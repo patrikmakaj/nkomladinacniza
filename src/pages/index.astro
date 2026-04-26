@@ -4,6 +4,7 @@ import Hero from "../components/Hero.astro";
 import NextMatchCard from "../components/NextMatchCard.astro";
 import LeagueTable from "../components/LeagueTable.astro";
 import RecentResults from "../components/RecentResults.astro";
+import LatestPostBlock from "../components/LatestPostBlock.astro";
 import { url } from "../lib/url";
 ---
 
@@ -25,6 +26,9 @@ import { url } from "../lib/url";
   <section class="container-narrow -mt-20 relative z-10">
     <NextMatchCard />
   </section>
+
+  <!-- Najnovija objava s Facebooka (pinned) -->
+  <LatestPostBlock />
 
   <!-- Tablica (cijela) -->
   <section class="container-narrow mt-16">

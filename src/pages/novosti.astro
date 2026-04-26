@@ -1,0 +1,81 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Hero from "../components/Hero.astro";
+import FacebookPost from "../components/FacebookPost.astro";
+import facebook from "../data/facebook.json";
+
+const enabled = facebook.enabled !== false;
+const posts = (facebook.posts ?? []).slice(0, 15);
+
+const lastUpdated = enabled
+  ? new Date(facebook.lastUpdated).toLocaleString("hr-HR", {
+      dateStyle: "short",
+      timeStyle: "short",
+    })
+  : null;
+---
+
+<BaseLayout
+  title="Novosti"
+  description="Najnovije objave NK Omladinac Niza - utakmice, izjave, fotografije."
+>
+  <Hero
+    title="Novosti"
+    subtitle="Sve s naše Facebook stranice — utakmice, izjave, fotografije"
+    height="md"
+  />
+
+  <section class="container-narrow mt-12">
+    {
+      !enabled && (
+        <div class="bg-club-light border-l-4 border-club-primary p-6 rounded">
+          <h3 class="text-lg mb-2">Facebook integracija još nije aktivirana</h3>
+          <p class="text-club-secondary/80 text-sm leading-relaxed">
+            Da bi se ovdje prikazivale objave s naše Facebook stranice
+            <a
+              href="https://www.facebook.com/omladinacniza/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-club-primary hover:underline"
+            >
+              @omladinacniza
+            </a>, treba u GitHub Secrets dodati <code class="bg-white px-1.5 py-0.5 rounded text-xs">FB_PAGE_ID</code>
+            i <code class="bg-white px-1.5 py-0.5 rounded text-xs">FB_ACCESS_TOKEN</code>.
+            Vidi README u repozitoriju.
+          </p>
+        </div>
+      )
+    }
+
+    {
+      enabled && posts.length === 0 && (
+        <p class="text-center text-club-muted py-8">
+          Nema objava za prikaz.
+        </p>
+      )
+    }
+
+    {
+      enabled && posts.length > 0 && (
+        <div class="space-y-6 max-w-2xl mx-auto">
+          {posts.map((post) => (
+            <FacebookPost post={post} collapsible={true} />
+          ))}
+        </div>
+      )
+    }
+
+    <p class="text-center text-xs text-club-muted mt-12">
+      Objave dolaze direktno s naše
+      <a
+        href="https://www.facebook.com/omladinacniza/"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-club-primary hover:underline"
+      >
+        Facebook stranice
+      </a>
+      {lastUpdated && <> · zadnje ažurirano {lastUpdated}</>}
+    </p>
+  </section>
+</BaseLayout>

@@ -10,8 +10,10 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "scrape": "node scripts/scrape.mjs",
-    "prebuild": "node scripts/scrape.mjs"
+    "scrape:hns": "node scripts/scrape.mjs",
+    "scrape:facebook": "node scripts/scrape-facebook.mjs",
+    "scrape": "npm run scrape:hns && npm run scrape:facebook",
+    "prebuild": "npm run scrape"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.2.4",

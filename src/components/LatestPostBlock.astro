@@ -1,0 +1,30 @@
+---
+import FacebookPost from "./FacebookPost.astro";
+import facebook from "../data/facebook.json";
+import { url } from "../lib/url";
+
+const latest = facebook.posts?.[0];
+const enabled = facebook.enabled !== false;
+---
+
+{
+  enabled && latest && (
+    <section class="container-narrow mt-16">
+      <div class="flex items-end justify-between mb-4 gap-4">
+        <div>
+          <p class="text-xs font-display uppercase tracking-widest text-club-primary mb-1">
+            S Facebook stranice
+          </p>
+          <h2 class="text-2xl">Najnovije</h2>
+        </div>
+        <a
+          href={url("/novosti")}
+          class="text-sm font-display uppercase tracking-wider text-club-primary hover:underline whitespace-nowrap"
+        >
+          Sve novosti →
+        </a>
+      </div>
+      <FacebookPost post={latest} collapsible={true} />
+    </section>
+  )
+}

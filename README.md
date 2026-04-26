@@ -20,7 +20,9 @@ npm run dev    # http://localhost:4321
 | Komanda | Što radi |
 |---|---|
 | `npm run dev` | Dev server s hot reload-om |
-| `npm run scrape` | Dohvati svježe podatke s HNS Semafora u `src/data/hns.json` |
+| `npm run scrape:hns` | Dohvati svježe podatke s HNS Semafora u `src/data/hns.json` |
+| `npm run scrape:facebook` | Dohvati zadnje FB postove u `src/data/facebook.json` (treba env varijable) |
+| `npm run scrape` | Pokrene oba scraper-a |
 | `npm run build` | Produkcijski build u `dist/` (automatski prvo scrape-a) |
 | `npm run preview` | Lokalni preview produkcijskog builda |
 
@@ -50,20 +52,37 @@ public/images/     # Logo, fotografije i statički assets
 
 ## Kako se ažuriraju podaci
 
-GitHub Action (`scrape-and-deploy.yml`) se okida:
-- **svakih 30 minuta** preko cron rasporeda
-- na **svaki push u `main`**
-- ručno preko **Actions → Run workflow**
+Postoje **dva izvora podataka**, oba se osvježavaju automatski:
 
-Action pokreće `npm run scrape` koji parsira HNS Semafor stranicu kluba i sprema strukturiran JSON. Ako se podaci razlikuju od posljednjeg snapshot-a → commit + rebuild + deploy.
-
-Što se izvlači:
+### 1. HNS Semafor (sportski podaci)
+Scraper `scripts/scrape.mjs` parsira [stranicu kluba na HNS Semaforu](https://semafor.hns.family/klubovi/134/nk-omladinac-niza/) i izvlači:
 - Klub: ime, stadion, adresa, grb
 - Trenutno natjecanje i sezona
 - Cijela tablica lige (sa grbovima i formom)
 - Sve utakmice sezone (raspored + rezultati)
 - Igrači (slike, brojevi, pozicije, statistike nastupa)
 - Ranking liste: strijelci, kartoni, najveći broj nastupa
+
+Output: `src/data/hns.json` (commit-an u repo).
+
+### 2. Facebook (novosti i objave)
+Scraper `scripts/scrape-facebook.mjs` koristi Graph API v21.0 za dohvat zadnjih objava sa [@omladinacniza](https://www.facebook.com/omladinacniza/) FB stranice. Slike se skidaju lokalno u `public/images/facebook/` (jer FB CDN URL-ovi ekspirira za 1-2 tjedna).
+
+Output: `src/data/facebook.json` + slike u `public/images/facebook/`.
+
+Treba dva GitHub Secrets za rad:
+- `FB_PAGE_ID` — Facebook Page ID
+- `FB_ACCESS_TOKEN` — Long-lived Page Access Token (admin pristup stranici)
+
+Generiranje tokena: vidi [Facebook Pages API docs](https://developers.facebook.com/docs/pages-api/getting-started). Za vlastiti page admin nije potreban app review.
+
+### GitHub Action workflow
+`scrape-and-deploy.yml` se okida:
+- **svakih 30 minuta** preko cron rasporeda
+- na **svaki push u `main`**
+- ručno preko **Actions → Run workflow**
+
+Pokrene oba scrapera, commita promjene (JSON-ove i nove FB slike), pa rebuilda i deploya.
 
 ## Dodavanje sadržaja
 

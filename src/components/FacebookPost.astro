@@ -1,0 +1,136 @@
+---
+import { url } from "../lib/url";
+import { linkify, formatPostDate, formatRelative } from "../lib/facebook";
+
+interface Post {
+  id: string;
+  message: string;
+  createdAt: string;
+  permalink: string | null;
+  images: string[];
+}
+
+interface Props {
+  post: Post;
+  /** Ako true, tekst je collapsed iznad ~5 linija s "Pročitaj više" */
+  collapsible?: boolean;
+}
+
+const { post, collapsible = false } = Astro.props;
+
+const messageHtml = linkify(post.message);
+const dateAbsolute = formatPostDate(post.createdAt);
+const dateRelative = formatRelative(post.createdAt);
+
+const imageGridClass =
+  post.images.length === 1
+    ? "grid-cols-1"
+    : post.images.length === 2
+      ? "grid-cols-2"
+      : post.images.length === 3
+        ? "grid-cols-2 md:grid-cols-3"
+        : "grid-cols-2 md:grid-cols-3";
+
+// Za grid s 3+ slika - prva može biti veća (col-span-2)
+const isFeaturedFirst = post.images.length === 3;
+---
+
+<article class="bg-white border border-club-border rounded-lg overflow-hidden hover:shadow-md transition-shadow">
+  {/* Header - datum + permalink */}
+  <header class="flex items-center justify-between px-5 py-3 border-b border-club-border bg-club-light-2">
+    <div class="flex items-center gap-2 text-sm">
+      <svg class="w-4 h-4 text-club-primary" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M22.675 0H1.325C.593 0 0 .593 0 1.325v21.351C0 23.407.593 24 1.325 24H12.82v-9.294H9.692v-3.622h3.128V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12V24h6.116c.73 0 1.323-.593 1.323-1.325V1.325C24 .593 23.407 0 22.675 0z"/>
+      </svg>
+      <time datetime={post.createdAt} title={dateAbsolute} class="text-club-muted">
+        {dateRelative}
+      </time>
+    </div>
+    {
+      post.permalink && (
+        <a
+          href={post.permalink}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-xs font-display uppercase tracking-wider text-club-primary hover:underline"
+        >
+          Otvori na FB →
+        </a>
+      )
+    }
+  </header>
+
+  {/* Slike */}
+  {
+    post.images.length > 0 && (
+      <div class={`grid ${imageGridClass} gap-1`}>
+        {post.images.map((img, idx) => {
+          const featured = isFeaturedFirst && idx === 0;
+          return (
+            <a
+              href={url(img)}
+              target="_blank"
+              rel="noopener noreferrer"
+              class={`block overflow-hidden ${featured ? "col-span-2 row-span-2" : ""}`}
+            >
+              <img
+                src={url(img)}
+                alt={`Slika iz Facebook objave`}
+                loading="lazy"
+                class={`w-full h-full object-cover hover:opacity-95 transition-opacity ${
+                  post.images.length === 1 ? "max-h-[600px]" : "aspect-square"
+                }`}
+              />
+            </a>
+          );
+        })}
+      </div>
+    )
+  }
+
+  {/* Tekst posta */}
+  {
+    post.message && (
+      <div class="px-5 py-4">
+        {collapsible ? (
+          <details class="fb-post-collapsible">
+            <summary class="cursor-pointer list-none">
+              <div
+                class="text-club-secondary leading-relaxed line-clamp-5"
+                set:html={messageHtml}
+              />
+              <span class="inline-block mt-2 text-sm font-display uppercase tracking-wider text-club-primary hover:underline">
+                Pročitaj više →
+              </span>
+            </summary>
+            <div
+              class="text-club-secondary leading-relaxed mt-2"
+              set:html={messageHtml}
+            />
+          </details>
+        ) : (
+          <div class="text-club-secondary leading-relaxed" set:html={messageHtml} />
+        )}
+      </div>
+    )
+  }
+</article>
+
+<style>
+  /* Collapsible: kad je `details` open, sakrij summary preview, prikaži pun tekst */
+  details.fb-post-collapsible[open] > summary {
+    display: none;
+  }
+  /* Inicijalno stanje: sakrij ekspandirani div, summary preview je vidljiv */
+  details.fb-post-collapsible:not([open]) > div {
+    display: none;
+  }
+
+  /* line-clamp-5 (Tailwind v4 ima utility, ali za sigurnost) */
+  .line-clamp-5 {
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>

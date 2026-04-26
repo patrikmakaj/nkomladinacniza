@@ -40,7 +40,10 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Scrape HNS Semafor
+      - name: Scrape HNS Semafor + Facebook
+        env:
+          FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
+          FB_ACCESS_TOKEN: ${{ secrets.FB_ACCESS_TOKEN }}
         run: npm run scrape
 
       - name: Commit if data changed
@@ -48,15 +51,17 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          if [[ -n "$(git status --porcelain src/data/hns.json)" ]]; then
-            git add src/data/hns.json
-            git commit -m "chore(data): update HNS scrape $(date -u +%Y-%m-%dT%H:%MZ)"
+          # Provjeri promjene u JSON-ovima i FB slikama
+          CHANGED=$(git status --porcelain src/data/ public/images/facebook/ 2>/dev/null)
+          if [[ -n "$CHANGED" ]]; then
+            git add src/data/ public/images/facebook/
+            git commit -m "chore(data): update scrape $(date -u +%Y-%m-%dT%H:%MZ)"
             git push
             echo "data_changed=true" >> "$GITHUB_OUTPUT"
-            echo "✓ HNS data updated and committed"
+            echo "✓ Data updated and committed"
           else
             echo "data_changed=false" >> "$GITHUB_OUTPUT"
-            echo "✓ HNS data unchanged, skipping commit"
+            echo "✓ Data unchanged, skipping commit"
           fi
 
   build-and-deploy:
@@ -85,6 +90,9 @@ jobs:
         # prebuild script već scrapa, ali to je brzo i daje nam svjeze podatke
         run: npm run build
         env:
+          # FB token treba i build step-u jer prebuild ponovo scrapa
+          FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
+          FB_ACCESS_TOKEN: ${{ secrets.FB_ACCESS_TOKEN }}
           # postaviti pravi URL kasnije kad domena bude poznata
           # za sada koristi defaultni github.io path
           ASTRO_SITE: ${{ vars.ASTRO_SITE || format('https://{0}.github.io', github.repository_owner) }}
