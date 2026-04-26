@@ -1,6 +1,248 @@
 {
-  "lastUpdated": "2026-04-26T09:02:30.735Z",
-  "enabled": false,
-  "reason": "FB_PAGE_ID / FB_ACCESS_TOKEN nisu postavljeni",
-  "posts": []
+  "lastUpdated": "2026-04-26T09:40:13.214Z",
+  "enabled": true,
+  "pageId": "55401829691",
+  "posts": [
+    {
+      "id": "55401829691_1550993490366479",
+      "message": "Nakon dugih 17 godina smo prvaci Lige Nogometnog Saveza Našice. Nakon krize i nestabilnosti prethodnih godina, složili smo se i krenuli raditi stvari na ispravan način. Treninzi i, najbitnije, zajedništvo su urodili plodom te smo četiri kola prije kraja matematički postali prvaci. Iako smo osigurali prvo mjesto, ostale su tri utakmice u koje ćemo ući ozbiljno kao i do sad te na kraju za kirvaj proslaviti s trofejem. Hvala svima na podršci. Za Benđu!💙",
+      "createdAt": "2026-04-25T20:14:56+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1550993490366479",
+      "images": [
+        "/images/facebook/55401829691_1550993490366479.jpg"
+      ]
+    },
+    {
+      "id": "55401829691_1550896337042861",
+      "message": "Pobjedom protiv Poleta smo matematički osigurali naslov prvaka. Čestitamo gostima koji su odigrali dobru, fer i korektnu utakmicu. Uskoro više...",
+      "createdAt": "2026-04-25T17:44:28+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1550896337042861",
+      "images": [
+        "/images/facebook/55401829691_1550896337042861.jpg"
+      ]
+    },
+    {
+      "id": "55401829691_1550888290376999",
+      "message": "",
+      "createdAt": "2026-04-25T17:32:57+0000",
+      "permalink": "https://www.facebook.com/reel/994912119881556/",
+      "images": [
+        "/images/facebook/55401829691_1550888290376999.jpg"
+      ]
+    },
+    {
+      "id": "55401829691_1550888100377018",
+      "message": "",
+      "createdAt": "2026-04-25T17:32:48+0000",
+      "permalink": "https://www.facebook.com/reel/955032567236553/",
+      "images": [
+        "/images/facebook/55401829691_1550888100377018.jpg"
+      ]
+    },
+    {
+      "id": "55401829691_1549116010554227",
+      "message": "Pozivamo sve na utakmicu protiv Poleta. Gosti su u odličnoj formi, ali mi imamo poseban motiv jer bi pobjedom matematički osigurali naslov prvaka. 💙",
+      "createdAt": "2026-04-23T19:50:05+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1549116010554227",
+      "images": [
+        "/images/facebook/55401829691_1549116010554227.jpg"
+      ]
+    },
+    {
+      "id": "55401829691_1545895507542944",
+      "message": "Gol Hrvoja Kasapović za izjednačenje u Budimcima.",
+      "createdAt": "2026-04-20T06:53:12+0000",
+      "permalink": "https://www.facebook.com/reel/4343171315938043/",
+      "images": [
+        "/images/facebook/55401829691_1545895507542944.jpg"
+      ]
+    },
+    {
+      "id": "55401829691_1545537047578790",
+      "message": "Nervozno odigrana utakmica protiv Dinama, ali bod je tu. Domaćinima čestitamo na korektno odigranoj utakmici.",
+      "createdAt": "2026-04-19T19:47:04+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1545537047578790",
+      "images": [
+        "/images/facebook/55401829691_1545537047578790.jpg"
+      ]
+    },
+    {
+      "id": "55401829691_1544320031033825",
+      "message": "Sutra idemo Dinamu u goste. Očekuje se jako lijepo vrijeme stoga poziv svima...",
+      "createdAt": "2026-04-18T10:18:11+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1544320031033825",
+      "images": [
+        "/images/facebook/55401829691_1544320031033825.jpg"
+      ]
+    },
+    {
+      "id": "55401829691_1540691691396659",
+      "message": "Stanje nakon 16. kola 😁💙",
+      "createdAt": "2026-04-14T09:09:07+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1540691691396659",
+      "images": [
+        "/images/facebook/55401829691_1540691691396659_0.jpg",
+        "/images/facebook/55401829691_1540691691396659_1.jpg"
+      ]
+    },
+    {
+      "id": "55401829691_1538418921623936",
+      "message": "Znatno oslabljeni dolazimo do pobjede protiv gostiju iz Razbojišta kojima ovim putem čestitamo na pruženom otporu i fer igri. 💙",
+      "createdAt": "2026-04-11T17:02:08+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1538418921623936",
+      "images": [
+        "/images/facebook/55401829691_1538418921623936.jpg"
+      ]
+    },
+    {
+      "id": "55401829691_1537426168389878",
+      "message": "Sutra na domaćem terenu igramo protiv NK Vuke iz Razbojišta od 16:30h.",
+      "createdAt": "2026-04-10T13:04:51+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1537426168389878",
+      "images": [
+        "/images/facebook/55401829691_1537426168389878.jpg"
+      ]
+    },
+    {
+      "id": "55401829691_1534748205324341",
+      "message": "U organizaciji Općine Koška, ulaz besplatan. Poziv svima!",
+      "createdAt": "2026-04-07T09:46:53+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1534748205324341",
+      "images": [
+        "/images/facebook/55401829691_1534748205324341.jpg"
+      ]
+    },
+    {
+      "id": "55401829691_1534682805330881",
+      "message": "",
+      "createdAt": "2026-04-07T07:50:15+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1534682805330881",
+      "images": [
+        "/images/facebook/55401829691_1534682805330881_0.jpg",
+        "/images/facebook/55401829691_1534682805330881_1.jpg",
+        "/images/facebook/55401829691_1534682805330881_2.jpg",
+        "/images/facebook/55401829691_1534682805330881_3.jpg",
+        "/images/facebook/55401829691_1534682805330881_4.jpg"
+      ]
+    },
+    {
+      "id": "55401829691_1532931535506008",
+      "message": "",
+      "createdAt": "2026-04-05T07:12:07+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1532931535506008",
+      "images": [
+        "/images/facebook/55401829691_1532931535506008.jpg"
+      ]
+    },
+    {
+      "id": "55401829691_1532560482209780",
+      "message": "Derbi napet kao i inače. Cijelu utakmicu namećemo svoju igru, koju je Matić okrunio s dva lijepa pogotka. Hvala susjedima na gostoprimstvu i puno sreće u nastavku prvenstva. 💙",
+      "createdAt": "2026-04-04T19:12:52+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1532560482209780",
+      "images": [
+        "/images/facebook/55401829691_1532560482209780.jpg"
+      ]
+    },
+    {
+      "id": "55401829691_1530358175763344",
+      "message": "1 remi.\n12 pobjeda u nizu.\n34 zabijena pogotka.\n5 primljenih.\n#nizazivivjecno",
+      "createdAt": "2026-04-02T08:44:41+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1530358175763344",
+      "images": [
+        "/images/facebook/55401829691_1530358175763344.jpg"
+      ]
+    },
+    {
+      "id": "55401829691_1530352872430541",
+      "message": "Pozivamo Vas u Košku na večernju utakmicu pod reflektorima. Vjerujemo u dobru utakmicu u susjedstvu jer susjedski derbi nikad ne razočara.💙",
+      "createdAt": "2026-04-02T08:35:28+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1530352872430541",
+      "images": [
+        "/images/facebook/55401829691_1530352872430541.jpg"
+      ]
+    },
+    {
+      "id": "55401829691_1526334692832359",
+      "message": "Potpuna dominacija za nastavak pobjedničkog niza. 💙",
+      "createdAt": "2026-03-28T15:54:42+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1526334692832359",
+      "images": [
+        "/images/facebook/55401829691_1526334692832359.jpg"
+      ]
+    },
+    {
+      "id": "55401829691_1525395899592905",
+      "message": "Sutra igramo sa kvalitetnim susjedima koji su drugoplasirana momčad lige. Ovaj derbi je od velikog značaja za borbu za vrh. Nadamo se dobrim uvjetima za igru. 💙",
+      "createdAt": "2026-03-27T15:07:00+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1525395899592905",
+      "images": [
+        "/images/facebook/55401829691_1525395899592905.jpg"
+      ]
+    },
+    {
+      "id": "55401829691_1523713683094460",
+      "message": "Sinoć odrađen zajednički trening na Šipovcu. Zahvala NK Šipovac - Tri Šešira na klopi poslije napornog treninga, a slijedeći put je na našu dušu... ifo",
+      "createdAt": "2026-03-25T21:03:51+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1523713683094460",
+      "images": [
+        "/images/facebook/55401829691_1523713683094460_0.jpg",
+        "/images/facebook/55401829691_1523713683094460_1.jpg",
+        "/images/facebook/55401829691_1523713683094460_2.jpg",
+        "/images/facebook/55401829691_1523713683094460_3.jpg",
+        "/images/facebook/55401829691_1523713683094460_4.jpg",
+        "/images/facebook/55401829691_1523713683094460_5.jpg",
+        "/images/facebook/55401829691_1523713683094460_6.jpg",
+        "/images/facebook/55401829691_1523713683094460_7.jpg",
+        "/images/facebook/55401829691_1523713683094460_8.jpg",
+        "/images/facebook/55401829691_1523713683094460_9.jpg"
+      ]
+    },
+    {
+      "id": "55401829691_1519720270160468",
+      "message": "Nakon nervoznog prvog poluvremena, plavi ubacuju u brzinu više i lome otpor jako dobrog domaćina. Čestitke domaćinima na odličnoj igri i želimo im sreću u nastavku prvenstva. 💙",
+      "createdAt": "2026-03-21T15:49:00+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1519720270160468",
+      "images": [
+        "/images/facebook/55401829691_1519720270160468.jpg"
+      ]
+    },
+    {
+      "id": "55401829691_1518497946949367",
+      "message": "Sutra nas čeka utakmica na Šipovcu. Poziv svima na Šipovac od 15h... 💙",
+      "createdAt": "2026-03-20T10:51:46+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1518497946949367",
+      "images": [
+        "/images/facebook/55401829691_1518497946949367.jpg"
+      ]
+    },
+    {
+      "id": "55401829691_1516166273849201",
+      "message": "Obavijest Općine Koška o podjeli Uskrsnica, Niza  utorak 24.3. od 8-10 sati na domu. Više na fotkama.",
+      "createdAt": "2026-03-17T20:32:00+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1516166273849201",
+      "images": [
+        "/images/facebook/55401829691_1516166273849201_0.jpg",
+        "/images/facebook/55401829691_1516166273849201_1.jpg"
+      ]
+    },
+    {
+      "id": "55401829691_1515203130612182",
+      "message": "Nastavljamo s radovima... Veliko hvala svima na uloženom trudu 💙",
+      "createdAt": "2026-03-16T18:09:47+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1515203130612182",
+      "images": [
+        "/images/facebook/55401829691_1515203130612182_0.jpg",
+        "/images/facebook/55401829691_1515203130612182_1.jpg"
+      ]
+    },
+    {
+      "id": "55401829691_1513362814129547",
+      "message": "Benđo ova je za tebe 💙",
+      "createdAt": "2026-03-14T15:34:52+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1513362814129547",
+      "images": [
+        "/images/facebook/55401829691_1513362814129547.jpg"
+      ]
+    }
+  ]
 }
