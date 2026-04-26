@@ -1,0 +1,109 @@
+@import "tailwindcss";
+
+@theme {
+  /* Klupske boje - plava paleta usklađena s grbom kluba */
+  --color-club-primary: #4287f5;       /* glavna plava (zatraženo) */
+  --color-club-primary-dark: #1e40af;  /* tamnija plava za hover */
+  --color-club-primary-deep: #0f2c6e;  /* vrlo tamna plava (header/hero) */
+  --color-club-light: #dbeafe;         /* svijetlo plava (suptilne pozadine) */
+  --color-club-light-2: #eff6ff;       /* još svijetlija plava */
+  --color-club-accent: #d4b659;        /* zlatna iz grba — fancy akcent */
+  --color-club-secondary: #0f172a;     /* tamno-tamno plava za tekst */
+  --color-club-bg: #f8fafc;            /* svijetla pozadina */
+  --color-club-surface: #ffffff;
+  --color-club-muted: #64748b;
+  --color-club-border: #e2e8f0;
+
+  /* Tipografija */
+  --font-display: "Oswald", "Arial Narrow", sans-serif;
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    color: var(--color-club-secondary);
+    background-color: var(--color-club-bg);
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+  }
+}
+
+/* Custom utility i component klase (Tailwind v4 sintaksa) */
+@utility container-narrow {
+  max-width: 72rem;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+
+  @media (min-width: 640px) {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+  @media (min-width: 1024px) {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+@utility btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.875rem;
+  font-weight: 700;
+  transition: all 200ms;
+  cursor: pointer;
+  border-radius: 4px;
+  background-color: var(--color-club-primary);
+  color: white;
+  box-shadow: 0 4px 14px rgb(66 135 245 / 30%);
+
+  &:hover {
+    background-color: var(--color-club-primary-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgb(66 135 245 / 40%);
+  }
+}
+
+@utility btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.875rem;
+  font-weight: 700;
+  transition: all 200ms;
+  cursor: pointer;
+  border-radius: 4px;
+  background-color: transparent;
+  color: white;
+  border: 2px solid white;
+
+  &:hover {
+    background-color: white;
+    color: var(--color-club-primary-deep);
+  }
+}
+
+/* Suptilan animirani gradient za hero */
+@utility hero-bg {
+  background: linear-gradient(135deg, #0f2c6e 0%, #1e40af 50%, #4287f5 100%);
+  position: relative;
+}

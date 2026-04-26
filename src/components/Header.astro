@@ -1,0 +1,93 @@
+---
+import Logo from "./Logo.astro";
+import { url } from "../lib/url";
+
+const navItems = [
+  { href: "/", label: "Početna" },
+  { href: "/momcad", label: "Momčad" },
+  { href: "/mladje-kategorije", label: "Mlađe kategorije" },
+  { href: "/galerija", label: "Galerija" },
+  { href: "/klub", label: "Klub" },
+  { href: "/povijest", label: "Povijest" },
+];
+
+// Normaliziraj trenutnu putanju (skida base path i trailing slash) za isActive provjeru
+const base = (import.meta.env.BASE_URL || "/").replace(/\/$/, "");
+const rawPath = Astro.url.pathname.replace(/\/$/, "");
+const currentPath = (rawPath.startsWith(base) ? rawPath.slice(base.length) : rawPath) || "/";
+---
+
+<header class="sticky top-0 z-50 bg-club-primary-deep text-white shadow-lg border-b-2 border-club-accent">
+  <div class="container-narrow flex items-center justify-between h-20">
+    <a href={url("/")} class="flex items-center gap-3 group">
+      <Logo size={48} class="group-hover:scale-105 transition-transform" />
+      <span class="font-display font-bold uppercase tracking-wider hidden sm:inline">
+        NK Omladinac Niza
+      </span>
+    </a>
+
+    <!-- Desktop nav -->
+    <nav class="hidden lg:flex items-center gap-1">
+      {
+        navItems.map((item) => {
+          const isActive =
+            item.href === "/" ? currentPath === "/" : currentPath.startsWith(item.href);
+          return (
+            <a
+              href={url(item.href)}
+              class={`px-3 py-2 text-sm font-display uppercase tracking-wider transition-colors hover:text-club-accent ${
+                isActive ? "text-club-accent" : "text-white"
+              }`}
+            >
+              {item.label}
+            </a>
+          );
+        })
+      }
+    </nav>
+
+    <!-- Mobile hamburger -->
+    <button
+      id="menu-toggle"
+      class="lg:hidden flex flex-col gap-1.5 p-2"
+      aria-label="Otvori meni"
+      aria-expanded="false"
+    >
+      <span class="w-6 h-0.5 bg-white transition-transform"></span>
+      <span class="w-6 h-0.5 bg-white transition-opacity"></span>
+      <span class="w-6 h-0.5 bg-white transition-transform"></span>
+    </button>
+  </div>
+
+  <!-- Mobile menu (collapsible) -->
+  <nav id="mobile-menu" class="hidden lg:hidden bg-club-primary-deep border-t border-white/10">
+    <div class="container-narrow py-4 flex flex-col gap-1">
+      {
+        navItems.map((item) => {
+          const isActive =
+            item.href === "/" ? currentPath === "/" : currentPath.startsWith(item.href);
+          return (
+            <a
+              href={url(item.href)}
+              class={`px-3 py-3 text-sm font-display uppercase tracking-wider ${
+                isActive ? "text-club-accent" : "text-white"
+              }`}
+            >
+              {item.label}
+            </a>
+          );
+        })
+      }
+    </div>
+  </nav>
+</header>
+
+<script>
+  const toggle = document.getElementById("menu-toggle");
+  const menu = document.getElementById("mobile-menu");
+  toggle?.addEventListener("click", () => {
+    const isOpen = !menu?.classList.contains("hidden");
+    menu?.classList.toggle("hidden");
+    toggle.setAttribute("aria-expanded", String(!isOpen));
+  });
+</script>

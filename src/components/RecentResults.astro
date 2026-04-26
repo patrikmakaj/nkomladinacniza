@@ -1,0 +1,80 @@
+---
+import hns from "../data/hns.json";
+
+interface Props {
+  limit?: number;
+  grid?: boolean;
+}
+
+const { limit, grid = false } = Astro.props;
+const wrapperClass = grid
+  ? "grid grid-cols-1 md:grid-cols-2 gap-3"
+  : "space-y-3";
+
+const allResults = hns.lastResults ?? [];
+const results = limit ? allResults.slice(0, limit) : allResults;
+
+const outcomeColor = {
+  W: "bg-green-600",
+  D: "bg-yellow-500",
+  L: "bg-red-600",
+};
+const outcomeLabel = { W: "P", D: "N", L: "I" };
+---
+
+<div class={wrapperClass}>
+  {
+    results.length === 0 && (
+      <p class="text-sm text-club-muted text-center py-4">
+        Nema rezultata za prikaz.
+      </p>
+    )
+  }
+  {
+    results.map((r) => {
+      const dateLabel = r.date
+        ? new Date(r.date).toLocaleDateString("hr-HR", {
+            day: "numeric",
+            month: "short",
+          })
+        : "";
+      const outcome = (r.result as "W" | "D" | "L") || "D";
+      return (
+        <article class="bg-white border border-club-border rounded-lg p-4 flex items-center gap-4 hover:shadow-md transition-shadow">
+          <div
+            class={`${outcomeColor[outcome]} text-white w-10 h-10 rounded flex items-center justify-center font-display font-bold flex-shrink-0`}
+            title={
+              outcome === "W"
+                ? "Pobjeda"
+                : outcome === "D"
+                  ? "Neriješeno"
+                  : "Poraz"
+            }
+          >
+            {outcomeLabel[outcome]}
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2 text-xs text-club-muted mb-1">
+              <span class="font-display uppercase tracking-wider truncate">
+                {r.competition}
+              </span>
+              <span>·</span>
+              <span class="flex-shrink-0">{dateLabel}</span>
+            </div>
+            <div class="flex items-center justify-between gap-2">
+              <span class={`text-sm truncate ${r.isHome ? "font-bold" : ""}`}>
+                {r.home.name}
+              </span>
+              <span class="font-display font-bold text-lg flex-shrink-0">
+                {r.score?.home} : {r.score?.away}
+              </span>
+              <span class={`text-sm truncate text-right ${!r.isHome ? "font-bold" : ""}`}>
+                {r.away.name}
+              </span>
+            </div>
+          </div>
+        </article>
+      );
+    })
+  }
+</div>

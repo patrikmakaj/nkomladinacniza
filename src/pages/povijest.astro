@@ -1,0 +1,218 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Hero from "../components/Hero.astro";
+
+const milestones = [
+  {
+    year: "1961-1962",
+    title: "Izgradnja prvog igrališta",
+    description:
+      "Osnovna škola Koška dozvoljava izgradnju nogometnog igrališta na svom zemljištu. Igralište je građeno u minimalnim propisanim dimenzijama — 90 × 45 metara.",
+  },
+  {
+    year: "1963",
+    title: "Osnivanje kluba",
+    description:
+      "U lipnju 1963. u prostorijama Osnovne škole u Nizi održana je osnivačka skupština NK Omladinac. Prvi predsjednik bio je Jure Dumenčić, tajnik Josip Krulić, a blagajnik Dragutin Mauhar. Istoga dana odigrana je i prva utakmica protiv NK Seljak iz Koške.",
+  },
+  {
+    year: "1964/65",
+    title: "Prvi naslov i ulazak u Međuopćinski savez",
+    description:
+      "Već u drugoj sezoni od osnutka klub osvaja Općinsku nogometnu ligu Našice. Pobjedom u kvalifikacijama protiv pobjednika susjednih saveza (Orahovica, Slatina, Donji Miholjac) plasira se u Međuopćinsku ligu.",
+  },
+  {
+    year: "1969-1973",
+    title: "Razdoblje mirovanja",
+    description:
+      "Zbog nedostatka financijskih sredstava klub ulazi u status mirovanja. Većina igrača prelazi u susjedne klubove (NK Seljak Koška, NK Mladost N. Breznica). Klub obnavlja rad 1973. godine.",
+  },
+  {
+    year: "1985/86",
+    title: "Povratak u Općinsku ligu",
+    description:
+      "Osvajanjem Grupne lige NS Našice klub se vraća u Općinsku ligu i istovremeno ponovno formira juniorski sastav. Od 1986. do danas klub kontinuirano ima juniorsku ili pionirsku momčad u natjecanju.",
+  },
+  {
+    year: "1986",
+    title: "Mjesni dom i svlačionice",
+    description:
+      "Završena je izgradnja mjesnog doma. U prizemlju zgrade smještene su svlačionice i prostorije kluba.",
+  },
+  {
+    year: "1988/89",
+    title: "Polufinale Kupa NS Slavonije i Baranje",
+    description:
+      "Pioniri NK Omladinca osvajaju prvenstvo svoje lige i dolaze do polufinala Kupa NS Slavonije i Baranje (izbacuju Viljevo 4:1 i Slatinu 2:1). Jedan od najvećih uspjeha u povijesti kluba.",
+  },
+  {
+    year: "1991-1992",
+    title: "Domovinski rat",
+    description:
+      "Sezona 1991/92. nije odigrana zbog Domovinskog rata. U jesen 1991. u ratu pogiba dugogodišnji igrač kluba Nikola Petranović-Šiljo. Većina igrača sudjeluje u Domovinskom ratu kroz 132. brigadu Hrvatske vojske Našice i policiju.",
+  },
+  {
+    year: "1994",
+    title: "Prelazak pod NS Valpovo",
+    description:
+      "Prema novom teritorijalnom ustroju klub prelazi pod okrilje Nogometnog središta Valpovo, gdje se natječe u 3. ŽNL Liga NS Valpovo.",
+  },
+  {
+    year: "2001/02",
+    title: "Prvaci 3. ŽNL i ulazak u 2. ŽNL",
+    description:
+      "Osvajanjem 3. ŽNL Liga NS Valpovo klub prvi put ulazi u 2. ŽNL Nogometnog središta Našice.",
+  },
+  {
+    year: "2007",
+    title: "Memorijal Miroslav Knežević-Bujdo",
+    description:
+      "U prometnoj nesreći pogiba Miroslav Knežević-Bujdo, dugogodišnji član kluba, dopredsjednik, tajnik i nekadašnji igrač. Od 2008. svake se godine u njegovu spomen organizira memorijalni nogometni turnir, a cijeli klupski kompleks dobiva njegovo ime.",
+  },
+  {
+    year: "2008/09",
+    title: "Prvaci 3. ŽNL Liga NS Našice",
+    description:
+      "Klub osvaja 3. ŽNL Liga NS Našice i vraća se u 2. ŽNL Našice.",
+  },
+  {
+    year: "2013",
+    title: "50 godina kluba",
+    description:
+      "31. kolovoza 2013. obilježeno je 50 godina od osnivanja kluba svečanom Skupštinom i velikom feštom uz pečenog vola s ražnja i zabavnim programom.",
+  },
+  {
+    year: "2014",
+    title: "Dječja športska akademija \"Niza\"",
+    description:
+      "Osnovana je Dječja športska akademija \"Niza\" koja organizira mlađe kategorije. Trenutno nogomet trenira pedesetak djece kroz selekcije predpočetnika (U-8), početnika (U-10) i juniora.",
+  },
+  {
+    year: "2019",
+    title: "Povratak u 2. ŽNL kvalifikacijama",
+    description:
+      "Kvalifikacijama (dvije pobjede 3:1 protiv NK Polet Bokšić) klub se ponovno plasira u 2. ŽNL Osječko-baranjska NS Našice.",
+  },
+  {
+    year: "2024",
+    title: "Natkrivena tribina",
+    description:
+      "Krajem 2024. izgrađena je natkrivena tribina sa 100 sjedalica i prilaznom stazom — investicija u cijelosti financirana iz proračuna Općine Koška.",
+  },
+  {
+    year: "2024/25",
+    title: "Trenutno: 3. ŽNL OB",
+    description:
+      "Nakon ispadanja iz 2. ŽNL na kraju sezone 2024/25., klub se natječe u 3. ŽNL Osječko-baranjska Liga NS Našice.",
+  },
+];
+
+const successes = {
+  Seniori: [
+    "1964/65 — Prvaci Općinske nogometne lige Našice",
+    "1985/86 — Prvaci Grupne lige NS Našice",
+    "1989/90 — Prvaci Grupne lige NS Našice",
+    "2001/02 — Prvaci 3. ŽNL OB Liga NS Valpovo",
+    "2008/09 — Prvaci 3. ŽNL OB Liga NS Našice",
+  ],
+  Pioniri: [
+    "1988/89 — Prvaci Lige pionira NS Našice",
+    "1988/89 — Polufinale Kupa NS Slavonije i Baranje",
+  ],
+};
+---
+
+<BaseLayout
+  title="Povijest"
+  description="Povijest NK Omladinac Niza od osnivanja 1963. do danas - više od 60 godina nogometa u Općini Koška."
+>
+  <Hero
+    title="Povijest"
+    subtitle="Više od 60 godina nogometa u Nizi — od 1963. do danas"
+    height="md"
+  />
+
+  <section class="container-narrow mt-12">
+    <div class="relative max-w-3xl mx-auto">
+      <!-- Vertikalna linija -->
+      <div class="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-club-border md:-translate-x-px"></div>
+
+      <div class="space-y-12">
+        {
+          milestones.map((m, i) => {
+            const isLeft = i % 2 === 0;
+            return (
+              <div class="relative pl-12 md:pl-0">
+                {/* Točka na liniji */}
+                <div class="absolute left-4 md:left-1/2 top-2 -translate-x-1/2 w-4 h-4 rounded-full bg-club-primary ring-4 ring-club-bg z-10" />
+
+                <div class={`md:grid md:grid-cols-2 md:gap-12 items-start ${isLeft ? "" : "md:[direction:rtl]"}`}>
+                  <div class={`${isLeft ? "md:text-right" : "md:text-left md:[direction:ltr]"}`}>
+                    <div
+                      class={`inline-block bg-club-primary text-white px-3 py-1 font-display font-bold text-base mb-3 rounded ${
+                        isLeft ? "md:ml-auto" : ""
+                      }`}
+                    >
+                      {m.year}
+                    </div>
+                    <h3 class="text-2xl mb-2">{m.title}</h3>
+                    <p class="text-club-secondary/80 leading-relaxed">{m.description}</p>
+                  </div>
+                  <div />
+                </div>
+              </div>
+            );
+          })
+        }
+      </div>
+    </div>
+
+    <!-- Trofejna polica -->
+    <div class="mt-20 max-w-4xl mx-auto">
+      <h2 class="text-3xl mb-6 text-center">Trofejna polica</h2>
+      <div class="grid md:grid-cols-2 gap-6">
+        {
+          Object.entries(successes).map(([category, items]) => (
+            <div class="bg-white border border-club-border rounded-lg p-6">
+              <h3 class="text-xl mb-4 flex items-center gap-2">
+                <span class="text-club-accent text-2xl">★</span>
+                {category}
+              </h3>
+              <ul class="space-y-2 text-sm">
+                {items.map((s) => (
+                  <li class="flex items-start gap-2">
+                    <span class="w-1.5 h-1.5 rounded-full bg-club-primary mt-2 flex-shrink-0"></span>
+                    <span>{s}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+
+    <!-- Poznati igrači -->
+    <div class="mt-16 max-w-4xl mx-auto bg-gradient-to-br from-club-primary-deep to-club-primary text-white rounded-lg p-8 md:p-10">
+      <h2 class="text-3xl mb-4 text-white">Poznati igrači</h2>
+      <article>
+        <h3 class="text-xl mb-2 text-white">Katarina Pranješ</h3>
+        <p class="text-white/90 leading-relaxed">
+          Karijeru je započela 2014. u NK Omladinac Niza kao članica Dječje športske akademije
+          "Niza" — <strong>prva registrirana ženska igračica u povijesti kluba</strong>.
+          Nakon uspješne pionirske sezone 2015/16., uočili su je skauti ŽNK Osijek, gdje
+          osvaja titulu državnog prvaka 2017/18. Nastupala je za hrvatske U-16, U-17 i U-19
+          reprezentacije, a u jesen 2020. debitira za seniorsku reprezentaciju Hrvatske
+          protiv Litve. Od 2021. članica je ŽNK Split.
+        </p>
+      </article>
+    </div>
+
+    <p class="text-center text-sm text-club-muted mt-12 max-w-2xl mx-auto">
+      Izvor: Wikipedia. Ako uočiš nepreciznost ili imaš dodatnu informaciju, javi nam na
+      <a href="mailto:info@nkomladinacniza.hr" class="text-club-primary hover:underline">
+        info@nkomladinacniza.hr
+      </a>.
+    </p>
+  </section>
+</BaseLayout>

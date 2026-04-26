@@ -1,0 +1,62 @@
+---
+import { url } from "../lib/url";
+
+interface Props {
+  title: string;
+  subtitle?: string;
+  height?: "sm" | "md" | "lg";
+}
+
+const { title, subtitle, height = "lg" } = Astro.props;
+
+const heightClass = {
+  sm: "h-[280px]",
+  md: "h-[420px]",
+  lg: "h-[560px]",
+}[height];
+---
+
+<section class={`relative ${heightClass} overflow-hidden hero-bg`}>
+  <!-- Suptilan dijagonalni accent svijetlo plave -->
+  <div
+    class="absolute inset-0 opacity-15"
+    style="background: repeating-linear-gradient(45deg, transparent, transparent 30px, rgba(255,255,255,0.4) 30px, rgba(255,255,255,0.4) 31px);"
+  >
+  </div>
+
+  <!-- Veliki polu-prozirni grb kao watermark -->
+  <div class="absolute -right-16 top-1/2 -translate-y-1/2 opacity-10 pointer-events-none">
+    <img
+      src={url("/images/logo.svg")}
+      alt=""
+      width="500"
+      height="500"
+      class="w-[400px] md:w-[500px] h-auto"
+    />
+  </div>
+
+  <!-- Akcent plavi sjaj u kutu -->
+  <div
+    class="absolute -bottom-32 -left-32 w-96 h-96 rounded-full blur-3xl opacity-30"
+    style="background: radial-gradient(circle, #4287f5 0%, transparent 70%);"
+  >
+  </div>
+
+  <div class="relative h-full container-narrow flex flex-col justify-center">
+    <div class="max-w-3xl">
+      <div class="inline-flex items-center gap-2 px-3 py-1 mb-4 bg-club-accent text-club-primary-deep text-xs font-display uppercase tracking-widest font-bold rounded-sm">
+        <span class="w-1.5 h-1.5 rounded-full bg-club-primary-deep"></span>
+        Nogometni klub
+      </div>
+      <h1 class="text-white text-5xl md:text-7xl font-bold leading-none mb-4 drop-shadow-lg">
+        {title}
+      </h1>
+      {
+        subtitle && (
+          <p class="text-white/90 text-lg md:text-xl max-w-2xl">{subtitle}</p>
+        )
+      }
+      <slot />
+    </div>
+  </div>
+</section>

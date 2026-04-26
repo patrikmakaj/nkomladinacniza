@@ -1,0 +1,192 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Hero from "../components/Hero.astro";
+import hns from "../data/hns.json";
+
+const facts = [
+  { label: "Osnovan", value: "1963." },
+  { label: "Adresa", value: hns.club.address || "Niza, Općina Koška" },
+  { label: "Županija", value: "Osječko-baranjska" },
+  { label: "Natjecanje", value: hns.competition?.name || "—" },
+  { label: "Stadion", value: hns.club.stadium || "—" },
+  { label: "Boje", value: "Plavo-bijelo-zlatne" },
+];
+
+const board = [
+  { name: "Predsjednik", person: "Robert Jakovac" },
+];
+---
+
+<BaseLayout
+  title="Klub"
+  description="Sve o NK Omladinac Niza - mjesnom nogometnom klubu iz Općine Koška, osnovanom 1963. godine."
+>
+  <Hero
+    title="O klubu"
+    subtitle="Tko smo, gdje smo i kako nas pronaći"
+    height="md"
+  />
+
+  <section class="container-narrow mt-12 grid lg:grid-cols-3 gap-8">
+    <div class="lg:col-span-2 space-y-8">
+      <div>
+        <h2 class="text-3xl mb-4">NK Omladinac Niza</h2>
+        <div class="prose prose-lg max-w-none text-club-secondary/80 space-y-4">
+          <p>
+            NK Omladinac je nogometni klub iz mjesta Niza u Općini Koška, nedaleko Našica
+            u Osječko-baranjskoj županiji. Klub je osnovan
+            <strong>u lipnju 1963. godine</strong>
+            i član je Nogometnog središta Našice.
+          </p>
+          <p>
+            Iako se nogomet u Nizi igrao i ranije, počeci stvaranja kluba sežu u 1961.
+            godinu kada je Osnovna škola Koška dozvolila izgradnju nogometnog igrališta na
+            njezinom zemljištu. Prvi predsjednik bio je pokojni Jure Dumenčić, tajnik
+            Josip Krulić, a blagajnik Dragutin Mauhar. Već u prvoj sezoni od osnutka,
+            1964/65., klub osvaja prvenstvo Općinske nogometne lige Našice.
+          </p>
+          <p>
+            Danas, nakon više od 60 godina postojanja, klub okuplja seniorsku momčad
+            i mlađe kategorije kroz <strong>Dječju športsku akademiju "Niza"</strong>
+            (osnovanu 2014.). Trenutno nogomet trenira pedesetak djece — što je velik
+            uspjeh za selo od oko 400 stanovnika.
+          </p>
+        </div>
+      </div>
+
+      <!-- Brze činjenice -->
+      <div>
+        <h3 class="text-2xl mb-4">Brze činjenice</h3>
+        <div class="grid sm:grid-cols-2 gap-3">
+          {
+            facts.map((f) => (
+              <div class="bg-white border border-club-border rounded-lg p-4 hover:border-club-primary transition-colors">
+                <p class="text-xs font-display uppercase tracking-wider text-club-muted">
+                  {f.label}
+                </p>
+                <p class="font-medium mt-1">{f.value}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+
+      <!-- Vodstvo -->
+      <div>
+        <h3 class="text-2xl mb-4">Vodstvo kluba</h3>
+        <div class="grid sm:grid-cols-2 gap-3">
+          {
+            board.map((b) => (
+              <div class="bg-white border border-club-border rounded-lg p-4">
+                <p class="text-xs font-display uppercase tracking-wider text-club-muted">
+                  {b.name}
+                </p>
+                <p class="font-medium mt-1">{b.person}</p>
+              </div>
+            ))
+          }
+          <div class="bg-club-light-2 border-2 border-dashed border-club-border rounded-lg p-4 flex items-center text-sm text-club-muted italic">
+            Ostali članovi Izvršnog odbora — uskoro
+          </div>
+        </div>
+      </div>
+
+      <!-- Stadion / kompleks -->
+      <div>
+        <h3 class="text-2xl mb-4">Stadion {hns.club.stadium ? `"${hns.club.stadium}"` : ""} — ŠRC Miroslav Knežević-Bujdo</h3>
+        <p class="text-club-secondary/80 leading-relaxed mb-4">
+          Klupski kompleks nazvan je u spomen Miroslavu Kneževiću-Bujdi, dugogodišnjem
+          igraču, dopredsjedniku i tajniku kluba koji je tragično preminuo 2007. godine.
+          Od 2008. svake se godine u njegovu spomen organizira memorijalni nogometni turnir.
+        </p>
+        <ul class="grid sm:grid-cols-2 gap-2 text-sm">
+          <li class="flex items-center gap-2">
+            <span class="w-1.5 h-1.5 rounded-full bg-club-primary"></span>
+            Glavno nogometno igralište
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="w-1.5 h-1.5 rounded-full bg-club-primary"></span>
+            Asfaltirano rukometno igralište (2006.)
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="w-1.5 h-1.5 rounded-full bg-club-primary"></span>
+            Boćalište
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="w-1.5 h-1.5 rounded-full bg-club-primary"></span>
+            Mjesni dom sa svlačionicama
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="w-1.5 h-1.5 rounded-full bg-club-primary"></span>
+            Reflektori za večernje utakmice
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="w-1.5 h-1.5 rounded-full bg-club-primary"></span>
+            Natkrivena tribina, 100 sjedalica (2024.)
+          </li>
+        </ul>
+      </div>
+
+      <!-- Navijači -->
+      <div class="bg-gradient-to-r from-club-primary-deep to-club-primary text-white rounded-lg p-6">
+        <h3 class="text-2xl mb-2 text-white">Niza Grickavci</h3>
+        <p class="text-white/90">
+          Navijačka skupina kluba osnovana 1992. godine. Bezuvjetna podrška plavima na
+          domaćem terenu i u gostima.
+        </p>
+      </div>
+    </div>
+
+    <aside class="space-y-6">
+      <div class="bg-white border border-club-border rounded-lg p-6">
+        <h3 class="text-xl mb-4">Kontakt</h3>
+        <ul class="space-y-3 text-sm">
+          <li class="flex items-start gap-3">
+            <svg class="w-5 h-5 text-club-primary flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            <div>
+              <p class="font-medium">{hns.club.stadium || "Stadion"} (ŠRC Miroslav Knežević-Bujdo)</p>
+              <p class="text-club-muted">{hns.club.address || "Niza, 31224 Koška"}</p>
+            </div>
+          </li>
+          <li class="flex items-start gap-3">
+            <svg class="w-5 h-5 text-club-primary flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+            <a href="mailto:info@nkomladinacniza.hr" class="hover:text-club-primary">
+              info@nkomladinacniza.hr
+            </a>
+          </li>
+          <li class="flex items-start gap-3">
+            <svg class="w-5 h-5 text-club-primary flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+            </svg>
+            <a
+              href="http://omladinacniza.blogspot.com/"
+              target="_blank"
+              rel="noopener"
+              class="hover:text-club-primary break-all"
+            >
+              omladinacniza.blogspot.com
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Mapa -->
+      <div class="bg-white border border-club-border rounded-lg overflow-hidden">
+        <iframe
+          src="https://www.openstreetmap.org/export/embed.html?bbox=18.10%2C45.49%2C18.20%2C45.55&layer=mapnik&marker=45.5167%2C18.1500"
+          class="w-full h-64 border-0"
+          loading="lazy"
+          title="Lokacija Niza"
+        ></iframe>
+        <div class="p-3 text-xs text-club-muted text-center">
+          Niza · Općina Koška · Osječko-baranjska županija
+        </div>
+      </div>
+    </aside>
+  </section>
+</BaseLayout>

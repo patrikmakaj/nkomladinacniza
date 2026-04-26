@@ -1,0 +1,104 @@
+---
+/**
+ * Reusable ranking lista (Strijelci, Kartoni, Nastupi).
+ * Prikazuje pozicija + slika igrača + ime + vrijednost (right-aligned).
+ *
+ * Item.value se renderira kao HTML stringa - omogućuje kombinacije ikona
+ * (npr. žuti + crveni karton).
+ */
+interface RankingItem {
+  position: number | null;
+  name: string;
+  photo?: string | null;
+  profileUrl?: string | null;
+  /** Renderirana vrijednost (može sadržavati HTML, npr. ikone). */
+  valueHtml: string;
+}
+
+interface Props {
+  title: string;
+  subtitle?: string;
+  items: RankingItem[];
+  valueLabel: string;
+  emptyText?: string;
+}
+
+const {
+  title,
+  subtitle,
+  items,
+  valueLabel,
+  emptyText = "Nema podataka.",
+} = Astro.props;
+
+function initials(name: string) {
+  return name
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+}
+---
+
+<div class="bg-white border border-club-border rounded-lg overflow-hidden">
+  <div class="bg-club-secondary text-white px-4 py-3 flex items-center justify-between">
+    <div>
+      <h3 class="font-display uppercase tracking-wider text-sm">{title}</h3>
+      {subtitle && <p class="text-xs text-white/60 mt-0.5">{subtitle}</p>}
+    </div>
+    <span class="text-xs font-display uppercase tracking-widest opacity-70">
+      {valueLabel}
+    </span>
+  </div>
+
+  {
+    items.length === 0 ? (
+      <p class="text-sm text-club-muted text-center py-6">{emptyText}</p>
+    ) : (
+      <ul class="divide-y divide-club-border">
+        {items.map((item, idx) => (
+          <li class="flex items-center gap-3 px-4 py-3 hover:bg-club-light-2 transition-colors">
+            <span class="font-display font-bold text-club-muted w-6 text-center text-sm">
+              {item.position ?? idx + 1}.
+            </span>
+            <div class="w-10 h-10 rounded-full overflow-hidden bg-club-light flex-shrink-0 flex items-center justify-center">
+              {item.photo ? (
+                <img
+                  src={item.photo}
+                  alt={item.name}
+                  width="40"
+                  height="40"
+                  class="w-full h-full object-cover object-top"
+                  loading="lazy"
+                />
+              ) : (
+                <span class="font-display font-bold text-xs text-club-primary-deep">
+                  {initials(item.name)}
+                </span>
+              )}
+            </div>
+            <span class="flex-1 text-sm font-medium truncate" title={item.name}>
+              {item.profileUrl ? (
+                <a
+                  href={item.profileUrl}
+                  target="_blank"
+                  rel="noopener"
+                  class="hover:text-club-primary"
+                >
+                  {item.name}
+                </a>
+              ) : (
+                item.name
+              )}
+            </span>
+            <span
+              class="font-display font-bold text-club-primary-deep flex-shrink-0 flex items-center gap-1.5"
+              set:html={item.valueHtml}
+            />
+          </li>
+        ))}
+      </ul>
+    )
+  }
+</div>

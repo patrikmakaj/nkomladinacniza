@@ -1,0 +1,83 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Hero from "../components/Hero.astro";
+import NextMatchCard from "../components/NextMatchCard.astro";
+import LeagueTable from "../components/LeagueTable.astro";
+import RecentResults from "../components/RecentResults.astro";
+import { url } from "../lib/url";
+---
+
+<BaseLayout
+  title="NK Omladinac Niza"
+  description="Službena web stranica nogometnog kluba NK Omladinac Niza - rezultati, tablica, momčad i sve novosti iz kluba."
+>
+  <Hero
+    title="Omladinac Niza"
+    subtitle="Tradicija, strast i nogomet u našoj zajednici"
+  >
+    <div class="flex flex-wrap gap-3 mt-8">
+      <a href={url("/momcad")} class="btn-primary">Upoznaj momčad</a>
+      <a href={url("/klub")} class="btn-outline">O klubu</a>
+    </div>
+  </Hero>
+
+  <!-- Sljedeća utakmica - flotira preko hero ruba -->
+  <section class="container-narrow -mt-20 relative z-10">
+    <NextMatchCard />
+  </section>
+
+  <!-- Tablica (cijela) -->
+  <section class="container-narrow mt-16">
+    <h2 class="text-2xl mb-4">Tablica</h2>
+    <LeagueTable />
+  </section>
+
+  <!-- Zadnji rezultati ispod tablice u 2 stupca -->
+  <section class="container-narrow mt-12">
+    <h2 class="text-2xl mb-4">Zadnji rezultati</h2>
+    <RecentResults limit={6} grid={true} />
+  </section>
+
+  <!-- O klubu CTA -->
+  <section class="container-narrow mt-20">
+    <div
+      class="bg-club-secondary text-white rounded-lg p-8 md:p-12 grid md:grid-cols-2 gap-8 items-center overflow-hidden relative"
+    >
+      <div
+        class="absolute -right-20 -top-20 w-64 h-64 rounded-full bg-club-primary opacity-20"
+      >
+      </div>
+      <div class="relative">
+        <h2 class="text-3xl md:text-4xl mb-4">O klubu</h2>
+        <p class="text-white/80 leading-relaxed mb-6">
+          NK Omladinac Niza je nogometni klub iz mjesta Niza u Općini Koška, osnovan
+          <strong class="text-club-accent">davne 1963. godine</strong>. Više od šest
+          desetljeća okupljamo generacije mladih oko ljubavi prema nogometu — od najmlađih
+          predpočetnika do seniorske momčadi.
+        </p>
+        <div class="flex flex-wrap gap-3">
+          <a href={url("/klub")} class="btn-primary">Više o klubu</a>
+          <a href={url("/povijest")} class="btn-outline">Povijest</a>
+        </div>
+      </div>
+      <div class="relative grid grid-cols-2 gap-4">
+        <div class="bg-white/5 backdrop-blur rounded-lg p-6 text-center">
+          <p class="font-display text-4xl font-bold text-club-accent">63</p>
+          <p class="text-sm text-white/70 mt-1">godine tradicije</p>
+        </div>
+        <div class="bg-white/5 backdrop-blur rounded-lg p-6 text-center">
+          <p class="font-display text-4xl font-bold text-club-accent">3</p>
+          <p class="text-sm text-white/70 mt-1">selekcije mlađih</p>
+        </div>
+        <div class="bg-white/5 backdrop-blur rounded-lg p-6 text-center">
+          <p class="font-display text-4xl font-bold text-club-accent">~50</p>
+          <p class="text-sm text-white/70 mt-1">djece u akademiji</p>
+        </div>
+        <div class="bg-white/5 backdrop-blur rounded-lg p-6 text-center">
+          <p class="font-display text-4xl font-bold text-club-accent">5</p>
+          <p class="text-sm text-white/70 mt-1">naslova prvaka</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

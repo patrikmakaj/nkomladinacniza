@@ -1,0 +1,105 @@
+---
+import hns from "../data/hns.json";
+import { url } from "../lib/url";
+
+interface Props {
+  preview?: boolean;
+}
+
+const { preview = false } = Astro.props;
+
+const fullTable = hns.table;
+const competitionName = hns.competition?.name ?? "Tablica lige";
+
+// Za preview na početnoj: prvih 5 + naš red ako nije u top 5
+const usIdx = fullTable.findIndex((t) => t.isUs);
+const top5 = fullTable.slice(0, 5);
+const includeUs = usIdx >= 5;
+const previewRows = includeUs ? [...top5, fullTable[usIdx]] : top5;
+
+const tableData = preview ? previewRows : fullTable;
+---
+
+<div class="bg-white rounded-lg shadow-md overflow-hidden border border-club-border">
+  {
+    preview && (
+      <div class="px-6 py-4 border-b border-club-border flex items-center justify-between">
+        <h3 class="font-display uppercase tracking-wider text-lg">{competitionName}</h3>
+        <a
+          href={url("/")}
+          class="text-xs font-display uppercase tracking-wider text-club-primary hover:underline"
+        >
+          Cijela tablica →
+        </a>
+      </div>
+    )
+  }
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead class="bg-club-secondary text-white">
+        <tr>
+          <th class="px-3 py-3 text-left font-display uppercase tracking-wider text-xs">#</th>
+          <th class="px-3 py-3 text-left font-display uppercase tracking-wider text-xs">Klub</th>
+          <th class="px-2 py-3 text-center font-display uppercase tracking-wider text-xs">U</th>
+          <th class="px-2 py-3 text-center font-display uppercase tracking-wider text-xs hidden sm:table-cell">P</th>
+          <th class="px-2 py-3 text-center font-display uppercase tracking-wider text-xs hidden sm:table-cell">N</th>
+          <th class="px-2 py-3 text-center font-display uppercase tracking-wider text-xs hidden sm:table-cell">I</th>
+          <th class="px-2 py-3 text-center font-display uppercase tracking-wider text-xs hidden md:table-cell">GZ:GP</th>
+          <th class="px-3 py-3 text-center font-display uppercase tracking-wider text-xs">B</th>
+        </tr>
+      </thead>
+      <tbody>
+        {
+          tableData.map((row, idx) => {
+            const showSeparator = preview && includeUs && idx === 5;
+            return (
+              <>
+                {showSeparator && (
+                  <tr>
+                    <td colspan="8" class="text-center text-club-muted text-xs py-1">···</td>
+                  </tr>
+                )}
+                <tr
+                  class={`border-b border-club-border ${
+                    row.isUs
+                      ? "bg-club-primary/10 font-bold"
+                      : idx % 2 === 0
+                        ? "bg-white"
+                        : "bg-gray-50"
+                  }`}
+                >
+                  <td class="px-3 py-3 font-display">{row.position}</td>
+                  <td class="px-3 py-3">
+                    <div class="flex items-center gap-2">
+                      {row.club.logo && (
+                        <img
+                          src={row.club.logo}
+                          alt=""
+                          width="24"
+                          height="24"
+                          class="object-contain w-6 h-6 flex-shrink-0"
+                          loading="lazy"
+                        />
+                      )}
+                      <span class={row.isUs ? "text-club-primary" : ""}>
+                        {row.club.name}
+                      </span>
+                    </div>
+                  </td>
+                  <td class="px-2 py-3 text-center">{row.played}</td>
+                  <td class="px-2 py-3 text-center hidden sm:table-cell">{row.wins}</td>
+                  <td class="px-2 py-3 text-center hidden sm:table-cell">{row.draws}</td>
+                  <td class="px-2 py-3 text-center hidden sm:table-cell">{row.losses}</td>
+                  <td class="px-2 py-3 text-center hidden md:table-cell text-club-muted">
+                    {row.gf}:{row.ga}
+                  </td>
+                  <td class="px-3 py-3 text-center font-bold">{row.points}</td>
+                </tr>
+              </>
+            );
+          })
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

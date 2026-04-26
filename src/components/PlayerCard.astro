@@ -1,0 +1,80 @@
+---
+interface Props {
+  number: number | null;
+  name: string;
+  position: string | null;
+  positionGroup: "GK" | "FIELD";
+  photo?: string | null;
+  appearances?: number;
+  goals?: number;
+}
+
+const {
+  number,
+  name,
+  position,
+  positionGroup,
+  photo,
+  appearances = 0,
+  goals = 0,
+} = Astro.props;
+
+const groupLabels: Record<typeof positionGroup, string> = {
+  GK: "Vratar",
+  FIELD: "Igrač",
+};
+
+// Inicijali za fallback ako nema slike
+const initials = name
+  .split(" ")
+  .map((n) => n[0])
+  .join("")
+  .slice(0, 2)
+  .toUpperCase();
+---
+
+<article
+  class="group relative bg-white border border-club-border rounded-lg overflow-hidden hover:shadow-xl hover:border-club-primary transition-all duration-200"
+  data-position={positionGroup}
+>
+  <div class="aspect-[3/4] bg-gradient-to-br from-club-primary-deep to-club-primary/40 flex items-center justify-center relative overflow-hidden">
+    {photo ? (
+      <img
+        src={photo}
+        alt={name}
+        class="w-full h-full object-cover object-top"
+        loading="lazy"
+      />
+    ) : (
+      <span class="font-display text-6xl text-white/30 font-bold">{initials}</span>
+    )}
+    {number != null && (
+      <div class="absolute top-2 left-2 bg-white text-club-secondary font-display font-bold text-lg w-10 h-10 rounded flex items-center justify-center shadow-md">
+        {number}
+      </div>
+    )}
+    <div class="absolute top-2 right-2 bg-club-primary text-white text-xs font-display uppercase tracking-wider px-2 py-1 rounded">
+      {groupLabels[positionGroup]}
+    </div>
+  </div>
+  <div class="p-3">
+    <p class="font-display font-bold uppercase text-sm leading-tight truncate" title={name}>
+      {name}
+    </p>
+    {position && <p class="text-xs text-club-muted mt-0.5">{position}</p>}
+    {(appearances > 0 || goals > 0) && (
+      <div class="flex items-center gap-3 mt-2 pt-2 border-t border-club-border text-xs">
+        <span class="flex items-center gap-1">
+          <span class="font-display font-bold text-club-primary-deep">{appearances}</span>
+          <span class="text-club-muted">nast.</span>
+        </span>
+        {goals > 0 && (
+          <span class="flex items-center gap-1">
+            <span class="font-display font-bold text-club-primary">{goals}</span>
+            <span class="text-club-muted">{goals === 1 ? "gol" : "g"}</span>
+          </span>
+        )}
+      </div>
+    )}
+  </div>
+</article>

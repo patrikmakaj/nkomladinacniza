@@ -1,0 +1,161 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Hero from "../components/Hero.astro";
+import PlayerCard from "../components/PlayerCard.astro";
+import StatRanking from "../components/StatRanking.astro";
+import hns from "../data/hns.json";
+
+// Iz HNS podataka — pozicija je samo "Vratar" / "Igrač"
+const allPlayers = hns.players.map((p) => ({
+  ...p,
+  positionGroup: (p.position || "").toLowerCase().includes("vratar")
+    ? "GK"
+    : "FIELD",
+}));
+
+// Pripremi rankingse za prikaz (prvih 10 da ne bude predugačko)
+const topScorersItems = (hns.stats?.topScorers ?? []).slice(0, 10).map((p) => ({
+  position: p.position,
+  name: p.name,
+  photo: p.photo,
+  profileUrl: p.profileUrl,
+  valueHtml: `<span>${p.goals}</span><span class="text-club-muted text-xs font-normal">${p.goals === 1 ? "gol" : "g"}</span>`,
+}));
+
+// Žuti karton SVG + crveni
+const cardSvg = (color: string) =>
+  `<svg width="10" height="14" viewBox="0 0 10 14" fill="${color}" xmlns="http://www.w3.org/2000/svg" class="inline-block"><rect width="10" height="14" rx="1"/></svg>`;
+
+const topCardsItems = (hns.stats?.topCards ?? []).slice(0, 10).map((p) => {
+  const parts: string[] = [];
+  if (p.yellow > 0) parts.push(`${cardSvg("#eab308")} <span>${p.yellow}</span>`);
+  if (p.red > 0) parts.push(`${cardSvg("#dc2626")} <span>${p.red}</span>`);
+  return {
+    position: p.position,
+    name: p.name,
+    photo: p.photo,
+    profileUrl: p.profileUrl,
+    valueHtml: parts.length > 0 ? parts.join(' <span class="w-1"></span> ') : '<span class="text-club-muted">—</span>',
+  };
+});
+
+const topAppsItems = (hns.stats?.topApps ?? []).slice(0, 10).map((p) => ({
+  position: p.position,
+  name: p.name,
+  photo: p.photo,
+  profileUrl: p.profileUrl,
+  valueHtml: `<span>${p.appearances}</span><span class="text-club-muted text-xs font-normal">nast.</span>`,
+}));
+
+// Sortiraj: vratari prvi, pa igrači po broju nastupa pa imenu
+const players = allPlayers.sort((a, b) => {
+  if (a.positionGroup !== b.positionGroup) {
+    return a.positionGroup === "GK" ? -1 : 1;
+  }
+  if (b.stats.appearances !== a.stats.appearances) {
+    return b.stats.appearances - a.stats.appearances;
+  }
+  return a.name.localeCompare(b.name, "hr");
+});
+
+const totalPlayers = players.length;
+const totalGoals = players.reduce((sum, p) => sum + (p.stats.goals || 0), 0);
+const lastUpdated = new Date(hns.lastUpdated).toLocaleString("hr-HR", {
+  dateStyle: "short",
+  timeStyle: "short",
+});
+const competition = hns.competition?.name ?? "Sezona";
+---
+
+<BaseLayout title="Momčad" description="Igrači prve momčadi NK Omladinac Niza u tekućoj sezoni.">
+  <Hero
+    title="Momčad"
+    subtitle={`Igrači koji nose dres NK Omladinac Niza · ${competition}`}
+    height="md"
+  />
+
+  <section class="container-narrow mt-12">
+    {/* Brze statistike */}
+    <div class="grid grid-cols-3 gap-3 md:gap-6 mb-8">
+      <div class="bg-white border border-club-border rounded-lg p-4 text-center">
+        <p class="font-display font-bold text-3xl md:text-4xl text-club-primary-deep">
+          {totalPlayers}
+        </p>
+        <p class="text-xs md:text-sm text-club-muted mt-1">igrača u kadru</p>
+      </div>
+      <div class="bg-white border border-club-border rounded-lg p-4 text-center">
+        <p class="font-display font-bold text-3xl md:text-4xl text-club-primary">
+          {totalGoals}
+        </p>
+        <p class="text-xs md:text-sm text-club-muted mt-1">postignutih golova</p>
+      </div>
+      <div class="bg-white border border-club-border rounded-lg p-4 text-center">
+        <p class="font-display font-bold text-3xl md:text-4xl text-club-accent">
+          {hns.ourRow?.position ?? "—"}
+        </p>
+        <p class="text-xs md:text-sm text-club-muted mt-1">mjesto na tablici</p>
+      </div>
+    </div>
+
+    <div
+      id="players-grid"
+      class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4 mt-8"
+    >
+      {
+        players.map((p) => (
+          <PlayerCard
+            number={p.number}
+            name={p.name}
+            position={p.position}
+            positionGroup={p.positionGroup as "GK" | "FIELD"}
+            photo={p.photo}
+            appearances={p.stats.appearances}
+            goals={p.stats.goals}
+          />
+        ))
+      }
+    </div>
+
+    {/* Statistika sezone — Strijelci, Kartoni, Nastupi */}
+    <div class="mt-12">
+      <h2 class="text-2xl mb-4">Statistika sezone</h2>
+      <p class="text-sm text-club-muted mb-6">
+        Najbolji u {hns.competition?.name ?? "ligi"} prema podacima HNS Semafora.
+      </p>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <StatRanking
+          title="Strijelci"
+          subtitle="Najbolji strijelci lige"
+          items={topScorersItems}
+          valueLabel="Golovi"
+        />
+        <StatRanking
+          title="Kartoni"
+          subtitle="Najviše opomena"
+          items={topCardsItems}
+          valueLabel="Žuti / Crveni"
+        />
+        <StatRanking
+          title="Nastupi"
+          subtitle="Najveći broj nastupa"
+          items={topAppsItems}
+          valueLabel="Nastupi"
+        />
+      </div>
+    </div>
+
+    <p class="text-center text-xs text-club-muted mt-12">
+      Podaci dohvaćeni s
+      <a
+        href="https://semafor.hns.family/klubovi/134/nk-omladinac-niza/"
+        target="_blank"
+        rel="noopener"
+        class="hover:text-club-primary underline"
+      >
+        HNS Semafora
+      </a>
+      · zadnje ažurirano {lastUpdated}
+    </p>
+  </section>
+</BaseLayout>
+

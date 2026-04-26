@@ -1,0 +1,129 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Hero from "../components/Hero.astro";
+
+// Mlađe kategorije organizira Dječja športska akademija "Niza" (osnovana 2014.)
+const categories = [
+  {
+    age: "U-8",
+    name: "Predpočetnici",
+    coach: "—",
+    description:
+      "Najmlađa selekcija kluba u kojoj djeca prve korake u nogometu pravе kroz igru, druženje i osnovne vježbe motorike.",
+    schedule: "Po dogovoru u sklopu DŠA \"Niza\"",
+  },
+  {
+    age: "U-10",
+    name: "Početnici",
+    coach: "—",
+    description:
+      "Selekcija u kojoj se učvršćuju osnovne tehničke vještine i razvija ljubav prema timskoj igri.",
+    schedule: "Po dogovoru u sklopu DŠA \"Niza\"",
+  },
+  {
+    age: "Juniori",
+    name: "Juniori",
+    coach: "—",
+    description:
+      "Posljednja stepenica prema seniorskoj momčadi - intenzivan rad na svim aspektima igre i pripremu za natjecanja.",
+    schedule: "Po dogovoru",
+  },
+];
+---
+
+<BaseLayout
+  title="Mlađe kategorije"
+  description="Mlađe selekcije NK Omladinac Niza - U-8, U-10 i juniori, organizirane kroz Dječju športsku akademiju 'Niza'."
+>
+  <Hero
+    title="Mlađe kategorije"
+    subtitle="Tri selekcije kroz Dječju športsku akademiju &quot;Niza&quot;"
+    height="md"
+  />
+
+  <section class="container-narrow mt-12">
+    <!-- Uvodni info blok -->
+    <div class="bg-white border border-club-border rounded-lg p-6 md:p-8 mb-10">
+      <div class="flex items-start gap-4">
+        <div class="w-12 h-12 rounded-full bg-club-light flex items-center justify-center flex-shrink-0">
+          <span class="text-club-primary-deep font-display font-bold text-lg">DŠA</span>
+        </div>
+        <div>
+          <h2 class="text-2xl mb-2">Dječja športska akademija "Niza"</h2>
+          <p class="text-club-secondary/80 leading-relaxed">
+            Osnovana 2014. godine, DŠA "Niza" organizira sve mlađe kategorije našeg kluba.
+            Trenutno nogomet trenira <strong>pedesetak djece</strong> — što je velik
+            uspjeh za selo od 400 stanovnika i pokazatelj kontinuiteta u radu s mladima.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Selekcije -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {
+        categories.map((c) => (
+          <article class="bg-white border border-club-border rounded-lg overflow-hidden hover:shadow-lg transition-shadow flex flex-col">
+            <div class="bg-gradient-to-r from-club-primary-deep to-club-primary text-white px-6 py-4 flex items-center justify-between">
+              <div class="flex items-center gap-3">
+                <div class="bg-club-accent text-club-primary-deep px-3 py-1 rounded font-display font-bold">
+                  {c.age}
+                </div>
+                <h3 class="text-xl">{c.name}</h3>
+              </div>
+            </div>
+            <div class="p-6 flex-1 flex flex-col">
+              <p class="text-club-secondary/80 leading-relaxed mb-4 flex-1">
+                {c.description}
+              </p>
+              <div class="space-y-2 pt-4 border-t border-club-border">
+                <div class="flex items-start gap-2 text-sm">
+                  <span class="font-display uppercase tracking-wider text-xs text-club-muted w-20 flex-shrink-0 pt-0.5">
+                    Trener
+                  </span>
+                  <span class="font-medium">{c.coach}</span>
+                </div>
+                <div class="flex items-start gap-2 text-sm">
+                  <span class="font-display uppercase tracking-wider text-xs text-club-muted w-20 flex-shrink-0 pt-0.5">
+                    Termini
+                  </span>
+                  <span>{c.schedule}</span>
+                </div>
+              </div>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+
+    <!-- Uspjeh - Katarina -->
+    <div class="mt-12 bg-gradient-to-r from-club-primary-deep to-club-primary text-white rounded-lg p-6 md:p-8">
+      <div class="flex items-start gap-4">
+        <span class="text-club-accent text-4xl flex-shrink-0">★</span>
+        <div>
+          <h3 class="text-2xl mb-2 text-white">Naš uspjeh: Katarina Pranješ</h3>
+          <p class="text-white/90 leading-relaxed">
+            Iz naše DŠA "Niza" potekla je <strong>prva registrirana ženska igračica</strong>
+            u povijesti kluba. Karijeru je započela 2014., a danas je članica ŽNK Split,
+            državna prvakinja s ŽNK Osijekom (2017/18.) i hrvatska reprezentativka.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="mt-10 bg-club-light border-l-4 border-club-primary p-6 rounded">
+      <h3 class="text-xl mb-2">Želiš se priključiti?</h3>
+      <p class="text-club-secondary/80 mb-4">
+        Klub i DŠA "Niza" otvoreni su za sve mlade ljubitelje nogometa. Za upis nove djece
+        kontaktiraj nas na
+        <a
+          href="mailto:info@nkomladinacniza.hr"
+          class="text-club-primary font-medium hover:underline"
+          >info@nkomladinacniza.hr</a
+        >
+        ili dođi na trening na ŠRC Miroslav Knežević-Bujdo.
+      </p>
+    </div>
+  </section>
+</BaseLayout>

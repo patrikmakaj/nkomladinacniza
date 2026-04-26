@@ -1,0 +1,99 @@
+name: Scrape HNS data + deploy to GitHub Pages
+
+# Pokreće se:
+#  - svakih 30 minuta (cron)
+#  - na svaki push u main (npr. promjena dizajna ili sadržaja)
+#  - ručno preko Actions UI-a (workflow_dispatch)
+on:
+  schedule:
+    - cron: "*/30 * * * *"   # svakih 30 min
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# GitHub Pages permissions
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+# Spriječi paralelne deploy-eve, ali nemoj cancel-ati pending-e (bitno za scheduler)
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    outputs:
+      data_changed: ${{ steps.commit.outputs.data_changed }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Scrape HNS Semafor
+        run: npm run scrape
+
+      - name: Commit if data changed
+        id: commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [[ -n "$(git status --porcelain src/data/hns.json)" ]]; then
+            git add src/data/hns.json
+            git commit -m "chore(data): update HNS scrape $(date -u +%Y-%m-%dT%H:%MZ)"
+            git push
+            echo "data_changed=true" >> "$GITHUB_OUTPUT"
+            echo "✓ HNS data updated and committed"
+          else
+            echo "data_changed=false" >> "$GITHUB_OUTPUT"
+            echo "✓ HNS data unchanged, skipping commit"
+          fi
+
+  build-and-deploy:
+    needs: scrape
+    # Deploy uvijek na push (jer je možda promijenjen kod, ne samo data)
+    # Na cron: deploy samo ako su se podaci promijenili
+    if: github.event_name != 'schedule' || needs.scrape.outputs.data_changed == 'true'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main  # uzmi najnoviji main (uključujući commit iz scrape job-a)
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build site
+        # prebuild script već scrapa, ali to je brzo i daje nam svjeze podatke
+        run: npm run build
+        env:
+          # postaviti pravi URL kasnije kad domena bude poznata
+          # za sada koristi defaultni github.io path
+          ASTRO_SITE: ${{ vars.ASTRO_SITE || format('https://{0}.github.io', github.repository_owner) }}
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+
+      - id: deployment
+        uses: actions/deploy-pages@v4
