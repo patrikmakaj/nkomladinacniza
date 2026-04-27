@@ -25,3 +25,8 @@ pnpm-debug.log*
 
 # Claude Code lokalne postavke (dev tool, ne dijeliti)
 .claude/
+
+# Lokalne bilješke (ne dijeliti) - sve s ".local." u nazivu
+*.local.*
+*.local
+.local/

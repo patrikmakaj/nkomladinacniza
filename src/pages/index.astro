@@ -5,6 +5,7 @@ import NextMatchCard from "../components/NextMatchCard.astro";
 import LeagueTable from "../components/LeagueTable.astro";
 import RecentResults from "../components/RecentResults.astro";
 import LatestPostBlock from "../components/LatestPostBlock.astro";
+import SchemaSportsTeam from "../components/SchemaSportsTeam.astro";
 import { url } from "../lib/url";
 ---
 
@@ -12,6 +13,7 @@ import { url } from "../lib/url";
   title="NK Omladinac Niza"
   description="Službena web stranica nogometnog kluba NK Omladinac Niza - rezultati, tablica, momčad i sve novosti iz kluba."
 >
+  <SchemaSportsTeam slot="head" />
   <Hero
     title="Omladinac Niza"
     subtitle="Tradicija, strast i nogomet u našoj zajednici"

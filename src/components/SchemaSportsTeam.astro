@@ -1,0 +1,64 @@
+---
+/**
+ * Schema.org SportsTeam JSON-LD za rich results na Google-u.
+ *
+ * Kad netko traži "NK Omladinac Niza", Google može prikazati kartice
+ * s logom, lokacijom i linkovima na društvene mreže (knowledge panel).
+ *
+ * Validator: https://validator.schema.org/ ili https://search.google.com/test/rich-results
+ */
+import hns from "../data/hns.json";
+import { url } from "../lib/url";
+
+const site = Astro.site?.toString().replace(/\/$/, "") || "";
+const baseUrl = site + url("/");
+const logoUrl = site + url("/images/logo.svg");
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "SportsTeam",
+  name: "NK Omladinac Niza",
+  alternateName: "Nogometni klub Omladinac Niza",
+  sport: "Soccer",
+  url: baseUrl,
+  logo: logoUrl,
+  image: logoUrl,
+  description:
+    "Nogometni klub iz mjesta Niza, Općina Koška, Osječko-baranjska županija. Osnovan 1963. godine. Trenutno se natječe u " +
+    (hns.competition?.name ?? "lokalnoj ligi") +
+    ".",
+  foundingDate: "1963",
+  foundingLocation: {
+    "@type": "Place",
+    name: "Niza, Općina Koška",
+  },
+  location: {
+    "@type": "Place",
+    name: "ŠRC Miroslav Knežević-Bujdo (Stadion Grbavica)",
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "Kolodvorska 50a",
+      addressLocality: "Niza",
+      postalCode: "31224",
+      addressRegion: "Osječko-baranjska županija",
+      addressCountry: "HR",
+    },
+  },
+  memberOf: {
+    "@type": "SportsOrganization",
+    name: "Hrvatski nogometni savez · Nogometno središte Našice",
+    url: "https://hns-cff.hr",
+  },
+  sameAs: [
+    "https://www.facebook.com/omladinacniza",
+    "https://semafor.hns.family/klubovi/134/nk-omladinac-niza/",
+    "http://omladinacniza.blogspot.com/",
+  ],
+};
+---
+
+<script
+  type="application/ld+json"
+  is:inline
+  set:html={JSON.stringify(schema)}
+/>

@@ -135,11 +135,32 @@ async function writeEmpty(reason) {
   console.log(`[fb-scrape] ${reason} — zapisan prazan JSON.`);
 }
 
+async function preserveExisting(reason) {
+  // Ako već imamo facebook.json s validnim postovima, ostavi ga (samo ažuriraj timestamp poruke).
+  // To čuva sajt funkcionalnim kad token expire-a — postovi ostaju zadnji poznati,
+  // dok ne osvježimo token. Build NE smije pasti zbog FB problema.
+  try {
+    const { readFile } = await import("node:fs/promises");
+    const existing = JSON.parse(await readFile(OUT_JSON, "utf8"));
+    if (existing.posts && existing.posts.length > 0) {
+      existing.lastUpdated = new Date().toISOString();
+      existing.lastError = reason;
+      await writeFile(OUT_JSON, JSON.stringify(existing, null, 2) + "\n", "utf8");
+      console.warn(
+        `[fb-scrape] ⚠️  ${reason}\n` +
+          `[fb-scrape] zadržavam postojeći facebook.json (${existing.posts.length} postova)`,
+      );
+      return;
+    }
+  } catch {
+    // facebook.json ne postoji ili nije čitljiv — pišemo prazan
+  }
+  await writeEmpty(reason);
+}
+
 async function main() {
   if (!PAGE_ID || !TOKEN) {
-    await writeEmpty(
-      "FB_PAGE_ID / FB_ACCESS_TOKEN nisu postavljeni",
-    );
+    await writeEmpty("FB_PAGE_ID / FB_ACCESS_TOKEN nisu postavljeni");
     return;
   }
 
@@ -153,14 +174,23 @@ async function main() {
   console.log(`[fb-scrape] dohvaćam postove (limit=${FETCH_LIMIT})…`);
   const startedAt = Date.now();
 
-  const res = await fetch(url);
+  let res;
+  try {
+    res = await fetch(url);
+  } catch (err) {
+    await preserveExisting(`Network error: ${err.message}`);
+    return;
+  }
+
   if (!res.ok) {
     const body = await res.text();
-    throw new Error(
-      `Graph API HTTP ${res.status}: ${body.slice(0, 300)}\n` +
-        `Provjeri da je FB_ACCESS_TOKEN valjan (long-lived Page token) ` +
+    const reason = `Graph API HTTP ${res.status}: ${body.slice(0, 200)}`;
+    await preserveExisting(reason);
+    console.warn(
+      `[fb-scrape] Provjeri da je FB_ACCESS_TOKEN valjan (long-lived Page token) ` +
         `i da app ima pristup pages_read_engagement.`,
     );
+    return;
   }
 
   const json = await res.json();

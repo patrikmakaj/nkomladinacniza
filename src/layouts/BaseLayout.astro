@@ -7,24 +7,44 @@ import { url } from "../lib/url";
 interface Props {
   title?: string;
   description?: string;
+  /** Path do OG slike (relativan, npr. "/images/logo.svg"). Default je grb. */
+  image?: string;
+  /** og:type — default "website", za novosti može biti "article" */
+  ogType?: "website" | "article";
+  /** Indeksiranje — default true. Postavi false za debug/admin stranice. */
+  noIndex?: boolean;
 }
 
 const {
   title = "NK Omladinac Niza",
-  description = "Službena web stranica nogometnog kluba NK Omladinac Niza.",
+  description = "Službena web stranica nogometnog kluba NK Omladinac Niza iz mjesta Niza, Općina Koška. Tablica, raspored, igrači, novosti.",
+  image = "/images/logo.svg",
+  ogType = "website",
+  noIndex = false,
 } = Astro.props;
 
-const fullTitle = title === "NK Omladinac Niza" ? title : `${title} | NK Omladinac Niza`;
+const fullTitle =
+  title === "NK Omladinac Niza" ? title : `${title} | NK Omladinac Niza`;
+
+// Apsolutne URL-ove iz Astro context-a
+const canonical = new URL(Astro.url.pathname, Astro.site).toString();
+const ogImageUrl = new URL(url(image), Astro.site).toString();
 ---
 
 <!doctype html>
 <html lang="hr">
   <head>
     <meta charset="UTF-8" />
-    <meta name="description" content={description} />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" type="image/svg+xml" href={url("/favicon.svg")} />
+    <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
+    {noIndex && <meta name="robots" content="noindex, nofollow" />}
+
+    <!-- Canonical -->
+    <link rel="canonical" href={canonical} />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href={url("/favicon.svg")} />
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -34,13 +54,27 @@ const fullTitle = title === "NK Omladinac Niza" ? title : `${title} | NK Omladin
       rel="stylesheet"
     />
 
-    <!-- OG -->
+    <!-- Open Graph (Facebook, WhatsApp, LinkedIn) -->
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:site_name" content="NK Omladinac Niza" />
     <meta property="og:locale" content="hr_HR" />
 
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+
+    <!-- Theme color (mobile chrome bar) -->
+    <meta name="theme-color" content="#0f2c6e" />
+
     <title>{fullTitle}</title>
+
+    <slot name="head" />
   </head>
   <body class="min-h-screen flex flex-col">
     <Header />
