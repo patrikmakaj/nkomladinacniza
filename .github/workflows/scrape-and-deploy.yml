@@ -49,32 +49,64 @@ jobs:
       - name: Commit if data changed
         id: commit
         run: |
+          set -e
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          # Provjeri promjene u JSON-ovima i FB slikama
+
+          # Brza provjera ima li uopće što za commitati
           CHANGED=$(git status --porcelain src/data/ public/images/facebook/ 2>/dev/null)
-          if [[ -n "$CHANGED" ]]; then
-            git add src/data/ public/images/facebook/
-            git commit -m "chore(data): update scrape $(date -u +%Y-%m-%dT%H:%MZ)"
-            # Retry s rebase-om u slučaju da je drugi run paralelno pushnuo
-            for attempt in 1 2 3 4 5; do
-              if git pull --rebase origin main && git push; then
-                echo "✓ Push uspio (pokušaj $attempt)"
-                break
-              fi
-              if [[ $attempt -eq 5 ]]; then
-                echo "✗ Push neuspješan nakon 5 pokušaja"
-                exit 1
-              fi
-              echo "Push pokušaj $attempt neuspješan, čekam pa ponovo..."
-              sleep $((attempt * 5))
-            done
-            echo "data_changed=true" >> "$GITHUB_OUTPUT"
-            echo "✓ Data updated and committed"
-          else
+          if [[ -z "$CHANGED" ]]; then
             echo "data_changed=false" >> "$GITHUB_OUTPUT"
             echo "✓ Data unchanged, skipping commit"
+            exit 0
           fi
+
+          # Sačuvaj scrapane fajlove izvan git radnog stabla
+          TMPDIR=$(mktemp -d)
+          cp -r src/data "$TMPDIR/data"
+          if [[ -d public/images/facebook ]]; then
+            cp -r public/images/facebook "$TMPDIR/fb"
+          fi
+
+          # Strategija: scrape je idempotentan (zadnji rezultat uvijek pobjeđuje).
+          # Umjesto rebase-a koji može imati JSON konflikte, resetiramo na latest
+          # origin/main i ponovo apply-amo svježe scrapane fajlove.
+          for attempt in 1 2 3 4 5; do
+            git fetch origin main
+            git reset --hard origin/main
+
+            # Vrati svježe scrapane fajlove na vrh
+            rm -rf src/data
+            cp -r "$TMPDIR/data" src/data
+            if [[ -d "$TMPDIR/fb" ]]; then
+              mkdir -p public/images
+              rm -rf public/images/facebook
+              cp -r "$TMPDIR/fb" public/images/facebook
+            fi
+
+            # Ako je remote već stigao do istog stanja, nemamo što pushati
+            if [[ -z "$(git status --porcelain src/data/ public/images/facebook/ 2>/dev/null)" ]]; then
+              echo "✓ Remote već ima iste podatke, ništa za pushati"
+              echo "data_changed=false" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+
+            git add src/data/ public/images/facebook/
+            git commit -m "chore(data): update scrape $(date -u +%Y-%m-%dT%H:%MZ)"
+
+            if git push; then
+              echo "✓ Push uspio (pokušaj $attempt)"
+              echo "data_changed=true" >> "$GITHUB_OUTPUT"
+              echo "✓ Data updated and committed"
+              exit 0
+            fi
+
+            echo "Push pokušaj $attempt neuspješan (vjerojatno paralelni run), pokušavam ponovo..."
+            sleep $((attempt * 5))
+          done
+
+          echo "✗ Push neuspješan nakon 5 pokušaja"
+          exit 1
 
   build-and-deploy:
     needs: scrape
