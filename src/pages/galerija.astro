@@ -16,87 +16,102 @@ type Album = {
   photos: Photo[];
 };
 
-const albums = ((albumsData as { albums?: Album[] }).albums || []) as Album[];
-const hasAlbums = albums.length > 0;
+type FlatPhoto = {
+  id: string;
+  src: string;
+  caption: string;
+  createdAt: string;
+  albumName: string;
+  albumPermalink: string | null;
+  aspect: "square" | "tall" | "wide";
+};
 
-function fmtDate(iso: string): string {
-  if (!iso) return "";
-  try {
-    return new Date(iso).toLocaleDateString("hr-HR", {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
+const MAX_PHOTOS = 100;
+
+const albums = ((albumsData as { albums?: Album[] }).albums || []) as Album[];
+
+// Flatten sve fotke iz svih albuma + zadrži referencu na album za caption/link
+const allPhotos: FlatPhoto[] = [];
+for (const album of albums) {
+  for (const p of album.photos) {
+    allPhotos.push({
+      id: p.id,
+      src: p.src,
+      caption: p.caption,
+      createdAt: p.createdAt,
+      albumName: album.name,
+      albumPermalink: album.permalink,
+      aspect: "square", // popunit ćemo dolje
     });
-  } catch {
-    return "";
   }
 }
 
-// Embed-amo svu galeriju u JSON skripti pa lightbox može listati po albumima
-const galleryPayload = albums.map((a) => ({
-  id: a.id,
-  name: a.name,
-  permalink: a.permalink,
-  photos: a.photos.map((p) => ({
-    src: url(p.src),
-    caption: p.caption,
-  })),
+// Sort po datumu silazno, uzmi prvih 100
+allPhotos.sort((a, b) => (b.createdAt || "").localeCompare(a.createdAt || ""));
+const photos = allPhotos.slice(0, MAX_PHOTOS);
+
+// Razbacani aspect ratios — deterministički prema indexu da bi build bio stabilan
+photos.forEach((p, i) => {
+  if (i % 7 === 0) p.aspect = "tall";
+  else if (i % 5 === 0) p.aspect = "wide";
+  else p.aspect = "square";
+});
+
+const hasPhotos = photos.length > 0;
+
+const aspectClass: Record<FlatPhoto["aspect"], string> = {
+  square: "aspect-square",
+  tall: "aspect-[3/4] row-span-2",
+  wide: "aspect-[4/3]",
+};
+
+// Payload za client-side lightbox (samo ono što treba)
+const lightboxPayload = photos.map((p) => ({
+  src: url(p.src),
+  caption: p.caption,
+  albumName: p.albumName,
+  albumPermalink: p.albumPermalink,
 }));
 ---
 
 <BaseLayout
   title="Galerija"
-  description="Foto galerija NK Omladinac Niza - albumi s utakmica, treninga i klupskih događaja, automatski sinhronizirani s Facebook stranice kluba."
+  description="Foto galerija NK Omladinac Niza - posljednjih 100 fotki s utakmica, treninga i klupskih događaja, automatski sinhronizirano s Facebook stranice kluba."
 >
   <Hero
     title="Galerija"
-    subtitle="Albumi s utakmica, treninga i klupskih događaja"
+    subtitle="Posljednje fotke s utakmica, treninga i klupskih događaja"
     height="md"
   />
 
   <section class="container-narrow mt-12">
     {
-      hasAlbums ? (
+      hasPhotos ? (
         <>
           <div
-            id="albums-grid"
-            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"
+            id="gallery-grid"
+            class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 auto-rows-[140px] sm:auto-rows-[180px] md:auto-rows-[200px] gap-3 md:gap-4"
           >
-            {albums.map((album, idx) => (
+            {photos.map((p, idx) => (
               <button
                 type="button"
-                data-album-idx={idx}
-                class="album-card group relative aspect-[4/3] overflow-hidden rounded-lg cursor-pointer focus:outline-none focus:ring-2 focus:ring-club-primary bg-club-light"
-                aria-label={`Otvori album: ${album.name}`}
+                data-photo-idx={idx}
+                class={`gallery-item group relative ${aspectClass[p.aspect]} overflow-hidden rounded-lg cursor-pointer focus:outline-none focus:ring-2 focus:ring-club-primary bg-club-light`}
+                aria-label={p.caption || `Fotka ${idx + 1}`}
               >
                 <img
-                  src={url(album.cover)}
-                  alt={album.name}
+                  src={url(p.src)}
+                  alt={p.caption || p.albumName}
                   loading="lazy"
                   class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
-                <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
-                <div class="absolute inset-x-0 bottom-0 p-4 text-white">
-                  <h3 class="text-lg font-display font-semibold leading-tight line-clamp-2">
-                    {album.name}
-                  </h3>
-                  <div class="mt-1 flex items-center gap-2 text-xs text-white/80">
-                    <span class="inline-flex items-center gap-1">
-                      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                      </svg>
-                      {album.photos.length} {album.photos.length === 1 ? "fotka" : "fotki"}
-                    </span>
-                    {album.updatedAt && (
-                      <>
-                        <span class="opacity-50">·</span>
-                        <span>{fmtDate(album.updatedAt)}</span>
-                      </>
-                    )}
-                  </div>
-                </div>
-                <div class="absolute top-3 right-3 w-9 h-9 rounded-full bg-black/40 backdrop-blur-sm text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="absolute inset-0 bg-black/0 group-hover:bg-black/35 transition-colors flex items-center justify-center">
+                  <svg
+                    class="w-10 h-10 text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m-3-3h6" />
                   </svg>
                 </div>
@@ -104,7 +119,7 @@ const galleryPayload = albums.map((a) => ({
             ))}
           </div>
           <p class="text-center text-xs text-club-muted mt-8">
-            Albumi se automatski sinhroniziraju s Facebook stranice kluba.
+            Prikazano posljednjih {photos.length} fotki — automatski sinhronizirano s Facebook stranice kluba.
           </p>
         </>
       ) : (
@@ -134,7 +149,7 @@ const galleryPayload = albums.map((a) => ({
     }
   </section>
 
-  {hasAlbums && (
+  {hasPhotos && (
     <>
       <!-- Lightbox dialog -->
       <dialog
@@ -178,12 +193,11 @@ const galleryPayload = albums.map((a) => ({
           />
 
           <div class="absolute top-4 left-4 right-20 text-white/90 text-sm">
-            <p id="lightbox-album-name" class="font-display font-semibold truncate"></p>
-            <p id="lightbox-counter" class="text-xs text-white/60 mt-0.5"></p>
+            <p id="lightbox-counter" class="text-xs text-white/70"></p>
           </div>
 
           <div class="absolute bottom-4 inset-x-4 text-center">
-            <p id="lightbox-caption" class="text-white/80 text-sm max-w-2xl mx-auto line-clamp-2"></p>
+            <p id="lightbox-caption" class="text-white/85 text-sm max-w-2xl mx-auto line-clamp-2"></p>
             <a
               id="lightbox-fb-link"
               href="#"
@@ -191,7 +205,7 @@ const galleryPayload = albums.map((a) => ({
               rel="noopener"
               class="inline-flex items-center gap-1.5 mt-2 text-xs text-white/60 hover:text-white"
             >
-              Otvori album na Facebooku
+              <span id="lightbox-album-name"></span>
               <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
               </svg>
@@ -200,49 +214,42 @@ const galleryPayload = albums.map((a) => ({
         </div>
       </dialog>
 
-      <script type="application/json" id="gallery-data" set:html={JSON.stringify(galleryPayload)} />
+      <script type="application/json" id="gallery-data" set:html={JSON.stringify(lightboxPayload)} />
 
       <script>
-        type Photo = { src: string; caption: string };
-        type Album = {
-          id: string;
-          name: string;
-          permalink: string | null;
-          photos: Photo[];
+        type Photo = {
+          src: string;
+          caption: string;
+          albumName: string;
+          albumPermalink: string | null;
         };
 
         const dataEl = document.getElementById("gallery-data");
-        const albums: Album[] = dataEl ? JSON.parse(dataEl.textContent || "[]") : [];
+        const photos: Photo[] = dataEl ? JSON.parse(dataEl.textContent || "[]") : [];
 
         const dialog = document.getElementById("lightbox") as HTMLDialogElement | null;
         const img = document.getElementById("lightbox-img") as HTMLImageElement | null;
         const captionEl = document.getElementById("lightbox-caption");
-        const albumNameEl = document.getElementById("lightbox-album-name");
         const counterEl = document.getElementById("lightbox-counter");
+        const albumNameEl = document.getElementById("lightbox-album-name");
         const fbLinkEl = document.getElementById("lightbox-fb-link") as HTMLAnchorElement | null;
         const closeBtn = document.getElementById("lightbox-close");
         const prevBtn = document.getElementById("lightbox-prev");
         const nextBtn = document.getElementById("lightbox-next");
 
-        let currentAlbum = 0;
-        let currentPhoto = 0;
+        let currentIdx = 0;
 
         function render() {
-          if (!dialog || !img) return;
-          const album = albums[currentAlbum];
-          if (!album || album.photos.length === 0) return;
-          const photo = album.photos[currentPhoto];
-
-          img.src = photo.src;
-          img.alt = photo.caption || album.name;
-          if (captionEl) captionEl.textContent = photo.caption || "";
-          if (albumNameEl) albumNameEl.textContent = album.name;
-          if (counterEl) {
-            counterEl.textContent = `${currentPhoto + 1} / ${album.photos.length}`;
-          }
+          if (!img || photos.length === 0) return;
+          const p = photos[currentIdx];
+          img.src = p.src;
+          img.alt = p.caption || p.albumName;
+          if (captionEl) captionEl.textContent = p.caption || "";
+          if (counterEl) counterEl.textContent = `${currentIdx + 1} / ${photos.length}`;
+          if (albumNameEl) albumNameEl.textContent = p.albumName ? `Album: ${p.albumName}` : "";
           if (fbLinkEl) {
-            if (album.permalink) {
-              fbLinkEl.href = album.permalink;
+            if (p.albumPermalink) {
+              fbLinkEl.href = p.albumPermalink;
               fbLinkEl.style.display = "";
             } else {
               fbLinkEl.style.display = "none";
@@ -250,33 +257,28 @@ const galleryPayload = albums.map((a) => ({
           }
         }
 
-        function open(albumIdx: number, photoIdx = 0) {
+        function open(idx: number) {
           if (!dialog) return;
-          currentAlbum = albumIdx;
-          currentPhoto = photoIdx;
+          currentIdx = ((idx % photos.length) + photos.length) % photos.length;
           render();
           dialog.showModal();
           document.body.style.overflow = "hidden";
         }
 
         function next() {
-          const album = albums[currentAlbum];
-          if (!album) return;
-          currentPhoto = (currentPhoto + 1) % album.photos.length;
+          currentIdx = (currentIdx + 1) % photos.length;
           render();
         }
 
         function prev() {
-          const album = albums[currentAlbum];
-          if (!album) return;
-          currentPhoto = (currentPhoto - 1 + album.photos.length) % album.photos.length;
+          currentIdx = (currentIdx - 1 + photos.length) % photos.length;
           render();
         }
 
-        document.querySelectorAll<HTMLButtonElement>(".album-card").forEach((card) => {
+        document.querySelectorAll<HTMLButtonElement>(".gallery-item").forEach((card) => {
           card.addEventListener("click", () => {
-            const idx = Number(card.dataset.albumIdx);
-            if (!Number.isNaN(idx)) open(idx, 0);
+            const idx = Number(card.dataset.photoIdx);
+            if (!Number.isNaN(idx)) open(idx);
           });
         });
 
@@ -288,7 +290,6 @@ const galleryPayload = albums.map((a) => ({
         nextBtn?.addEventListener("click", next);
 
         dialog?.addEventListener("click", (e) => {
-          // Klik na backdrop (sam dialog element, ne na njegov sadržaj) zatvara
           if (e.target === dialog) {
             dialog.close();
             document.body.style.overflow = "";
