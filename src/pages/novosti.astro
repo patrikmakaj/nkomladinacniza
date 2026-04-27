@@ -29,20 +29,18 @@ const lastUpdated = enabled
   <section class="container-narrow mt-12">
     {
       !enabled && (
-        <div class="bg-club-light border-l-4 border-club-primary p-6 rounded">
-          <h3 class="text-lg mb-2">Facebook integracija još nije aktivirana</h3>
+        <div class="bg-club-light border-l-4 border-club-primary p-6 rounded text-center">
+          <h3 class="text-lg mb-2">Novosti uskoro</h3>
           <p class="text-club-secondary/80 text-sm leading-relaxed">
-            Da bi se ovdje prikazivale objave s naše Facebook stranice
+            U međuvremenu sve novosti i objave možeš pratiti na našoj
             <a
               href="https://www.facebook.com/omladinacniza/"
               target="_blank"
               rel="noopener noreferrer"
-              class="text-club-primary hover:underline"
+              class="text-club-primary hover:underline font-medium"
             >
-              @omladinacniza
-            </a>, treba u GitHub Secrets dodati <code class="bg-white px-1.5 py-0.5 rounded text-xs">FB_PAGE_ID</code>
-            i <code class="bg-white px-1.5 py-0.5 rounded text-xs">FB_ACCESS_TOKEN</code>.
-            Vidi README u repozitoriju.
+              Facebook stranici
+            </a>.
           </p>
         </div>
       )

@@ -88,7 +88,9 @@ export function formatPostDate(iso: string): string {
   return `${date} u ${time}`;
 }
 
-/** "prije 3 dana", "prije 2 sata", "upravo" - relative time */
+/** "prije 3 dana", "prije 2 sata", "prije 5 mjeseci", "upravo" - relative time */
+import { pluralCroatian } from "./croatian";
+
 export function formatRelative(iso: string): string {
   const d = new Date(iso).getTime();
   if (Number.isNaN(d)) return "";
@@ -99,7 +101,23 @@ export function formatRelative(iso: string): string {
 
   if (diffMin < 1) return "upravo";
   if (diffMin < 60) return `prije ${diffMin} min`;
-  if (diffH < 24) return `prije ${diffH} ${diffH === 1 ? "sat" : diffH < 5 ? "sata" : "sati"}`;
-  if (diffD < 30) return `prije ${diffD} ${diffD === 1 ? "dan" : "dana"}`;
-  return formatPostDate(iso);
+  if (diffH < 24) return `prije ${diffH} ${pluralCroatian(diffH, "sat", "sata", "sati")}`;
+  if (diffD < 7) return `prije ${diffD} ${pluralCroatian(diffD, "dan", "dana", "dana")}`;
+
+  const diffW = Math.round(diffD / 7);
+  if (diffD < 30) {
+    if (diffW === 1) return "prije tjedan dana";
+    return `prije ${diffW} ${pluralCroatian(diffW, "tjedan", "tjedna", "tjedana")}`;
+  }
+
+  const diffMo = Math.round(diffD / 30);
+  if (diffD < 365) {
+    if (diffMo === 1) return "prije mjesec dana";
+    return `prije ${diffMo} ${pluralCroatian(diffMo, "mjesec", "mjeseca", "mjeseci")}`;
+  }
+
+  const diffY = Math.round(diffD / 365);
+  if (diffY === 1) return "prije godinu dana";
+  // Za 2+ godina: paucal "godine" / množina "godina"
+  return `prije ${diffY} ${pluralCroatian(diffY, "godine", "godine", "godina")}`;
 }

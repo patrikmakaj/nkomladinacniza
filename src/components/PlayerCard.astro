@@ -1,4 +1,6 @@
 ---
+import { golLabel, nastupLabel } from "../lib/croatian";
+
 interface Props {
   number: number | null;
   name: string;
@@ -66,12 +68,12 @@ const initials = name
       <div class="flex items-center gap-3 mt-2 pt-2 border-t border-club-border text-xs">
         <span class="flex items-center gap-1">
           <span class="font-display font-bold text-club-primary-deep">{appearances}</span>
-          <span class="text-club-muted">nast.</span>
+          <span class="text-club-muted">{nastupLabel(appearances)}</span>
         </span>
         {goals > 0 && (
           <span class="flex items-center gap-1">
             <span class="font-display font-bold text-club-primary">{goals}</span>
-            <span class="text-club-muted">{goals === 1 ? "gol" : "g"}</span>
+            <span class="text-club-muted">{golLabel(goals)}</span>
           </span>
         )}
       </div>

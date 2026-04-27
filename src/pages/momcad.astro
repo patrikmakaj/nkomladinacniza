@@ -4,6 +4,7 @@ import Hero from "../components/Hero.astro";
 import PlayerCard from "../components/PlayerCard.astro";
 import StatRanking from "../components/StatRanking.astro";
 import hns from "../data/hns.json";
+import { golLabel, nastupLabel } from "../lib/croatian";
 
 // Iz HNS podataka — pozicija je samo "Vratar" / "Igrač"
 const allPlayers = hns.players.map((p) => ({
@@ -19,7 +20,7 @@ const topScorersItems = (hns.stats?.topScorers ?? []).slice(0, 10).map((p) => ({
   name: p.name,
   photo: p.photo,
   profileUrl: p.profileUrl,
-  valueHtml: `<span>${p.goals}</span><span class="text-club-muted text-xs font-normal">${p.goals === 1 ? "gol" : "g"}</span>`,
+  valueHtml: `<span>${p.goals}</span><span class="text-club-muted text-xs font-normal">${golLabel(p.goals)}</span>`,
 }));
 
 // Žuti karton SVG + crveni
@@ -44,7 +45,7 @@ const topAppsItems = (hns.stats?.topApps ?? []).slice(0, 10).map((p) => ({
   name: p.name,
   photo: p.photo,
   profileUrl: p.profileUrl,
-  valueHtml: `<span>${p.appearances}</span><span class="text-club-muted text-xs font-normal">nast.</span>`,
+  valueHtml: `<span>${p.appearances}</span><span class="text-club-muted text-xs font-normal">${nastupLabel(p.appearances)}</span>`,
 }));
 
 // Sortiraj: vratari prvi, pa igrači po broju nastupa pa imenu
