@@ -8,6 +8,7 @@ const facts = [
   { label: "Adresa", value: hns.club.address || "Niza, Općina Koška" },
   { label: "Županija", value: "Osječko-baranjska" },
   { label: "Natjecanje", value: hns.competition?.name || "—" },
+  { label: "Aktualni naslov", value: "Prvaci 3. ŽNL OB · 2025/26" },
   { label: "Stadion", value: hns.club.stadium || "—" },
   { label: "Boje", value: "Plavo-bijelo-zlatne" },
 ];
@@ -39,6 +40,19 @@ const boardNO = {
 
   <section class="container-narrow mt-12 grid lg:grid-cols-3 gap-8">
     <div class="lg:col-span-2 space-y-8">
+      {/* Slavljenički callout — naslov prvaka 2025/26 */}
+      <div class="bg-gradient-to-r from-club-accent via-yellow-300 to-club-accent text-club-primary-deep rounded-lg p-5 md:p-6 shadow-md ring-1 ring-club-primary-deep/10 flex items-center gap-4">
+        <span class="text-4xl flex-shrink-0" aria-hidden="true">🏆</span>
+        <div>
+          <p class="font-display font-bold text-base md:text-lg uppercase tracking-wider leading-tight">
+            Prvaci 3. ŽNL OB · Sezona 2025/26
+          </p>
+          <p class="text-sm text-club-primary-deep/85 mt-0.5">
+            Naslov osiguran <strong>4 kola prije kraja</strong> — povratak u 2. ŽNL!
+          </p>
+        </div>
+      </div>
+
       <div>
         <h2 class="text-3xl mb-4">NK Omladinac Niza</h2>
         <div class="prose prose-lg max-w-none text-club-secondary/80 space-y-4">
