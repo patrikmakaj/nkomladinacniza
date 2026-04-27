@@ -2,42 +2,29 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Hero from "../components/Hero.astro";
 
-// Mlađe kategorije organizira Dječja športska akademija "Niza" (osnovana 2014.)
 const categories = [
   {
-    age: "U-8",
-    name: "Predpočetnici",
-    coach: "—",
+    age: "U9",
+    name: "Do 9 godina",
     description:
-      "Najmlađa selekcija kluba u kojoj djeca prve korake u nogometu pravе kroz igru, druženje i osnovne vježbe motorike.",
-    schedule: "Po dogovoru u sklopu DŠA \"Niza\"",
+      "Najmlađa selekcija — kroz igru, zabavu i osnovne vježbe motorike djeca uče prve korake u nogometu i razvijaju ljubav prema sportu.",
   },
   {
-    age: "U-10",
-    name: "Početnici",
-    coach: "—",
+    age: "U11",
+    name: "Do 11 godina",
     description:
-      "Selekcija u kojoj se učvršćuju osnovne tehničke vještine i razvija ljubav prema timskoj igri.",
-    schedule: "Po dogovoru u sklopu DŠA \"Niza\"",
-  },
-  {
-    age: "Juniori",
-    name: "Juniori",
-    coach: "—",
-    description:
-      "Posljednja stepenica prema seniorskoj momčadi - intenzivan rad na svim aspektima igre i pripremu za natjecanja.",
-    schedule: "Po dogovoru",
+      "Selekcija u kojoj se učvršćuju osnovne tehničke vještine, razvija timski duh i priprema za organizirani nastup u natjecanjima.",
   },
 ];
 ---
 
 <BaseLayout
   title="Mlađe kategorije"
-  description="Mlađe selekcije NK Omladinac Niza - U-8, U-10 i juniori, organizirane kroz Dječju športsku akademiju 'Niza'."
+  description="NK Omladinac Niza prima prijave za mlađe kategorije U9 i U11. Kroz povijest kluba afirmiralo se više od 100 djece iz Nize i okolice."
 >
   <Hero
     title="Mlađe kategorije"
-    subtitle="Tri selekcije kroz Dječju športsku akademiju &quot;Niza&quot;"
+    subtitle="Prijave za U9 i U11 otvorene su putem Facebooka"
     height="md"
   />
 
@@ -45,50 +32,44 @@ const categories = [
     <!-- Uvodni info blok -->
     <div class="bg-white border border-club-border rounded-lg p-6 md:p-8 mb-10">
       <div class="flex items-start gap-4">
-        <div class="w-12 h-12 rounded-full bg-club-light flex items-center justify-center flex-shrink-0">
-          <span class="text-club-primary-deep font-display font-bold text-lg">DŠA</span>
+        <div class="w-12 h-12 rounded-full bg-club-light flex items-center justify-center flex-shrink-0 text-2xl">
+          ⚽
         </div>
         <div>
-          <h2 class="text-2xl mb-2">Dječja športska akademija "Niza"</h2>
+          <h2 class="text-2xl mb-2">Mladi igrači NK Omladinac Niza</h2>
           <p class="text-club-secondary/80 leading-relaxed">
-            Osnovana 2014. godine, DŠA "Niza" organizira sve mlađe kategorije našeg kluba.
-            Trenutno nogomet trenira <strong>pedesetak djece</strong> — što je velik
-            uspjeh za selo od 400 stanovnika i pokazatelj kontinuiteta u radu s mladima.
+            Kroz povijest kluba treniralo se i afirmiralo u lokalne i regionalne klubove
+            <strong>više od 100 djece</strong> iz Nize i okolice — što svjedoči
+            dugogodišnjoj predanosti radu s mladim naraštajima u malom selu od oko
+            400 stanovnika. Klub nastavlja tu tradiciju i prima prijave za
+            kategorije <strong>U9 i U11</strong>.
           </p>
         </div>
       </div>
     </div>
 
     <!-- Selekcije -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
       {
         categories.map((c) => (
           <article class="bg-white border border-club-border rounded-lg overflow-hidden hover:shadow-lg transition-shadow flex flex-col">
-            <div class="bg-gradient-to-r from-club-primary-deep to-club-primary text-white px-6 py-4 flex items-center justify-between">
-              <div class="flex items-center gap-3">
-                <div class="bg-club-accent text-club-primary-deep px-3 py-1 rounded font-display font-bold">
-                  {c.age}
-                </div>
-                <h3 class="text-xl">{c.name}</h3>
+            <div class="bg-gradient-to-r from-club-primary-deep to-club-primary text-white px-6 py-4 flex items-center gap-3">
+              <div class="bg-club-accent text-club-primary-deep px-3 py-1 rounded font-display font-bold text-lg">
+                {c.age}
               </div>
+              <h3 class="text-xl">{c.name}</h3>
             </div>
             <div class="p-6 flex-1 flex flex-col">
               <p class="text-club-secondary/80 leading-relaxed mb-4 flex-1">
                 {c.description}
               </p>
-              <div class="space-y-2 pt-4 border-t border-club-border">
-                <div class="flex items-start gap-2 text-sm">
-                  <span class="font-display uppercase tracking-wider text-xs text-club-muted w-20 flex-shrink-0 pt-0.5">
-                    Trener
-                  </span>
-                  <span class="font-medium">{c.coach}</span>
-                </div>
-                <div class="flex items-start gap-2 text-sm">
-                  <span class="font-display uppercase tracking-wider text-xs text-club-muted w-20 flex-shrink-0 pt-0.5">
-                    Termini
-                  </span>
-                  <span>{c.schedule}</span>
-                </div>
+              <div class="pt-4 border-t border-club-border">
+                <span class="inline-flex items-center gap-1.5 text-sm font-medium text-club-primary">
+                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                  </svg>
+                  Prijave putem Facebooka
+                </span>
               </div>
             </div>
           </article>
@@ -97,13 +78,13 @@ const categories = [
     </div>
 
     <!-- Uspjeh - Katarina -->
-    <div class="mt-12 bg-gradient-to-r from-club-primary-deep to-club-primary text-white rounded-lg p-6 md:p-8">
+    <div class="bg-gradient-to-r from-club-primary-deep to-club-primary text-white rounded-lg p-6 md:p-8 mb-10">
       <div class="flex items-start gap-4">
         <span class="text-club-accent text-4xl flex-shrink-0">★</span>
         <div>
-          <h3 class="text-2xl mb-2 text-white">Naš uspjeh: Katarina Pranješ</h3>
+          <h3 class="text-2xl mb-2 text-white">Naš ponos: Katarina Pranješ</h3>
           <p class="text-white/90 leading-relaxed">
-            Iz naše DŠA "Niza" potekla je <strong>prva registrirana ženska igračica</strong>
+            Iz naše mladeži potekla je <strong>prva registrirana ženska igračica</strong>
             u povijesti kluba. Karijeru je započela 2014., a danas je članica ŽNK Split,
             državna prvakinja s ŽNK Osijekom (2017/18.) i hrvatska reprezentativka.
           </p>
@@ -112,18 +93,23 @@ const categories = [
     </div>
 
     <!-- CTA -->
-    <div class="mt-10 bg-club-light border-l-4 border-club-primary p-6 rounded">
+    <div class="bg-club-light border-l-4 border-club-primary p-6 rounded">
       <h3 class="text-xl mb-2">Želiš se priključiti?</h3>
       <p class="text-club-secondary/80 mb-4">
-        Klub i DŠA "Niza" otvoreni su za sve mlade ljubitelje nogometa. Za upis nove djece
-        kontaktiraj nas na
-        <a
-          href="mailto:info@nkomladinacniza.hr"
-          class="text-club-primary font-medium hover:underline"
-          >info@nkomladinacniza.hr</a
-        >
-        ili dođi na trening na ŠRC Miroslav Knežević-Bujdo.
+        Pošalji nam poruku na Facebooku ili dođi na trening na
+        <strong>ŠRC Miroslav Knežević-Bujdo</strong> — rado ćemo te dočekati!
       </p>
+      <a
+        href="https://www.facebook.com/omladinacniza"
+        target="_blank"
+        rel="noopener"
+        class="inline-flex items-center gap-2 bg-club-primary text-white px-5 py-2.5 rounded-lg font-medium hover:bg-club-primary-deep transition-colors"
+      >
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+        </svg>
+        Kontaktiraj nas na Facebooku
+      </a>
     </div>
   </section>
 </BaseLayout>
