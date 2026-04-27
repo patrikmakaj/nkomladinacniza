@@ -1,8 +1,7 @@
-# robots.txt za nkomladinacniza.hr
-# https://patrikmakaj.github.io/nkomladinacniza/
+# robots.txt za omladinacniza.hr
 
 User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: https://patrikmakaj.github.io/nkomladinacniza/sitemap-index.xml
+Sitemap: https://omladinacniza.hr/sitemap-index.xml
