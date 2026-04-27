@@ -56,7 +56,19 @@ jobs:
           if [[ -n "$CHANGED" ]]; then
             git add src/data/ public/images/facebook/
             git commit -m "chore(data): update scrape $(date -u +%Y-%m-%dT%H:%MZ)"
-            git push
+            # Retry s rebase-om u slučaju da je drugi run paralelno pushnuo
+            for attempt in 1 2 3 4 5; do
+              if git pull --rebase origin main && git push; then
+                echo "✓ Push uspio (pokušaj $attempt)"
+                break
+              fi
+              if [[ $attempt -eq 5 ]]; then
+                echo "✗ Push neuspješan nakon 5 pokušaja"
+                exit 1
+              fi
+              echo "Push pokušaj $attempt neuspješan, čekam pa ponovo..."
+              sleep $((attempt * 5))
+            done
             echo "data_changed=true" >> "$GITHUB_OUTPUT"
             echo "✓ Data updated and committed"
           else
