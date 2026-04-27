@@ -1,8 +1,17 @@
 {
-  "lastUpdated": "2026-04-27T16:39:17.250Z",
+  "lastUpdated": "2026-04-27T17:48:15.541Z",
   "enabled": true,
   "pageId": "55401829691",
   "posts": [
+    {
+      "id": "55401829691_1552312473567914",
+      "message": "Postani dio ove lijepe sportske priče, naruči svoju majicu. Cijena je 8 eura, a veličine su od dječje 86-94 do unisex 3XL. Majice je moguće preuzeti na kraju prvenstva u prostorijama kluba, po dogovoru u Osijeku ili slanje poštom.\nNaručiti možete u komentarima ove objave, u porukama sa stranicom ili porukom na 0915082684.\nPotrebno je napisati ime, prezime i veličinu.",
+      "createdAt": "2026-04-27T07:52:26+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1552312473567914",
+      "images": [
+        "/images/facebook/55401829691_1552312473567914.jpg"
+      ]
+    },
     {
       "id": "55401829691_1550993490366479",
       "message": "Nakon dugih 17 godina smo prvaci Lige Nogometnog Saveza Našice. Nakon krize i nestabilnosti prethodnih godina, složili smo se i krenuli raditi stvari na ispravan način. Treninzi i, najbitnije, zajedništvo su urodili plodom te smo četiri kola prije kraja matematički postali prvaci. Iako smo osigurali prvo mjesto, ostale su tri utakmice u koje ćemo ući ozbiljno kao i do sad te na kraju za kirvaj proslaviti s trofejem. Hvala svima na podršci. Za Benđu!💙",
@@ -234,16 +243,6 @@
         "/images/facebook/55401829691_1515203130612182_0.jpg",
         "/images/facebook/55401829691_1515203130612182_1.jpg"
       ]
-    },
-    {
-      "id": "55401829691_1513362814129547",
-      "message": "Benđo ova je za tebe 💙",
-      "createdAt": "2026-03-14T15:34:52+0000",
-      "permalink": "https://www.facebook.com/1551452460320582/posts/1513362814129547",
-      "images": [
-        "/images/facebook/55401829691_1513362814129547.jpg"
-      ]
     }
-  ],
-  "lastError": "Graph API HTTP 400: {\"error\":{\"message\":\"Error validating access token: Session has expired on Sunday, 26-Apr-26 04:00:00 PDT. The current time is Monday, 27-Apr-26 09:39:17 PDT.\",\"type\":\"OAuthException\",\"code\":190,\"erro"
+  ]
 }
