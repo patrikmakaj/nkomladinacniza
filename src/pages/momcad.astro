@@ -63,6 +63,7 @@ const totalGoals = players.reduce((sum, p) => sum + (p.stats.goals || 0), 0);
 const lastUpdated = new Date(hns.lastUpdated).toLocaleString("hr-HR", {
   dateStyle: "short",
   timeStyle: "short",
+  timeZone: "Europe/Zagreb",
 });
 const competition = hns.competition?.name ?? "Sezona";
 ---

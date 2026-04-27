@@ -11,6 +11,7 @@ const lastUpdated = enabled
   ? new Date(facebook.lastUpdated).toLocaleString("hr-HR", {
       dateStyle: "short",
       timeStyle: "short",
+      timeZone: "Europe/Zagreb",
     })
   : null;
 ---
