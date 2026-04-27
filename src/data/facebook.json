@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-04-26T10:24:37.142Z",
+  "lastUpdated": "2026-04-27T16:39:17.250Z",
   "enabled": true,
   "pageId": "55401829691",
   "posts": [
@@ -244,5 +244,6 @@
         "/images/facebook/55401829691_1513362814129547.jpg"
       ]
     }
-  ]
+  ],
+  "lastError": "Graph API HTTP 400: {\"error\":{\"message\":\"Error validating access token: Session has expired on Sunday, 26-Apr-26 04:00:00 PDT. The current time is Monday, 27-Apr-26 09:39:17 PDT.\",\"type\":\"OAuthException\",\"code\":190,\"erro"
 }
