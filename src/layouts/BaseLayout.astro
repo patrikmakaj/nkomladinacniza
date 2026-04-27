@@ -7,7 +7,7 @@ import { url } from "../lib/url";
 interface Props {
   title?: string;
   description?: string;
-  /** Path do OG slike (relativan, npr. "/images/logo.svg"). Default je grb. */
+  /** Path do OG slike (relativan, npr. "/images/og-image.png"). Default je grb na plavoj pozadini, 1200×630. */
   image?: string;
   /** og:type — default "website", za novosti može biti "article" */
   ogType?: "website" | "article";
@@ -18,7 +18,7 @@ interface Props {
 const {
   title = "NK Omladinac Niza",
   description = "Službena web stranica nogometnog kluba NK Omladinac Niza iz mjesta Niza, Općina Koška. Tablica, raspored, igrači, novosti.",
-  image = "/images/logo.svg",
+  image = "/images/og-image.png",
   ogType = "website",
   noIndex = false,
 } = Astro.props;
