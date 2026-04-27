@@ -3,12 +3,10 @@ import { defineConfig } from "astro/config";
 import tailwindcss from "@tailwindcss/vite";
 import sitemap from "@astrojs/sitemap";
 
-// GitHub Pages konfiguracija
-// Dok je sajt na patrikmakaj.github.io/nkomladinacniza/ koristi base "/nkomladinacniza".
-// Kad nabaviš domenu nkomladinacniza.hr, promijeni site na "https://nkomladinacniza.hr"
-// i base na "/" (i dodaj public/CNAME s domenom).
-const SITE = process.env.ASTRO_SITE || "https://patrikmakaj.github.io";
-const BASE = process.env.ASTRO_BASE || "/nkomladinacniza";
+// Custom domena omladinacniza.hr (preko deSEC DNS-a) → GitHub Pages
+// public/CNAME drži vrijednost koja konfigurira GitHub Pages
+const SITE = process.env.ASTRO_SITE || "https://omladinacniza.hr";
+const BASE = process.env.ASTRO_BASE || "/";
 
 // https://astro.build/config
 export default defineConfig({
