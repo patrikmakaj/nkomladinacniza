@@ -137,9 +137,6 @@ jobs:
           # FB token treba i build step-u jer prebuild ponovo scrapa
           FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
           FB_ACCESS_TOKEN: ${{ secrets.FB_ACCESS_TOKEN }}
-          # postaviti pravi URL kasnije kad domena bude poznata
-          # za sada koristi defaultni github.io path
-          ASTRO_SITE: ${{ vars.ASTRO_SITE || format('https://{0}.github.io', github.repository_owner) }}
 
       - uses: actions/configure-pages@v5
 
