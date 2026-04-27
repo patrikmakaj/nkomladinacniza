@@ -1,156 +1,309 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Hero from "../components/Hero.astro";
+import { url } from "../lib/url";
+import albumsData from "../data/facebook-albums.json";
 
-// Placeholder slike - generiramo gradijente kao SVG dok ne dodamo prave fotke
-const photos = Array.from({ length: 18 }, (_, i) => {
-  const hues = [0, 15, 30, 220, 240, 260];
-  const hue = hues[i % hues.length];
-  const aspect = i % 4 === 0 ? "tall" : i % 5 === 0 ? "wide" : "square";
-  return {
-    id: i + 1,
-    title: `Galerija slika ${i + 1}`,
-    placeholder: `linear-gradient(${135 + i * 10}deg, hsl(${hue}, 60%, 25%), hsl(${hue}, 70%, 45%))`,
-    aspect,
-  };
-});
-
-const aspectClass = {
-  square: "aspect-square",
-  tall: "aspect-[3/4]",
-  wide: "aspect-[4/3]",
+type Photo = { id: string; src: string; caption: string; createdAt: string };
+type Album = {
+  id: string;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+  permalink: string | null;
+  cover: string;
+  count: number;
+  photos: Photo[];
 };
+
+const albums = ((albumsData as { albums?: Album[] }).albums || []) as Album[];
+const hasAlbums = albums.length > 0;
+
+function fmtDate(iso: string): string {
+  if (!iso) return "";
+  try {
+    return new Date(iso).toLocaleDateString("hr-HR", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
+  } catch {
+    return "";
+  }
+}
+
+// Embed-amo svu galeriju u JSON skripti pa lightbox može listati po albumima
+const galleryPayload = albums.map((a) => ({
+  id: a.id,
+  name: a.name,
+  permalink: a.permalink,
+  photos: a.photos.map((p) => ({
+    src: url(p.src),
+    caption: p.caption,
+  })),
+}));
 ---
 
-<BaseLayout title="Galerija" description="Fotografije s utakmica i događaja NK Omladinac Niza.">
+<BaseLayout
+  title="Galerija"
+  description="Foto galerija NK Omladinac Niza - albumi s utakmica, treninga i klupskih događaja, automatski sinhronizirani s Facebook stranice kluba."
+>
   <Hero
     title="Galerija"
-    subtitle="Trenuci s naših utakmica, treninga i klupskih događaja"
+    subtitle="Albumi s utakmica, treninga i klupskih događaja"
     height="md"
   />
 
   <section class="container-narrow mt-12">
-    <div
-      id="gallery-grid"
-      class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4"
-    >
-      {
-        photos.map((p) => (
-          <button
-            type="button"
-            data-photo-id={p.id}
-            class={`gallery-item group relative ${aspectClass[p.aspect as keyof typeof aspectClass]} overflow-hidden rounded-lg cursor-pointer focus:outline-none focus:ring-2 focus:ring-club-primary`}
-            style={`background: ${p.placeholder};`}
-            aria-label={p.title}
+    {
+      hasAlbums ? (
+        <>
+          <div
+            id="albums-grid"
+            class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"
           >
-            <div class="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center">
-              <svg
-                class="w-10 h-10 text-white opacity-0 group-hover:opacity-100 transition-opacity"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+            {albums.map((album, idx) => (
+              <button
+                type="button"
+                data-album-idx={idx}
+                class="album-card group relative aspect-[4/3] overflow-hidden rounded-lg cursor-pointer focus:outline-none focus:ring-2 focus:ring-club-primary bg-club-light"
+                aria-label={`Otvori album: ${album.name}`}
               >
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m-3-3h6" />
-              </svg>
-            </div>
-          </button>
-        ))
-      }
-    </div>
-
-    <p class="text-center text-sm text-club-muted mt-8">
-      Galerija će se popuniti pravim fotografijama uskoro.
-    </p>
+                <img
+                  src={url(album.cover)}
+                  alt={album.name}
+                  loading="lazy"
+                  class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent" />
+                <div class="absolute inset-x-0 bottom-0 p-4 text-white">
+                  <h3 class="text-lg font-display font-semibold leading-tight line-clamp-2">
+                    {album.name}
+                  </h3>
+                  <div class="mt-1 flex items-center gap-2 text-xs text-white/80">
+                    <span class="inline-flex items-center gap-1">
+                      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                      {album.photos.length} {album.photos.length === 1 ? "fotka" : "fotki"}
+                    </span>
+                    {album.updatedAt && (
+                      <>
+                        <span class="opacity-50">·</span>
+                        <span>{fmtDate(album.updatedAt)}</span>
+                      </>
+                    )}
+                  </div>
+                </div>
+                <div class="absolute top-3 right-3 w-9 h-9 rounded-full bg-black/40 backdrop-blur-sm text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m-3-3h6" />
+                  </svg>
+                </div>
+              </button>
+            ))}
+          </div>
+          <p class="text-center text-xs text-club-muted mt-8">
+            Albumi se automatski sinhroniziraju s Facebook stranice kluba.
+          </p>
+        </>
+      ) : (
+        <div class="bg-white border border-club-border rounded-lg p-8 md:p-12 text-center">
+          <div class="w-16 h-16 rounded-full bg-club-light mx-auto mb-4 flex items-center justify-center">
+            <svg class="w-8 h-8 text-club-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+          </div>
+          <h2 class="text-2xl mb-2">Galerija uskoro</h2>
+          <p class="text-club-secondary/80 max-w-md mx-auto mb-4">
+            Sve fotke s utakmica i događaja u međuvremenu možeš pogledati na našoj Facebook stranici.
+          </p>
+          <a
+            href="https://www.facebook.com/omladinacniza/photos"
+            target="_blank"
+            rel="noopener"
+            class="inline-flex items-center gap-2 bg-club-primary text-white px-5 py-2.5 rounded-lg font-medium hover:bg-club-primary-deep transition-colors"
+          >
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+            </svg>
+            Otvori fotke na Facebooku
+          </a>
+        </div>
+      )
+    }
   </section>
 
-  <!-- Lightbox dialog -->
-  <dialog
-    id="lightbox"
-    class="m-0 p-0 max-w-none w-full h-full bg-black/95 backdrop:bg-black/80"
-  >
-    <div class="relative w-full h-full flex items-center justify-center">
-      <button
-        id="lightbox-close"
-        class="absolute top-4 right-4 z-10 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center"
-        aria-label="Zatvori"
+  {hasAlbums && (
+    <>
+      <!-- Lightbox dialog -->
+      <dialog
+        id="lightbox"
+        class="m-0 p-0 max-w-none w-full h-full bg-black/95 backdrop:bg-black/80"
       >
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-        </svg>
-      </button>
-      <button
-        id="lightbox-prev"
-        class="absolute left-4 z-10 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center"
-        aria-label="Prethodna"
-      >
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-        </svg>
-      </button>
-      <button
-        id="lightbox-next"
-        class="absolute right-4 z-10 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center"
-        aria-label="Sljedeća"
-      >
-        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-        </svg>
-      </button>
-      <div
-        id="lightbox-content"
-        class="w-[80vw] h-[80vh] max-w-4xl rounded-lg shadow-2xl"
-      ></div>
-      <p id="lightbox-caption" class="absolute bottom-6 text-white/80 text-sm"></p>
-    </div>
-  </dialog>
+        <div class="relative w-full h-full flex items-center justify-center">
+          <button
+            id="lightbox-close"
+            class="absolute top-4 right-4 z-10 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center"
+            aria-label="Zatvori"
+          >
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+          <button
+            id="lightbox-prev"
+            class="absolute left-2 sm:left-4 z-10 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center"
+            aria-label="Prethodna"
+          >
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+          <button
+            id="lightbox-next"
+            class="absolute right-2 sm:right-4 z-10 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center"
+            aria-label="Sljedeća"
+          >
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+
+          <img
+            id="lightbox-img"
+            src=""
+            alt=""
+            class="max-w-[90vw] max-h-[80vh] object-contain rounded-lg shadow-2xl"
+          />
+
+          <div class="absolute top-4 left-4 right-20 text-white/90 text-sm">
+            <p id="lightbox-album-name" class="font-display font-semibold truncate"></p>
+            <p id="lightbox-counter" class="text-xs text-white/60 mt-0.5"></p>
+          </div>
+
+          <div class="absolute bottom-4 inset-x-4 text-center">
+            <p id="lightbox-caption" class="text-white/80 text-sm max-w-2xl mx-auto line-clamp-2"></p>
+            <a
+              id="lightbox-fb-link"
+              href="#"
+              target="_blank"
+              rel="noopener"
+              class="inline-flex items-center gap-1.5 mt-2 text-xs text-white/60 hover:text-white"
+            >
+              Otvori album na Facebooku
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+              </svg>
+            </a>
+          </div>
+        </div>
+      </dialog>
+
+      <script type="application/json" id="gallery-data" set:html={JSON.stringify(galleryPayload)} />
+
+      <script>
+        type Photo = { src: string; caption: string };
+        type Album = {
+          id: string;
+          name: string;
+          permalink: string | null;
+          photos: Photo[];
+        };
+
+        const dataEl = document.getElementById("gallery-data");
+        const albums: Album[] = dataEl ? JSON.parse(dataEl.textContent || "[]") : [];
+
+        const dialog = document.getElementById("lightbox") as HTMLDialogElement | null;
+        const img = document.getElementById("lightbox-img") as HTMLImageElement | null;
+        const captionEl = document.getElementById("lightbox-caption");
+        const albumNameEl = document.getElementById("lightbox-album-name");
+        const counterEl = document.getElementById("lightbox-counter");
+        const fbLinkEl = document.getElementById("lightbox-fb-link") as HTMLAnchorElement | null;
+        const closeBtn = document.getElementById("lightbox-close");
+        const prevBtn = document.getElementById("lightbox-prev");
+        const nextBtn = document.getElementById("lightbox-next");
+
+        let currentAlbum = 0;
+        let currentPhoto = 0;
+
+        function render() {
+          if (!dialog || !img) return;
+          const album = albums[currentAlbum];
+          if (!album || album.photos.length === 0) return;
+          const photo = album.photos[currentPhoto];
+
+          img.src = photo.src;
+          img.alt = photo.caption || album.name;
+          if (captionEl) captionEl.textContent = photo.caption || "";
+          if (albumNameEl) albumNameEl.textContent = album.name;
+          if (counterEl) {
+            counterEl.textContent = `${currentPhoto + 1} / ${album.photos.length}`;
+          }
+          if (fbLinkEl) {
+            if (album.permalink) {
+              fbLinkEl.href = album.permalink;
+              fbLinkEl.style.display = "";
+            } else {
+              fbLinkEl.style.display = "none";
+            }
+          }
+        }
+
+        function open(albumIdx: number, photoIdx = 0) {
+          if (!dialog) return;
+          currentAlbum = albumIdx;
+          currentPhoto = photoIdx;
+          render();
+          dialog.showModal();
+          document.body.style.overflow = "hidden";
+        }
+
+        function next() {
+          const album = albums[currentAlbum];
+          if (!album) return;
+          currentPhoto = (currentPhoto + 1) % album.photos.length;
+          render();
+        }
+
+        function prev() {
+          const album = albums[currentAlbum];
+          if (!album) return;
+          currentPhoto = (currentPhoto - 1 + album.photos.length) % album.photos.length;
+          render();
+        }
+
+        document.querySelectorAll<HTMLButtonElement>(".album-card").forEach((card) => {
+          card.addEventListener("click", () => {
+            const idx = Number(card.dataset.albumIdx);
+            if (!Number.isNaN(idx)) open(idx, 0);
+          });
+        });
+
+        closeBtn?.addEventListener("click", () => {
+          dialog?.close();
+          document.body.style.overflow = "";
+        });
+        prevBtn?.addEventListener("click", prev);
+        nextBtn?.addEventListener("click", next);
+
+        dialog?.addEventListener("click", (e) => {
+          // Klik na backdrop (sam dialog element, ne na njegov sadržaj) zatvara
+          if (e.target === dialog) {
+            dialog.close();
+            document.body.style.overflow = "";
+          }
+        });
+        dialog?.addEventListener("close", () => {
+          document.body.style.overflow = "";
+        });
+
+        document.addEventListener("keydown", (e) => {
+          if (!dialog?.open) return;
+          if (e.key === "ArrowLeft") prev();
+          if (e.key === "ArrowRight") next();
+        });
+      </script>
+    </>
+  )}
 </BaseLayout>
-
-<script>
-  type PhotoData = { id: number; bg: string; title: string };
-
-  const items = Array.from(
-    document.querySelectorAll<HTMLButtonElement>(".gallery-item"),
-  );
-  const photos: PhotoData[] = items.map((el) => ({
-    id: Number(el.dataset.photoId),
-    bg: el.style.background,
-    title: el.getAttribute("aria-label") || "",
-  }));
-
-  const dialog = document.getElementById("lightbox") as HTMLDialogElement;
-  const content = document.getElementById("lightbox-content") as HTMLElement;
-  const caption = document.getElementById("lightbox-caption") as HTMLElement;
-  const closeBtn = document.getElementById("lightbox-close");
-  const prevBtn = document.getElementById("lightbox-prev");
-  const nextBtn = document.getElementById("lightbox-next");
-
-  let currentIdx = 0;
-
-  function show(idx: number) {
-    currentIdx = (idx + photos.length) % photos.length;
-    const p = photos[currentIdx];
-    content.style.background = p.bg;
-    caption.textContent = p.title;
-  }
-
-  items.forEach((el, idx) => {
-    el.addEventListener("click", () => {
-      show(idx);
-      dialog.showModal();
-    });
-  });
-
-  closeBtn?.addEventListener("click", () => dialog.close());
-  prevBtn?.addEventListener("click", () => show(currentIdx - 1));
-  nextBtn?.addEventListener("click", () => show(currentIdx + 1));
-
-  dialog.addEventListener("click", (e) => {
-    if (e.target === dialog) dialog.close();
-  });
-
-  document.addEventListener("keydown", (e) => {
-    if (!dialog.open) return;
-    if (e.key === "ArrowLeft") show(currentIdx - 1);
-    if (e.key === "ArrowRight") show(currentIdx + 1);
-  });
-</script>

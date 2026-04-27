@@ -12,7 +12,8 @@
     "astro": "astro",
     "scrape:hns": "node scripts/scrape.mjs",
     "scrape:facebook": "node scripts/scrape-facebook.mjs",
-    "scrape": "npm run scrape:hns && npm run scrape:facebook",
+    "scrape:fb-albums": "node scripts/scrape-facebook-albums.mjs",
+    "scrape": "npm run scrape:hns && npm run scrape:facebook && npm run scrape:fb-albums",
     "prebuild": "npm run scrape"
   },
   "dependencies": {
