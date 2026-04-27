@@ -23,7 +23,6 @@ type FlatPhoto = {
   createdAt: string;
   albumName: string;
   albumPermalink: string | null;
-  aspect: "square" | "tall" | "wide";
 };
 
 const MAX_PHOTOS = 100;
@@ -41,7 +40,6 @@ for (const album of albums) {
       createdAt: p.createdAt,
       albumName: album.name,
       albumPermalink: album.permalink,
-      aspect: "square", // popunit ćemo dolje
     });
   }
 }
@@ -50,20 +48,7 @@ for (const album of albums) {
 allPhotos.sort((a, b) => (b.createdAt || "").localeCompare(a.createdAt || ""));
 const photos = allPhotos.slice(0, MAX_PHOTOS);
 
-// Razbacani aspect ratios — deterministički prema indexu da bi build bio stabilan
-photos.forEach((p, i) => {
-  if (i % 7 === 0) p.aspect = "tall";
-  else if (i % 5 === 0) p.aspect = "wide";
-  else p.aspect = "square";
-});
-
 const hasPhotos = photos.length > 0;
-
-const aspectClass: Record<FlatPhoto["aspect"], string> = {
-  square: "aspect-square",
-  tall: "aspect-[3/4] row-span-2",
-  wide: "aspect-[4/3]",
-};
 
 // Payload za client-side lightbox (samo ono što treba)
 const lightboxPayload = photos.map((p) => ({
@@ -90,22 +75,22 @@ const lightboxPayload = photos.map((p) => ({
         <>
           <div
             id="gallery-grid"
-            class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 auto-rows-[140px] sm:auto-rows-[180px] md:auto-rows-[200px] gap-3 md:gap-4"
+            class="columns-2 md:columns-3 lg:columns-4 gap-3 md:gap-4 [column-fill:_balance]"
           >
             {photos.map((p, idx) => (
               <button
                 type="button"
                 data-photo-idx={idx}
-                class={`gallery-item group relative ${aspectClass[p.aspect]} overflow-hidden rounded-lg cursor-pointer focus:outline-none focus:ring-2 focus:ring-club-primary bg-club-light`}
+                class="gallery-item group relative block w-full mb-3 md:mb-4 break-inside-avoid overflow-hidden rounded-lg cursor-pointer focus:outline-none focus:ring-2 focus:ring-club-primary bg-club-light"
                 aria-label={p.caption || `Fotka ${idx + 1}`}
               >
                 <img
                   src={url(p.src)}
                   alt={p.caption || p.albumName}
                   loading="lazy"
-                  class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  class="block w-full h-auto group-hover:scale-105 transition-transform duration-500"
                 />
-                <div class="absolute inset-0 bg-black/0 group-hover:bg-black/35 transition-colors flex items-center justify-center">
+                <div class="absolute inset-0 bg-black/0 group-hover:bg-black/35 transition-colors flex items-center justify-center pointer-events-none">
                   <svg
                     class="w-10 h-10 text-white opacity-0 group-hover:opacity-100 transition-opacity"
                     fill="none"
