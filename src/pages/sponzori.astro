@@ -1,0 +1,89 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Hero from "../components/Hero.astro";
+import { url } from "../lib/url";
+
+type Sponsor = {
+  name: string;
+  logo?: string;
+  url?: string;
+  textOnly?: boolean;
+};
+
+const sponzori: Sponsor[] = [
+  { name: "Općina Koška", logo: "opcinakoska.png", url: "https://www.koska.hr/" },
+  { name: "HANA d.o.o.", logo: "hanadoo.jpg", url: "https://hana.hr/" },
+  { name: "NEXE d.d.", logo: "nexedd.png", url: "https://www.nexe.hr/" },
+  { name: "GRADITELJSTVO NOA j.d.o.o.", logo: "graditeljstvonoa.jpg", url: "https://www.facebook.com/graditeljstvonoa/?locale=hr_HR" },
+  { name: "PATERNA d.o.o.", logo: "paternadoo.png", url: "https://webshop.paterna.hr/" },
+  { name: "JERKOVIĆ d.o.o. Koška", logo: "jerkovic.png", url: "https://www.jerkovic.hr/" },
+  { name: "OPG Radaković Nedeljko", logo: "nedeljkoradakovic.jpg", url: "https://www.facebook.com/nedeljko.radakovic" },
+  { name: "Branimir Petranović - Maka", logo: "branimirpetranovicmaka.jpg", url: "https://www.facebook.com/branimir.petranovicmaka" },
+  { name: "ĆOSO POSO", textOnly: true },
+  { name: "Pro-mont", textOnly: true },
+  { name: "IZOLACIJA-KOŠKA d.o.o.", textOnly: true, url: "https://www.izolacija.hr/" },
+  { name: "Tunja Tomić", textOnly: true },
+];
+
+const textLogo = (name: string) => name.replace(/-/g, " ").toUpperCase();
+---
+
+<BaseLayout
+  title="Sponzori"
+  description="Sponzori i prijatelji NK Omladinac Niza — svi koji podržavaju klub."
+>
+  <Hero
+    title="Sponzori"
+    subtitle="Hvala svima koji podržavaju naš klub"
+    height="md"
+  />
+
+  <section class="container-narrow mt-12 mb-20">
+    <ul class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+      {sponzori.map((s) => (
+        <li>
+          {s.url ? (
+            <a
+              href={s.url}
+              target="_blank"
+              rel="noopener"
+              title={s.name}
+              class="group block bg-white border border-club-border rounded-lg aspect-square flex items-center justify-center p-4 hover:border-club-primary hover:shadow-md transition"
+            >
+              {s.textOnly ? (
+                <span class="font-display font-bold text-2xl md:text-3xl text-club-primary text-center leading-tight tracking-wide">
+                  {textLogo(s.name)}
+                </span>
+              ) : (
+                <img
+                  src={url(`/images/sponzori/${s.logo}`)}
+                  alt={s.name}
+                  loading="lazy"
+                  class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform"
+                />
+              )}
+            </a>
+          ) : (
+            <div
+              title={s.name}
+              class="bg-white border border-club-border rounded-lg aspect-square flex items-center justify-center p-4"
+            >
+              {s.textOnly ? (
+                <span class="font-display font-bold text-2xl md:text-3xl text-club-primary text-center leading-tight tracking-wide">
+                  {textLogo(s.name)}
+                </span>
+              ) : (
+                <img
+                  src={url(`/images/sponzori/${s.logo}`)}
+                  alt={s.name}
+                  loading="lazy"
+                  class="max-h-full max-w-full object-contain"
+                />
+              )}
+            </div>
+          )}
+        </li>
+      ))}
+    </ul>
+  </section>
+</BaseLayout>
