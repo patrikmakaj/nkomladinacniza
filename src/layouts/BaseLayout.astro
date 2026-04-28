@@ -43,8 +43,12 @@ const ogImageUrl = new URL(url(image), Astro.site).toString();
     <!-- Canonical -->
     <link rel="canonical" href={canonical} />
 
-    <!-- Favicon -->
+    <!-- Favicon — klupski grb -->
     <link rel="icon" type="image/svg+xml" href={url("/favicon.svg")} />
+    <link rel="icon" type="image/png" sizes="32x32" href={url("/favicon-32.png")} />
+    <link rel="apple-touch-icon" sizes="180x180" href={url("/apple-touch-icon.png")} />
+    <link rel="icon" type="image/png" sizes="192x192" href={url("/icon-192.png")} />
+    <link rel="icon" type="image/png" sizes="512x512" href={url("/icon-512.png")} />
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
