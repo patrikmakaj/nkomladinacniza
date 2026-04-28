@@ -1,0 +1,393 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Hero from "../components/Hero.astro";
+import Logo from "../components/Logo.astro";
+import hns from "../data/hns.json";
+
+type Match = {
+  id: string;
+  round: number;
+  date: string;
+  time: string;
+  iso: string;
+  competition: string;
+  home: { id: number; name: string; logo: string | null };
+  away: { id: number; name: string; logo: string | null };
+  score: { home: number; away: number } | null;
+  played: boolean;
+  isHome: boolean;
+  result: "W" | "D" | "L" | null;
+  url: string | null;
+};
+
+const allMatches = (hns.matches ?? []) as Match[];
+const competitionName = hns.competition?.name ?? "Sezona";
+
+// Sortirano po datumu — predstojeće uzlazno, odigrane silazno
+const upcoming = allMatches
+  .filter((m) => !m.played)
+  .sort((a, b) => a.iso.localeCompare(b.iso));
+const played = allMatches
+  .filter((m) => m.played)
+  .sort((a, b) => b.iso.localeCompare(a.iso));
+
+const totalRounds = Math.max(...allMatches.map((m) => m.round || 0), 0);
+
+// Hrvatski format datuma (npr. "ned, 2. svibnja 2026.")
+function formatDate(iso: string): string {
+  if (!iso) return "";
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return iso;
+  const weekday = d.toLocaleDateString("hr-HR", { weekday: "short" });
+  const date = d.toLocaleDateString("hr-HR", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+  return `${weekday}, ${date}`;
+}
+
+const lastUpdated = new Date(hns.lastUpdated).toLocaleString("hr-HR", {
+  dateStyle: "short",
+  timeStyle: "short",
+  timeZone: "Europe/Zagreb",
+});
+
+const outcomeColor = {
+  W: "bg-green-600",
+  D: "bg-yellow-500",
+  L: "bg-red-600",
+};
+const outcomeLabel = { W: "P", D: "N", L: "I" };
+const outcomeTitle = { W: "Pobjeda", D: "Neriješeno", L: "Poraz" };
+
+// Embed-amo predstojeće utakmice u client-side payload za .ics download
+const icsPayload = upcoming.map((m) => ({
+  id: m.id,
+  iso: m.iso,
+  homeName: m.home.name,
+  awayName: m.away.name,
+  isHome: m.isHome,
+  competition: m.competition,
+  round: m.round,
+}));
+---
+
+<BaseLayout
+  title="Raspored"
+  description={`Pun raspored utakmica NK Omladinac Niza u ${competitionName}. Datumi, vremena, suparnici, rezultati.`}
+>
+  <Hero
+    title="Raspored"
+    subtitle={`Sve utakmice — ${competitionName}`}
+    height="md"
+  />
+
+  <section class="container-narrow mt-12">
+    {/* Sažetak sezone */}
+    <div class="grid grid-cols-3 gap-3 md:gap-6 mb-10">
+      <div class="bg-white border border-club-border rounded-lg p-4 text-center">
+        <p class="font-display font-bold text-3xl md:text-4xl text-club-primary-deep">
+          {allMatches.length}
+        </p>
+        <p class="text-xs md:text-sm text-club-muted mt-1">utakmica u sezoni</p>
+      </div>
+      <div class="bg-white border border-club-border rounded-lg p-4 text-center">
+        <p class="font-display font-bold text-3xl md:text-4xl text-club-primary">
+          {played.length}
+        </p>
+        <p class="text-xs md:text-sm text-club-muted mt-1">odigrano</p>
+      </div>
+      <div class="bg-white border border-club-border rounded-lg p-4 text-center">
+        <p class="font-display font-bold text-3xl md:text-4xl text-club-accent">
+          {upcoming.length}
+        </p>
+        <p class="text-xs md:text-sm text-club-muted mt-1">preostalo</p>
+      </div>
+    </div>
+
+    {/* PREDSTOJEĆE */}
+    <div class="mb-12">
+      <div class="flex items-baseline justify-between mb-4">
+        <h2 class="text-2xl">Predstojeće utakmice</h2>
+        <span class="text-xs font-display uppercase tracking-wider text-club-muted">
+          {upcoming.length} {upcoming.length === 1 ? "utakmica" : "utakmica"}
+        </span>
+      </div>
+
+      {upcoming.length === 0 ? (
+        <div class="bg-club-light border-l-4 border-club-primary p-6 rounded text-center">
+          <p class="text-club-secondary/80">
+            Nema više utakmica u ovoj sezoni — sezona je završena.
+          </p>
+        </div>
+      ) : (
+        <div class="space-y-3">
+          {upcoming.map((m) => (
+            <article
+              data-match-id={m.id}
+              class="bg-white border-2 border-club-border hover:border-club-primary rounded-lg overflow-hidden transition-colors"
+            >
+              {/* Header: kolo + datum + venue */}
+              <div class="bg-club-light-2 px-4 py-2 flex flex-wrap items-center justify-between gap-2 text-xs border-b border-club-border">
+                <div class="flex items-center gap-2">
+                  <span class="font-display font-bold uppercase tracking-wider bg-club-primary text-white px-2 py-0.5 rounded">
+                    {m.round}. kolo
+                  </span>
+                  <span class="text-club-muted">{formatDate(m.iso)}</span>
+                </div>
+                <span class="font-display uppercase tracking-wider text-club-muted">
+                  {m.isHome ? "Doma · Grbavica" : `Gosti · ${m.home.name}`}
+                </span>
+              </div>
+
+              {/* Body: home vs away + vrijeme */}
+              <div class="p-4 grid grid-cols-[1fr_auto_1fr] items-center gap-3 md:gap-6">
+                {/* Domaći */}
+                <div class="flex items-center gap-2 md:gap-3 justify-end text-right">
+                  <span
+                    class={`font-display font-bold uppercase text-sm md:text-base leading-tight ${
+                      m.home.id === 134 ? "text-club-primary-deep" : ""
+                    }`}
+                  >
+                    {m.home.name}
+                  </span>
+                  <div class="w-10 h-10 md:w-12 md:h-12 flex-shrink-0 flex items-center justify-center">
+                    {m.home.id === 134 ? (
+                      <Logo size={48} />
+                    ) : m.home.logo ? (
+                      <img
+                        src={m.home.logo}
+                        alt=""
+                        width="48"
+                        height="48"
+                        class="object-contain w-full h-full"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div class="w-full h-full rounded-full bg-club-light flex items-center justify-center text-club-muted text-xs">?</div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Vrijeme */}
+                <div class="text-center">
+                  <p class="font-display font-bold text-xl md:text-2xl text-club-primary-deep">
+                    {m.time || "—"}
+                  </p>
+                  <p class="text-[10px] md:text-xs uppercase tracking-widest text-club-muted">
+                    sat
+                  </p>
+                </div>
+
+                {/* Gosti */}
+                <div class="flex items-center gap-2 md:gap-3 justify-start">
+                  <div class="w-10 h-10 md:w-12 md:h-12 flex-shrink-0 flex items-center justify-center">
+                    {m.away.id === 134 ? (
+                      <Logo size={48} />
+                    ) : m.away.logo ? (
+                      <img
+                        src={m.away.logo}
+                        alt=""
+                        width="48"
+                        height="48"
+                        class="object-contain w-full h-full"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div class="w-full h-full rounded-full bg-club-light flex items-center justify-center text-club-muted text-xs">?</div>
+                    )}
+                  </div>
+                  <span
+                    class={`font-display font-bold uppercase text-sm md:text-base leading-tight ${
+                      m.away.id === 134 ? "text-club-primary-deep" : ""
+                    }`}
+                  >
+                    {m.away.name}
+                  </span>
+                </div>
+              </div>
+
+              {/* Footer: dodaj u kalendar */}
+              <div class="px-4 py-2 border-t border-club-border bg-club-light/50 flex justify-end">
+                <button
+                  type="button"
+                  data-ics-id={m.id}
+                  class="ics-btn text-xs font-display uppercase tracking-wider text-club-primary hover:text-club-primary-deep flex items-center gap-1.5"
+                  aria-label="Dodaj u kalendar"
+                >
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                  Dodaj u kalendar
+                </button>
+              </div>
+            </article>
+          ))}
+        </div>
+      )}
+    </div>
+
+    {/* ODIGRANE */}
+    {played.length > 0 && (
+      <div>
+        <div class="flex items-baseline justify-between mb-4">
+          <h2 class="text-2xl">Odigrane utakmice</h2>
+          <span class="text-xs font-display uppercase tracking-wider text-club-muted">
+            {played.length} odigrano
+          </span>
+        </div>
+
+        <div class="space-y-2">
+          {played.map((m) => {
+            const outcome = (m.result as "W" | "D" | "L") || "D";
+            return (
+              <a
+                href={m.url || "#"}
+                target={m.url ? "_blank" : undefined}
+                rel={m.url ? "noopener" : undefined}
+                class="block bg-white border border-club-border hover:border-club-primary hover:shadow-md rounded-lg p-3 md:p-4 transition-all"
+              >
+                <div class="grid grid-cols-[auto_auto_1fr_auto] items-center gap-3 md:gap-4">
+                  {/* Outcome badge */}
+                  <div
+                    class={`${outcomeColor[outcome]} text-white w-10 h-10 rounded flex items-center justify-center font-display font-bold flex-shrink-0`}
+                    title={outcomeTitle[outcome]}
+                  >
+                    {outcomeLabel[outcome]}
+                  </div>
+
+                  {/* Round + date */}
+                  <div class="text-xs text-club-muted w-20 flex-shrink-0">
+                    <p class="font-display uppercase tracking-wider font-bold text-club-primary-deep">
+                      {m.round}. kolo
+                    </p>
+                    <p>{new Date(m.iso).toLocaleDateString("hr-HR", { day: "numeric", month: "short" })}</p>
+                  </div>
+
+                  {/* Match */}
+                  <div class="flex items-center justify-center gap-2 md:gap-3 min-w-0">
+                    <span class={`text-xs md:text-sm truncate text-right flex-1 ${m.isHome ? "font-bold" : ""}`}>
+                      {m.home.name}
+                    </span>
+                    <span class="font-display font-bold text-base md:text-lg flex-shrink-0 bg-club-light-2 px-2 py-0.5 rounded">
+                      {m.score?.home} : {m.score?.away}
+                    </span>
+                    <span class={`text-xs md:text-sm truncate flex-1 ${!m.isHome ? "font-bold" : ""}`}>
+                      {m.away.name}
+                    </span>
+                  </div>
+
+                  {/* External arrow */}
+                  {m.url && (
+                    <svg class="w-4 h-4 text-club-muted flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                  )}
+                </div>
+              </a>
+            );
+          })}
+        </div>
+      </div>
+    )}
+
+    <p class="text-center text-xs text-club-muted mt-12">
+      Podaci dohvaćeni s
+      <a
+        href={hns.sourceUrl || "https://semafor.hns.family/"}
+        target="_blank"
+        rel="noopener"
+        class="hover:text-club-primary underline"
+      >
+        HNS Semafora
+      </a>
+      · zadnje ažurirano {lastUpdated}
+    </p>
+  </section>
+
+  {/* ICS payload za client-side download */}
+  <script type="application/json" id="ics-data" set:html={JSON.stringify(icsPayload)} />
+
+  <script>
+    type IcsMatch = {
+      id: string;
+      iso: string;
+      homeName: string;
+      awayName: string;
+      isHome: boolean;
+      competition: string;
+      round: number;
+    };
+
+    const dataEl = document.getElementById("ics-data");
+    const matches: IcsMatch[] = dataEl ? JSON.parse(dataEl.textContent || "[]") : [];
+
+    /** Format ISO datetime → "20260502T173000" (lokalno vrijeme, bez Z) */
+    function fmtIcsLocal(iso: string): string {
+      const d = new Date(iso);
+      const pad = (n: number) => String(n).padStart(2, "0");
+      return (
+        d.getFullYear() +
+        pad(d.getMonth() + 1) +
+        pad(d.getDate()) +
+        "T" +
+        pad(d.getHours()) +
+        pad(d.getMinutes()) +
+        pad(d.getSeconds())
+      );
+    }
+
+    function buildIcs(m: IcsMatch): string {
+      const dtStart = fmtIcsLocal(m.iso);
+      // Pretpostavljamo 90 min trajanje + 15 min poluvrijeme = 105 min, zaokruženo na 2h
+      const endDate = new Date(new Date(m.iso).getTime() + 2 * 60 * 60 * 1000);
+      const dtEnd = fmtIcsLocal(endDate.toISOString().replace("Z", ""));
+      const summary = `${m.homeName} – ${m.awayName}`;
+      const location = m.isHome ? "Grbavica, Niza" : m.homeName;
+      const description = `${m.competition}\\nNK Omladinac Niza`;
+      const uid = `match-${m.id}@nkomladinacniza.hr`;
+      const stamp = fmtIcsLocal(new Date().toISOString().replace("Z", ""));
+
+      return [
+        "BEGIN:VCALENDAR",
+        "VERSION:2.0",
+        "PRODID:-//NK Omladinac Niza//Raspored//HR",
+        "CALSCALE:GREGORIAN",
+        "METHOD:PUBLISH",
+        "BEGIN:VEVENT",
+        `UID:${uid}`,
+        `DTSTAMP:${stamp}`,
+        `DTSTART;TZID=Europe/Zagreb:${dtStart}`,
+        `DTEND;TZID=Europe/Zagreb:${dtEnd}`,
+        `SUMMARY:${summary}`,
+        `LOCATION:${location}`,
+        `DESCRIPTION:${description}`,
+        "END:VEVENT",
+        "END:VCALENDAR",
+      ].join("\r\n");
+    }
+
+    function downloadIcs(m: IcsMatch) {
+      const ics = buildIcs(m);
+      const blob = new Blob([ics], { type: "text/calendar;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `omladinac-${m.iso.slice(0, 10)}-${m.round}kolo.ics`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+
+    document.querySelectorAll<HTMLButtonElement>(".ics-btn").forEach((btn) => {
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        const id = btn.dataset.icsId;
+        const m = matches.find((x) => x.id === id);
+        if (m) downloadIcs(m);
+      });
+    });
+  </script>
+</BaseLayout>

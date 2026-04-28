@@ -29,6 +29,10 @@ export default defineConfig({
         } else if (item.url.includes("/novosti")) {
           item.priority = 0.9;
           item.changefreq = "hourly";
+        } else if (item.url.includes("/raspored")) {
+          // Raspored se mijenja kako se odigravaju utakmice
+          item.priority = 0.9;
+          item.changefreq = "daily";
         } else if (
           item.url.includes("/momcad") ||
           item.url.includes("/mladje-kategorije")
