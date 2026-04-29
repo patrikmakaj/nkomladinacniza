@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Hero from "../components/Hero.astro";
+import { url } from "../lib/url";
 
 const categories = [
   {
@@ -77,18 +78,42 @@ const categories = [
       }
     </div>
 
-    <!-- Uspjeh - Katarina -->
-    <div class="bg-gradient-to-r from-club-primary-deep to-club-primary text-white rounded-lg p-6 md:p-8 mb-10">
-      <div class="flex items-start gap-4">
-        <span class="text-club-accent text-4xl flex-shrink-0">★</span>
-        <div>
-          <h3 class="text-2xl mb-2 text-white">Naš ponos: Katarina Pranješ</h3>
+    <!-- Poznati igrači -->
+    <div class="bg-gradient-to-br from-club-primary-deep to-club-primary text-white rounded-lg p-8 md:p-10 mb-10">
+      <h2 class="text-3xl mb-6 text-white">Poznati igrači</h2>
+      <div class="grid md:grid-cols-2 gap-8">
+        <article class="flex flex-col">
+          <img
+            src={url("/images/poznatiigraci/katarinapranjes.png")}
+            alt="Katarina Pranješ"
+            class="w-32 h-32 rounded-full object-cover ring-2 ring-club-accent mb-4"
+            loading="lazy"
+          />
+          <h3 class="text-xl mb-2 text-white">Katarina Pranješ</h3>
           <p class="text-white/90 leading-relaxed">
-            Iz naše mladeži potekla je <strong>prva registrirana ženska igračica</strong>
-            u povijesti kluba. Karijeru je započela 2014., a danas je članica ŽNK Split,
-            državna prvakinja s ŽNK Osijekom (2017/18.) i hrvatska reprezentativka.
+            Karijeru je započela 2014. u NK Omladinac Niza kao članica Dječje športske akademije
+            "Niza" — <strong>prva registrirana ženska igračica u povijesti kluba</strong>.
+            Nakon uspješne pionirske sezone 2015/16., uočili su je skauti ŽNK Osijek, gdje
+            osvaja titulu državnog prvaka 2017/18. Nastupala je za hrvatske U-16, U-17 i U-19
+            reprezentacije, a u jesen 2020. debitira za seniorsku reprezentaciju Hrvatske
+            protiv Litve. Od 2021. do 2023. nosi dres ŽNK Split, a od sezone 2023/24. članica
+            je austrijskog <strong>LASK Linza</strong>.
           </p>
-        </div>
+        </article>
+        <article class="flex flex-col">
+          <img
+            src={url("/images/poznatiigraci/janadzic.png")}
+            alt="Jan Adžić"
+            class="w-32 h-32 rounded-full object-cover ring-2 ring-club-accent mb-4"
+            loading="lazy"
+          />
+          <h3 class="text-xl mb-2 text-white">Jan Adžić</h3>
+          <p class="text-white/90 leading-relaxed">
+            Nogometnu karijeru započeo je u sezoni 2016/17. u Dječjoj športskoj akademiji
+            "Niza", u kategorijama prednatjecatelja i početnika. Danas brani boje
+            <strong>NK Osijeka</strong> kao golman.
+          </p>
+        </article>
       </div>
     </div>
 

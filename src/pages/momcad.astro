@@ -2,9 +2,11 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Hero from "../components/Hero.astro";
 import PlayerCard from "../components/PlayerCard.astro";
+import StaffCard from "../components/StaffCard.astro";
 import StatRanking from "../components/StatRanking.astro";
 import hns from "../data/hns.json";
 import { golLabel, nastupLabel } from "../lib/croatian";
+import { url } from "../lib/url";
 
 // Iz HNS podataka — pozicija je samo "Vratar" / "Igrač"
 const allPlayers = hns.players.map((p) => ({
@@ -77,6 +79,14 @@ const competition = hns.competition?.name ?? "Sezona";
   />
 
   <section class="container-narrow mt-12">
+    <StaffCard
+      name="Tomislav Banaj"
+      role="Trener prve momčadi"
+      photo={url("/images/trener/tomislav-banaj.jpeg")}
+    />
+  </section>
+
+  <section class="container-narrow mt-8">
     {/* Brze statistike */}
     <div class="grid grid-cols-3 gap-3 md:gap-6 mb-8">
       <div class="bg-white border border-club-border rounded-lg p-4 text-center">
