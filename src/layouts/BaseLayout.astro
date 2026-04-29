@@ -79,6 +79,9 @@ const ogImageUrl = new URL(url(image), Astro.site).toString();
     <title>{fullTitle}</title>
 
     <slot name="head" />
+
+    <!-- Umami Analytics -->
+    <script defer src="https://cloud.umami.is/script.js" data-website-id="2312771d-a887-4d9f-a074-9bb444964aa0"></script>
   </head>
   <body class="min-h-screen flex flex-col">
     <Header />
