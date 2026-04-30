@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-04-30T03:48:59.560Z",
+  "lastUpdated": "2026-04-30T06:25:16.037Z",
   "sourceUrl": "https://semafor.hns.family/klubovi/134/nk-omladinac-niza/",
   "club": {
     "id": 134,
@@ -403,20 +403,20 @@
         "name": "NK Seljak",
         "logo": "https://hns.family/files/images_comet/36/9/_resized/36972d1f76ba9ef18cd52f28155fd5a08c4c465a_100_100_wg_t.png"
       },
-      "played": 16,
-      "wins": 8,
+      "played": 17,
+      "wins": 9,
       "draws": 1,
       "losses": 7,
-      "gf": 34,
+      "gf": 39,
       "ga": 30,
-      "gd": "+4",
-      "points": 25,
+      "gd": "+9",
+      "points": 28,
       "form": [
-        "L",
         "D",
         "L",
         "L",
-        "L"
+        "L",
+        "W"
       ],
       "isUs": false
     },
@@ -523,18 +523,18 @@
         "name": "NK Šipovac",
         "logo": "https://hns.family/files/images_comet/f7/d/_resized/f7d87ca932c2a22b6cdd7a430be55b9fcad3038b_100_100_wg_t.png"
       },
-      "played": 15,
+      "played": 16,
       "wins": 2,
       "draws": 0,
-      "losses": 13,
+      "losses": 14,
       "gf": 17,
-      "ga": 64,
-      "gd": "-47",
+      "ga": 69,
+      "gd": "-52",
       "points": 6,
       "form": [
         "L",
-        "L",
         "W",
+        "L",
         "L",
         "L"
       ],
