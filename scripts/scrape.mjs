@@ -9,7 +9,7 @@
  * Izvor: https://semafor.hns.family/klubovi/134/nk-omladinac-niza/
  */
 
-import { writeFile, mkdir } from "node:fs/promises";
+import { writeFile, mkdir, readFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import * as cheerio from "cheerio";
@@ -20,6 +20,9 @@ const OUR_CLUB_NAME = "NK Omladinac Niza";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const OUT_PATH = resolve(__dirname, "../src/data/hns.json");
+
+// Pauza između HTTP zahtjeva za detalje utakmica (ms) — pristojno prema serveru
+const MATCH_FETCH_DELAY_MS = 250;
 
 const UA =
   "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 " +
@@ -274,7 +277,144 @@ function parsePlayers($) {
   return players;
 }
 
+// ───────── Match detail parsers ────────────────────────────────────────
+
+/** Mapira CSS klasu eventa u tip ("goal" | "yellow" | "red" | "own_goal" | "penalty" | "subin" | "subout" | "other"). */
+function eventTypeFromClass(className) {
+  const c = (className || "").toLowerCase();
+  if (c.includes("own_goal") || c.includes("autogol")) return "own_goal";
+  if (c.includes("penalty")) return "penalty";
+  if (c.includes("goal")) return "goal";
+  if (c.includes("yellow")) return "yellow";
+  if (c.includes("red")) return "red";
+  if (c.includes("subin") || c.includes("sub_in")) return "subin";
+  if (c.includes("subout") || c.includes("sub_out")) return "subout";
+  return "other";
+}
+
+/** "33'", "90+1'", "45+2'" → minute (90+1 → 91, 45+2 → 47). Vraća null ako ne uspije. */
+function parseMinute(text) {
+  if (!text) return null;
+  const m = String(text).match(/(\d+)(?:\+(\d+))?'?/);
+  if (!m) return null;
+  return parseInt(m[1], 10) + (m[2] ? parseInt(m[2], 10) : 0);
+}
+
+/** Parsira eventi unutar `.matchEvents` jednog igrača. */
+function parsePlayerEvents($, $cell) {
+  const events = [];
+  $cell.find("li").each((_, li) => {
+    const cls = $(li).attr("class") || "";
+    const type = eventTypeFromClass(cls);
+    const text = $(li).text().replace(/\s+/g, " ").trim();
+    const minute = parseMinute(text);
+    events.push({ type, minute, label: text || null });
+  });
+  return events;
+}
+
+/** Parsira jedan tim iz lineupa: starters + subs s eventima. */
+function parseLineupTeam($, $teamRoot) {
+  const starters = [];
+  const subs = [];
+  let inSubs = false;
+
+  $teamRoot.find("> ul > li").each((_, li) => {
+    const $li = $(li);
+    const cls = $li.attr("class") || "";
+
+    if (cls.includes("separatorTitle")) {
+      inSubs = true;
+      return;
+    }
+    if (cls.includes("clubName") || cls.includes("empty")) return;
+    if (!cls.includes("match_lineup")) return;
+
+    const personId = parseInt0($li.attr("data-personid"));
+    const number = parseInt0($li.find(".shirtNumber").first().text());
+    const $nameLink = $li.find(".playerName h3 a").first();
+    const rawHeading = $li.find(".playerName h3").first().text().trim();
+    const name = $nameLink.text().trim();
+    const captain = /\(C\)/.test(rawHeading);
+    const photo = imgSrc($li.find(".playerPhoto img").first());
+    const profileUrl = $nameLink.attr("href") || null;
+
+    // Position is text outside the <h3> inside .playerName
+    const $playerName = $li.find(".playerName").first();
+    const position = $playerName
+      .contents()
+      .filter((_, n) => n.type === "text")
+      .map((_, n) => $(n).text())
+      .get()
+      .join("")
+      .trim() || null;
+
+    const events = parsePlayerEvents($, $li.find(".matchEvents").first());
+
+    const player = { personId, number, name, position, captain, photo, profileUrl, events };
+    if (inSubs) subs.push(player);
+    else starters.push(player);
+  });
+
+  return { starters, subs };
+}
+
+/** Parsira detaljnu stranicu pojedinačne utakmice na HNS Semaforu. */
+function parseMatchDetail(html) {
+  const $ = cheerio.load(html);
+  const $hdr = $(".matchHeader").first();
+
+  const status = $hdr.find(".status").first().text().trim() || null;
+  const facility = $hdr.find(".facility").first().text().trim() || null;
+  const attendanceText = $hdr.find(".attendance").first().text().trim() || null;
+  const attendance = attendanceText ? parseInt0(attendanceText) : null;
+  const refereesText = $hdr.find(".referees").first().text().trim() || null;
+  // "Suci: Manuel Dendis." → ["Manuel Dendis"]
+  const referees = refereesText
+    ? refereesText
+        .replace(/^Suci\s*:\s*/i, "")
+        .replace(/\.\s*$/, "")
+        .split(/\s*[,;]\s*/)
+        .map((s) => s.trim())
+        .filter(Boolean)
+    : [];
+
+  // Eventi prikazani u headeru (kombinirani po klubu, lijevo = home, desno = away)
+  const headerEvents = { home: [], away: [] };
+  const $eventLists = $hdr.find(".events_main > ul.events");
+  $eventLists.eq(0).find("> li").each((_, li) => {
+    const $li = $(li);
+    const playerName = $li.find(".playerName").first().text().trim() || null;
+    const $event = $li.find(".event").first();
+    const type = eventTypeFromClass($event.attr("class") || "");
+    const minute = parseMinute($event.text());
+    headerEvents.home.push({ type, minute, playerName });
+  });
+  $eventLists.eq(1).find("> li").each((_, li) => {
+    const $li = $(li);
+    const playerName = $li.find(".playerName").first().text().trim() || null;
+    const $event = $li.find(".event").first();
+    const type = eventTypeFromClass($event.attr("class") || "");
+    const minute = parseMinute($event.text());
+    headerEvents.away.push({ type, minute, playerName });
+  });
+
+  const homeLineup = parseLineupTeam($, $(".matchLineup .homeTeam").first());
+  const awayLineup = parseLineupTeam($, $(".matchLineup .awayTeam").first());
+
+  return {
+    status,
+    facility,
+    attendance,
+    referees,
+    headerEvents,
+    lineup: { home: homeLineup, away: awayLineup },
+  };
+}
+
 // ───────── Main ────────────────────────────────────────────────────────
+
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 async function fetchHtml(url) {
   const res = await fetch(url, {
@@ -285,6 +425,47 @@ async function fetchHtml(url) {
   });
   if (!res.ok) throw new Error(`HTTP ${res.status} dohvaćajući ${url}`);
   return await res.text();
+}
+
+/** Učitaj prethodno spremljene matchDetails (radi cache-a — odigrane utakmice se ne mijenjaju). */
+async function loadExistingMatchDetails() {
+  try {
+    const raw = await readFile(OUT_PATH, "utf8");
+    const prev = JSON.parse(raw);
+    return prev?.matchDetails ?? {};
+  } catch {
+    return {};
+  }
+}
+
+async function fetchMatchDetails(matches, existing) {
+  const details = { ...existing };
+  // Skupi sve odigrane utakmice s URL-om koje još nemaju detalje
+  const toFetch = matches.filter(
+    (m) => m.played && m.url && !details[m.id],
+  );
+
+  if (toFetch.length === 0) {
+    console.log(`[scrape] svi detalji utakmica već cached (${Object.keys(details).length})`);
+    return details;
+  }
+
+  console.log(`[scrape] dohvaćam detalje za ${toFetch.length} utakmica…`);
+  let ok = 0;
+  let fail = 0;
+  for (const m of toFetch) {
+    try {
+      const html = await fetchHtml(m.url);
+      details[m.id] = parseMatchDetail(html);
+      ok++;
+    } catch (err) {
+      fail++;
+      console.warn(`[scrape] greška za utakmicu ${m.id}: ${err.message}`);
+    }
+    await sleep(MATCH_FETCH_DELAY_MS);
+  }
+  console.log(`[scrape] detalji utakmica · OK ${ok} · greške ${fail}`);
+  return details;
 }
 
 async function main() {
@@ -308,6 +489,9 @@ async function main() {
   const lastResults = matches.filter((m) => m.played).slice(-10).reverse();
   const ourRow = table.find((r) => r.isUs) || null;
 
+  const existingDetails = await loadExistingMatchDetails();
+  const matchDetails = await fetchMatchDetails(matches, existingDetails);
+
   const data = {
     lastUpdated: startedAt.toISOString(),
     sourceUrl: CLUB_URL,
@@ -324,6 +508,7 @@ async function main() {
       topCards,
       topApps,
     },
+    matchDetails,
   };
 
   await mkdir(dirname(OUT_PATH), { recursive: true });
@@ -334,6 +519,7 @@ async function main() {
     `[scrape] gotovo za ${ms}ms · ${matches.length} utakmica · ` +
       `${table.length} klubova · ${players.length} igrača · ` +
       `${topScorers.length} strijelaca · ${topCards.length} kartonjera · ` +
+      `${Object.keys(matchDetails).length} detalja · ` +
       `naša pozicija: ${ourRow?.position ?? "?"}`,
   );
   console.log(`[scrape] zapisano: ${OUT_PATH}`);

@@ -2,7 +2,10 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Hero from "../components/Hero.astro";
 import Logo from "../components/Logo.astro";
+import { url } from "../lib/url";
 import hns from "../data/hns.json";
+
+const matchDetails = (hns.matchDetails ?? {}) as Record<string, unknown>;
 
 type Match = {
   id: string;
@@ -241,11 +244,16 @@ const icsPayload = upcoming.map((m) => ({
         <div class="space-y-2">
           {played.map((m) => {
             const outcome = (m.result as "W" | "D" | "L") || "D";
+            const hasDetail = !!matchDetails[m.id];
+            const href = hasDetail
+              ? url(`/utakmica/${m.id}`)
+              : m.url || "#";
+            const externalLink = !hasDetail && !!m.url;
             return (
               <a
-                href={m.url || "#"}
-                target={m.url ? "_blank" : undefined}
-                rel={m.url ? "noopener" : undefined}
+                href={href}
+                target={externalLink ? "_blank" : undefined}
+                rel={externalLink ? "noopener" : undefined}
                 class="block bg-white border border-club-border hover:border-club-primary hover:shadow-md rounded-lg p-3 md:p-4 transition-all"
               >
                 <div class="grid grid-cols-[auto_auto_1fr_auto] items-center gap-3 md:gap-4">
@@ -278,12 +286,10 @@ const icsPayload = upcoming.map((m) => ({
                     </span>
                   </div>
 
-                  {/* External arrow */}
-                  {m.url && (
-                    <svg class="w-4 h-4 text-club-muted flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                    </svg>
-                  )}
+                  {/* Arrow */}
+                  <svg class="w-4 h-4 text-club-muted flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                  </svg>
                 </div>
               </a>
             );

@@ -1,0 +1,114 @@
+---
+type EventType = "goal" | "own_goal" | "penalty" | "yellow" | "red" | "subin" | "subout" | "other";
+
+interface Event {
+  type: EventType;
+  minute: number | null;
+  playerName: string | null;
+}
+
+interface Props {
+  homeEvents: Event[];
+  awayEvents: Event[];
+  homeName: string;
+  awayName: string;
+}
+
+const { homeEvents, awayEvents, homeName, awayName } = Astro.props;
+
+// Spoji u jedinstvenu vremensku liniju, sortiranu po minuti uzlazno
+type RowEvent = Event & { side: "home" | "away" };
+const all: RowEvent[] = [
+  ...homeEvents.map((e) => ({ ...e, side: "home" as const })),
+  ...awayEvents.map((e) => ({ ...e, side: "away" as const })),
+].sort((a, b) => (a.minute ?? 999) - (b.minute ?? 999));
+
+const iconFor = (type: EventType): string => {
+  switch (type) {
+    case "goal":
+    case "penalty":
+      return "⚽";
+    case "own_goal":
+      return "🥅";
+    case "yellow":
+      return "🟨";
+    case "red":
+      return "🟥";
+    default:
+      return "•";
+  }
+};
+
+const labelFor = (type: EventType): string => {
+  switch (type) {
+    case "goal":
+      return "Gol";
+    case "penalty":
+      return "Gol (kazneni)";
+    case "own_goal":
+      return "Autogol";
+    case "yellow":
+      return "Žuti karton";
+    case "red":
+      return "Crveni karton";
+    default:
+      return "";
+  }
+};
+---
+
+<div class="bg-white border border-club-border rounded-lg overflow-hidden">
+  {/* Zaglavlje s nazivima momčadi */}
+  <div class="grid grid-cols-[1fr_auto_1fr] bg-club-light-2 border-b border-club-border px-4 py-2 gap-2 text-[10px] font-display uppercase tracking-wider text-club-muted">
+    <p class="text-right truncate">{homeName}</p>
+    <p class="text-center w-12">Min</p>
+    <p class="truncate">{awayName}</p>
+  </div>
+
+  {all.length === 0 ? (
+    <p class="text-sm text-club-muted text-center py-6">
+      Nema zabilježenih događaja.
+    </p>
+  ) : (
+    <ul class="divide-y divide-club-border">
+      {all.map((ev) => (
+        <li class="grid grid-cols-[1fr_auto_1fr] items-center gap-2 px-4 py-2.5 hover:bg-club-light/40 transition-colors">
+          {/* Lijeva strana — domaći */}
+          <div class="flex items-center justify-end gap-2 min-w-0">
+            {ev.side === "home" && (
+              <>
+                <span class="text-xs md:text-sm text-club-primary-deep truncate" title={labelFor(ev.type)}>
+                  {ev.playerName || "—"}
+                </span>
+                <span class="text-base md:text-lg leading-none flex-shrink-0" title={labelFor(ev.type)}>
+                  {iconFor(ev.type)}
+                </span>
+              </>
+            )}
+          </div>
+
+          {/* Minuta */}
+          <div class="text-center w-12 flex-shrink-0">
+            <span class="font-display font-bold text-xs md:text-sm text-club-primary bg-club-light px-2 py-0.5 rounded">
+              {ev.minute != null ? `${ev.minute}'` : "—"}
+            </span>
+          </div>
+
+          {/* Desna strana — gosti */}
+          <div class="flex items-center justify-start gap-2 min-w-0">
+            {ev.side === "away" && (
+              <>
+                <span class="text-base md:text-lg leading-none flex-shrink-0" title={labelFor(ev.type)}>
+                  {iconFor(ev.type)}
+                </span>
+                <span class="text-xs md:text-sm text-club-primary-deep truncate" title={labelFor(ev.type)}>
+                  {ev.playerName || "—"}
+                </span>
+              </>
+            )}
+          </div>
+        </li>
+      ))}
+    </ul>
+  )}
+</div>

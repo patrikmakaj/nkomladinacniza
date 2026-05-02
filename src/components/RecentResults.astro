@@ -1,4 +1,5 @@
 ---
+import { url } from "../lib/url";
 import hns from "../data/hns.json";
 
 interface Props {
@@ -13,6 +14,7 @@ const wrapperClass = grid
 
 const allResults = hns.lastResults ?? [];
 const results = limit ? allResults.slice(0, limit) : allResults;
+const matchDetails = (hns.matchDetails ?? {}) as Record<string, unknown>;
 
 const outcomeColor = {
   W: "bg-green-600",
@@ -39,8 +41,9 @@ const outcomeLabel = { W: "P", D: "N", L: "I" };
           })
         : "";
       const outcome = (r.result as "W" | "D" | "L") || "D";
-      return (
-        <article class="bg-white border border-club-border rounded-lg p-4 flex items-center gap-4 hover:shadow-md transition-shadow">
+      const hasDetail = !!matchDetails[r.id];
+      const cardContent = (
+        <>
           <div
             class={`${outcomeColor[outcome]} text-white w-10 h-10 rounded flex items-center justify-center font-display font-bold flex-shrink-0`}
             title={
@@ -73,6 +76,19 @@ const outcomeLabel = { W: "P", D: "N", L: "I" };
               </span>
             </div>
           </div>
+        </>
+      );
+
+      return hasDetail ? (
+        <a
+          href={url(`/utakmica/${r.id}`)}
+          class="bg-white border border-club-border hover:border-club-primary rounded-lg p-4 flex items-center gap-4 hover:shadow-md transition-all"
+        >
+          {cardContent}
+        </a>
+      ) : (
+        <article class="bg-white border border-club-border rounded-lg p-4 flex items-center gap-4">
+          {cardContent}
         </article>
       );
     })

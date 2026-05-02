@@ -1,0 +1,142 @@
+---
+import Logo from "./Logo.astro";
+
+type EventType = "goal" | "own_goal" | "penalty" | "yellow" | "red" | "subin" | "subout" | "other";
+
+interface PlayerEvent {
+  type: EventType;
+  minute: number | null;
+  label: string | null;
+}
+
+interface Player {
+  personId: number | null;
+  number: number | null;
+  name: string;
+  position: string | null;
+  captain: boolean;
+  photo: string | null;
+  profileUrl: string | null;
+  events: PlayerEvent[];
+}
+
+interface Props {
+  team: { starters: Player[]; subs: Player[] };
+  teamName: string;
+  teamLogo: string | null;
+  isOurClub: boolean;
+}
+
+const { team, teamName, teamLogo, isOurClub } = Astro.props;
+
+const eventIcon = (t: EventType): string => {
+  switch (t) {
+    case "goal":
+    case "penalty":
+      return "⚽";
+    case "own_goal":
+      return "🥅";
+    case "yellow":
+      return "🟨";
+    case "red":
+      return "🟥";
+    default:
+      return "•";
+  }
+};
+---
+
+<div class={`bg-white border-2 ${isOurClub ? "border-club-primary" : "border-club-border"} rounded-lg overflow-hidden`}>
+  {/* Header s grbom kluba */}
+  <div class={`px-4 py-3 flex items-center gap-3 ${isOurClub ? "bg-club-primary text-white" : "bg-club-light-2"}`}>
+    <div class="w-8 h-8 flex-shrink-0 flex items-center justify-center">
+      {isOurClub ? (
+        <Logo size={32} class="brightness-0 invert" />
+      ) : teamLogo ? (
+        <img src={teamLogo} alt="" width="32" height="32" class="object-contain w-full h-full" />
+      ) : null}
+    </div>
+    <h3 class={`font-display font-bold uppercase text-sm ${isOurClub ? "text-white" : "text-club-primary-deep"}`}>
+      {teamName}
+    </h3>
+  </div>
+
+  {/* Starteri */}
+  <div>
+    <p class="px-4 pt-3 pb-1 text-[10px] font-display uppercase tracking-wider text-club-muted">
+      Početnih 11
+    </p>
+    <ul class="divide-y divide-club-border">
+      {team.starters.map((p) => (
+        <li class="px-4 py-2 flex items-center gap-3">
+          <span class="font-display font-bold text-club-primary-deep w-6 text-right text-sm flex-shrink-0">
+            {p.number ?? "·"}
+          </span>
+          <div class="flex-1 min-w-0">
+            <p class="text-sm font-medium text-club-secondary truncate">
+              {p.name}
+              {p.captain && (
+                <span class="ml-1 text-[10px] font-display font-bold text-club-accent" title="Kapetan">
+                  (C)
+                </span>
+              )}
+            </p>
+            {p.position && (
+              <p class="text-[10px] text-club-muted">{p.position}</p>
+            )}
+          </div>
+          {p.events.length > 0 && (
+            <div class="flex items-center gap-1 flex-wrap justify-end">
+              {p.events.map((ev) => (
+                <span class="inline-flex items-center gap-0.5 text-xs" title={ev.label || ""}>
+                  <span>{eventIcon(ev.type)}</span>
+                  {ev.minute != null && (
+                    <span class="text-club-muted text-[10px]">{ev.minute}'</span>
+                  )}
+                </span>
+              ))}
+            </div>
+          )}
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  {/* Pričuvni */}
+  {team.subs.length > 0 && (
+    <div class="border-t-2 border-club-border bg-club-light/30">
+      <p class="px-4 pt-3 pb-1 text-[10px] font-display uppercase tracking-wider text-club-muted">
+        Pričuvni igrači
+      </p>
+      <ul class="divide-y divide-club-border/60">
+        {team.subs.map((p) => (
+          <li class="px-4 py-2 flex items-center gap-3">
+            <span class="font-display font-bold text-club-muted w-6 text-right text-sm flex-shrink-0">
+              {p.number ?? "·"}
+            </span>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm text-club-secondary/80 truncate">
+                {p.name}
+              </p>
+              {p.position && (
+                <p class="text-[10px] text-club-muted">{p.position}</p>
+              )}
+            </div>
+            {p.events.length > 0 && (
+              <div class="flex items-center gap-1 flex-wrap justify-end">
+                {p.events.map((ev) => (
+                  <span class="inline-flex items-center gap-0.5 text-xs" title={ev.label || ""}>
+                    <span>{eventIcon(ev.type)}</span>
+                    {ev.minute != null && (
+                      <span class="text-club-muted text-[10px]">{ev.minute}'</span>
+                    )}
+                  </span>
+                ))}
+              </div>
+            )}
+          </li>
+        ))}
+      </ul>
+    </div>
+  )}
+</div>

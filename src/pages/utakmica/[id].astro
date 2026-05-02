@@ -1,0 +1,273 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Logo from "../../components/Logo.astro";
+import MatchEventsList from "../../components/MatchEventsList.astro";
+import MatchLineup from "../../components/MatchLineup.astro";
+import { url } from "../../lib/url";
+import hns from "../../data/hns.json";
+
+const OUR_CLUB_ID = 134;
+
+type Match = {
+  id: string;
+  round: number;
+  date: string;
+  time: string;
+  iso: string;
+  competition: string;
+  home: { id: number; name: string; logo: string | null };
+  away: { id: number; name: string; logo: string | null };
+  score: { home: number; away: number } | null;
+  played: boolean;
+  isHome: boolean;
+  result: "W" | "D" | "L" | null;
+  url: string | null;
+};
+
+export async function getStaticPaths() {
+  const matches = (hns.matches ?? []) as Match[];
+  const details = (hns.matchDetails ?? {}) as Record<string, unknown>;
+  // Generiraj samo za utakmice koje su odigrane I imaju detalje
+  return matches
+    .filter((m) => m.played && details[m.id])
+    .map((m) => ({ params: { id: m.id } }));
+}
+
+const { id } = Astro.params;
+const match = (hns.matches as Match[]).find((m) => m.id === id);
+const detail = (hns.matchDetails as Record<string, any>)?.[id ?? ""];
+
+if (!match || !detail) {
+  return Astro.redirect(url("/raspored"));
+}
+
+const isHome = match.home.id === OUR_CLUB_ID;
+const ourScore = isHome ? match.score?.home : match.score?.away;
+const oppScore = isHome ? match.score?.away : match.score?.home;
+const outcomeColor =
+  match.result === "W" ? "bg-green-600"
+  : match.result === "L" ? "bg-red-600"
+  : "bg-yellow-500";
+const outcomeLabel =
+  match.result === "W" ? "Pobjeda"
+  : match.result === "L" ? "Poraz"
+  : "Neriješeno";
+
+function formatDate(iso: string): string {
+  if (!iso) return "";
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return iso;
+  const weekday = d.toLocaleDateString("hr-HR", { weekday: "long" });
+  const date = d.toLocaleDateString("hr-HR", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+  return `${weekday}, ${date}`;
+}
+
+const pageTitle = `${match.home.name} ${match.score?.home ?? "-"} : ${match.score?.away ?? "-"} ${match.away.name}`;
+const pageDescription = `Detalji utakmice — ${match.competition}. ${formatDate(match.iso)}, ${match.time || ""}.`;
+---
+
+<BaseLayout title={pageTitle} description={pageDescription}>
+  {/* Hero — kompaktan, fokus na rezultat */}
+  <section class="relative bg-club-primary text-white overflow-hidden">
+    <div class="absolute inset-0 opacity-10 pointer-events-none">
+      <img
+        src={url("/images/logo.svg")}
+        alt=""
+        width="500"
+        height="500"
+        class="absolute -right-16 top-1/2 -translate-y-1/2 w-[400px] h-auto"
+      />
+    </div>
+
+    <div class="relative container-narrow py-8 md:py-12">
+      <a
+        href={url("/raspored")}
+        class="inline-flex items-center gap-1.5 text-xs font-display uppercase tracking-wider text-white/70 hover:text-white mb-4 transition-colors"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        Natrag na raspored
+      </a>
+
+      <p class="text-xs md:text-sm font-display uppercase tracking-wider text-club-accent mb-2">
+        {match.competition}
+      </p>
+
+      {/* Header s grbovima i rezultatom */}
+      <div class="grid grid-cols-[1fr_auto_1fr] items-center gap-4 md:gap-8 mt-6">
+        {/* Domaći */}
+        <div class="flex flex-col items-center text-center">
+          <div class="w-16 h-16 md:w-24 md:h-24 mb-2 md:mb-3 flex items-center justify-center">
+            {match.home.id === OUR_CLUB_ID ? (
+              <Logo size={96} />
+            ) : match.home.logo ? (
+              <img
+                src={match.home.logo}
+                alt=""
+                width="96"
+                height="96"
+                class="object-contain w-full h-full"
+              />
+            ) : (
+              <div class="w-full h-full rounded-full bg-white/10 flex items-center justify-center text-white/50">?</div>
+            )}
+          </div>
+          <p class="font-display font-bold uppercase text-sm md:text-base leading-tight">
+            {match.home.name}
+          </p>
+        </div>
+
+        {/* Rezultat */}
+        <div class="text-center">
+          <div class="font-display font-bold text-4xl md:text-6xl leading-none">
+            {match.score?.home} <span class="text-white/40">:</span> {match.score?.away}
+          </div>
+          <p class="mt-2 text-[10px] md:text-xs uppercase tracking-widest text-white/70">
+            {detail.status || "Završeno"}
+          </p>
+        </div>
+
+        {/* Gosti */}
+        <div class="flex flex-col items-center text-center">
+          <div class="w-16 h-16 md:w-24 md:h-24 mb-2 md:mb-3 flex items-center justify-center">
+            {match.away.id === OUR_CLUB_ID ? (
+              <Logo size={96} />
+            ) : match.away.logo ? (
+              <img
+                src={match.away.logo}
+                alt=""
+                width="96"
+                height="96"
+                class="object-contain w-full h-full"
+              />
+            ) : (
+              <div class="w-full h-full rounded-full bg-white/10 flex items-center justify-center text-white/50">?</div>
+            )}
+          </div>
+          <p class="font-display font-bold uppercase text-sm md:text-base leading-tight">
+            {match.away.name}
+          </p>
+        </div>
+      </div>
+
+      {/* Outcome traka */}
+      {match.result && (
+        <div class="flex justify-center mt-6">
+          <div class={`${outcomeColor} text-white text-xs font-display uppercase tracking-wider px-3 py-1 rounded-full`}>
+            {outcomeLabel} · NK Omladinac Niza
+          </div>
+        </div>
+      )}
+    </div>
+  </section>
+
+  <section class="container-narrow mt-8 md:mt-12">
+    {/* META: stadion / datum / suci / gledatelja */}
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-8">
+      <div class="bg-white border border-club-border rounded-lg p-4">
+        <p class="text-[10px] font-display uppercase tracking-wider text-club-muted mb-1">
+          Datum
+        </p>
+        <p class="font-display font-bold text-sm md:text-base text-club-primary-deep capitalize">
+          {formatDate(match.iso)}
+        </p>
+      </div>
+      <div class="bg-white border border-club-border rounded-lg p-4">
+        <p class="text-[10px] font-display uppercase tracking-wider text-club-muted mb-1">
+          Početak
+        </p>
+        <p class="font-display font-bold text-sm md:text-base text-club-primary-deep">
+          {match.time || "—"}
+        </p>
+      </div>
+      <div class="bg-white border border-club-border rounded-lg p-4">
+        <p class="text-[10px] font-display uppercase tracking-wider text-club-muted mb-1">
+          Gledatelja
+        </p>
+        <p class="font-display font-bold text-sm md:text-base text-club-primary-deep">
+          {detail.attendance != null ? detail.attendance : "—"}
+        </p>
+      </div>
+      <div class="bg-white border border-club-border rounded-lg p-4">
+        <p class="text-[10px] font-display uppercase tracking-wider text-club-muted mb-1">
+          {detail.referees && detail.referees.length > 1 ? "Suci" : "Sudac"}
+        </p>
+        <p class="font-display font-bold text-sm md:text-base text-club-primary-deep">
+          {detail.referees && detail.referees.length > 0 ? detail.referees.join(", ") : "—"}
+        </p>
+      </div>
+    </div>
+
+    {/* Stadion (puni redak) */}
+    {detail.facility && (
+      <div class="bg-club-light-2 border-l-4 border-club-primary rounded p-4 mb-8 flex items-start gap-3">
+        <svg class="w-5 h-5 text-club-primary flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+        <div>
+          <p class="text-[10px] font-display uppercase tracking-wider text-club-muted mb-1">
+            Stadion
+          </p>
+          <p class="text-sm md:text-base text-club-primary-deep">
+            {detail.facility}
+          </p>
+        </div>
+      </div>
+    )}
+
+    {/* TIJEK UTAKMICE (eventi) */}
+    {(detail.headerEvents?.home?.length > 0 || detail.headerEvents?.away?.length > 0) && (
+      <div class="mb-10">
+        <h2 class="text-2xl mb-4">Tijek utakmice</h2>
+        <MatchEventsList
+          homeEvents={detail.headerEvents.home}
+          awayEvents={detail.headerEvents.away}
+          homeName={match.home.name}
+          awayName={match.away.name}
+        />
+      </div>
+    )}
+
+    {/* POSTAVA */}
+    {(detail.lineup?.home?.starters?.length > 0 || detail.lineup?.away?.starters?.length > 0) && (
+      <div class="mb-10">
+        <h2 class="text-2xl mb-4">Postave</h2>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <MatchLineup
+            team={detail.lineup.home}
+            teamName={match.home.name}
+            teamLogo={match.home.logo}
+            isOurClub={match.home.id === OUR_CLUB_ID}
+          />
+          <MatchLineup
+            team={detail.lineup.away}
+            teamName={match.away.name}
+            teamLogo={match.away.logo}
+            isOurClub={match.away.id === OUR_CLUB_ID}
+          />
+        </div>
+      </div>
+    )}
+
+    {/* Vanjski link na izvor */}
+    {match.url && (
+      <p class="text-center text-xs text-club-muted mt-12">
+        Podaci s
+        <a
+          href={match.url}
+          target="_blank"
+          rel="noopener"
+          class="hover:text-club-primary underline ml-1"
+        >
+          HNS Semafora ↗
+        </a>
+      </p>
+    )}
+  </section>
+</BaseLayout>
