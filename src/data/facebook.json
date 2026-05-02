@@ -1,8 +1,17 @@
 {
-  "lastUpdated": "2026-05-02T17:13:22.032Z",
+  "lastUpdated": "2026-05-02T18:08:35.525Z",
   "enabled": true,
   "pageId": "55401829691",
   "posts": [
+    {
+      "id": "55401829691_1557430299722798",
+      "message": "Čestitamo domaćinima koji preokretom pred kraj utakmice dolaze do tri boda. Unatoč dobrom prvom dijelu utakmice, naša momčad nakon bezbroj neiskorištenih prilika pada i Brezik odnosi pobjedu.",
+      "createdAt": "2026-05-02T17:25:19+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1557430299722798",
+      "images": [
+        "/images/facebook/55401829691_1557430299722798.jpg"
+      ]
+    },
     {
       "id": "55401829691_1557050186427476",
       "message": "Danas gostujemo u Breziku protiv vrlo kvalitetne ekipe koja je konstantna i cijelu sezonu boravi u vrhu tablice. Također, zahvaljujemo na velikih 1700 pratitelja. Ovo je prikaz s naše nove web stranice (omladinacniza.hr)",
@@ -222,15 +231,6 @@
       "permalink": "https://www.facebook.com/1551452460320582/posts/1526334692832359",
       "images": [
         "/images/facebook/55401829691_1526334692832359.jpg"
-      ]
-    },
-    {
-      "id": "55401829691_1525395899592905",
-      "message": "Sutra igramo sa kvalitetnim susjedima koji su drugoplasirana momčad lige. Ovaj derbi je od velikog značaja za borbu za vrh. Nadamo se dobrim uvjetima za igru. 💙",
-      "createdAt": "2026-03-27T15:07:00+0000",
-      "permalink": "https://www.facebook.com/1551452460320582/posts/1525395899592905",
-      "images": [
-        "/images/facebook/55401829691_1525395899592905.jpg"
       ]
     }
   ]
