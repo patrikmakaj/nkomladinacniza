@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-05-02T18:08:31.835Z",
+  "lastUpdated": "2026-05-02T19:33:11.803Z",
   "sourceUrl": "https://semafor.hns.family/klubovi/134/nk-omladinac-niza/",
   "club": {
     "id": 134,
@@ -379,20 +379,20 @@
         "name": "NK Mladost (BN)",
         "logo": "https://hns.family/files/images_comet/5d/2/_resized/5d2a5b77042c3f19be79820867f9fef17f8d375b_100_100_wg_t.png"
       },
-      "played": 16,
+      "played": 17,
       "wins": 10,
       "draws": 2,
-      "losses": 4,
-      "gf": 44,
-      "ga": 23,
-      "gd": "+21",
+      "losses": 5,
+      "gf": 48,
+      "ga": 30,
+      "gd": "+18",
       "points": 32,
       "form": [
-        "W",
         "L",
         "W",
         "D",
-        "W"
+        "W",
+        "L"
       ],
       "isUs": false
     },
@@ -403,19 +403,19 @@
         "name": "NK Seljak",
         "logo": "https://hns.family/files/images_comet/36/9/_resized/36972d1f76ba9ef18cd52f28155fd5a08c4c465a_100_100_wg_t.png"
       },
-      "played": 17,
-      "wins": 9,
+      "played": 18,
+      "wins": 10,
       "draws": 1,
       "losses": 7,
-      "gf": 39,
-      "ga": 30,
-      "gd": "+9",
-      "points": 28,
+      "gf": 46,
+      "ga": 34,
+      "gd": "+12",
+      "points": 31,
       "form": [
-        "D",
         "L",
         "L",
         "L",
+        "W",
         "W"
       ],
       "isUs": false
@@ -1128,7 +1128,7 @@
       "photo": "https://hns.family/files/images_comet/12/f/_resized/12fca5adb4d1c93e67868a3e218418be760a0478_80_100_cut_wg_top.jpg",
       "profileUrl": "https://semafor.hns.family/igraci/365472/jan-rajs/",
       "stats": {
-        "appearances": 16,
+        "appearances": 17,
         "minutes": 0,
         "goals": 0,
         "cards": "0 / 0"
@@ -1164,13 +1164,13 @@
     },
     {
       "id": 48000,
-      "number": 24,
+      "number": 13,
       "name": "Tomislav Banaj",
       "position": "Igrač",
       "photo": "https://hns.family/files/images_comet/Person/_resized/48000_ed1f0b84-5ee7-4ce6-83a0-a1701a613b3d_80_100_cut_wg_top.png",
       "profileUrl": "https://semafor.hns.family/igraci/48000/tomislav-banaj/",
       "stats": {
-        "appearances": 0,
+        "appearances": 1,
         "minutes": 0,
         "goals": 0,
         "cards": "0 / 0"
@@ -1226,7 +1226,7 @@
       "photo": "https://hns.family/files/images_comet/97/0/_resized/970975f4675a93f7427b52a819b1a2a8370cbc3b_80_100_cut_wg_top.jpg",
       "profileUrl": "https://semafor.hns.family/igraci/70771/danijel-cosic/",
       "stats": {
-        "appearances": 17,
+        "appearances": 18,
         "minutes": 0,
         "goals": 10,
         "cards": "3 / 0"
@@ -1268,10 +1268,10 @@
       "photo": "https://hns.family/files/images_comet/Person/_resized/49179_4d4f0298-c249-4c7d-83d0-97242c22cf1d_80_100_cut_wg_top.jpg",
       "profileUrl": "https://semafor.hns.family/igraci/49179/ivan-galinec/",
       "stats": {
-        "appearances": 8,
+        "appearances": 9,
         "minutes": 0,
         "goals": 1,
-        "cards": "0 / 0"
+        "cards": "1 / 0"
       }
     },
     {
@@ -1296,7 +1296,7 @@
       "photo": "https://hns.family/files/images_comet/Person/_resized/58712_669f1d8e-2459-4cae-b94a-91e1dab5cd23_80_100_cut_wg_top.jpg",
       "profileUrl": "https://semafor.hns.family/igraci/58712/hrvoje-kasapovic/",
       "stats": {
-        "appearances": 15,
+        "appearances": 16,
         "minutes": 0,
         "goals": 4,
         "cards": "4 / 0"
@@ -1310,10 +1310,10 @@
       "photo": "https://hns.family/files/images_comet/Person/_resized/182403_b500dbbf-2be1-4c02-9dc2-5c459899bea2_80_100_cut_wg_top.jpg",
       "profileUrl": "https://semafor.hns.family/igraci/182403/ante-knezevic/",
       "stats": {
-        "appearances": 15,
+        "appearances": 16,
         "minutes": 0,
         "goals": 0,
-        "cards": "5 / 0"
+        "cards": "6 / 0"
       }
     },
     {
@@ -1338,10 +1338,10 @@
       "photo": "https://hns.family/files/images_comet/27/0/_resized/270a45d3b4d085a2e34a7fdce2621f563597fee2_80_100_cut_wg_top.png",
       "profileUrl": "https://semafor.hns.family/igraci/49014/marin-kuzminski/",
       "stats": {
-        "appearances": 2,
+        "appearances": 3,
         "minutes": 0,
-        "goals": 0,
-        "cards": "0 / 0"
+        "goals": 1,
+        "cards": "1 / 0"
       }
     },
     {
@@ -1352,7 +1352,7 @@
       "photo": "https://hns.family/files/images_comet/28/0/_resized/28009ba9eeb98f1abc969db67f7de56f98efaf35_80_100_cut_wg_top.jpg",
       "profileUrl": "https://semafor.hns.family/igraci/390748/ivan-makaj/",
       "stats": {
-        "appearances": 4,
+        "appearances": 5,
         "minutes": 0,
         "goals": 0,
         "cards": "0 / 0"
@@ -1394,9 +1394,9 @@
       "photo": "https://hns.family/files/images_comet/Person/_resized/125673_2f9825dc-889e-490b-8c18-4d7a41ed47c4_80_100_cut_wg_top.jpg",
       "profileUrl": "https://semafor.hns.family/igraci/125673/josip-matic/",
       "stats": {
-        "appearances": 6,
+        "appearances": 7,
         "minutes": 0,
-        "goals": 10,
+        "goals": 11,
         "cards": "1 / 0"
       }
     },
@@ -1422,7 +1422,7 @@
       "photo": "https://hns.family/files/images_comet/d4/a/_resized/d4a2b099b5a81468062f14832687dbb11601f5aa_80_100_cut_wg_top.jpg",
       "profileUrl": "https://semafor.hns.family/igraci/437293/marin-petar-mescic/",
       "stats": {
-        "appearances": 17,
+        "appearances": 18,
         "minutes": 0,
         "goals": 0,
         "cards": "3 / 0"
@@ -1430,13 +1430,13 @@
     },
     {
       "id": 48591,
-      "number": 21,
+      "number": 17,
       "name": "Silvester Misbrener",
       "position": "Igrač",
       "photo": "https://hns.family/files/images_comet/Person/_resized/48591_66bb8aba-ca5d-4f9c-80a0-4a52a2a4dc3d_80_100_cut_wg_top.jpg",
       "profileUrl": "https://semafor.hns.family/igraci/48591/silvester-misbrener/",
       "stats": {
-        "appearances": 3,
+        "appearances": 4,
         "minutes": 0,
         "goals": 1,
         "cards": "0 / 0"
@@ -1472,7 +1472,7 @@
     },
     {
       "id": 198154,
-      "number": 23,
+      "number": 14,
       "name": "Luka Stojaković",
       "position": "Igrač",
       "photo": "https://hns.family/files/images_comet/Person/_resized/198154_1ecf5cab-5d25-4e25-a4c9-58839dffebda_80_100_cut_wg_top.jpg",
@@ -1520,7 +1520,7 @@
       "photo": "https://hns.family/files/images_comet/97/b/_resized/97b5f153b275bc9340577267d4afd6c6b9a16ef5_80_100_cut_wg_top.png",
       "profileUrl": "https://semafor.hns.family/igraci/365480/daniel-vrbanic/",
       "stats": {
-        "appearances": 17,
+        "appearances": 18,
         "minutes": 0,
         "goals": 0,
         "cards": "0 / 0"
@@ -1544,20 +1544,20 @@
   "stats": {
     "topScorers": [
       {
-        "personId": 70771,
-        "position": 1,
-        "name": "Danijel Ćosić",
-        "profileUrl": "https://semafor.hns.family/igraci/70771/danijel-cosic/",
-        "photo": "https://hns.family/files/images_comet/97/0/_resized/970975f4675a93f7427b52a819b1a2a8370cbc3b_80_100_cut_wg_top.jpg",
-        "value": "10",
-        "goals": 10
-      },
-      {
         "personId": 125673,
         "position": 1,
         "name": "Josip Matić",
         "profileUrl": "https://semafor.hns.family/igraci/125673/josip-matic/",
         "photo": "https://hns.family/files/images_comet/Person/_resized/125673_2f9825dc-889e-490b-8c18-4d7a41ed47c4_80_100_cut_wg_top.jpg",
+        "value": "11",
+        "goals": 11
+      },
+      {
+        "personId": 70771,
+        "position": 2,
+        "name": "Danijel Ćosić",
+        "profileUrl": "https://semafor.hns.family/igraci/70771/danijel-cosic/",
+        "photo": "https://hns.family/files/images_comet/97/0/_resized/970975f4675a93f7427b52a819b1a2a8370cbc3b_80_100_cut_wg_top.jpg",
         "value": "10",
         "goals": 10
       },
@@ -1643,6 +1643,15 @@
         "goals": 1
       },
       {
+        "personId": 49014,
+        "position": 8,
+        "name": "Marin Kuzminski",
+        "profileUrl": "https://semafor.hns.family/igraci/49014/marin-kuzminski/",
+        "photo": "https://hns.family/files/images_comet/27/0/_resized/270a45d3b4d085a2e34a7fdce2621f563597fee2_80_100_cut_wg_top.png",
+        "value": "1",
+        "goals": 1
+      },
+      {
         "personId": 48591,
         "position": 8,
         "name": "Silvester Misbrener",
@@ -1668,13 +1677,13 @@
         "name": "Ante Knežević",
         "profileUrl": "https://semafor.hns.family/igraci/182403/ante-knezevic/",
         "photo": "https://hns.family/files/images_comet/Person/_resized/182403_b500dbbf-2be1-4c02-9dc2-5c459899bea2_80_100_cut_wg_top.jpg",
-        "value": "5 / 0",
-        "yellow": 5,
+        "value": "6 / 0",
+        "yellow": 6,
         "red": 0
       },
       {
         "personId": 190205,
-        "position": 1,
+        "position": 2,
         "name": "Mario Pranješ",
         "profileUrl": "https://semafor.hns.family/igraci/190205/mario-pranjes/",
         "photo": "https://hns.family/files/images_comet/Person/_resized/190205_3704e9d9-8cff-449a-9db2-7a44acb56af9_80_100_cut_wg_top.jpg",
@@ -1753,11 +1762,31 @@
         "red": 0
       },
       {
+        "personId": 49179,
+        "position": 9,
+        "name": "Ivan Galinec",
+        "profileUrl": "https://semafor.hns.family/igraci/49179/ivan-galinec/",
+        "photo": "https://hns.family/files/images_comet/Person/_resized/49179_4d4f0298-c249-4c7d-83d0-97242c22cf1d_80_100_cut_wg_top.jpg",
+        "value": "1 / 0",
+        "yellow": 1,
+        "red": 0
+      },
+      {
         "personId": 49013,
         "position": 9,
         "name": "Florijan Kuzminski",
         "profileUrl": "https://semafor.hns.family/igraci/49013/florijan-kuzminski/",
         "photo": "https://hns.family/files/images_comet/Person/_resized/49013_d26ad340-9139-4b60-846d-86fe85eedf16_80_100_cut_wg_top.jpg",
+        "value": "1 / 0",
+        "yellow": 1,
+        "red": 0
+      },
+      {
+        "personId": 49014,
+        "position": 9,
+        "name": "Marin Kuzminski",
+        "profileUrl": "https://semafor.hns.family/igraci/49014/marin-kuzminski/",
+        "photo": "https://hns.family/files/images_comet/27/0/_resized/270a45d3b4d085a2e34a7fdce2621f563597fee2_80_100_cut_wg_top.png",
         "value": "1 / 0",
         "yellow": 1,
         "red": 0
@@ -1800,18 +1829,8 @@
         "name": "Danijel Ćosić",
         "profileUrl": "https://semafor.hns.family/igraci/70771/danijel-cosic/",
         "photo": "https://hns.family/files/images_comet/97/0/_resized/970975f4675a93f7427b52a819b1a2a8370cbc3b_80_100_cut_wg_top.jpg",
-        "value": "17 / 0",
-        "appearances": 17,
-        "minutes": 0
-      },
-      {
-        "personId": 389829,
-        "position": 1,
-        "name": "Tin Mauhar",
-        "profileUrl": "https://semafor.hns.family/igraci/389829/tin-mauhar/",
-        "photo": "https://hns.family/files/images_comet/6a/4/_resized/6a4e068e61fb0acefa66e426b53bdbb0b3c3fc52_80_100_cut_wg_top.jpg",
-        "value": "17 / 0",
-        "appearances": 17,
+        "value": "18 / 0",
+        "appearances": 18,
         "minutes": 0
       },
       {
@@ -1820,8 +1839,8 @@
         "name": "Marin-Petar Meščić",
         "profileUrl": "https://semafor.hns.family/igraci/437293/marin-petar-mescic/",
         "photo": "https://hns.family/files/images_comet/d4/a/_resized/d4a2b099b5a81468062f14832687dbb11601f5aa_80_100_cut_wg_top.jpg",
-        "value": "17 / 0",
-        "appearances": 17,
+        "value": "18 / 0",
+        "appearances": 18,
         "minutes": 0
       },
       {
@@ -1830,13 +1849,33 @@
         "name": "Daniel Vrbanić",
         "profileUrl": "https://semafor.hns.family/igraci/365480/daniel-vrbanic/",
         "photo": "https://hns.family/files/images_comet/97/b/_resized/97b5f153b275bc9340577267d4afd6c6b9a16ef5_80_100_cut_wg_top.png",
+        "value": "18 / 0",
+        "appearances": 18,
+        "minutes": 0
+      },
+      {
+        "personId": 389829,
+        "position": 4,
+        "name": "Tin Mauhar",
+        "profileUrl": "https://semafor.hns.family/igraci/389829/tin-mauhar/",
+        "photo": "https://hns.family/files/images_comet/6a/4/_resized/6a4e068e61fb0acefa66e426b53bdbb0b3c3fc52_80_100_cut_wg_top.jpg",
+        "value": "17 / 0",
+        "appearances": 17,
+        "minutes": 0
+      },
+      {
+        "personId": 365472,
+        "position": 4,
+        "name": "Jan Rajs",
+        "profileUrl": "https://semafor.hns.family/igraci/365472/jan-rajs/",
+        "photo": "https://hns.family/files/images_comet/12/f/_resized/12fca5adb4d1c93e67868a3e218418be760a0478_80_100_cut_wg_top.jpg",
         "value": "17 / 0",
         "appearances": 17,
         "minutes": 0
       },
       {
         "personId": 110997,
-        "position": 5,
+        "position": 6,
         "name": "Denis Ćosić",
         "profileUrl": "https://semafor.hns.family/igraci/110997/denis-cosic/",
         "photo": "https://hns.family/files/images_comet/Person/_resized/110997_36372826-945d-4a22-a9de-360809b0653b_80_100_cut_wg_top.jpg",
@@ -1845,33 +1884,23 @@
         "minutes": 0
       },
       {
-        "personId": 365472,
-        "position": 5,
-        "name": "Jan Rajs",
-        "profileUrl": "https://semafor.hns.family/igraci/365472/jan-rajs/",
-        "photo": "https://hns.family/files/images_comet/12/f/_resized/12fca5adb4d1c93e67868a3e218418be760a0478_80_100_cut_wg_top.jpg",
+        "personId": 58712,
+        "position": 6,
+        "name": "Hrvoje Kasapović",
+        "profileUrl": "https://semafor.hns.family/igraci/58712/hrvoje-kasapovic/",
+        "photo": "https://hns.family/files/images_comet/Person/_resized/58712_669f1d8e-2459-4cae-b94a-91e1dab5cd23_80_100_cut_wg_top.jpg",
         "value": "16 / 0",
         "appearances": 16,
         "minutes": 0
       },
       {
-        "personId": 58712,
-        "position": 7,
-        "name": "Hrvoje Kasapović",
-        "profileUrl": "https://semafor.hns.family/igraci/58712/hrvoje-kasapovic/",
-        "photo": "https://hns.family/files/images_comet/Person/_resized/58712_669f1d8e-2459-4cae-b94a-91e1dab5cd23_80_100_cut_wg_top.jpg",
-        "value": "15 / 0",
-        "appearances": 15,
-        "minutes": 0
-      },
-      {
         "personId": 182403,
-        "position": 7,
+        "position": 6,
         "name": "Ante Knežević",
         "profileUrl": "https://semafor.hns.family/igraci/182403/ante-knezevic/",
         "photo": "https://hns.family/files/images_comet/Person/_resized/182403_b500dbbf-2be1-4c02-9dc2-5c459899bea2_80_100_cut_wg_top.jpg",
-        "value": "15 / 0",
-        "appearances": 15,
+        "value": "16 / 0",
+        "appearances": 16,
         "minutes": 0
       },
       {
@@ -1925,6 +1954,16 @@
         "minutes": 0
       },
       {
+        "personId": 49179,
+        "position": 14,
+        "name": "Ivan Galinec",
+        "profileUrl": "https://semafor.hns.family/igraci/49179/ivan-galinec/",
+        "photo": "https://hns.family/files/images_comet/Person/_resized/49179_4d4f0298-c249-4c7d-83d0-97242c22cf1d_80_100_cut_wg_top.jpg",
+        "value": "9 / 0",
+        "appearances": 9,
+        "minutes": 0
+      },
+      {
         "personId": 400435,
         "position": 14,
         "name": "Filip Tomac",
@@ -1935,18 +1974,8 @@
         "minutes": 0
       },
       {
-        "personId": 49179,
-        "position": 15,
-        "name": "Ivan Galinec",
-        "profileUrl": "https://semafor.hns.family/igraci/49179/ivan-galinec/",
-        "photo": "https://hns.family/files/images_comet/Person/_resized/49179_4d4f0298-c249-4c7d-83d0-97242c22cf1d_80_100_cut_wg_top.jpg",
-        "value": "8 / 0",
-        "appearances": 8,
-        "minutes": 0
-      },
-      {
         "personId": 49013,
-        "position": 15,
+        "position": 16,
         "name": "Florijan Kuzminski",
         "profileUrl": "https://semafor.hns.family/igraci/49013/florijan-kuzminski/",
         "photo": "https://hns.family/files/images_comet/Person/_resized/49013_d26ad340-9139-4b60-846d-86fe85eedf16_80_100_cut_wg_top.jpg",
@@ -1965,8 +1994,18 @@
         "minutes": 0
       },
       {
+        "personId": 125673,
+        "position": 17,
+        "name": "Josip Matić",
+        "profileUrl": "https://semafor.hns.family/igraci/125673/josip-matic/",
+        "photo": "https://hns.family/files/images_comet/Person/_resized/125673_2f9825dc-889e-490b-8c18-4d7a41ed47c4_80_100_cut_wg_top.jpg",
+        "value": "7 / 0",
+        "appearances": 7,
+        "minutes": 0
+      },
+      {
         "personId": 213135,
-        "position": 18,
+        "position": 19,
         "name": "Lukas Đurinski",
         "profileUrl": "https://semafor.hns.family/igraci/213135/lukas-djurinski/",
         "photo": "https://hns.family/files/images_comet/1d/7/_resized/1d78eef65eecc63630429d5308334c10ca845b02_80_100_cut_wg_top.jpg",
@@ -1975,18 +2014,8 @@
         "minutes": 0
       },
       {
-        "personId": 125673,
-        "position": 18,
-        "name": "Josip Matić",
-        "profileUrl": "https://semafor.hns.family/igraci/125673/josip-matic/",
-        "photo": "https://hns.family/files/images_comet/Person/_resized/125673_2f9825dc-889e-490b-8c18-4d7a41ed47c4_80_100_cut_wg_top.jpg",
-        "value": "6 / 0",
-        "appearances": 6,
-        "minutes": 0
-      },
-      {
         "personId": 110994,
-        "position": 18,
+        "position": 19,
         "name": "David Rajs",
         "profileUrl": "https://semafor.hns.family/igraci/110994/david-rajs/",
         "photo": "https://hns.family/files/images_comet/Person/_resized/110994_8c96c3cf-7e95-4806-9d4e-539d4b1131c2_80_100_cut_wg_top.jpg",
@@ -2000,18 +2029,8 @@
         "name": "Ivan Makaj",
         "profileUrl": "https://semafor.hns.family/igraci/390748/ivan-makaj/",
         "photo": "https://hns.family/files/images_comet/28/0/_resized/28009ba9eeb98f1abc969db67f7de56f98efaf35_80_100_cut_wg_top.jpg",
-        "value": "4 / 0",
-        "appearances": 4,
-        "minutes": 0
-      },
-      {
-        "personId": 466352,
-        "position": 22,
-        "name": "Željko Martić",
-        "profileUrl": "https://semafor.hns.family/igraci/466352/zeljko-martic/",
-        "photo": "https://hns.family/files/images_comet/0e/b/_resized/0eb77c6328ccfce1c7b261cf613419440d9ff6f6_80_100_cut_wg_top.jpg",
-        "value": "3 / 0",
-        "appearances": 3,
+        "value": "5 / 0",
+        "appearances": 5,
         "minutes": 0
       },
       {
@@ -2020,13 +2039,33 @@
         "name": "Silvester Misbrener",
         "profileUrl": "https://semafor.hns.family/igraci/48591/silvester-misbrener/",
         "photo": "https://hns.family/files/images_comet/Person/_resized/48591_66bb8aba-ca5d-4f9c-80a0-4a52a2a4dc3d_80_100_cut_wg_top.jpg",
+        "value": "4 / 0",
+        "appearances": 4,
+        "minutes": 0
+      },
+      {
+        "personId": 49014,
+        "position": 23,
+        "name": "Marin Kuzminski",
+        "profileUrl": "https://semafor.hns.family/igraci/49014/marin-kuzminski/",
+        "photo": "https://hns.family/files/images_comet/27/0/_resized/270a45d3b4d085a2e34a7fdce2621f563597fee2_80_100_cut_wg_top.png",
+        "value": "3 / 0",
+        "appearances": 3,
+        "minutes": 0
+      },
+      {
+        "personId": 466352,
+        "position": 23,
+        "name": "Željko Martić",
+        "profileUrl": "https://semafor.hns.family/igraci/466352/zeljko-martic/",
+        "photo": "https://hns.family/files/images_comet/0e/b/_resized/0eb77c6328ccfce1c7b261cf613419440d9ff6f6_80_100_cut_wg_top.jpg",
         "value": "3 / 0",
         "appearances": 3,
         "minutes": 0
       },
       {
         "personId": 438362,
-        "position": 22,
+        "position": 23,
         "name": "Ivano Zušćak",
         "profileUrl": "https://semafor.hns.family/igraci/438362/ivano-zuscak/",
         "photo": "https://hns.family/files/images_comet/6c/a/_resized/6ca957242e1f59ea19326a0651643e731d54f60a_80_100_cut_wg_top.jpg",
@@ -2035,13 +2074,13 @@
         "minutes": 0
       },
       {
-        "personId": 49014,
-        "position": 25,
-        "name": "Marin Kuzminski",
-        "profileUrl": "https://semafor.hns.family/igraci/49014/marin-kuzminski/",
-        "photo": "https://hns.family/files/images_comet/27/0/_resized/270a45d3b4d085a2e34a7fdce2621f563597fee2_80_100_cut_wg_top.png",
-        "value": "2 / 0",
-        "appearances": 2,
+        "personId": 48000,
+        "position": 26,
+        "name": "Tomislav Banaj",
+        "profileUrl": "https://semafor.hns.family/igraci/48000/tomislav-banaj/",
+        "photo": "https://hns.family/files/images_comet/Person/_resized/48000_ed1f0b84-5ee7-4ce6-83a0-a1701a613b3d_80_100_cut_wg_top.png",
+        "value": "1 / 0",
+        "appearances": 1,
         "minutes": 0
       },
       {
