@@ -1,8 +1,17 @@
 {
-  "lastUpdated": "2026-05-02T08:05:56.149Z",
+  "lastUpdated": "2026-05-02T09:13:37.745Z",
   "enabled": true,
   "pageId": "55401829691",
   "posts": [
+    {
+      "id": "55401829691_1557050186427476",
+      "message": "Danas gostujemo u Breziku protiv vrlo kvalitetne ekipe koja je konstantna i cijelu sezonu boravi u vrhu tablice. Također, zahvaljujemo na velikih 1700 pratitelja. Ovo je prikaz s naše nove web stranice (omladinacniza.hr)",
+      "createdAt": "2026-05-02T08:30:18+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1557050186427476",
+      "images": [
+        "/images/facebook/55401829691_1557050186427476.jpg"
+      ]
+    },
     {
       "id": "55401829691_1556649933134168",
       "message": "Obljetnica VRO \"Bljesak\" danas u Okučanima nije prošla bez naših članova kluba.",
@@ -222,24 +231,6 @@
       "permalink": "https://www.facebook.com/1551452460320582/posts/1525395899592905",
       "images": [
         "/images/facebook/55401829691_1525395899592905.jpg"
-      ]
-    },
-    {
-      "id": "55401829691_1523713683094460",
-      "message": "Sinoć odrađen zajednički trening na Šipovcu. Zahvala NK Šipovac - Tri Šešira na klopi poslije napornog treninga, a slijedeći put je na našu dušu... ifo",
-      "createdAt": "2026-03-25T21:03:51+0000",
-      "permalink": "https://www.facebook.com/1551452460320582/posts/1523713683094460",
-      "images": [
-        "/images/facebook/55401829691_1523713683094460_0.jpg",
-        "/images/facebook/55401829691_1523713683094460_1.jpg",
-        "/images/facebook/55401829691_1523713683094460_2.jpg",
-        "/images/facebook/55401829691_1523713683094460_3.jpg",
-        "/images/facebook/55401829691_1523713683094460_4.jpg",
-        "/images/facebook/55401829691_1523713683094460_5.jpg",
-        "/images/facebook/55401829691_1523713683094460_6.jpg",
-        "/images/facebook/55401829691_1523713683094460_7.jpg",
-        "/images/facebook/55401829691_1523713683094460_8.jpg",
-        "/images/facebook/55401829691_1523713683094460_9.jpg"
       ]
     }
   ]
