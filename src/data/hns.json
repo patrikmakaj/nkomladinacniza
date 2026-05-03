@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-05-03T16:07:21.211Z",
+  "lastUpdated": "2026-05-03T17:14:07.553Z",
   "sourceUrl": "https://semafor.hns.family/klubovi/134/nk-omladinac-niza/",
   "club": {
     "id": 134,
@@ -355,20 +355,20 @@
         "name": "NK Poganovci",
         "logo": "https://hns.family/files/images_comet/8b/e/_resized/8be8390f3c2d16ae7c1d214573a27031aa33f988_100_100_wg_t.png"
       },
-      "played": 16,
+      "played": 17,
       "wins": 10,
-      "draws": 4,
+      "draws": 5,
       "losses": 2,
-      "gf": 65,
-      "ga": 22,
+      "gf": 67,
+      "ga": 24,
       "gd": "+43",
-      "points": 34,
+      "points": 35,
       "form": [
-        "W",
         "W",
         "D",
         "W",
-        "W"
+        "W",
+        "D"
       ],
       "isUs": false
     },
@@ -427,20 +427,20 @@
         "name": "NK Seona",
         "logo": "https://hns.family/files/images_comet/63/3/_resized/633b62f9d0e508299c1e71b0e19b2038c588a20d_100_100_wg_t.png"
       },
-      "played": 16,
+      "played": 17,
       "wins": 8,
       "draws": 1,
-      "losses": 7,
-      "gf": 32,
-      "ga": 30,
-      "gd": "+2",
+      "losses": 8,
+      "gf": 33,
+      "ga": 34,
+      "gd": "-1",
       "points": 25,
       "form": [
         "L",
-        "L",
         "W",
         "W",
-        "W"
+        "W",
+        "L"
       ],
       "isUs": false
     },
@@ -475,20 +475,20 @@
         "name": "NK Polet (Bo)",
         "logo": "https://hns.family/files/images_comet/d1/b/_resized/d1b20e824a1235b9a50d5def437f34c8821e5a2d_100_100_wg_t.jpg"
       },
-      "played": 16,
-      "wins": 6,
+      "played": 17,
+      "wins": 7,
       "draws": 2,
       "losses": 8,
-      "gf": 26,
-      "ga": 37,
-      "gd": "-11",
-      "points": 20,
+      "gf": 30,
+      "ga": 38,
+      "gd": "-8",
+      "points": 23,
       "form": [
         "W",
         "W",
         "W",
-        "W",
-        "L"
+        "L",
+        "W"
       ],
       "isUs": false
     },
@@ -499,20 +499,20 @@
         "name": "NK Dinamo Budimci (-1)",
         "logo": "https://hns.family/files/images_comet/77/0/_resized/7702bcc3158b0e194b7a2220308c428a525e9284_100_100_wg_t.png"
       },
-      "played": 16,
+      "played": 17,
       "wins": 3,
-      "draws": 3,
+      "draws": 4,
       "losses": 10,
-      "gf": 23,
-      "ga": 40,
+      "gf": 25,
+      "ga": 42,
       "gd": "-17",
-      "points": 11,
+      "points": 12,
       "form": [
         "L",
         "L",
-        "L",
         "D",
-        "L"
+        "L",
+        "D"
       ],
       "isUs": false
     },
@@ -523,17 +523,17 @@
         "name": "NK Šipovac",
         "logo": "https://hns.family/files/images_comet/f7/d/_resized/f7d87ca932c2a22b6cdd7a430be55b9fcad3038b_100_100_wg_t.png"
       },
-      "played": 16,
+      "played": 17,
       "wins": 2,
       "draws": 0,
-      "losses": 14,
-      "gf": 17,
-      "ga": 69,
-      "gd": "-52",
+      "losses": 15,
+      "gf": 18,
+      "ga": 73,
+      "gd": "-55",
       "points": 6,
       "form": [
-        "L",
         "W",
+        "L",
         "L",
         "L",
         "L"
@@ -547,20 +547,20 @@
         "name": "NK Vuka",
         "logo": "https://hns.family/files/images_comet/Club/_resized/120_1363856199284_100_100_wg_t.jpg_100_100_wg_t.jpg"
       },
-      "played": 17,
-      "wins": 0,
+      "played": 18,
+      "wins": 1,
       "draws": 0,
       "losses": 17,
-      "gf": 11,
-      "ga": 71,
-      "gd": "-60",
-      "points": 0,
+      "gf": 15,
+      "ga": 72,
+      "gd": "-57",
+      "points": 3,
       "form": [
         "L",
         "L",
         "L",
         "L",
-        "L"
+        "W"
       ],
       "isUs": false
     }
