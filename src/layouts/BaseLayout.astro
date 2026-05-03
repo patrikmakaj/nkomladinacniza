@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import { ClientRouter } from "astro:transitions";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import { url } from "../lib/url";
@@ -79,6 +80,9 @@ const ogImageUrl = new URL(url(image), Astro.site).toString();
     <title>{fullTitle}</title>
 
     <slot name="head" />
+
+    <!-- View Transitions (smooth page navigation) -->
+    <ClientRouter />
 
     <!-- Umami Analytics -->
     <script defer src="https://cloud.umami.is/script.js" data-website-id="2312771d-a887-4d9f-a074-9bb444964aa0"></script>
