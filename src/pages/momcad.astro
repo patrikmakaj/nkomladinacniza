@@ -16,12 +16,17 @@ const allPlayers = hns.players.map((p) => ({
     : "FIELD",
 }));
 
+// Set personId-eva naših igrača — za interno linkanje umjesto vanjskog HNS Semafora
+const ourRosterIds = new Set<number>(hns.players.map((p) => p.id));
+const internalProfileUrl = (personId: number | null | undefined, fallback: string | null) =>
+  personId && ourRosterIds.has(personId) ? url(`/igrac/${personId}`) : fallback;
+
 // Pripremi rankingse za prikaz (prvih 10 da ne bude predugačko)
 const topScorersItems = (hns.stats?.topScorers ?? []).slice(0, 10).map((p) => ({
   position: p.position,
   name: p.name,
   photo: p.photo,
-  profileUrl: p.profileUrl,
+  profileUrl: internalProfileUrl((p as any).personId, p.profileUrl),
   valueHtml: `<span>${p.goals}</span><span class="text-club-muted text-xs font-normal">${golLabel(p.goals)}</span>`,
 }));
 
@@ -37,7 +42,7 @@ const topCardsItems = (hns.stats?.topCards ?? []).slice(0, 10).map((p) => {
     position: p.position,
     name: p.name,
     photo: p.photo,
-    profileUrl: p.profileUrl,
+    profileUrl: internalProfileUrl((p as any).personId, p.profileUrl),
     valueHtml: parts.length > 0 ? parts.join(' <span class="w-1"></span> ') : '<span class="text-club-muted">—</span>',
   };
 });
@@ -46,7 +51,7 @@ const topAppsItems = (hns.stats?.topApps ?? []).slice(0, 10).map((p) => ({
   position: p.position,
   name: p.name,
   photo: p.photo,
-  profileUrl: p.profileUrl,
+  profileUrl: internalProfileUrl((p as any).personId, p.profileUrl),
   valueHtml: `<span>${p.appearances}</span><span class="text-club-muted text-xs font-normal">${nastupLabel(p.appearances)}</span>`,
 }));
 
@@ -116,6 +121,7 @@ const competition = hns.competition?.name ?? "Sezona";
       {
         players.map((p) => (
           <PlayerCard
+            personId={p.id}
             number={p.number}
             name={p.name}
             position={p.position}

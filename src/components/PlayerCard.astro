@@ -1,7 +1,9 @@
 ---
 import { golLabel, nastupLabel } from "../lib/croatian";
+import { url } from "../lib/url";
 
 interface Props {
+  personId?: number | null;
   number: number | null;
   name: string;
   position: string | null;
@@ -12,6 +14,7 @@ interface Props {
 }
 
 const {
+  personId,
   number,
   name,
   position,
@@ -20,6 +23,8 @@ const {
   appearances = 0,
   goals = 0,
 } = Astro.props;
+
+const profileHref = personId ? url(`/igrac/${personId}`) : null;
 
 const groupLabels: Record<typeof positionGroup, string> = {
   GK: "Vratar",
@@ -39,6 +44,13 @@ const initials = name
   class="group relative bg-white border border-club-border rounded-lg overflow-hidden hover:shadow-xl hover:border-club-primary transition-all duration-200"
   data-position={positionGroup}
 >
+  {profileHref && (
+    <a
+      href={profileHref}
+      class="absolute inset-0 z-10"
+      aria-label={`Profil — ${name}`}
+    />
+  )}
   <div class="aspect-[3/4] bg-gradient-to-br from-club-primary-deep to-club-primary/40 flex items-center justify-center relative overflow-hidden">
     {photo ? (
       <img

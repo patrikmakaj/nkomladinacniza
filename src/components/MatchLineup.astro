@@ -1,5 +1,6 @@
 ---
 import Logo from "./Logo.astro";
+import { url } from "../lib/url";
 
 type EventType = "goal" | "own_goal" | "penalty" | "yellow" | "red" | "subin" | "subout" | "other";
 
@@ -25,9 +26,14 @@ interface Props {
   teamName: string;
   teamLogo: string | null;
   isOurClub: boolean;
+  /** Set personId-eva za koje postoji interna /igrac/[id] stranica. */
+  linkableIds?: Set<number>;
 }
 
-const { team, teamName, teamLogo, isOurClub } = Astro.props;
+const { team, teamName, teamLogo, isOurClub, linkableIds } = Astro.props;
+
+const profileHref = (personId: number | null): string | null =>
+  personId && linkableIds?.has(personId) ? url(`/igrac/${personId}`) : null;
 
 const eventIcon = (t: EventType): string => {
   switch (t) {
@@ -74,7 +80,16 @@ const eventIcon = (t: EventType): string => {
           </span>
           <div class="flex-1 min-w-0">
             <p class="text-sm font-medium text-club-secondary truncate">
-              {p.name}
+              {profileHref(p.personId) ? (
+                <a
+                  href={profileHref(p.personId)!}
+                  class="hover:text-club-primary hover:underline"
+                >
+                  {p.name}
+                </a>
+              ) : (
+                p.name
+              )}
               {p.captain && (
                 <span class="ml-1 text-[10px] font-display font-bold text-club-accent" title="Kapetan">
                   (C)
@@ -116,7 +131,16 @@ const eventIcon = (t: EventType): string => {
             </span>
             <div class="flex-1 min-w-0">
               <p class="text-sm text-club-secondary/80 truncate">
-                {p.name}
+                {profileHref(p.personId) ? (
+                  <a
+                    href={profileHref(p.personId)!}
+                    class="hover:text-club-primary hover:underline"
+                  >
+                    {p.name}
+                  </a>
+                ) : (
+                  p.name
+                )}
               </p>
               {p.position && (
                 <p class="text-[10px] text-club-muted">{p.position}</p>

@@ -1,0 +1,408 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Logo from "../../components/Logo.astro";
+import { golLabel, nastupLabel } from "../../lib/croatian";
+import { url } from "../../lib/url";
+import hns from "../../data/hns.json";
+
+const OUR_CLUB_ID = 134;
+
+type Player = {
+  id: number;
+  number: number | null;
+  name: string;
+  position: string | null;
+  photo: string | null;
+  profileUrl: string | null;
+};
+
+type LineupPlayer = {
+  personId: number | null;
+  number: number | null;
+  name: string;
+  position: string | null;
+  captain: boolean;
+  photo: string | null;
+  events: { type: string; minute: number | null; label: string | null }[];
+};
+
+type Match = {
+  id: string;
+  round: number;
+  date: string;
+  iso: string;
+  home: { id: number; name: string; logo: string | null };
+  away: { id: number; name: string; logo: string | null };
+  score: { home: number; away: number } | null;
+  played: boolean;
+  result: "W" | "D" | "L" | null;
+};
+
+export async function getStaticPaths() {
+  const players = (hns.players ?? []) as Player[];
+  return players.map((p) => ({ params: { id: String(p.id) } }));
+}
+
+const { id } = Astro.params;
+const personId = Number(id);
+
+const player = (hns.players as Player[]).find((p) => p.id === personId);
+
+if (!player) {
+  return Astro.redirect(url("/momcad"));
+}
+
+const matches = (hns.matches as Match[]) ?? [];
+const matchDetails = (hns.matchDetails ?? {}) as Record<string, any>;
+
+type PlayerMatchEntry = {
+  match: Match;
+  ourSide: "home" | "away";
+  isStarter: boolean;
+  events: LineupPlayer["events"];
+  goals: number;
+  yellow: number;
+  red: number;
+};
+
+const appearances: PlayerMatchEntry[] = [];
+
+for (const match of matches) {
+  if (!match.played || !match.score) continue;
+  const detail = matchDetails[match.id];
+  if (!detail) continue;
+
+  const ourSide: "home" | "away" =
+    match.home.id === OUR_CLUB_ID ? "home" : "away";
+  const ourLineup = detail.lineup?.[ourSide];
+  if (!ourLineup) continue;
+
+  const starters = (ourLineup.starters ?? []) as LineupPlayer[];
+  const subs = (ourLineup.subs ?? []) as LineupPlayer[];
+
+  const inStarters = starters.find((p) => p.personId === personId);
+  const inSubs = subs.find((p) => p.personId === personId);
+  const found = inStarters ?? inSubs;
+  if (!found) continue;
+
+  const evs = found.events ?? [];
+  const goals = evs.filter(
+    (e) => e.type === "goal" || e.type === "penalty"
+  ).length;
+  const yellow = evs.filter((e) => e.type === "yellow").length;
+  const red = evs.filter((e) => e.type === "red").length;
+
+  appearances.push({
+    match,
+    ourSide,
+    isStarter: !!inStarters,
+    events: evs,
+    goals,
+    yellow,
+    red,
+  });
+}
+
+// Najnoviji prvi
+appearances.sort((a, b) => b.match.iso.localeCompare(a.match.iso));
+
+const totalAppearances = appearances.length;
+const totalGoals = appearances.reduce((s, a) => s + a.goals, 0);
+const totalYellow = appearances.reduce((s, a) => s + a.yellow, 0);
+const totalRed = appearances.reduce((s, a) => s + a.red, 0);
+const firstAppearance = appearances[appearances.length - 1]?.match;
+const matchesWithGoals = appearances.filter((a) => a.goals > 0).length;
+
+const initials = player.name
+  .split(" ")
+  .map((n) => n[0])
+  .join("")
+  .slice(0, 2)
+  .toUpperCase();
+
+function formatShortDate(iso: string): string {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return iso;
+  return d.toLocaleDateString("hr-HR", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+}
+
+function eventIcon(t: string): string {
+  switch (t) {
+    case "goal":
+    case "penalty":
+      return "⚽";
+    case "own_goal":
+      return "🥅";
+    case "yellow":
+      return "🟨";
+    case "red":
+      return "🟥";
+    case "subin":
+      return "🔼";
+    case "subout":
+      return "🔽";
+    default:
+      return "•";
+  }
+}
+
+const positionGroup = (player.position || "")
+  .toLowerCase()
+  .includes("vratar")
+  ? "Vratar"
+  : "Igrač";
+
+const pageTitle = player.name;
+const pageDescription = `Profil igrača ${player.name} u sezoni ${hns.competition?.name ?? ""} — golovi, nastupi, kartoni i sve utakmice.`;
+---
+
+<BaseLayout title={pageTitle} description={pageDescription}>
+  {/* Hero */}
+  <section class="relative bg-club-primary text-white overflow-hidden">
+    <div class="absolute inset-0 opacity-10 pointer-events-none">
+      <img
+        src={url("/images/logo.svg")}
+        alt=""
+        width="500"
+        height="500"
+        class="absolute -right-16 top-1/2 -translate-y-1/2 w-[400px] h-auto"
+      />
+    </div>
+
+    <div class="relative container-narrow py-8 md:py-12">
+      <a
+        href={url("/momcad")}
+        class="inline-flex items-center gap-1.5 text-xs font-display uppercase tracking-wider text-white/70 hover:text-white mb-6 transition-colors"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        Natrag na momčad
+      </a>
+
+      <div class="flex items-center gap-6 md:gap-8">
+        {/* Foto */}
+        <div class="flex-shrink-0 w-28 h-28 md:w-40 md:h-40 rounded-lg bg-white/10 border-2 border-white/30 overflow-hidden flex items-center justify-center">
+          {player.photo ? (
+            <img
+              src={player.photo}
+              alt={player.name}
+              class="w-full h-full object-cover object-top"
+            />
+          ) : (
+            <span class="font-display font-bold text-3xl md:text-5xl text-white/70">
+              {initials}
+            </span>
+          )}
+        </div>
+
+        {/* Info */}
+        <div class="flex-1 min-w-0">
+          {player.number != null && (
+            <p class="font-display font-bold text-club-accent text-3xl md:text-5xl leading-none mb-2">
+              #{player.number}
+            </p>
+          )}
+          <h1 class="font-display font-bold text-2xl md:text-4xl uppercase tracking-tight leading-tight">
+            {player.name}
+          </h1>
+          <p class="text-white/70 text-sm md:text-base mt-1">
+            {positionGroup}
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* Statistike sezone */}
+  <section class="container-narrow mt-8 mb-12">
+    <h2 class="text-xl font-display font-bold uppercase tracking-wider text-club-primary-deep mb-4">
+      Sezona {hns.competition?.name ?? ""}
+    </h2>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+      <div class="bg-white border border-club-border rounded-lg p-4 text-center">
+        <p class="font-display font-bold text-3xl md:text-4xl text-club-primary-deep">
+          {totalAppearances}
+        </p>
+        <p class="text-xs md:text-sm text-club-muted mt-1">
+          {nastupLabel(totalAppearances)}
+        </p>
+      </div>
+      <div class="bg-white border border-club-border rounded-lg p-4 text-center">
+        <p class="font-display font-bold text-3xl md:text-4xl text-club-primary">
+          {totalGoals}
+        </p>
+        <p class="text-xs md:text-sm text-club-muted mt-1">
+          {golLabel(totalGoals)}
+        </p>
+      </div>
+      <div class="bg-white border border-club-border rounded-lg p-4 text-center">
+        <p class="font-display font-bold text-3xl md:text-4xl text-yellow-600 flex items-center justify-center gap-2">
+          <span>🟨</span>
+          <span>{totalYellow}</span>
+        </p>
+        <p class="text-xs md:text-sm text-club-muted mt-1">žuti kartoni</p>
+      </div>
+      <div class="bg-white border border-club-border rounded-lg p-4 text-center">
+        <p class="font-display font-bold text-3xl md:text-4xl text-red-600 flex items-center justify-center gap-2">
+          <span>🟥</span>
+          <span>{totalRed}</span>
+        </p>
+        <p class="text-xs md:text-sm text-club-muted mt-1">crveni kartoni</p>
+      </div>
+    </div>
+
+    {/* Dodatne info */}
+    {totalAppearances > 0 && (
+      <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+        {firstAppearance && (
+          <div class="bg-club-light/30 border border-club-border rounded-lg px-4 py-3">
+            <p class="text-xs uppercase tracking-wider text-club-muted font-display">
+              Prvi nastup u sezoni
+            </p>
+            <p class="text-club-secondary font-medium mt-1">
+              {formatShortDate(firstAppearance.iso)} ·
+              {firstAppearance.home.id === OUR_CLUB_ID
+                ? ` vs ${firstAppearance.away.name}`
+                : ` vs ${firstAppearance.home.name}`}
+            </p>
+          </div>
+        )}
+        {totalGoals > 0 && (
+          <div class="bg-club-light/30 border border-club-border rounded-lg px-4 py-3">
+            <p class="text-xs uppercase tracking-wider text-club-muted font-display">
+              Prosjek golova
+            </p>
+            <p class="text-club-secondary font-medium mt-1">
+              {(totalGoals / totalAppearances).toFixed(2)} po utakmici · zabio
+              na {matchesWithGoals} {nastupLabel(matchesWithGoals)}
+            </p>
+          </div>
+        )}
+      </div>
+    )}
+  </section>
+
+  {/* Lista utakmica */}
+  <section class="container-narrow mb-20">
+    <h2 class="text-xl font-display font-bold uppercase tracking-wider text-club-primary-deep mb-4">
+      Utakmice ({totalAppearances})
+    </h2>
+
+    {totalAppearances === 0 ? (
+      <p class="text-club-muted text-sm py-8 text-center bg-club-light/30 rounded-lg">
+        Nema zabilježenih nastupa u tekućoj sezoni.
+      </p>
+    ) : (
+      <ul class="space-y-2">
+        {appearances.map((a) => {
+          const opponent =
+            a.ourSide === "home" ? a.match.away : a.match.home;
+          const ourScore =
+            a.ourSide === "home"
+              ? a.match.score!.home
+              : a.match.score!.away;
+          const oppScore =
+            a.ourSide === "home"
+              ? a.match.score!.away
+              : a.match.score!.home;
+          const resultColor =
+            a.match.result === "W"
+              ? "bg-green-600"
+              : a.match.result === "L"
+              ? "bg-red-600"
+              : "bg-yellow-500";
+          const resultLetter =
+            a.match.result === "W" ? "P"
+            : a.match.result === "L" ? "P"
+            : "N";
+          const resultTitle =
+            a.match.result === "W" ? "Pobjeda"
+            : a.match.result === "L" ? "Poraz"
+            : "Neriješeno";
+
+          return (
+            <li>
+              <a
+                href={url(`/utakmica/${a.match.id}`)}
+                class="flex items-center gap-3 bg-white border border-club-border rounded-lg px-3 py-3 hover:border-club-primary hover:shadow transition group"
+              >
+                {/* Ishod badge */}
+                <span
+                  class={`flex-shrink-0 w-7 h-7 rounded-full ${resultColor} text-white font-display font-bold text-xs flex items-center justify-center`}
+                  title={resultTitle}
+                >
+                  {resultLetter}
+                </span>
+
+                {/* Kolo + datum */}
+                <div class="flex-shrink-0 w-16 text-xs">
+                  <p class="font-display font-bold text-club-primary-deep">
+                    {a.match.round}. kolo
+                  </p>
+                  <p class="text-club-muted">{formatShortDate(a.match.iso)}</p>
+                </div>
+
+                {/* Protivnik + rezultat */}
+                <div class="flex-1 min-w-0 flex items-center gap-2">
+                  {opponent.logo && (
+                    <img
+                      src={opponent.logo}
+                      alt=""
+                      width="20"
+                      height="20"
+                      class="w-5 h-5 object-contain flex-shrink-0"
+                      loading="lazy"
+                    />
+                  )}
+                  <span class="text-sm font-medium text-club-secondary truncate">
+                    {a.ourSide === "home" ? "vs" : "@"} {opponent.name}
+                  </span>
+                  <span class="font-display font-bold text-club-primary-deep ml-auto whitespace-nowrap">
+                    {ourScore} : {oppScore}
+                  </span>
+                </div>
+
+                {/* Igračevi eventi u toj utakmici */}
+                {a.events.length > 0 && (
+                  <div class="flex-shrink-0 hidden sm:flex items-center gap-1.5 ml-2 pl-3 border-l border-club-border">
+                    {a.events.map((ev) => (
+                      <span
+                        class="inline-flex items-center gap-0.5 text-xs"
+                        title={ev.label || ev.type}
+                      >
+                        <span>{eventIcon(ev.type)}</span>
+                        {ev.minute != null && (
+                          <span class="text-club-muted text-[10px]">
+                            {ev.minute}'
+                          </span>
+                        )}
+                      </span>
+                    ))}
+                  </div>
+                )}
+
+                {/* Starter/sub indicator */}
+                <span
+                  class={`flex-shrink-0 hidden md:inline-block text-[10px] font-display uppercase tracking-wider px-1.5 py-0.5 rounded ${
+                    a.isStarter
+                      ? "bg-club-primary/10 text-club-primary"
+                      : "bg-club-light text-club-muted"
+                  }`}
+                  title={a.isStarter ? "Početni 11" : "Pričuva"}
+                >
+                  {a.isStarter ? "11" : "Pr."}
+                </span>
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    )}
+  </section>
+</BaseLayout>

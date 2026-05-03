@@ -69,6 +69,7 @@ function formatDate(iso: string): string {
 const pageTitle = `${match.home.name} ${match.score?.home ?? "-"} : ${match.score?.away ?? "-"} ${match.away.name}`;
 const pageDescription = `Detalji utakmice — ${match.competition}. ${formatDate(match.iso)}, ${match.time || ""}.`;
 const ogImage = match.played && match.score ? `/utakmica/${id}.png` : undefined;
+const ourRosterIds = new Set<number>((hns.players ?? []).map((p: any) => p.id));
 ---
 
 <BaseLayout title={pageTitle} description={pageDescription} image={ogImage}>
@@ -245,12 +246,14 @@ const ogImage = match.played && match.score ? `/utakmica/${id}.png` : undefined;
             teamName={match.home.name}
             teamLogo={match.home.logo}
             isOurClub={match.home.id === OUR_CLUB_ID}
+            linkableIds={ourRosterIds}
           />
           <MatchLineup
             team={detail.lineup.away}
             teamName={match.away.name}
             teamLogo={match.away.logo}
             isOurClub={match.away.id === OUR_CLUB_ID}
+            linkableIds={ourRosterIds}
           />
         </div>
       </div>

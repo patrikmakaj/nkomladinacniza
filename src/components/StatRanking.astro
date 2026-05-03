@@ -80,14 +80,23 @@ function initials(name: string) {
             </div>
             <span class="flex-1 text-sm font-medium truncate" title={item.name}>
               {item.profileUrl ? (
-                <a
-                  href={item.profileUrl}
-                  target="_blank"
-                  rel="noopener"
-                  class="hover:text-club-primary"
-                >
-                  {item.name}
-                </a>
+                /^https?:/.test(item.profileUrl) ? (
+                  <a
+                    href={item.profileUrl}
+                    target="_blank"
+                    rel="noopener"
+                    class="hover:text-club-primary"
+                  >
+                    {item.name}
+                  </a>
+                ) : (
+                  <a
+                    href={item.profileUrl}
+                    class="hover:text-club-primary"
+                  >
+                    {item.name}
+                  </a>
+                )
               ) : (
                 item.name
               )}
