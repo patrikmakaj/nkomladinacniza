@@ -3,7 +3,14 @@ import satori from "satori";
 import { Resvg } from "@resvg/resvg-js";
 import fs from "node:fs";
 import path from "node:path";
+import crypto from "node:crypto";
 import hns from "../../data/hns.json";
+
+// Cache PNG-ova po sadržaju utakmice — preskoči generiranje ako je
+// (id + score + imena + competition) hash isti. CI cache (GitHub Actions)
+// može cache-ati .cache/og kroz buildove.
+const CACHE_DIR = path.resolve(".cache/og");
+fs.mkdirSync(CACHE_DIR, { recursive: true });
 
 const OUR_CLUB_ID = 134;
 const OUR_NAME = "NK OMLADINAC NIZA";
@@ -60,6 +67,30 @@ export const GET: APIRoute = async ({ params }) => {
   const match = (hns.matches as Match[]).find((m) => m.id === params.id);
   if (!match || !match.score) {
     return new Response("Not found", { status: 404 });
+  }
+
+  // Cache key: sve što utječe na vizualni izgled OG slike
+  const cacheKey = JSON.stringify({
+    id: match.id,
+    home: match.home.name,
+    away: match.away.name,
+    homeId: match.home.id,
+    awayId: match.away.id,
+    score: match.score,
+    iso: match.iso,
+    competition: match.competition,
+  });
+  const hash = crypto
+    .createHash("sha256")
+    .update(cacheKey)
+    .digest("hex")
+    .slice(0, 16);
+  const cachePath = path.join(CACHE_DIR, `${match.id}-${hash}.png`);
+
+  if (fs.existsSync(cachePath)) {
+    return new Response(new Uint8Array(fs.readFileSync(cachePath)), {
+      headers: { "Content-Type": "image/png", "X-Cache": "HIT" },
+    });
   }
 
   const isHome = match.home.id === OUR_CLUB_ID;
@@ -259,7 +290,14 @@ export const GET: APIRoute = async ({ params }) => {
     .render()
     .asPng();
 
+  // Cache na disk za sljedeći build
+  try {
+    fs.writeFileSync(cachePath, png);
+  } catch {
+    // Ako nije moguće pisati u cache (npr. read-only FS), tiho ignoriraj
+  }
+
   return new Response(new Uint8Array(png), {
-    headers: { "Content-Type": "image/png" },
+    headers: { "Content-Type": "image/png", "X-Cache": "MISS" },
   });
 };

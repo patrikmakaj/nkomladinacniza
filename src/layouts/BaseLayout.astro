@@ -74,6 +74,14 @@ const ogImageUrl = new URL(url(image), Astro.site).toString();
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageUrl} />
 
+    <!-- RSS feed za novosti -->
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="NK Omladinac Niza · Novosti"
+      href={url("/rss.xml")}
+    />
+
     <!-- Theme color (mobile chrome bar) -->
     <meta name="theme-color" content="#0f2c6e" />
 

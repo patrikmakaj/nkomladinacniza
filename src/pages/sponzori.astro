@@ -1,7 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Hero from "../components/Hero.astro";
-import { url } from "../lib/url";
+import { Image } from "astro:assets";
 
 type Sponsor = {
   name: string;
@@ -9,6 +9,20 @@ type Sponsor = {
   url?: string;
   textOnly?: boolean;
 };
+
+// Učitaj sve sponzorske logote iz src/assets/sponzori/ — Astro generira
+// optimizirane WebP/AVIF varijante s responsive srcset-om.
+const logoImports = import.meta.glob<{ default: ImageMetadata }>(
+  "../assets/sponzori/*.{jpg,jpeg,png}",
+  { eager: true }
+);
+
+function getLogo(filename: string): ImageMetadata | null {
+  const match = Object.entries(logoImports).find(([path]) =>
+    path.endsWith(`/${filename}`)
+  );
+  return match ? match[1].default : null;
+}
 
 const sponzori: Sponsor[] = [
   { name: "Općina Koška", logo: "opcinakoska.png", url: "https://www.koska.hr/" },
@@ -43,50 +57,57 @@ const textLogo = (name: string) => name.replace(/-/g, " ").toUpperCase();
 
   <section class="container-narrow mt-12 mb-20">
     <ul class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-      {sponzori.map((s) => (
-        <li>
-          {s.url ? (
-            <a
-              href={s.url}
-              target="_blank"
-              rel="noopener"
-              title={s.name}
-              class="group block bg-white border border-club-border rounded-lg aspect-square flex items-center justify-center p-4 hover:border-club-primary hover:shadow-md transition"
-            >
-              {s.textOnly ? (
-                <span class="font-display font-bold text-2xl md:text-3xl text-club-primary text-center leading-tight tracking-wide">
-                  {textLogo(s.name)}
-                </span>
-              ) : (
-                <img
-                  src={url(`/images/sponzori/${s.logo}`)}
-                  alt={s.name}
-                  loading="lazy"
-                  class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform"
-                />
-              )}
-            </a>
-          ) : (
-            <div
-              title={s.name}
-              class="bg-white border border-club-border rounded-lg aspect-square flex items-center justify-center p-4"
-            >
-              {s.textOnly ? (
-                <span class="font-display font-bold text-2xl md:text-3xl text-club-primary text-center leading-tight tracking-wide">
-                  {textLogo(s.name)}
-                </span>
-              ) : (
-                <img
-                  src={url(`/images/sponzori/${s.logo}`)}
-                  alt={s.name}
-                  loading="lazy"
-                  class="max-h-full max-w-full object-contain"
-                />
-              )}
-            </div>
-          )}
-        </li>
-      ))}
+      {sponzori.map((s) => {
+        const logo = !s.textOnly && s.logo ? getLogo(s.logo) : null;
+        return (
+          <li>
+            {s.url ? (
+              <a
+                href={s.url}
+                target="_blank"
+                rel="noopener"
+                title={s.name}
+                class="group block bg-white border border-club-border rounded-lg aspect-square flex items-center justify-center p-4 hover:border-club-primary hover:shadow-md transition"
+              >
+                {s.textOnly ? (
+                  <span class="font-display font-bold text-2xl md:text-3xl text-club-primary text-center leading-tight tracking-wide">
+                    {textLogo(s.name)}
+                  </span>
+                ) : logo ? (
+                  <Image
+                    src={logo}
+                    alt={s.name}
+                    widths={[200, 400]}
+                    sizes="(max-width: 640px) 200px, 256px"
+                    loading="lazy"
+                    class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform"
+                  />
+                ) : null}
+              </a>
+            ) : (
+              <div
+                title={s.name}
+                class="bg-white border border-club-border rounded-lg aspect-square flex items-center justify-center p-4"
+              >
+                {s.textOnly ? (
+                  <span class="font-display font-bold text-2xl md:text-3xl text-club-primary text-center leading-tight tracking-wide">
+                    {textLogo(s.name)}
+                  </span>
+                ) : logo ? (
+                  <Image
+                    src={logo}
+                    alt={s.name}
+                    widths={[200, 400]}
+                    sizes="(max-width: 640px) 200px, 256px"
+                    loading="lazy"
+                    class="max-h-full max-w-full object-contain"
+                  />
+                ) : null}
+              </div>
+            )}
+          </li>
+        );
+      })}
     </ul>
   </section>
 </BaseLayout>

@@ -70,9 +70,60 @@ const pageTitle = `${match.home.name} ${match.score?.home ?? "-"} : ${match.scor
 const pageDescription = `Detalji utakmice — ${match.competition}. ${formatDate(match.iso)}, ${match.time || ""}.`;
 const ogImage = match.played && match.score ? `/utakmica/${id}.png` : undefined;
 const ourRosterIds = new Set<number>((hns.players ?? []).map((p: any) => p.id));
+
+// JSON-LD SportsEvent — Google može prikazati rezultate u search-u.
+// Koristi se isti pattern kao SchemaSportsTeam (script type="application/ld+json").
+const siteUrl = Astro.site?.toString().replace(/\/$/, "") || "";
+const matchUrl = siteUrl + url(`/utakmica/${id}`);
+const sportsEventSchema: Record<string, unknown> = {
+  "@context": "https://schema.org",
+  "@type": "SportsEvent",
+  name: `${match.home.name} vs ${match.away.name}`,
+  description: match.played && match.score
+    ? `${match.competition}. Konačni rezultat ${match.home.name} ${match.score.home} : ${match.score.away} ${match.away.name}.`
+    : `${match.competition}. ${formatDate(match.iso)}.`,
+  startDate: match.iso,
+  url: matchUrl,
+  sport: "Soccer",
+  eventStatus: match.played
+    ? "https://schema.org/EventCompleted"
+    : "https://schema.org/EventScheduled",
+  homeTeam: {
+    "@type": "SportsTeam",
+    name: match.home.name,
+    ...(match.home.logo ? { logo: match.home.logo } : {}),
+  },
+  awayTeam: {
+    "@type": "SportsTeam",
+    name: match.away.name,
+    ...(match.away.logo ? { logo: match.away.logo } : {}),
+  },
+  competitor: [
+    { "@type": "SportsTeam", name: match.home.name },
+    { "@type": "SportsTeam", name: match.away.name },
+  ],
+  location: {
+    "@type": "Place",
+    name: detail.facility || "Stadion Grbavica, Niza",
+    address: {
+      "@type": "PostalAddress",
+      addressCountry: "HR",
+    },
+  },
+  organizer: {
+    "@type": "SportsOrganization",
+    name: "Nogometno središte Našice",
+  },
+};
 ---
 
 <BaseLayout title={pageTitle} description={pageDescription} image={ogImage}>
+  <script
+    slot="head"
+    type="application/ld+json"
+    is:inline
+    set:html={JSON.stringify(sportsEventSchema)}
+  />
   {/* Hero — kompaktan, fokus na rezultat */}
   <section class="relative bg-club-primary text-white overflow-hidden">
     <div class="absolute inset-0 opacity-10 pointer-events-none">
