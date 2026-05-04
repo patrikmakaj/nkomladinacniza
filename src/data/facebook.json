@@ -1,8 +1,18 @@
 {
-  "lastUpdated": "2026-05-04T13:06:07.871Z",
+  "lastUpdated": "2026-05-04T15:21:25.082Z",
   "enabled": true,
   "pageId": "55401829691",
   "posts": [
+    {
+      "id": "55401829691_1559151402884021",
+      "message": "Građevinski radovi na postavljanju reflektora su u tijeku. Od slijedeće sezone i kod nas će se igrati noćne bilo prvenstvene ili prijateljske utakmice.",
+      "createdAt": "2026-05-04T13:52:43+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1559151402884021",
+      "images": [
+        "/images/facebook/55401829691_1559151402884021_0.jpg",
+        "/images/facebook/55401829691_1559151402884021_1.jpg"
+      ]
+    },
     {
       "id": "55401829691_1557430299722798",
       "message": "Čestitamo domaćinima koji preokretom pred kraj utakmice dolaze do tri boda. Unatoč dobrom prvom dijelu utakmice, naša momčad nakon bezbroj neiskorištenih prilika pada i Brezik odnosi pobjedu.",
@@ -222,15 +232,6 @@
       "permalink": "https://www.facebook.com/1551452460320582/posts/1530352872430541",
       "images": [
         "/images/facebook/55401829691_1530352872430541.jpg"
-      ]
-    },
-    {
-      "id": "55401829691_1526334692832359",
-      "message": "Potpuna dominacija za nastavak pobjedničkog niza. 💙",
-      "createdAt": "2026-03-28T15:54:42+0000",
-      "permalink": "https://www.facebook.com/1551452460320582/posts/1526334692832359",
-      "images": [
-        "/images/facebook/55401829691_1526334692832359.jpg"
       ]
     }
   ]
