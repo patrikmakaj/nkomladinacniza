@@ -86,11 +86,20 @@ const currentPath = (rawPath.startsWith(base) ? rawPath.slice(base.length) : raw
 </header>
 
 <script>
-  const toggle = document.getElementById("menu-toggle");
-  const menu = document.getElementById("mobile-menu");
-  toggle?.addEventListener("click", () => {
-    const isOpen = !menu?.classList.contains("hidden");
-    menu?.classList.toggle("hidden");
-    toggle.setAttribute("aria-expanded", String(!isOpen));
-  });
+  function setupMenu() {
+    const toggle = document.getElementById("menu-toggle");
+    const menu = document.getElementById("mobile-menu");
+    if (!toggle || !menu) return;
+    if (toggle.dataset.menuInit === "1") return;
+    toggle.dataset.menuInit = "1";
+
+    toggle.addEventListener("click", () => {
+      const isOpen = !menu.classList.contains("hidden");
+      menu.classList.toggle("hidden");
+      toggle.setAttribute("aria-expanded", String(!isOpen));
+    });
+  }
+
+  setupMenu();
+  document.addEventListener("astro:page-load", setupMenu);
 </script>
