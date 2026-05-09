@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-05-09T17:46:27.883Z",
+  "lastUpdated": "2026-05-09T18:55:47.026Z",
   "sourceUrl": "https://semafor.hns.family/klubovi/134/nk-omladinac-niza/",
   "club": {
     "id": 134,
@@ -1399,8 +1399,8 @@
       "stats": {
         "appearances": 8,
         "minutes": 0,
-        "goals": 14,
-        "cards": "1 / 0"
+        "goals": 15,
+        "cards": "2 / 0"
       }
     },
     {
@@ -1552,8 +1552,8 @@
         "name": "Josip Matić",
         "profileUrl": "https://semafor.hns.family/igraci/125673/josip-matic/",
         "photo": "https://hns.family/files/images_comet/Person/_resized/125673_2f9825dc-889e-490b-8c18-4d7a41ed47c4_80_100_cut_wg_top.jpg",
-        "value": "14",
-        "goals": 14
+        "value": "15",
+        "goals": 15
       },
       {
         "personId": 70771,
@@ -1765,6 +1765,16 @@
         "red": 0
       },
       {
+        "personId": 125673,
+        "position": 7,
+        "name": "Josip Matić",
+        "profileUrl": "https://semafor.hns.family/igraci/125673/josip-matic/",
+        "photo": "https://hns.family/files/images_comet/Person/_resized/125673_2f9825dc-889e-490b-8c18-4d7a41ed47c4_80_100_cut_wg_top.jpg",
+        "value": "2 / 0",
+        "yellow": 2,
+        "red": 0
+      },
+      {
         "personId": 389829,
         "position": 7,
         "name": "Tin Mauhar",
@@ -1776,7 +1786,7 @@
       },
       {
         "personId": 110997,
-        "position": 11,
+        "position": 12,
         "name": "Denis Ćosić",
         "profileUrl": "https://semafor.hns.family/igraci/110997/denis-cosic/",
         "photo": "https://hns.family/files/images_comet/Person/_resized/110997_36372826-945d-4a22-a9de-360809b0653b_80_100_cut_wg_top.jpg",
@@ -1786,7 +1796,7 @@
       },
       {
         "personId": 49179,
-        "position": 11,
+        "position": 12,
         "name": "Ivan Galinec",
         "profileUrl": "https://semafor.hns.family/igraci/49179/ivan-galinec/",
         "photo": "https://hns.family/files/images_comet/Person/_resized/49179_4d4f0298-c249-4c7d-83d0-97242c22cf1d_80_100_cut_wg_top.jpg",
@@ -1796,7 +1806,7 @@
       },
       {
         "personId": 49014,
-        "position": 11,
+        "position": 12,
         "name": "Marin Kuzminski",
         "profileUrl": "https://semafor.hns.family/igraci/49014/marin-kuzminski/",
         "photo": "https://hns.family/files/images_comet/27/0/_resized/270a45d3b4d085a2e34a7fdce2621f563597fee2_80_100_cut_wg_top.png",
@@ -1805,18 +1815,8 @@
         "red": 0
       },
       {
-        "personId": 125673,
-        "position": 11,
-        "name": "Josip Matić",
-        "profileUrl": "https://semafor.hns.family/igraci/125673/josip-matic/",
-        "photo": "https://hns.family/files/images_comet/Person/_resized/125673_2f9825dc-889e-490b-8c18-4d7a41ed47c4_80_100_cut_wg_top.jpg",
-        "value": "1 / 0",
-        "yellow": 1,
-        "red": 0
-      },
-      {
         "personId": 110994,
-        "position": 11,
+        "position": 12,
         "name": "David Rajs",
         "profileUrl": "https://semafor.hns.family/igraci/110994/david-rajs/",
         "photo": "https://hns.family/files/images_comet/Person/_resized/110994_8c96c3cf-7e95-4806-9d4e-539d4b1131c2_80_100_cut_wg_top.jpg",
@@ -1826,7 +1826,7 @@
       },
       {
         "personId": 400435,
-        "position": 11,
+        "position": 12,
         "name": "Filip Tomac",
         "profileUrl": "https://semafor.hns.family/igraci/400435/filip-tomac/",
         "photo": "https://hns.family/files/images_comet/19/6/_resized/196e90ca1bdae4b92c4b44ad4993f050af7379f2_80_100_cut_wg_top.jpg",
