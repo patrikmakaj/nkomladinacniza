@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-05-10T16:51:51.108Z",
+  "lastUpdated": "2026-05-10T17:48:51.555Z",
   "sourceUrl": "https://semafor.hns.family/klubovi/134/nk-omladinac-niza/",
   "club": {
     "id": 134,
@@ -327,23 +327,23 @@
     {
       "position": 2,
       "club": {
-        "id": 126,
-        "name": "NK Brezik",
-        "logo": "https://hns.family/files/images_comet/03/a/_resized/03ab0f906448fd102ff730818a0931b71e3d4ba6_100_100_wg_t.png"
+        "id": 116,
+        "name": "NK Poganovci",
+        "logo": "https://hns.family/files/images_comet/8b/e/_resized/8be8390f3c2d16ae7c1d214573a27031aa33f988_100_100_wg_t.png"
       },
-      "played": 17,
-      "wins": 12,
-      "draws": 1,
-      "losses": 4,
-      "gf": 53,
-      "ga": 26,
-      "gd": "+27",
-      "points": 37,
+      "played": 18,
+      "wins": 11,
+      "draws": 5,
+      "losses": 2,
+      "gf": 73,
+      "ga": 24,
+      "gd": "+49",
+      "points": 38,
       "form": [
+        "D",
         "W",
         "W",
-        "L",
-        "W",
+        "D",
         "W"
       ],
       "isUs": false
@@ -351,24 +351,24 @@
     {
       "position": 3,
       "club": {
-        "id": 116,
-        "name": "NK Poganovci",
-        "logo": "https://hns.family/files/images_comet/8b/e/_resized/8be8390f3c2d16ae7c1d214573a27031aa33f988_100_100_wg_t.png"
+        "id": 126,
+        "name": "NK Brezik",
+        "logo": "https://hns.family/files/images_comet/03/a/_resized/03ab0f906448fd102ff730818a0931b71e3d4ba6_100_100_wg_t.png"
       },
-      "played": 17,
-      "wins": 10,
-      "draws": 5,
-      "losses": 2,
-      "gf": 67,
-      "ga": 24,
-      "gd": "+43",
-      "points": 35,
+      "played": 18,
+      "wins": 12,
+      "draws": 1,
+      "losses": 5,
+      "gf": 54,
+      "ga": 29,
+      "gd": "+25",
+      "points": 37,
       "form": [
         "W",
-        "D",
+        "L",
         "W",
         "W",
-        "D"
+        "L"
       ],
       "isUs": false
     },
@@ -379,20 +379,20 @@
         "name": "NK Mladost (BN)",
         "logo": "https://hns.family/files/images_comet/5d/2/_resized/5d2a5b77042c3f19be79820867f9fef17f8d375b_100_100_wg_t.png"
       },
-      "played": 17,
-      "wins": 10,
+      "played": 18,
+      "wins": 11,
       "draws": 2,
       "losses": 5,
-      "gf": 48,
+      "gf": 57,
       "ga": 30,
-      "gd": "+18",
-      "points": 32,
+      "gd": "+27",
+      "points": 35,
       "form": [
-        "L",
         "W",
         "D",
         "W",
-        "L"
+        "L",
+        "W"
       ],
       "isUs": false
     },
@@ -427,20 +427,20 @@
         "name": "NK Seona",
         "logo": "https://hns.family/files/images_comet/63/3/_resized/633b62f9d0e508299c1e71b0e19b2038c588a20d_100_100_wg_t.png"
       },
-      "played": 17,
-      "wins": 8,
+      "played": 18,
+      "wins": 9,
       "draws": 1,
       "losses": 8,
-      "gf": 33,
-      "ga": 34,
-      "gd": "-1",
-      "points": 25,
+      "gf": 36,
+      "ga": 35,
+      "gd": "+1",
+      "points": 28,
       "form": [
+        "W",
+        "W",
+        "W",
         "L",
-        "W",
-        "W",
-        "W",
-        "L"
+        "W"
       ],
       "isUs": false
     },
@@ -475,20 +475,20 @@
         "name": "NK Polet (Bo)",
         "logo": "https://hns.family/files/images_comet/d1/b/_resized/d1b20e824a1235b9a50d5def437f34c8821e5a2d_100_100_wg_t.jpg"
       },
-      "played": 17,
+      "played": 18,
       "wins": 7,
       "draws": 2,
-      "losses": 8,
+      "losses": 9,
       "gf": 30,
-      "ga": 38,
-      "gd": "-8",
+      "ga": 44,
+      "gd": "-14",
       "points": 23,
       "form": [
         "W",
         "W",
-        "W",
         "L",
-        "W"
+        "W",
+        "L"
       ],
       "isUs": false
     },
@@ -547,20 +547,20 @@
         "name": "NK Vuka",
         "logo": "https://hns.family/files/images_comet/Club/_resized/120_1363856199284_100_100_wg_t.jpg_100_100_wg_t.jpg"
       },
-      "played": 18,
+      "played": 19,
       "wins": 1,
       "draws": 0,
-      "losses": 17,
+      "losses": 18,
       "gf": 15,
-      "ga": 72,
-      "gd": "-57",
+      "ga": 81,
+      "gd": "-66",
       "points": 3,
       "form": [
         "L",
         "L",
         "L",
-        "L",
-        "W"
+        "W",
+        "L"
       ],
       "isUs": false
     }
