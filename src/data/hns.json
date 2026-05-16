@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-05-16T16:56:24.772Z",
+  "lastUpdated": "2026-05-16T17:54:33.934Z",
   "sourceUrl": "https://semafor.hns.family/klubovi/134/nk-omladinac-niza/",
   "club": {
     "id": 134,
@@ -331,20 +331,20 @@
         "name": "NK Poganovci",
         "logo": "https://hns.family/files/images_comet/8b/e/_resized/8be8390f3c2d16ae7c1d214573a27031aa33f988_100_100_wg_t.png"
       },
-      "played": 18,
+      "played": 19,
       "wins": 11,
-      "draws": 5,
+      "draws": 6,
       "losses": 2,
-      "gf": 73,
-      "ga": 24,
+      "gf": 74,
+      "ga": 25,
       "gd": "+49",
-      "points": 38,
+      "points": 39,
       "form": [
-        "D",
         "W",
         "W",
         "D",
-        "W"
+        "W",
+        "D"
       ],
       "isUs": false
     },
@@ -355,20 +355,20 @@
         "name": "NK Brezik",
         "logo": "https://hns.family/files/images_comet/03/a/_resized/03ab0f906448fd102ff730818a0931b71e3d4ba6_100_100_wg_t.png"
       },
-      "played": 18,
+      "played": 19,
       "wins": 12,
-      "draws": 1,
+      "draws": 2,
       "losses": 5,
-      "gf": 54,
-      "ga": 29,
+      "gf": 55,
+      "ga": 30,
       "gd": "+25",
-      "points": 37,
+      "points": 38,
       "form": [
-        "W",
         "L",
         "W",
         "W",
-        "L"
+        "L",
+        "D"
       ],
       "isUs": false
     },
