@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-05-16T17:54:33.934Z",
+  "lastUpdated": "2026-05-16T18:59:27.760Z",
   "sourceUrl": "https://semafor.hns.family/klubovi/134/nk-omladinac-niza/",
   "club": {
     "id": 134,
@@ -427,20 +427,20 @@
         "name": "NK Seona",
         "logo": "https://hns.family/files/images_comet/63/3/_resized/633b62f9d0e508299c1e71b0e19b2038c588a20d_100_100_wg_t.png"
       },
-      "played": 18,
+      "played": 19,
       "wins": 9,
       "draws": 1,
-      "losses": 8,
-      "gf": 36,
-      "ga": 35,
-      "gd": "+1",
+      "losses": 9,
+      "gf": 37,
+      "ga": 40,
+      "gd": "-3",
       "points": 28,
       "form": [
         "W",
         "W",
-        "W",
         "L",
-        "W"
+        "W",
+        "L"
       ],
       "isUs": false
     },
@@ -451,20 +451,20 @@
         "name": "NK Slavonija NLT",
         "logo": "https://hns.family/files/images_comet/b9/5/_resized/b95249da8ff3382edea063a14dbc9ab838aaf1d0_100_100_wg_t.png"
       },
-      "played": 18,
-      "wins": 7,
+      "played": 19,
+      "wins": 8,
       "draws": 2,
       "losses": 9,
-      "gf": 40,
-      "ga": 42,
-      "gd": "-2",
-      "points": 23,
+      "gf": 45,
+      "ga": 43,
+      "gd": "+2",
+      "points": 26,
       "form": [
         "W",
-        "W",
         "L",
         "L",
-        "L"
+        "L",
+        "W"
       ],
       "isUs": false
     },
