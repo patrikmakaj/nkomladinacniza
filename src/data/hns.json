@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-05-17T19:07:13.830Z",
+  "lastUpdated": "2026-05-17T20:12:17.435Z",
   "sourceUrl": "https://semafor.hns.family/klubovi/134/nk-omladinac-niza/",
   "club": {
     "id": 134,
@@ -379,20 +379,20 @@
         "name": "NK Mladost (BN)",
         "logo": "https://hns.family/files/images_comet/5d/2/_resized/5d2a5b77042c3f19be79820867f9fef17f8d375b_100_100_wg_t.png"
       },
-      "played": 18,
+      "played": 19,
       "wins": 11,
       "draws": 2,
-      "losses": 5,
-      "gf": 57,
-      "ga": 30,
-      "gd": "+27",
+      "losses": 6,
+      "gf": 58,
+      "ga": 32,
+      "gd": "+26",
       "points": 35,
       "form": [
-        "W",
         "D",
         "W",
         "L",
-        "W"
+        "W",
+        "L"
       ],
       "isUs": false
     },
@@ -499,19 +499,19 @@
         "name": "NK Dinamo Budimci (-1)",
         "logo": "https://hns.family/files/images_comet/77/0/_resized/7702bcc3158b0e194b7a2220308c428a525e9284_100_100_wg_t.png"
       },
-      "played": 18,
-      "wins": 4,
+      "played": 19,
+      "wins": 5,
       "draws": 4,
       "losses": 10,
-      "gf": 30,
-      "ga": 45,
-      "gd": "-15",
-      "points": 15,
+      "gf": 32,
+      "ga": 46,
+      "gd": "-14",
+      "points": 18,
       "form": [
-        "L",
         "D",
         "L",
         "D",
+        "W",
         "W"
       ],
       "isUs": false
