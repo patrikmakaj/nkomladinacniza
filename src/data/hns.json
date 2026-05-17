@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-05-17T16:54:35.075Z",
+  "lastUpdated": "2026-05-17T17:56:04.152Z",
   "sourceUrl": "https://semafor.hns.family/klubovi/134/nk-omladinac-niza/",
   "club": {
     "id": 134,
@@ -403,18 +403,18 @@
         "name": "NK Seljak",
         "logo": "https://hns.family/files/images_comet/36/9/_resized/36972d1f76ba9ef18cd52f28155fd5a08c4c465a_100_100_wg_t.png"
       },
-      "played": 18,
-      "wins": 10,
+      "played": 19,
+      "wins": 11,
       "draws": 1,
       "losses": 7,
-      "gf": 46,
-      "ga": 34,
-      "gd": "+12",
-      "points": 31,
+      "gf": 52,
+      "ga": 35,
+      "gd": "+17",
+      "points": 34,
       "form": [
         "L",
         "L",
-        "L",
+        "W",
         "W",
         "W"
       ],
@@ -475,20 +475,20 @@
         "name": "NK Polet (Bo)",
         "logo": "https://hns.family/files/images_comet/d1/b/_resized/d1b20e824a1235b9a50d5def437f34c8821e5a2d_100_100_wg_t.jpg"
       },
-      "played": 18,
-      "wins": 7,
+      "played": 19,
+      "wins": 8,
       "draws": 2,
       "losses": 9,
-      "gf": 30,
+      "gf": 36,
       "ga": 44,
-      "gd": "-14",
-      "points": 23,
+      "gd": "-8",
+      "points": 26,
       "form": [
-        "W",
         "W",
         "L",
         "W",
-        "L"
+        "L",
+        "W"
       ],
       "isUs": false
     },
@@ -523,13 +523,13 @@
         "name": "NK Šipovac",
         "logo": "https://hns.family/files/images_comet/f7/d/_resized/f7d87ca932c2a22b6cdd7a430be55b9fcad3038b_100_100_wg_t.png"
       },
-      "played": 18,
+      "played": 19,
       "wins": 2,
       "draws": 0,
-      "losses": 16,
+      "losses": 17,
       "gf": 21,
-      "ga": 78,
-      "gd": "-57",
+      "ga": 84,
+      "gd": "-63",
       "points": 6,
       "form": [
         "L",
@@ -547,19 +547,19 @@
         "name": "NK Vuka",
         "logo": "https://hns.family/files/images_comet/Club/_resized/120_1363856199284_100_100_wg_t.jpg_100_100_wg_t.jpg"
       },
-      "played": 19,
+      "played": 20,
       "wins": 1,
       "draws": 0,
-      "losses": 18,
-      "gf": 15,
-      "ga": 81,
-      "gd": "-66",
+      "losses": 19,
+      "gf": 16,
+      "ga": 87,
+      "gd": "-71",
       "points": 3,
       "form": [
         "L",
         "L",
-        "L",
         "W",
+        "L",
         "L"
       ],
       "isUs": false
