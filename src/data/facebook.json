@@ -1,8 +1,27 @@
 {
-  "lastUpdated": "2026-05-18T05:48:05.096Z",
+  "lastUpdated": "2026-05-18T09:55:35.720Z",
   "enabled": true,
   "pageId": "55401829691",
   "posts": [
+    {
+      "id": "55401829691_1575490511250110",
+      "message": "",
+      "createdAt": "2026-05-18T09:39:27+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1575490511250110",
+      "images": [
+        "/images/facebook/55401829691_1575490511250110.jpg"
+      ]
+    },
+    {
+      "id": "55401829691_1575397527926075",
+      "message": "Stanje nakon slobodnog vikenda. U zadnjem kolu gostujemo u Seoni.",
+      "createdAt": "2026-05-18T07:18:25+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1575397527926075",
+      "images": [
+        "/images/facebook/55401829691_1575397527926075_0.jpg",
+        "/images/facebook/55401829691_1575397527926075_1.jpg"
+      ]
+    },
     {
       "id": "55401829691_1564074672391694",
       "message": "Ovim putem šaljemo pozdrave Tinu i Denisu 🐟",
@@ -214,24 +233,6 @@
         "/images/facebook/55401829691_1534682805330881_2.jpg",
         "/images/facebook/55401829691_1534682805330881_3.jpg",
         "/images/facebook/55401829691_1534682805330881_4.jpg"
-      ]
-    },
-    {
-      "id": "55401829691_1532931535506008",
-      "message": "",
-      "createdAt": "2026-04-05T07:12:07+0000",
-      "permalink": "https://www.facebook.com/1551452460320582/posts/1532931535506008",
-      "images": [
-        "/images/facebook/55401829691_1532931535506008.jpg"
-      ]
-    },
-    {
-      "id": "55401829691_1532560482209780",
-      "message": "Derbi napet kao i inače. Cijelu utakmicu namećemo svoju igru, koju je Matić okrunio s dva lijepa pogotka. Hvala susjedima na gostoprimstvu i puno sreće u nastavku prvenstva. 💙",
-      "createdAt": "2026-04-04T19:12:52+0000",
-      "permalink": "https://www.facebook.com/1551452460320582/posts/1532560482209780",
-      "images": [
-        "/images/facebook/55401829691_1532560482209780.jpg"
       ]
     }
   ]
