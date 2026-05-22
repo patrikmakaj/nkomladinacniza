@@ -1,8 +1,17 @@
 {
-  "lastUpdated": "2026-05-22T10:54:14.400Z",
+  "lastUpdated": "2026-05-22T13:28:47.571Z",
   "enabled": true,
   "pageId": "55401829691",
   "posts": [
+    {
+      "id": "55401829691_1579738724158622",
+      "message": "Obavijest svima koji su naručili!\nMajice možete preuzeti od večeras u birtiji.\nCijena je 8,00€ po majici.\nOni koji nisu naručili majicu, imati će priliku kupiti na proslavi iduću subotu.",
+      "createdAt": "2026-05-22T11:53:03+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1579738724158622",
+      "images": [
+        "/images/facebook/55401829691_1579738724158622.jpg"
+      ]
+    },
     {
       "id": "55401829691_1575490511250110",
       "message": "",
@@ -220,19 +229,6 @@
       "permalink": "https://www.facebook.com/1551452460320582/posts/1534748205324341",
       "images": [
         "/images/facebook/55401829691_1534748205324341.jpg"
-      ]
-    },
-    {
-      "id": "55401829691_1534682805330881",
-      "message": "",
-      "createdAt": "2026-04-07T07:50:15+0000",
-      "permalink": "https://www.facebook.com/1551452460320582/posts/1534682805330881",
-      "images": [
-        "/images/facebook/55401829691_1534682805330881_0.jpg",
-        "/images/facebook/55401829691_1534682805330881_1.jpg",
-        "/images/facebook/55401829691_1534682805330881_2.jpg",
-        "/images/facebook/55401829691_1534682805330881_3.jpg",
-        "/images/facebook/55401829691_1534682805330881_4.jpg"
       ]
     }
   ]
