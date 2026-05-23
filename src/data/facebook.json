@@ -1,8 +1,17 @@
 {
-  "lastUpdated": "2026-05-23T04:23:41.067Z",
+  "lastUpdated": "2026-05-23T07:14:19.832Z",
   "enabled": true,
   "pageId": "55401829691",
   "posts": [
+    {
+      "id": "55401829691_1580498160749345",
+      "message": "Sutra ćemo kod naših sportskih prijatelja iz Seone odigrati zadnju službenu utakmicu ove sezone i podići dugo očekivani trofej Lige NS Našice. 👋",
+      "createdAt": "2026-05-23T06:56:26+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1580498160749345",
+      "images": [
+        "/images/facebook/55401829691_1580498160749345.jpg"
+      ]
+    },
     {
       "id": "55401829691_1579738724158622",
       "message": "Obavijest svima koji su naručili!\nMajice možete preuzeti od večeras u birtiji.\nCijena je 8,00€ po majici.\nOni koji nisu naručili majicu, imati će priliku kupiti na proslavi iduću subotu.",
@@ -220,15 +229,6 @@
       "permalink": "https://www.facebook.com/1551452460320582/posts/1537426168389878",
       "images": [
         "/images/facebook/55401829691_1537426168389878.jpg"
-      ]
-    },
-    {
-      "id": "55401829691_1534748205324341",
-      "message": "U organizaciji Općine Koška, ulaz besplatan. Poziv svima!",
-      "createdAt": "2026-04-07T09:46:53+0000",
-      "permalink": "https://www.facebook.com/1551452460320582/posts/1534748205324341",
-      "images": [
-        "/images/facebook/55401829691_1534748205324341.jpg"
       ]
     }
   ]
