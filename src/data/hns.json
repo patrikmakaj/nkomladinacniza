@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-05-23T17:33:10.866Z",
+  "lastUpdated": "2026-05-23T19:04:44.738Z",
   "sourceUrl": "https://semafor.hns.family/klubovi/134/nk-omladinac-niza/",
   "club": {
     "id": 134,
@@ -327,6 +327,30 @@
     {
       "position": 2,
       "club": {
+        "id": 126,
+        "name": "NK Brezik",
+        "logo": "https://hns.family/files/images_comet/03/a/_resized/03ab0f906448fd102ff730818a0931b71e3d4ba6_100_100_wg_t.png"
+      },
+      "played": 20,
+      "wins": 13,
+      "draws": 2,
+      "losses": 5,
+      "gf": 62,
+      "ga": 30,
+      "gd": "+32",
+      "points": 41,
+      "form": [
+        "W",
+        "W",
+        "L",
+        "D",
+        "W"
+      ],
+      "isUs": false
+    },
+    {
+      "position": 3,
+      "club": {
         "id": 116,
         "name": "NK Poganovci",
         "logo": "https://hns.family/files/images_comet/8b/e/_resized/8be8390f3c2d16ae7c1d214573a27031aa33f988_100_100_wg_t.png"
@@ -344,30 +368,6 @@
         "W",
         "D",
         "W",
-        "D"
-      ],
-      "isUs": false
-    },
-    {
-      "position": 3,
-      "club": {
-        "id": 126,
-        "name": "NK Brezik",
-        "logo": "https://hns.family/files/images_comet/03/a/_resized/03ab0f906448fd102ff730818a0931b71e3d4ba6_100_100_wg_t.png"
-      },
-      "played": 19,
-      "wins": 12,
-      "draws": 2,
-      "losses": 5,
-      "gf": 55,
-      "ga": 30,
-      "gd": "+25",
-      "points": 38,
-      "form": [
-        "L",
-        "W",
-        "W",
-        "L",
         "D"
       ],
       "isUs": false
@@ -523,13 +523,13 @@
         "name": "NK Šipovac",
         "logo": "https://hns.family/files/images_comet/f7/d/_resized/f7d87ca932c2a22b6cdd7a430be55b9fcad3038b_100_100_wg_t.png"
       },
-      "played": 19,
+      "played": 20,
       "wins": 2,
       "draws": 0,
-      "losses": 17,
+      "losses": 18,
       "gf": 21,
-      "ga": 84,
-      "gd": "-63",
+      "ga": 91,
+      "gd": "-70",
       "points": 6,
       "form": [
         "L",
