@@ -1,8 +1,21 @@
 {
-  "lastUpdated": "2026-05-24T17:12:21.490Z",
+  "lastUpdated": "2026-05-24T18:35:41.510Z",
   "enabled": true,
   "pageId": "55401829691",
   "posts": [
+    {
+      "id": "55401829691_1581875270611634",
+      "message": "Prvaci LNS za 2025/26. Izađite na balkone i pozdravite šampione. Kroz pol sata prolazimo kroz selo...",
+      "createdAt": "2026-05-24T17:30:12+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1581875270611634",
+      "images": [
+        "/images/facebook/55401829691_1581875270611634_0.jpg",
+        "/images/facebook/55401829691_1581875270611634_1.jpg",
+        "/images/facebook/55401829691_1581875270611634_2.jpg",
+        "/images/facebook/55401829691_1581875270611634_3.jpg",
+        "/images/facebook/55401829691_1581875270611634_4.jpg"
+      ]
+    },
     {
       "id": "55401829691_1580498160749345",
       "message": "Sutra ćemo kod naših sportskih prijatelja iz Seone odigrati zadnju službenu utakmicu ove sezone i podići dugo očekivani trofej Lige NS Našice. 👋",
@@ -220,15 +233,6 @@
       "permalink": "https://www.facebook.com/1551452460320582/posts/1538418921623936",
       "images": [
         "/images/facebook/55401829691_1538418921623936.jpg"
-      ]
-    },
-    {
-      "id": "55401829691_1537426168389878",
-      "message": "Sutra na domaćem terenu igramo protiv NK Vuke iz Razbojišta od 16:30h.",
-      "createdAt": "2026-04-10T13:04:51+0000",
-      "permalink": "https://www.facebook.com/1551452460320582/posts/1537426168389878",
-      "images": [
-        "/images/facebook/55401829691_1537426168389878.jpg"
       ]
     }
   ]
