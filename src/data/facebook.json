@@ -1,8 +1,26 @@
 {
-  "lastUpdated": "2026-05-25T08:44:32.669Z",
+  "lastUpdated": "2026-05-25T12:26:37.834Z",
   "enabled": true,
   "pageId": "55401829691",
   "posts": [
+    {
+      "id": "55401829691_1582415067224321",
+      "message": "Poziv svima na kirvajsku zabavu i proslavu naslova prvaka",
+      "createdAt": "2026-05-25T09:27:06+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1582415067224321",
+      "images": [
+        "/images/facebook/55401829691_1582415067224321.jpg"
+      ]
+    },
+    {
+      "id": "55401829691_1561009728709529",
+      "message": "",
+      "createdAt": "2026-05-25T09:26:35+0000",
+      "permalink": "https://www.facebook.com/events/1561009728709529/",
+      "images": [
+        "/images/facebook/55401829691_1561009728709529.jpg"
+      ]
+    },
     {
       "id": "55401829691_1582016370597524",
       "message": "Uskoro više kad se otrijeznimo...",
@@ -214,25 +232,6 @@
       "permalink": "https://www.facebook.com/1551452460320582/posts/1545537047578790",
       "images": [
         "/images/facebook/55401829691_1545537047578790.jpg"
-      ]
-    },
-    {
-      "id": "55401829691_1544320031033825",
-      "message": "Sutra idemo Dinamu u goste. Očekuje se jako lijepo vrijeme stoga poziv svima...",
-      "createdAt": "2026-04-18T10:18:11+0000",
-      "permalink": "https://www.facebook.com/1551452460320582/posts/1544320031033825",
-      "images": [
-        "/images/facebook/55401829691_1544320031033825.jpg"
-      ]
-    },
-    {
-      "id": "55401829691_1540691691396659",
-      "message": "Stanje nakon 16. kola 😁💙",
-      "createdAt": "2026-04-14T09:09:07+0000",
-      "permalink": "https://www.facebook.com/1551452460320582/posts/1540691691396659",
-      "images": [
-        "/images/facebook/55401829691_1540691691396659_0.jpg",
-        "/images/facebook/55401829691_1540691691396659_1.jpg"
       ]
     }
   ]
