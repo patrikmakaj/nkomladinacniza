@@ -1,8 +1,17 @@
 {
-  "lastUpdated": "2026-06-02T03:36:54.554Z",
+  "lastUpdated": "2026-06-02T08:25:44.716Z",
   "enabled": true,
   "pageId": "55401829691",
   "posts": [
+    {
+      "id": "55401829691_1590622603070234",
+      "message": "",
+      "createdAt": "2026-06-02T08:09:38+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1590622603070234",
+      "images": [
+        "/images/facebook/55401829691_1590622603070234.jpg"
+      ]
+    },
     {
       "id": "55401829691_1588766206589207",
       "message": "Jučer je odigrana revijalna utakmica između seniora i veterana, a nakon toga se pošteno feštalo. Zahvaljujemo svima na dolasku i uveličavanju ove prigode. Sada na zasluženi odmor... #nizazivivjecno 💙",
@@ -238,15 +247,6 @@
       "permalink": "https://www.facebook.com/reel/994912119881556/",
       "images": [
         "/images/facebook/55401829691_1550888290376999.jpg"
-      ]
-    },
-    {
-      "id": "55401829691_1550888100377018",
-      "message": "",
-      "createdAt": "2026-04-25T17:32:48+0000",
-      "permalink": "https://www.facebook.com/reel/955032567236553/",
-      "images": [
-        "/images/facebook/55401829691_1550888100377018.jpg"
       ]
     }
   ]
