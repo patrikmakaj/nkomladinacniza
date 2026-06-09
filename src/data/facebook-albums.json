@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-09T19:33:17.253Z",
+  "lastUpdated": "2026-06-09T21:44:51.656Z",
   "enabled": true,
   "pageId": "55401829691",
   "albums": [
@@ -4170,5 +4170,6 @@
         }
       ]
     }
-  ]
+  ],
+  "lastError": "Graph API HTTP 500: {\"error\":{\"code\":1,\"message\":\"An unknown error occurred\",\"error_subcode\":99}}"
 }
