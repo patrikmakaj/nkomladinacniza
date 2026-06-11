@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-11T19:33:17.345Z",
+  "lastUpdated": "2026-06-11T21:59:50.699Z",
   "sourceUrl": "https://semafor.hns.family/klubovi/134/nk-omladinac-niza/",
   "club": {
     "id": 134,
@@ -426,7 +426,7 @@
       "position": 7,
       "club": {
         "id": 118,
-        "name": "NK Seona",
+        "name": "NK Seona (-1)",
         "logo": "https://hns.family/files/images_comet/63/3/_resized/633b62f9d0e508299c1e71b0e19b2038c588a20d_100_100_wg_t.png"
       },
       "played": 20,
@@ -436,7 +436,7 @@
       "gf": 38,
       "ga": 42,
       "gd": "-4",
-      "points": 28,
+      "points": 27,
       "form": [
         "W",
         "L",
