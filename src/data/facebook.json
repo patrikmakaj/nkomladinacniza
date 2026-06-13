@@ -1,8 +1,21 @@
 {
-  "lastUpdated": "2026-06-13T14:36:59.071Z",
+  "lastUpdated": "2026-06-13T16:12:11.172Z",
   "enabled": true,
   "pageId": "55401829691",
   "posts": [
+    {
+      "id": "55401829691_1602674688531692",
+      "message": "",
+      "createdAt": "2026-06-13T15:34:35+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1602674688531692",
+      "images": [
+        "/images/facebook/55401829691_1602674688531692_0.jpg",
+        "/images/facebook/55401829691_1602674688531692_1.jpg",
+        "/images/facebook/55401829691_1602674688531692_2.jpg",
+        "/images/facebook/55401829691_1602674688531692_3.jpg",
+        "/images/facebook/55401829691_1602674688531692_4.jpg"
+      ]
+    },
     {
       "id": "55401829691_1598221852310309",
       "message": "",
@@ -246,15 +259,6 @@
       "permalink": "https://www.facebook.com/1551452460320582/posts/1555510439914784",
       "images": [
         "/images/facebook/55401829691_1555510439914784.jpg"
-      ]
-    },
-    {
-      "id": "55401829691_1554409050024923",
-      "message": "Pozivamo svu djecu iz Nize i okolice koja su rođena 2016. i mlađe na upisivanje u školu nogometa. Nogomet nisu samo treninzi i utakmice, već razvoj koordinacije, discipline i na kraju, druženje. Krajem školske godine planirano je nogometno druženje na nogometnom igralištu u Nizi.",
-      "createdAt": "2026-04-29T10:57:58+0000",
-      "permalink": "https://www.facebook.com/1551452460320582/posts/1554409050024923",
-      "images": [
-        "/images/facebook/55401829691_1554409050024923.jpg"
       ]
     }
   ]
