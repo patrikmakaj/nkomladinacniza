@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-06-27T19:14:58.316Z",
+  "lastUpdated": "2026-06-27T20:37:08.286Z",
   "sourceUrl": "https://semafor.hns.family/klubovi/134/nk-omladinac-niza/",
   "club": {
     "id": 134,
@@ -14,11 +14,603 @@
     "name": "2. ŽNL Našice - Seniori 26/27",
     "season": "2026/27"
   },
-  "nextMatch": null,
+  "nextMatch": {
+    "id": "114378673",
+    "round": 1,
+    "date": "2026-08-30",
+    "time": "17:30",
+    "iso": "2026-08-30T17:30:00",
+    "competition": "2. ŽNL Našice - Seniori 26/27, 1. kolo",
+    "home": {
+      "id": 140,
+      "name": "NK Vihor (J)",
+      "logo": "https://hns.family/files/images_comet/07/3/_resized/073548045a9ffd623cfb00b39796fde20ba35dd0_100_100_wg_t.png"
+    },
+    "away": {
+      "id": 134,
+      "name": "NK Omladinac Niza",
+      "logo": "https://hns.family/files/images_comet/49/b/_resized/49b362069bd38a3154422c8f1c4b7cd4f5aee1b7_100_100_wg_t.png"
+    },
+    "score": null,
+    "played": false,
+    "isHome": false,
+    "result": null,
+    "url": null
+  },
   "lastResults": [],
-  "table": [],
-  "ourRow": null,
-  "matches": [],
+  "table": [
+    {
+      "position": 1,
+      "club": {
+        "id": 142,
+        "name": "NK Croatia Velimirovac",
+        "logo": "https://hns.family/files/images_comet/98/e/_resized/98e1b8d07601774edf642e2a65312c7aa7e90753_100_100_wg_t.png"
+      },
+      "played": 0,
+      "wins": 0,
+      "draws": 0,
+      "losses": 0,
+      "gf": 0,
+      "ga": 0,
+      "gd": "0",
+      "points": 0,
+      "form": [],
+      "isUs": false
+    },
+    {
+      "position": 2,
+      "club": {
+        "id": 129,
+        "name": "NK Iskrica",
+        "logo": "https://hns.family/files/images_comet/53/8/_resized/53808e6ce48919c1cf17ea580f20dae3362014e7_100_100_wg_t.png"
+      },
+      "played": 0,
+      "wins": 0,
+      "draws": 0,
+      "losses": 0,
+      "gf": 0,
+      "ga": 0,
+      "gd": "0",
+      "points": 0,
+      "form": [],
+      "isUs": false
+    },
+    {
+      "position": 3,
+      "club": {
+        "id": 130,
+        "name": "NK Lađanska",
+        "logo": "https://hns.family/files/images_comet/cf/3/_resized/cf30a9ba4a0d66a0643df4033141d1c77e2183e9_100_100_wg_t.png"
+      },
+      "played": 0,
+      "wins": 0,
+      "draws": 0,
+      "losses": 0,
+      "gf": 0,
+      "ga": 0,
+      "gd": "0",
+      "points": 0,
+      "form": [],
+      "isUs": false
+    },
+    {
+      "position": 4,
+      "club": {
+        "id": 131,
+        "name": "NK Lila",
+        "logo": "https://hns.family/files/images_comet/ef/0/_resized/ef0f2eb9faa8e182f6ec0ea528cdec636b5591b5_100_100_wg_t.png"
+      },
+      "played": 0,
+      "wins": 0,
+      "draws": 0,
+      "losses": 0,
+      "gf": 0,
+      "ga": 0,
+      "gd": "0",
+      "points": 0,
+      "form": [],
+      "isUs": false
+    },
+    {
+      "position": 5,
+      "club": {
+        "id": 144,
+        "name": "NK Lug",
+        "logo": "https://hns.family/files/images_comet/bc/b/_resized/bcb44ae2bb76e29c13c5b61dbcf58620703d06fe_100_100_wg_t.png"
+      },
+      "played": 0,
+      "wins": 0,
+      "draws": 0,
+      "losses": 0,
+      "gf": 0,
+      "ga": 0,
+      "gd": "0",
+      "points": 0,
+      "form": [],
+      "isUs": false
+    },
+    {
+      "position": 6,
+      "club": {
+        "id": 4174,
+        "name": "NK Martin",
+        "logo": "https://hns.family/files/images_comet/b3/6/_resized/b366da4f8698b43fa0d8e9cc67f9847d52d44770_100_100_wg_t.png"
+      },
+      "played": 0,
+      "wins": 0,
+      "draws": 0,
+      "losses": 0,
+      "gf": 0,
+      "ga": 0,
+      "gd": "0",
+      "points": 0,
+      "form": [],
+      "isUs": false
+    },
+    {
+      "position": 7,
+      "club": {
+        "id": 133,
+        "name": "NK Mladost Stipanovci",
+        "logo": "https://hns.family/files/images_comet/2b/2/_resized/2b29ebd8980577c3191bac933b14de4e196a2405_100_100_wg_t.png"
+      },
+      "played": 0,
+      "wins": 0,
+      "draws": 0,
+      "losses": 0,
+      "gf": 0,
+      "ga": 0,
+      "gd": "0",
+      "points": 0,
+      "form": [],
+      "isUs": false
+    },
+    {
+      "position": 8,
+      "club": {
+        "id": 124,
+        "name": "NK Motičina",
+        "logo": "https://hns.family/files/images_comet/1a/1/_resized/1a1bed16175357903eb41863550b59046f315ece_100_100_wg_t.png"
+      },
+      "played": 0,
+      "wins": 0,
+      "draws": 0,
+      "losses": 0,
+      "gf": 0,
+      "ga": 0,
+      "gd": "0",
+      "points": 0,
+      "form": [],
+      "isUs": false
+    },
+    {
+      "position": 9,
+      "club": {
+        "id": 134,
+        "name": "NK Omladinac Niza",
+        "logo": "https://hns.family/files/images_comet/49/b/_resized/49b362069bd38a3154422c8f1c4b7cd4f5aee1b7_100_100_wg_t.png"
+      },
+      "played": 0,
+      "wins": 0,
+      "draws": 0,
+      "losses": 0,
+      "gf": 0,
+      "ga": 0,
+      "gd": "0",
+      "points": 0,
+      "form": [],
+      "isUs": true
+    },
+    {
+      "position": 10,
+      "club": {
+        "id": 138,
+        "name": "NK Sloga Podgorač",
+        "logo": "https://hns.family/files/images_comet/3c/c/_resized/3ccd7c677305af4e44209f1c6b1153aec6f3f83f_100_100_wg_t.png"
+      },
+      "played": 0,
+      "wins": 0,
+      "draws": 0,
+      "losses": 0,
+      "gf": 0,
+      "ga": 0,
+      "gd": "0",
+      "points": 0,
+      "form": [],
+      "isUs": false
+    },
+    {
+      "position": 11,
+      "club": {
+        "id": 140,
+        "name": "NK Vihor (J)",
+        "logo": "https://hns.family/files/images_comet/07/3/_resized/073548045a9ffd623cfb00b39796fde20ba35dd0_100_100_wg_t.png"
+      },
+      "played": 0,
+      "wins": 0,
+      "draws": 0,
+      "losses": 0,
+      "gf": 0,
+      "ga": 0,
+      "gd": "0",
+      "points": 0,
+      "form": [],
+      "isUs": false
+    },
+    {
+      "position": 12,
+      "club": {
+        "id": 141,
+        "name": "NK Zoljan",
+        "logo": "https://hns.family/files/images_comet/c4/8/_resized/c48aa5a81cba18f656c49eb1b316dc10e207ca08_100_100_wg_t.png"
+      },
+      "played": 0,
+      "wins": 0,
+      "draws": 0,
+      "losses": 0,
+      "gf": 0,
+      "ga": 0,
+      "gd": "0",
+      "points": 0,
+      "form": [],
+      "isUs": false
+    },
+    {
+      "position": 13,
+      "club": {
+        "id": 127,
+        "name": "NK Đurđenovac",
+        "logo": "https://hns.family/files/images_comet/a5/0/_resized/a5019da3fed2f68e88845d5dd31abaa0f550b0ec_100_100_wg_t.png"
+      },
+      "played": 0,
+      "wins": 0,
+      "draws": 0,
+      "losses": 0,
+      "gf": 0,
+      "ga": 0,
+      "gd": "0",
+      "points": 0,
+      "form": [],
+      "isUs": false
+    },
+    {
+      "position": 14,
+      "club": {
+        "id": 139,
+        "name": "NK Željezničar (MN)",
+        "logo": "https://hns.family/files/images_comet/ba/1/_resized/ba1480acacd707e235b17832f3d7983b5e81d4a1_100_100_wg_t.png"
+      },
+      "played": 0,
+      "wins": 0,
+      "draws": 0,
+      "losses": 0,
+      "gf": 0,
+      "ga": 0,
+      "gd": "0",
+      "points": 0,
+      "form": [],
+      "isUs": false
+    }
+  ],
+  "ourRow": {
+    "position": 9,
+    "club": {
+      "id": 134,
+      "name": "NK Omladinac Niza",
+      "logo": "https://hns.family/files/images_comet/49/b/_resized/49b362069bd38a3154422c8f1c4b7cd4f5aee1b7_100_100_wg_t.png"
+    },
+    "played": 0,
+    "wins": 0,
+    "draws": 0,
+    "losses": 0,
+    "gf": 0,
+    "ga": 0,
+    "gd": "0",
+    "points": 0,
+    "form": [],
+    "isUs": true
+  },
+  "matches": [
+    {
+      "id": "114378673",
+      "round": 1,
+      "date": "2026-08-30",
+      "time": "17:30",
+      "iso": "2026-08-30T17:30:00",
+      "competition": "2. ŽNL Našice - Seniori 26/27, 1. kolo",
+      "home": {
+        "id": 140,
+        "name": "NK Vihor (J)",
+        "logo": "https://hns.family/files/images_comet/07/3/_resized/073548045a9ffd623cfb00b39796fde20ba35dd0_100_100_wg_t.png"
+      },
+      "away": {
+        "id": 134,
+        "name": "NK Omladinac Niza",
+        "logo": "https://hns.family/files/images_comet/49/b/_resized/49b362069bd38a3154422c8f1c4b7cd4f5aee1b7_100_100_wg_t.png"
+      },
+      "score": null,
+      "played": false,
+      "isHome": false,
+      "result": null,
+      "url": null
+    },
+    {
+      "id": "114378676",
+      "round": 2,
+      "date": "2026-09-05",
+      "time": "17:00",
+      "iso": "2026-09-05T17:00:00",
+      "competition": "2. ŽNL Našice - Seniori 26/27, 2. kolo",
+      "home": {
+        "id": 134,
+        "name": "NK Omladinac Niza",
+        "logo": "https://hns.family/files/images_comet/49/b/_resized/49b362069bd38a3154422c8f1c4b7cd4f5aee1b7_100_100_wg_t.png"
+      },
+      "away": {
+        "id": 129,
+        "name": "NK Iskrica",
+        "logo": "https://hns.family/files/images_comet/53/8/_resized/53808e6ce48919c1cf17ea580f20dae3362014e7_100_100_wg_t.png"
+      },
+      "score": null,
+      "played": false,
+      "isHome": true,
+      "result": null,
+      "url": null
+    },
+    {
+      "id": "114378688",
+      "round": 3,
+      "date": "2026-09-13",
+      "time": "17:00",
+      "iso": "2026-09-13T17:00:00",
+      "competition": "2. ŽNL Našice - Seniori 26/27, 3. kolo",
+      "home": {
+        "id": 124,
+        "name": "NK Motičina",
+        "logo": "https://hns.family/files/images_comet/1a/1/_resized/1a1bed16175357903eb41863550b59046f315ece_100_100_wg_t.png"
+      },
+      "away": {
+        "id": 134,
+        "name": "NK Omladinac Niza",
+        "logo": "https://hns.family/files/images_comet/49/b/_resized/49b362069bd38a3154422c8f1c4b7cd4f5aee1b7_100_100_wg_t.png"
+      },
+      "score": null,
+      "played": false,
+      "isHome": false,
+      "result": null,
+      "url": null
+    },
+    {
+      "id": "114378689",
+      "round": 4,
+      "date": "2026-09-19",
+      "time": "16:30",
+      "iso": "2026-09-19T16:30:00",
+      "competition": "2. ŽNL Našice - Seniori 26/27, 4. kolo",
+      "home": {
+        "id": 142,
+        "name": "NK Croatia Velimirovac",
+        "logo": "https://hns.family/files/images_comet/98/e/_resized/98e1b8d07601774edf642e2a65312c7aa7e90753_100_100_wg_t.png"
+      },
+      "away": {
+        "id": 134,
+        "name": "NK Omladinac Niza",
+        "logo": "https://hns.family/files/images_comet/49/b/_resized/49b362069bd38a3154422c8f1c4b7cd4f5aee1b7_100_100_wg_t.png"
+      },
+      "score": null,
+      "played": false,
+      "isHome": false,
+      "result": null,
+      "url": null
+    },
+    {
+      "id": "114378702",
+      "round": 5,
+      "date": "2026-09-26",
+      "time": "16:00",
+      "iso": "2026-09-26T16:00:00",
+      "competition": "2. ŽNL Našice - Seniori 26/27, 5. kolo",
+      "home": {
+        "id": 134,
+        "name": "NK Omladinac Niza",
+        "logo": "https://hns.family/files/images_comet/49/b/_resized/49b362069bd38a3154422c8f1c4b7cd4f5aee1b7_100_100_wg_t.png"
+      },
+      "away": {
+        "id": 130,
+        "name": "NK Lađanska",
+        "logo": "https://hns.family/files/images_comet/cf/3/_resized/cf30a9ba4a0d66a0643df4033141d1c77e2183e9_100_100_wg_t.png"
+      },
+      "score": null,
+      "played": false,
+      "isHome": true,
+      "result": null,
+      "url": null
+    },
+    {
+      "id": "114378704",
+      "round": 6,
+      "date": "2026-10-04",
+      "time": "16:00",
+      "iso": "2026-10-04T16:00:00",
+      "competition": "2. ŽNL Našice - Seniori 26/27, 6. kolo",
+      "home": {
+        "id": 139,
+        "name": "NK Željezničar (MN)",
+        "logo": "https://hns.family/files/images_comet/ba/1/_resized/ba1480acacd707e235b17832f3d7983b5e81d4a1_100_100_wg_t.png"
+      },
+      "away": {
+        "id": 134,
+        "name": "NK Omladinac Niza",
+        "logo": "https://hns.family/files/images_comet/49/b/_resized/49b362069bd38a3154422c8f1c4b7cd4f5aee1b7_100_100_wg_t.png"
+      },
+      "score": null,
+      "played": false,
+      "isHome": false,
+      "result": null,
+      "url": null
+    },
+    {
+      "id": "114378715",
+      "round": 7,
+      "date": "2026-10-10",
+      "time": "15:30",
+      "iso": "2026-10-10T15:30:00",
+      "competition": "2. ŽNL Našice - Seniori 26/27, 7. kolo",
+      "home": {
+        "id": 134,
+        "name": "NK Omladinac Niza",
+        "logo": "https://hns.family/files/images_comet/49/b/_resized/49b362069bd38a3154422c8f1c4b7cd4f5aee1b7_100_100_wg_t.png"
+      },
+      "away": {
+        "id": 144,
+        "name": "NK Lug",
+        "logo": "https://hns.family/files/images_comet/bc/b/_resized/bcb44ae2bb76e29c13c5b61dbcf58620703d06fe_100_100_wg_t.png"
+      },
+      "score": null,
+      "played": false,
+      "isHome": true,
+      "result": null,
+      "url": null
+    },
+    {
+      "id": "114378719",
+      "round": 8,
+      "date": "2026-10-18",
+      "time": "15:00",
+      "iso": "2026-10-18T15:00:00",
+      "competition": "2. ŽNL Našice - Seniori 26/27, 8. kolo",
+      "home": {
+        "id": 133,
+        "name": "NK Mladost Stipanovci",
+        "logo": "https://hns.family/files/images_comet/2b/2/_resized/2b29ebd8980577c3191bac933b14de4e196a2405_100_100_wg_t.png"
+      },
+      "away": {
+        "id": 134,
+        "name": "NK Omladinac Niza",
+        "logo": "https://hns.family/files/images_comet/49/b/_resized/49b362069bd38a3154422c8f1c4b7cd4f5aee1b7_100_100_wg_t.png"
+      },
+      "score": null,
+      "played": false,
+      "isHome": false,
+      "result": null,
+      "url": null
+    },
+    {
+      "id": "114378728",
+      "round": 9,
+      "date": "2026-10-24",
+      "time": "15:00",
+      "iso": "2026-10-24T15:00:00",
+      "competition": "2. ŽNL Našice - Seniori 26/27, 9. kolo",
+      "home": {
+        "id": 134,
+        "name": "NK Omladinac Niza",
+        "logo": "https://hns.family/files/images_comet/49/b/_resized/49b362069bd38a3154422c8f1c4b7cd4f5aee1b7_100_100_wg_t.png"
+      },
+      "away": {
+        "id": 4174,
+        "name": "NK Martin",
+        "logo": "https://hns.family/files/images_comet/b3/6/_resized/b366da4f8698b43fa0d8e9cc67f9847d52d44770_100_100_wg_t.png"
+      },
+      "score": null,
+      "played": false,
+      "isHome": true,
+      "result": null,
+      "url": null
+    },
+    {
+      "id": "114378734",
+      "round": 10,
+      "date": "2026-11-01",
+      "time": "14:00",
+      "iso": "2026-11-01T14:00:00",
+      "competition": "2. ŽNL Našice - Seniori 26/27, 10. kolo",
+      "home": {
+        "id": 141,
+        "name": "NK Zoljan",
+        "logo": "https://hns.family/files/images_comet/c4/8/_resized/c48aa5a81cba18f656c49eb1b316dc10e207ca08_100_100_wg_t.png"
+      },
+      "away": {
+        "id": 134,
+        "name": "NK Omladinac Niza",
+        "logo": "https://hns.family/files/images_comet/49/b/_resized/49b362069bd38a3154422c8f1c4b7cd4f5aee1b7_100_100_wg_t.png"
+      },
+      "score": null,
+      "played": false,
+      "isHome": false,
+      "result": null,
+      "url": null
+    },
+    {
+      "id": "114378741",
+      "round": 11,
+      "date": "2026-11-07",
+      "time": "13:30",
+      "iso": "2026-11-07T13:30:00",
+      "competition": "2. ŽNL Našice - Seniori 26/27, 11. kolo",
+      "home": {
+        "id": 134,
+        "name": "NK Omladinac Niza",
+        "logo": "https://hns.family/files/images_comet/49/b/_resized/49b362069bd38a3154422c8f1c4b7cd4f5aee1b7_100_100_wg_t.png"
+      },
+      "away": {
+        "id": 138,
+        "name": "NK Sloga Podgorač",
+        "logo": "https://hns.family/files/images_comet/3c/c/_resized/3ccd7c677305af4e44209f1c6b1153aec6f3f83f_100_100_wg_t.png"
+      },
+      "score": null,
+      "played": false,
+      "isHome": true,
+      "result": null,
+      "url": null
+    },
+    {
+      "id": "114378749",
+      "round": 12,
+      "date": "2026-11-14",
+      "time": "13:30",
+      "iso": "2026-11-14T13:30:00",
+      "competition": "2. ŽNL Našice - Seniori 26/27, 12. kolo",
+      "home": {
+        "id": 131,
+        "name": "NK Lila",
+        "logo": "https://hns.family/files/images_comet/ef/0/_resized/ef0f2eb9faa8e182f6ec0ea528cdec636b5591b5_100_100_wg_t.png"
+      },
+      "away": {
+        "id": 134,
+        "name": "NK Omladinac Niza",
+        "logo": "https://hns.family/files/images_comet/49/b/_resized/49b362069bd38a3154422c8f1c4b7cd4f5aee1b7_100_100_wg_t.png"
+      },
+      "score": null,
+      "played": false,
+      "isHome": false,
+      "result": null,
+      "url": null
+    },
+    {
+      "id": "114378754",
+      "round": 13,
+      "date": "2026-11-21",
+      "time": "13:30",
+      "iso": "2026-11-21T13:30:00",
+      "competition": "2. ŽNL Našice - Seniori 26/27, 13. kolo",
+      "home": {
+        "id": 134,
+        "name": "NK Omladinac Niza",
+        "logo": "https://hns.family/files/images_comet/49/b/_resized/49b362069bd38a3154422c8f1c4b7cd4f5aee1b7_100_100_wg_t.png"
+      },
+      "away": {
+        "id": 127,
+        "name": "NK Đurđenovac",
+        "logo": "https://hns.family/files/images_comet/a5/0/_resized/a5019da3fed2f68e88845d5dd31abaa0f550b0ec_100_100_wg_t.png"
+      },
+      "score": null,
+      "played": false,
+      "isHome": true,
+      "result": null,
+      "url": null
+    }
+  ],
   "players": [],
   "stats": {
     "topScorers": [],
