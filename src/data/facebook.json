@@ -1,8 +1,17 @@
 {
-  "lastUpdated": "2026-07-01T01:38:35.303Z",
+  "lastUpdated": "2026-07-01T06:23:07.122Z",
   "enabled": true,
   "pageId": "55401829691",
   "posts": [
+    {
+      "id": "55401829691_1757236605625154",
+      "message": "",
+      "createdAt": "2026-07-01T05:05:53+0000",
+      "permalink": "https://www.facebook.com/events/1757236605625154/",
+      "images": [
+        "/images/facebook/55401829691_1757236605625154.jpg"
+      ]
+    },
     {
       "id": "55401829691_1602674688531692",
       "message": "",
@@ -241,15 +250,6 @@
       "permalink": "https://www.facebook.com/1551452460320582/posts/1557050186427476",
       "images": [
         "/images/facebook/55401829691_1557050186427476.jpg"
-      ]
-    },
-    {
-      "id": "55401829691_1556649933134168",
-      "message": "Obljetnica VRO \"Bljesak\" danas u Okučanima nije prošla bez naših članova kluba.",
-      "createdAt": "2026-05-01T20:34:24+0000",
-      "permalink": "https://www.facebook.com/1551452460320582/posts/1556649933134168",
-      "images": [
-        "/images/facebook/55401829691_1556649933134168.jpg"
       ]
     }
   ]
