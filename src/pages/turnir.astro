@@ -1,0 +1,667 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Logo from "../components/Logo.astro";
+
+// ID Google Sheeta s rezultatima (native Google Sheet u klupskom Driveu, "Turnir_zapisnik").
+// Tabovi: Ekipe, Igrači, Utakmice. Mora biti dijeljen: "Bilo tko s poveznicom → Preglednik".
+const SHEET_ID = "1et2zlS8HjE6Lf3l9Qtk6pJFWFqQddgdmarB0iv8sbOQ";
+
+const TURNIR_NAZIV = "3. Noćni turnir na asfaltu";
+const TURNIR_PODNASLOV = "„Krunoslav Bencek – Benđo“ · Subota, 04.07.2026. od 17:00 · Niza";
+---
+
+<BaseLayout
+  title="Turnir uživo"
+  description="Rezultati uživo — 3. Noćni turnir na asfaltu „Krunoslav Bencek – Benđo“. Grupne tablice, raspored, strijelci i nokaut faza u stvarnom vremenu."
+>
+  <!-- HERO -->
+  <section class="relative overflow-hidden hero-bg py-12 md:py-16">
+    <div
+      class="absolute inset-0 opacity-15"
+      style="background: repeating-linear-gradient(45deg, transparent, transparent 30px, rgba(255,255,255,0.4) 30px, rgba(255,255,255,0.4) 31px);"
+    >
+    </div>
+    <div class="absolute -right-16 top-1/2 -translate-y-1/2 opacity-10 pointer-events-none">
+      <Logo size={420} class="w-[320px] md:w-[420px] h-auto" />
+    </div>
+    <div class="relative container-narrow">
+      <div class="inline-flex items-center gap-2 px-3 py-1 mb-4 bg-club-accent text-club-primary-deep text-xs font-display uppercase tracking-widest font-bold rounded-sm">
+        <span class="w-2 h-2 rounded-full bg-red-600 animate-pulse"></span>
+        Rezultati uživo
+      </div>
+      <h1 class="text-white text-4xl md:text-6xl font-bold leading-none mb-3 drop-shadow-lg">
+        {TURNIR_NAZIV}
+      </h1>
+      <p class="text-white/90 text-base md:text-lg max-w-2xl">{TURNIR_PODNASLOV}</p>
+    </div>
+  </section>
+
+  <!-- STATUS BAR -->
+  <div class="bg-club-primary-deep border-b-2 border-club-accent">
+    <div class="container-narrow py-3 flex flex-wrap items-center justify-between gap-3 text-white">
+      <div class="flex items-center gap-2 text-sm">
+        <span id="live-dot" class="w-2.5 h-2.5 rounded-full bg-green-400 animate-pulse"></span>
+        <span id="status-text" class="font-display uppercase tracking-wider text-xs">Učitavam…</span>
+      </div>
+      <div class="flex items-center gap-3">
+        <span id="last-updated" class="text-xs text-white/70"></span>
+        <button
+          id="refresh-btn"
+          class="text-xs font-display uppercase tracking-wider px-3 py-1.5 rounded bg-club-accent text-club-primary-deep font-bold hover:brightness-110 transition"
+        >
+          Osvježi
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUICK NAV (ljepljiva) -->
+  <nav id="quicknav" class="hidden sticky top-20 z-40 bg-white/95 backdrop-blur border-b border-club-border">
+    <div class="container-narrow flex gap-2 overflow-x-auto py-2 text-xs font-display uppercase tracking-wider scrollbar-none">
+      <a data-target="sec-uzivo" href="#sec-uzivo" class="qn hidden shrink-0 px-3 py-1.5 rounded-full bg-club-light-2 text-club-primary-deep hover:bg-club-light transition">Uživo</a>
+      <a data-target="sec-grupe" href="#sec-grupe" class="qn shrink-0 px-3 py-1.5 rounded-full bg-club-light-2 text-club-primary-deep hover:bg-club-light transition">Tablice</a>
+      <a data-target="sec-nokaut" href="#sec-nokaut" class="qn hidden shrink-0 px-3 py-1.5 rounded-full bg-club-light-2 text-club-primary-deep hover:bg-club-light transition">Bracket</a>
+      <a data-target="sec-raspored" href="#sec-raspored" class="qn shrink-0 px-3 py-1.5 rounded-full bg-club-light-2 text-club-primary-deep hover:bg-club-light transition">Raspored</a>
+      <a data-target="sec-strijelci" href="#sec-strijelci" class="qn hidden shrink-0 px-3 py-1.5 rounded-full bg-club-light-2 text-club-primary-deep hover:bg-club-light transition">Strijelci</a>
+    </div>
+  </nav>
+
+  <main class="container-narrow py-8 md:py-12 space-y-12">
+    <div id="load-msg" class="text-center text-club-muted py-8">
+      <div class="inline-block w-8 h-8 border-4 border-club-light border-t-club-primary rounded-full animate-spin"></div>
+      <p class="mt-3 font-display uppercase tracking-wider text-sm">Učitavam rezultate…</p>
+    </div>
+
+    <div id="countdown" class="hidden mb-6"></div>
+    <div id="progress" class="hidden mb-6"></div>
+
+    <section id="sec-uzivo" class="hidden scroll-mt-36">
+      <div id="uzivo-live" class="mb-4"></div>
+      <div id="uzivo-next"></div>
+    </section>
+
+    <section id="sec-grupe" class="hidden scroll-mt-36">
+      <h2 class="text-2xl md:text-3xl font-bold mb-1">Grupne tablice</h2>
+      <p class="text-club-muted text-sm mb-6">Prolaze prve dvije ekipe iz svake grupe + dvije najbolje trećeplasirane.</p>
+      <div id="grupe" class="grid gap-6 md:grid-cols-3"></div>
+      <p class="text-xs text-club-muted mt-3">Kod jednakih bodova: međusobni susret → gol-razlika → postignuti golovi.</p>
+      <div id="najbolje-trece-wrap" class="hidden mt-6">
+        <h3 class="text-lg font-bold mb-3">Poredak trećeplasiranih</h3>
+        <div id="najbolje-trece" class="bg-white rounded-lg shadow-md border border-club-border overflow-hidden max-w-2xl"></div>
+      </div>
+    </section>
+
+    <section id="sec-nokaut" class="hidden scroll-mt-36">
+      <h2 class="text-2xl md:text-3xl font-bold mb-6">Nokaut faza</h2>
+      <div id="nokaut" class="overflow-x-auto bg-white rounded-lg shadow-md border border-club-border p-4"></div>
+    </section>
+
+    <section id="sec-raspored" class="hidden scroll-mt-36">
+      <div class="flex items-center gap-4 mb-6 flex-wrap">
+        <h2 class="text-2xl md:text-3xl font-bold">Raspored i rezultati</h2>
+        <div class="flex gap-1 text-xs font-display uppercase tracking-wider" id="rf">
+          <button data-f="sve" class="rfbtn px-3 py-1.5 rounded-full bg-club-primary text-white">Sve</button>
+          <button data-f="preostalo" class="rfbtn px-3 py-1.5 rounded-full bg-club-light-2 text-club-primary-deep">Preostalo</button>
+          <button data-f="odigrano" class="rfbtn px-3 py-1.5 rounded-full bg-club-light-2 text-club-primary-deep">Odigrano</button>
+        </div>
+      </div>
+      <div id="raspored" class="space-y-3"></div>
+    </section>
+
+    <section id="sec-strijelci" class="hidden scroll-mt-36">
+      <h2 class="text-2xl md:text-3xl font-bold mb-6">Lista strijelaca</h2>
+      <div id="kopacka" class="mb-4 max-w-2xl"></div>
+      <div id="strijelci" class="bg-white rounded-lg shadow-md border border-club-border overflow-hidden max-w-2xl"></div>
+    </section>
+  </main>
+</BaseLayout>
+
+<script define:vars={{ SHEET_ID }}>
+  const REFRESH_MS = 25000;
+  let LAST = null, RFILTER = "sve";
+  const START = new Date(2026, 6, 4, 17, 0, 0); // 04.07.2026. 17:00
+  const gvizUrl = (sheet) =>
+    `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&headers=1&sheet=${encodeURIComponent(sheet)}&_=${Date.now()}`;
+
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) =>
+    String(s ?? "").replace(/[&<>"']/g, (c) =>
+      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])
+    );
+  const isNum = (v) => v !== "" && v !== null && !isNaN(Number(v));
+
+  // Inicijali + boja ekipe (deterministički iz imena)
+  const AV_COLORS = ["#0f2c6e","#2563a8","#1e40af","#0e7490","#7c3aed","#b45309","#be123c","#15803d","#0f766e","#4d7c0f","#9333ea","#c2410c"];
+  const hashN = (s) => { let h = 0; for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0; return h; };
+  const initials = (name) => {
+    const w = String(name || "").trim().split(/\s+/).filter(Boolean);
+    if (!w.length) return "?";
+    return (w.length === 1 ? w[0].slice(0, 2) : w[0][0] + w[1][0]).toUpperCase();
+  };
+  const avatar = (name, size = 22) => {
+    if (!name) return "";
+    const c = AV_COLORS[hashN(name) % AV_COLORS.length];
+    return `<span class="inline-flex items-center justify-center rounded-full text-white font-bold shrink-0" style="width:${size}px;height:${size}px;font-size:${Math.round(size * 0.42)}px;background:${c}">${esc(initials(name))}</span>`;
+  };
+  const medal = (rank) => (rank === 1 ? "🥇" : rank === 2 ? "🥈" : rank === 3 ? "🥉" : "");
+  // "17:00" → Date danas; za detekciju utakmice u tijeku
+  const kickoff = (v) => {
+    const m = String(v || "").match(/(\d{1,2}):(\d{2})/);
+    if (!m) return null;
+    const d = new Date(); d.setHours(+m[1], +m[2], 0, 0); return d;
+  };
+
+  // Vrati redove kao nizove ćelija (po indeksu stupca), koristeći formatiranu vrijednost.
+  function parseGviz(text) {
+    const json = JSON.parse(text.slice(text.indexOf("{"), text.lastIndexOf("}") + 1));
+    return (json.table.rows || []).map((r) =>
+      (r.c || []).map((cell) => {
+        let v = cell ? (cell.f !== undefined && cell.f !== null ? cell.f : cell.v) : "";
+        if (v === null || v === undefined) v = "";
+        return typeof v === "string" ? v.trim() : v;
+      })
+    );
+  }
+
+  async function fetchTab(sheet) {
+    const res = await fetch(gvizUrl(sheet), { cache: "no-store" });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    return parseGviz(await res.text());
+  }
+
+  // Strijelci iz jedne ćelije: "Ivić 12; Perić 34" → [{name,team,minute}, ...]
+  function parseScorers(cellText, team) {
+    const out = [];
+    if (!cellText) return out;
+    String(cellText)
+      .split(/[;,\n]+/)
+      .forEach((part) => {
+        const p = part.trim();
+        if (!p) return;
+        const mm = p.match(/\d+/);
+        const minute = mm ? mm[0] : "";
+        const name = p.replace(/\d+/g, "").replace(/[’'`.\-]/g, "").replace(/\s+/g, " ").trim();
+        if (name) out.push({ name, team, minute });
+      });
+    return out;
+  }
+
+  function cmpTeam(a, b) {
+    if (b.Pts !== a.Pts) return b.Pts - a.Pts;
+    if (b.GD !== a.GD) return b.GD - a.GD;
+    if (b.GF !== a.GF) return b.GF - a.GF;
+    return a.name.localeCompare(b.name, "hr");
+  }
+
+  // Poredak grupe: bodovi → međusobni susret (mini-tablica) → gol-razlika → golovi → ime
+  function orderGroupH2H(teams, gm) {
+    const byPts = [...teams].sort((a, b) => b.Pts - a.Pts);
+    const out = [];
+    let i = 0;
+    while (i < byPts.length) {
+      let j = i;
+      while (j < byPts.length && byPts[j].Pts === byPts[i].Pts) j++;
+      const cluster = byPts.slice(i, j);
+      if (cluster.length > 1) {
+        const names = new Set(cluster.map((t) => t.name));
+        const mini = {};
+        cluster.forEach((t) => (mini[t.name] = { p: 0, gf: 0, ga: 0 }));
+        gm.forEach((m) => {
+          if (names.has(m.home) && names.has(m.away)) {
+            const h = mini[m.home], a = mini[m.away];
+            h.gf += m.gd; h.ga += m.gg; a.gf += m.gg; a.ga += m.gd;
+            if (m.gd > m.gg) h.p += 3; else if (m.gd < m.gg) a.p += 3; else { h.p++; a.p++; }
+          }
+        });
+        cluster.sort((a, b) => {
+          const A = mini[a.name], B = mini[b.name];
+          if (B.p !== A.p) return B.p - A.p;
+          const Agd = A.gf - A.ga, Bgd = B.gf - B.ga;
+          if (Bgd !== Agd) return Bgd - Agd;
+          if (B.gf !== A.gf) return B.gf - A.gf;
+          if (b.GD !== a.GD) return b.GD - a.GD;
+          if (b.GF !== a.GF) return b.GF - a.GF;
+          return a.name.localeCompare(b.name, "hr");
+        });
+      }
+      out.push(...cluster);
+      i = j;
+    }
+    return out;
+  }
+
+  function processData(ekipeRows, utakRows) {
+    // Ekipe: [Grupa, Ekipa]
+    const groups = { A: [], B: [], C: [] };
+    ekipeRows.forEach((r) => {
+      const g = String(r[0] || "").trim();
+      const name = String(r[1] || "").trim();
+      if (groups[g] && name) groups[g].push(name);
+    });
+
+    // Utakmice: [Redni, Faza, Grupa, Vrijeme, Domaćin, Gost, GolD, GolG, StrDom, StrGost]
+    const matches = [];
+    const goals = [];
+    utakRows.forEach((r) => {
+      const faza = String(r[1] || "").trim();
+      if (!faza) return;
+      const grupa = String(r[2] || "").trim();
+      const vrijeme = String(r[3] || "").trim();
+      const home = String(r[4] || "").trim();
+      const away = String(r[5] || "").trim();
+      const played = isNum(r[6]) && isNum(r[7]);
+      const hasTeams = !!(home && away);
+      matches.push({
+        redni: isNum(r[0]) ? Number(r[0]) : matches.length + 1,
+        faza, grupa, vrijeme, home, away,
+        gd: played ? Number(r[6]) : null,
+        gg: played ? Number(r[7]) : null,
+        played, hasTeams,
+      });
+      if (home) parseScorers(r[8], home).forEach((x) => goals.push(x));
+      if (away) parseScorers(r[9], away).forEach((x) => goals.push(x));
+    });
+
+    // Tablice po grupama
+    const standings = {};
+    for (const g of ["A", "B", "C"]) {
+      const tbl = {};
+      groups[g].forEach((name) => (tbl[name] = { name, P: 0, W: 0, D: 0, L: 0, GF: 0, GA: 0, Pts: 0 }));
+      const gm = matches.filter((m) => m.faza === "Grupa" && m.grupa === g && m.played && m.hasTeams);
+      gm.forEach((m) => {
+        const h = tbl[m.home], a = tbl[m.away];
+        if (!h || !a) return;
+        h.P++; a.P++;
+        h.GF += m.gd; h.GA += m.gg; a.GF += m.gg; a.GA += m.gd;
+        if (m.gd > m.gg) { h.W++; h.Pts += 3; a.L++; }
+        else if (m.gd < m.gg) { a.W++; a.Pts += 3; h.L++; }
+        else { h.D++; a.D++; h.Pts++; a.Pts++; }
+      });
+      const arr = Object.values(tbl).map((t) => ({ ...t, GD: t.GF - t.GA }));
+      const ordered = orderGroupH2H(arr, gm);
+      ordered.forEach((t, i) => (t.rank = i + 1));
+      standings[g] = ordered;
+    }
+
+    // Strijelci: agregiraj po igraču
+    const scMap = {};
+    goals.forEach((x) => {
+      const key = x.name + "||" + x.team;
+      if (!scMap[key]) scMap[key] = { igrac: x.name, ekipa: x.team, golovi: 0, min: [] };
+      scMap[key].golovi++;
+      if (x.minute) scMap[key].min.push(x.minute);
+    });
+    const scorers = Object.values(scMap).sort(
+      (a, b) => b.golovi - a.golovi || a.igrac.localeCompare(b.igrac, "hr")
+    );
+
+    return { groups, matches, standings, scorers };
+  }
+
+  // ---------- RENDER ----------
+  function renderGroups(standings) {
+    const wrap = $("grupe");
+    wrap.innerHTML = "";
+    for (const g of ["A", "B", "C"]) {
+      const rows = standings[g]
+        .map((t) => {
+          const qual = t.rank <= 2 ? "bg-green-50" : t.rank === 3 ? "bg-amber-50" : "";
+          const rk = t.rank === 1 ? "🥇" : t.rank;
+          return `<tr class="border-b border-club-border ${qual}">
+            <td class="px-2 py-2 font-display text-center">${rk}</td>
+            <td class="px-2 py-2"><div class="flex items-center gap-2">${avatar(t.name, 22)}<span class="font-medium">${esc(t.name)}</span></div></td>
+            <td class="px-1 py-2 text-center">${t.P}</td>
+            <td class="px-1 py-2 text-center hidden sm:table-cell">${t.W}</td>
+            <td class="px-1 py-2 text-center hidden sm:table-cell">${t.D}</td>
+            <td class="px-1 py-2 text-center hidden sm:table-cell">${t.L}</td>
+            <td class="px-1 py-2 text-center text-club-muted">${t.GF}:${t.GA}</td>
+            <td class="px-2 py-2 text-center font-bold">${t.Pts}</td>
+          </tr>`;
+        })
+        .join("");
+      wrap.insertAdjacentHTML(
+        "beforeend",
+        `<div class="bg-white rounded-lg shadow-md border border-club-border overflow-hidden">
+          <div class="bg-club-primary-deep text-white px-4 py-2.5 font-display uppercase tracking-wider text-sm">Grupa ${g}</div>
+          <table class="w-full text-sm">
+            <thead class="bg-club-secondary text-white">
+              <tr>
+                <th class="px-2 py-2 text-center font-display text-xs">#</th>
+                <th class="px-2 py-2 text-left font-display text-xs">Ekipa</th>
+                <th class="px-1 py-2 text-center font-display text-xs">U</th>
+                <th class="px-1 py-2 text-center font-display text-xs hidden sm:table-cell">P</th>
+                <th class="px-1 py-2 text-center font-display text-xs hidden sm:table-cell">N</th>
+                <th class="px-1 py-2 text-center font-display text-xs hidden sm:table-cell">I</th>
+                <th class="px-1 py-2 text-center font-display text-xs">G</th>
+                <th class="px-2 py-2 text-center font-display text-xs">B</th>
+              </tr>
+            </thead>
+            <tbody>${rows}</tbody>
+          </table>
+        </div>`
+      );
+    }
+  }
+
+  function renderThirds(standings) {
+    const thirds = ["A", "B", "C"]
+      .map((g) => standings[g][2] && { ...standings[g][2], grupa: g })
+      .filter(Boolean)
+      .filter((t) => t.P > 0);
+    const wrap = $("najbolje-trece-wrap");
+    if (thirds.length < 2) { wrap.classList.add("hidden"); return; }
+    thirds.sort(cmpTeam);
+    const rows = thirds
+      .map((t, i) => {
+        const qual = i < 2 ? "bg-green-50" : "";
+        return `<tr class="border-b border-club-border ${qual}">
+          <td class="px-3 py-2 font-display text-center">${i + 1}</td>
+          <td class="px-3 py-2"><div class="flex items-center gap-2">${avatar(t.name, 20)}<span class="font-medium">${esc(t.name)}</span></div></td>
+          <td class="px-2 py-2 text-center text-club-muted">Gr. ${t.grupa}</td>
+          <td class="px-2 py-2 text-center text-club-muted">${t.GF}:${t.GA}</td>
+          <td class="px-3 py-2 text-center font-bold">${t.Pts}</td>
+        </tr>`;
+      })
+      .join("");
+    $("najbolje-trece").innerHTML = `<table class="w-full text-sm">
+      <thead class="bg-club-secondary text-white"><tr>
+        <th class="px-3 py-2 text-center font-display text-xs">#</th>
+        <th class="px-3 py-2 text-left font-display text-xs">Ekipa</th>
+        <th class="px-2 py-2 text-center font-display text-xs">Grupa</th>
+        <th class="px-2 py-2 text-center font-display text-xs">G</th>
+        <th class="px-3 py-2 text-center font-display text-xs">B</th>
+      </tr></thead><tbody>${rows}</tbody></table>
+      <p class="text-xs text-club-muted px-3 py-2">Zelena = prolaz u nokaut fazu.</p>`;
+    wrap.classList.remove("hidden");
+  }
+
+  function matchCard(m, highlight) {
+    const done = m.played;
+    const score = done
+      ? `<span class="font-bold text-lg tabular-nums">${m.gd} : ${m.gg}</span>`
+      : `<span class="text-club-muted text-sm font-display">${esc(m.vrijeme) || "—"}</span>`;
+    const hw = done && m.gd > m.gg ? "font-bold" : "";
+    const aw = done && m.gg > m.gd ? "font-bold" : "";
+    const ring = highlight ? "ring-2 ring-club-accent" : "";
+    return `<div class="flex items-center gap-3 bg-white rounded-lg shadow-sm border border-club-border px-4 py-3 ${ring}">
+      <div class="flex-1 flex items-center justify-end gap-2 text-right ${hw}"><span>${esc(m.home || "—")}</span>${avatar(m.home, 24)}</div>
+      <div class="px-2 text-center min-w-[70px]">${score}</div>
+      <div class="flex-1 flex items-center gap-2 ${aw}">${avatar(m.away, 24)}<span>${esc(m.away || "—")}</span></div>
+    </div>`;
+  }
+
+  function renderSchedule(matches, filter) {
+    filter = filter || "sve";
+    const wrap = $("raspored");
+    wrap.innerHTML = "";
+    const keep = (m) => (filter === "sve" ? true : filter === "odigrano" ? m.played : !m.played);
+    const nextIdx = matches.findIndex((m) => m.hasTeams && !m.played);
+    let shown = 0;
+    ["A", "B", "C"].forEach((g) => {
+      const gm = matches.filter((m) => m.faza === "Grupa" && m.grupa === g && keep(m));
+      if (!gm.length) return;
+      shown += gm.length;
+      const cards = gm.map((m) => matchCard(m, matches.indexOf(m) === nextIdx)).join("");
+      wrap.insertAdjacentHTML(
+        "beforeend",
+        `<div><h3 class="font-display uppercase tracking-wider text-sm text-club-primary mb-2 mt-4">Grupa ${g}</h3><div class="space-y-2">${cards}</div></div>`
+      );
+    });
+    ["Četvrtfinale", "Polufinale", "Za 3. mjesto", "Finale"].forEach((faza) => {
+      const ms = matches.filter((m) => m.faza === faza && (m.hasTeams || m.played) && keep(m));
+      if (!ms.length) return;
+      shown += ms.length;
+      const cards = ms.map((m) => matchCard(m, matches.indexOf(m) === nextIdx)).join("");
+      wrap.insertAdjacentHTML(
+        "beforeend",
+        `<div><h3 class="font-display uppercase tracking-wider text-sm text-club-accent mb-2 mt-4">${faza}</h3><div class="space-y-2">${cards}</div></div>`
+      );
+    });
+    if (!shown) wrap.innerHTML = `<p class="text-club-muted text-sm py-4">${filter === "odigrano" ? "Još nema odigranih utakmica." : "Nema utakmica za prikaz."}</p>`;
+  }
+
+  // Grafički bracket (lijevo/desno → finale u sredini) kao SVG
+  function generateBracket(matches) {
+    const trunc = (s, n = 16) => { s = String(s || ""); return s.length > n ? s.slice(0, n - 1) + "…" : s; };
+    const pick = (f) => matches.filter((m) => m.faza === f);
+    const qf = pick("Četvrtfinale"), sf = pick("Polufinale"), fin = pick("Finale")[0], third = pick("Za 3. mjesto")[0];
+    const all = [...qf, ...sf, ...(fin ? [fin] : []), ...(third ? [third] : [])];
+    if (!all.some((m) => m && m.hasTeams)) return "";
+    const BW = 176, BH = 54;
+    const COL = { LQF: 12, LSF: 232, FIN: 452, RSF: 672, RQF: 892 };
+    const V = "#cbd5e1", BORD = "#e2e8f0", DEEP = "#0f2c6e", PRIM = "#2563a8", MUT = "#64748b", ACC = "#d4b659";
+    const parts = [];
+    const cy = (y) => y + BH / 2;
+    function box(x, y, m) {
+      if (!m) m = { home: "", away: "", played: false, hasTeams: false };
+      const done = m.played, hw = done && m.gd > m.gg, aw = done && m.gg > m.gd;
+      const hn = trunc(m.home || "—"), an = trunc(m.away || "—");
+      const sd = done ? String(m.gd) : "", sg = done ? String(m.gg) : "";
+      parts.push(`<rect x="${x}" y="${y}" width="${BW}" height="${BH}" rx="6" fill="#ffffff" stroke="${BORD}"/>`);
+      parts.push(`<line x1="${x}" y1="${y + BH / 2}" x2="${x + BW}" y2="${y + BH / 2}" stroke="${BORD}"/>`);
+      parts.push(`<text x="${x + 10}" y="${y + 18}" font-size="13" font-weight="${hw ? 700 : 500}" fill="${hw ? PRIM : DEEP}">${esc(hn)}</text>`);
+      parts.push(`<text x="${x + BW - 10}" y="${y + 18}" font-size="13" text-anchor="end" font-weight="700" fill="${hw ? PRIM : DEEP}">${esc(sd)}</text>`);
+      parts.push(`<text x="${x + 10}" y="${y + 42}" font-size="13" font-weight="${aw ? 700 : 500}" fill="${aw ? PRIM : DEEP}">${esc(an)}</text>`);
+      parts.push(`<text x="${x + BW - 10}" y="${y + 42}" font-size="13" text-anchor="end" font-weight="700" fill="${aw ? PRIM : DEEP}">${esc(sg)}</text>`);
+    }
+    const conn = (pts) => parts.push(`<polyline points="${pts}" fill="none" stroke="${V}" stroke-width="1.5"/>`);
+    const lbl = (x, t) => parts.push(`<text x="${x + BW / 2}" y="30" font-size="12" text-anchor="middle" font-family="Oswald,Arial,sans-serif" letter-spacing="1" fill="${MUT}">${t}</text>`);
+    const qfY = [46, 352], sfTop = (cy(qfY[0]) + cy(qfY[1])) / 2 - BH / 2, finTop = sfTop, sfC = cy(sfTop);
+    lbl(COL.LQF, "ČETVRTFINALE"); lbl(COL.LSF, "POLUFINALE"); lbl(COL.FIN, "FINALE"); lbl(COL.RSF, "POLUFINALE"); lbl(COL.RQF, "ČETVRTFINALE");
+    box(COL.LQF, qfY[0], qf[0]); box(COL.LQF, qfY[1], qf[1]); box(COL.LSF, sfTop, sf[0]);
+    box(COL.RQF, qfY[0], qf[2]); box(COL.RQF, qfY[1], qf[3]); box(COL.RSF, sfTop, sf[1]);
+    box(COL.FIN, finTop, fin);
+    const mL = (COL.LQF + BW + COL.LSF) / 2, mR = (COL.RSF + BW + COL.RQF) / 2;
+    conn(`${COL.LQF + BW},${cy(qfY[0])} ${mL},${cy(qfY[0])} ${mL},${sfC} ${COL.LSF},${sfC}`);
+    conn(`${COL.LQF + BW},${cy(qfY[1])} ${mL},${cy(qfY[1])} ${mL},${sfC} ${COL.LSF},${sfC}`);
+    conn(`${COL.LSF + BW},${sfC} ${COL.FIN},${sfC}`);
+    conn(`${COL.RQF},${cy(qfY[0])} ${mR},${cy(qfY[0])} ${mR},${sfC} ${COL.RSF + BW},${sfC}`);
+    conn(`${COL.RQF},${cy(qfY[1])} ${mR},${cy(qfY[1])} ${mR},${sfC} ${COL.RSF + BW},${sfC}`);
+    conn(`${COL.RSF},${sfC} ${COL.FIN + BW},${sfC}`);
+    let champ = "";
+    if (fin && fin.played) champ = fin.gd > fin.gg ? fin.home : (fin.gg > fin.gd ? fin.away : "");
+    if (champ) {
+      parts.push(`<text x="${COL.FIN + BW / 2}" y="${finTop + BH + 34}" font-size="12" text-anchor="middle" font-family="Oswald,Arial,sans-serif" letter-spacing="1" fill="${MUT}">PRVAK</text>`);
+      parts.push(`<rect x="${COL.FIN - 10}" y="${finTop + BH + 44}" width="${BW + 20}" height="34" rx="6" fill="${ACC}"/>`);
+      parts.push(`<text x="${COL.FIN + BW / 2}" y="${finTop + BH + 66}" font-size="15" text-anchor="middle" font-weight="700" font-family="Oswald,Arial,sans-serif" fill="${DEEP}">🏆 ${esc(trunc(champ))}</text>`);
+    }
+    if (third && (third.hasTeams || third.played)) {
+      const ty = 430;
+      parts.push(`<text x="${COL.FIN + BW / 2}" y="${ty - 8}" font-size="12" text-anchor="middle" font-family="Oswald,Arial,sans-serif" letter-spacing="1" fill="${MUT}">ZA 3. MJESTO</text>`);
+      box(COL.FIN, ty, third);
+    }
+    const H = third ? 510 : (champ ? finTop + BH + 100 : finTop + BH + 40);
+    return `<svg viewBox="0 0 1080 ${H}" xmlns="http://www.w3.org/2000/svg" style="width:100%;min-width:760px;height:auto;font-family:Inter,Arial,sans-serif">${parts.join("")}</svg>`;
+  }
+
+  function renderKnockout(matches) {
+    const sec = $("sec-nokaut");
+    const svg = generateBracket(matches);
+    if (!svg) { sec.classList.add("hidden"); return; }
+    $("nokaut").innerHTML = svg;
+    sec.classList.remove("hidden");
+  }
+
+  const golText = (n) => { const a = n % 10, b = n % 100; return (a === 1 && b !== 11) ? "gol" : (a >= 2 && a <= 4 && !(b >= 12 && b <= 14)) ? "gola" : "golova"; };
+
+  function renderScorers(scorers) {
+    const sec = $("sec-strijelci");
+    if (!scorers.length) { sec.classList.add("hidden"); $("kopacka").innerHTML = ""; return; }
+    // Zlatna kopačka — vodeći strijelac(i)
+    const top = scorers[0].golovi;
+    const leaders = scorers.filter((s) => s.golovi === top);
+    const names = leaders.slice(0, 3).map((s) => esc(s.igrac)).join(", ") + (leaders.length > 3 ? "…" : "");
+    const leadTeam = leaders.length === 1 ? esc(leaders[0].ekipa) : "";
+    $("kopacka").innerHTML = `
+      <div class="flex items-center gap-4 rounded-lg p-4 text-club-primary-deep shadow-md" style="background:linear-gradient(135deg,#f5e7ab,#d4b659)">
+        <div class="text-4xl leading-none">👟</div>
+        <div class="min-w-0">
+          <div class="font-display uppercase tracking-wider text-xs opacity-80">Zlatna kopačka</div>
+          <div class="font-bold text-lg truncate">${names}</div>
+          <div class="text-sm opacity-90">${leadTeam ? leadTeam + " · " : ""}${top} ${golText(top)}</div>
+        </div>
+      </div>`;
+    const rowsHtml = scorers
+      .map((r, i) => {
+        const rk = medal(i + 1) || (i + 1);
+        return `<tr class="border-b border-club-border ${i < 3 ? "bg-club-light-2" : ""}">
+        <td class="px-3 py-2 font-display text-center">${rk}</td>
+        <td class="px-3 py-2"><span class="font-medium">${esc(r.igrac)}</span></td>
+        <td class="px-3 py-2"><div class="flex items-center gap-2">${avatar(r.ekipa, 20)}<span class="text-club-muted">${esc(r.ekipa)}</span></div></td>
+        <td class="px-3 py-2 text-center font-bold">${r.golovi}</td>
+      </tr>`;
+      })
+      .join("");
+    $("strijelci").innerHTML = `<table class="w-full text-sm">
+      <thead class="bg-club-secondary text-white"><tr>
+        <th class="px-3 py-2 text-center font-display text-xs">#</th>
+        <th class="px-3 py-2 text-left font-display text-xs">Igrač</th>
+        <th class="px-3 py-2 text-left font-display text-xs">Ekipa</th>
+        <th class="px-3 py-2 text-center font-display text-xs">Golovi</th>
+      </tr></thead><tbody>${rowsHtml}</tbody></table>`;
+    sec.classList.remove("hidden");
+  }
+
+  // "Trenutno na terenu" + "Slijedi" — po REDOSLIJEDU igranja (jedan teren), ne po satu
+  function renderTop(matches) {
+    const sec = $("sec-uzivo");
+    const seq = matches.filter((m) => m.hasTeams).slice().sort((a, b) => a.redni - b.redni);
+    const played = seq.filter((m) => m.played);
+    const pending = seq.filter((m) => !m.played);
+    const underway = played.length > 0;
+    const faze = (m) => (m.faza === "Grupa" ? "Grupa " + m.grupa : m.faza);
+
+    if (!pending.length) { sec.classList.add("hidden"); $("uzivo-live").innerHTML = ""; $("uzivo-next").innerHTML = ""; return false; }
+
+    const cur = pending[0];
+    const curLabel = underway ? "Trenutno na terenu" : "Prvo na redu";
+    const dot = underway
+      ? '<span class="w-2.5 h-2.5 rounded-full bg-red-600 animate-pulse"></span>'
+      : '<span class="w-2.5 h-2.5 rounded-full bg-club-accent"></span>';
+    $("uzivo-live").innerHTML = `
+      <h2 class="text-lg font-bold mb-2 flex items-center gap-2">${dot}${curLabel}</h2>
+      <div class="flex items-center gap-3 rounded-lg border-2 ${underway ? "border-red-500" : "border-club-accent"} bg-white px-4 py-3 shadow-sm">
+        <div class="flex-1 flex items-center justify-end gap-2 text-right font-medium"><span>${esc(cur.home)}</span>${avatar(cur.home, 26)}</div>
+        <div class="px-2 text-center shrink-0">
+          <div class="text-club-muted text-xs font-display uppercase">${faze(cur)}</div>
+          ${cur.vrijeme ? `<div class="text-club-primary font-display font-bold text-sm">~${esc(cur.vrijeme)}</div>` : `<div class="text-club-muted text-xs">vs</div>`}
+        </div>
+        <div class="flex-1 flex items-center gap-2 font-medium">${avatar(cur.away, 26)}<span>${esc(cur.away)}</span></div>
+      </div>`;
+
+    const nextList = pending.slice(1, 4);
+    $("uzivo-next").innerHTML = nextList.length
+      ? `<h3 class="text-sm font-display uppercase tracking-wider text-club-muted mb-2 mt-4">Slijedi</h3>
+         <div class="space-y-2">${nextList.map((m) => `
+           <div class="flex items-center gap-3 rounded-lg border border-club-border bg-white px-4 py-2.5 shadow-sm">
+             <span class="shrink-0 text-club-muted text-[11px] font-display uppercase w-14">${faze(m)}</span>
+             <div class="flex-1 flex items-center gap-2 min-w-0">${avatar(m.home, 20)}<span class="truncate">${esc(m.home)}</span></div>
+             <span class="text-club-muted text-xs shrink-0">vs</span>
+             <div class="flex-1 flex items-center justify-end gap-2 min-w-0 text-right"><span class="truncate">${esc(m.away)}</span>${avatar(m.away, 20)}</div>
+             <span class="shrink-0 text-club-muted text-xs tabular-nums w-12 text-right">${m.vrijeme ? "~" + esc(m.vrijeme) : ""}</span>
+           </div>`).join("")}</div>
+         <p class="text-xs text-club-muted mt-2">Redoslijed je stvaran; vremena su okvirna i pomiču se ako utakmice traju duže.</p>`
+      : `<p class="text-xs text-club-muted mt-2">Vremena su okvirna.</p>`;
+
+    sec.classList.remove("hidden");
+    return true;
+  }
+
+  function syncQuickNav() {
+    let anyChip = false;
+    document.querySelectorAll("#quicknav .qn").forEach((a) => {
+      const target = document.getElementById(a.dataset.target);
+      const vis = target && !target.classList.contains("hidden");
+      a.classList.toggle("hidden", !vis);
+      if (vis) anyChip = true;
+    });
+    $("quicknav").classList.toggle("hidden", !anyChip);
+  }
+
+  function renderProgress(matches) {
+    const withTeams = matches.filter((m) => m.hasTeams);
+    const total = withTeams.length;
+    const done = withTeams.filter((m) => m.played).length;
+    const el = $("progress");
+    if (!total) { el.classList.add("hidden"); return; }
+    const pct = Math.round((done / total) * 100);
+    el.innerHTML = `<div class="rounded-lg bg-white border border-club-border shadow-sm p-3">
+      <div class="flex items-center justify-between mb-1.5">
+        <span class="font-display uppercase tracking-wider text-xs text-club-muted">Napredak turnira</span>
+        <span class="font-bold text-sm">${done}/${total} odigrano</span>
+      </div>
+      <div class="h-2 rounded-full bg-club-light-2 overflow-hidden"><div class="h-full bg-club-primary transition-all" style="width:${pct}%"></div></div>
+    </div>`;
+    el.classList.remove("hidden");
+  }
+
+  function tickCountdown() {
+    const el = $("countdown");
+    if (!el) return;
+    const diff = START - new Date();
+    const started = LAST && LAST.matches.some((m) => m.played);
+    if (diff <= 0 || started) { el.classList.add("hidden"); return; }
+    const d = Math.floor(diff / 864e5), h = Math.floor((diff % 864e5) / 36e5), m = Math.floor((diff % 36e5) / 6e4), s = Math.floor((diff % 6e4) / 1e3);
+    const p = (n) => String(n).padStart(2, "0");
+    const txt = d > 0 ? `${d}d ${p(h)}:${p(m)}:${p(s)}` : `${p(h)}:${p(m)}:${p(s)}`;
+    el.innerHTML = `<div class="rounded-lg px-4 py-4 text-white text-center hero-bg shadow-md">
+      <div class="font-display uppercase tracking-widest text-xs opacity-80 mb-1">Turnir počinje za</div>
+      <div class="font-display font-bold text-3xl md:text-4xl tabular-nums text-club-accent">${txt}</div>
+    </div>`;
+    el.classList.remove("hidden");
+  }
+
+  function setFilter(f) {
+    RFILTER = f;
+    document.querySelectorAll("#rf .rfbtn").forEach((x) => {
+      const on = x.dataset.f === f;
+      x.classList.toggle("bg-club-primary", on);
+      x.classList.toggle("text-white", on);
+      x.classList.toggle("bg-club-light-2", !on);
+      x.classList.toggle("text-club-primary-deep", !on);
+    });
+    if (LAST) renderSchedule(LAST.matches, f);
+  }
+
+  const show = (id) => $(id).classList.remove("hidden");
+
+  async function load() {
+    try {
+      const [ekipe, utak] = await Promise.all([fetchTab("Ekipe"), fetchTab("Utakmice")]);
+      const data = processData(ekipe, utak);
+
+      LAST = data;
+      renderTop(data.matches);
+      renderProgress(data.matches);
+      renderGroups(data.standings);
+      renderThirds(data.standings);
+      renderKnockout(data.matches);
+      renderSchedule(data.matches, RFILTER);
+      renderScorers(data.scorers);
+
+      $("load-msg").classList.add("hidden");
+      show("sec-grupe");
+      show("sec-raspored");
+      syncQuickNav();
+      tickCountdown();
+
+      $("status-text").textContent = "Uživo";
+      $("live-dot").className = "w-2.5 h-2.5 rounded-full bg-green-400 animate-pulse";
+      $("last-updated").textContent = "Zadnje osvježeno: " + new Date().toLocaleTimeString("hr-HR");
+    } catch (e) {
+      $("load-msg").innerHTML =
+        `<div class="max-w-lg mx-auto bg-amber-50 border border-amber-200 rounded-lg p-6 text-left">
+          <p class="font-bold text-club-secondary mb-2">Rezultati trenutno nisu dostupni.</p>
+          <p class="text-sm text-club-muted">Provjeri da je Google tablica podijeljena kao <em>„Bilo tko s poveznicom → Preglednik“</em> i da postoje tabovi <em>Ekipe</em> i <em>Utakmice</em>. Stranica se osvježava automatski.</p>
+        </div>`;
+      $("status-text").textContent = "Nema veze";
+      $("live-dot").className = "w-2.5 h-2.5 rounded-full bg-red-500";
+    }
+  }
+
+  document.querySelectorAll("#rf .rfbtn").forEach((b) => b.addEventListener("click", () => setFilter(b.dataset.f)));
+  $("refresh-btn").addEventListener("click", load);
+  load();
+  setInterval(load, REFRESH_MS);
+  setInterval(tickCountdown, 1000);
+</script>
