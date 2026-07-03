@@ -150,6 +150,18 @@ const TURNIR_PODNASLOV = "„Krunoslav Bencek – Benđo“ · Subota, 04.07.202
     if (!m) return null;
     const d = new Date(); d.setHours(+m[1], +m[2], 0, 0); return d;
   };
+  // Poredak igranja = po satnici (Vrijeme); utakmice bez vremena idu iza, po Redni
+  const timeMin = (v) => {
+    const s = String(v || "");
+    const m = s.match(/(\d{1,2}):(\d{2})/);
+    if (!m) return null;
+    let h = +m[1]; const min = +m[2];
+    if (/pm/i.test(s) && h < 12) h += 12;
+    if (/am/i.test(s) && h === 12) h = 0;
+    return h * 60 + min;
+  };
+  const orderKey = (m) => { const t = timeMin(m.vrijeme); return t === null ? 100000 + (m.redni || 0) : t; };
+  const fmtTime = (v) => { const t = timeMin(v); if (t === null) return ""; return String(Math.floor(t / 60)).padStart(2, "0") + ":" + String(t % 60).padStart(2, "0"); };
 
   // Vrati redove kao nizove ćelija (po indeksu stupca), koristeći formatiranu vrijednost.
   function parseGviz(text) {
@@ -379,7 +391,7 @@ const TURNIR_PODNASLOV = "„Krunoslav Bencek – Benđo“ · Subota, 04.07.202
     const done = m.played;
     const score = done
       ? `<span class="font-bold text-lg tabular-nums">${m.gd} : ${m.gg}</span>`
-      : `<span class="text-club-muted text-sm font-display">${esc(m.vrijeme) || "—"}</span>`;
+      : `<span class="text-club-muted text-sm font-display">${fmtTime(m.vrijeme) || "—"}</span>`;
     const hw = done && m.gd > m.gg ? "font-bold" : "";
     const aw = done && m.gg > m.gd ? "font-bold" : "";
     const ring = highlight ? "ring-2 ring-club-accent" : "";
@@ -395,23 +407,24 @@ const TURNIR_PODNASLOV = "„Krunoslav Bencek – Benđo“ · Subota, 04.07.202
     const wrap = $("raspored");
     wrap.innerHTML = "";
     const keep = (m) => (filter === "sve" ? true : filter === "odigrano" ? m.played : !m.played);
-    const nextIdx = matches.findIndex((m) => m.hasTeams && !m.played);
+    const pend = matches.filter((m) => m.hasTeams && !m.played).sort((a, b) => orderKey(a) - orderKey(b));
+    const nextRedni = pend.length ? pend[0].redni : -1;
     let shown = 0;
     ["A", "B", "C"].forEach((g) => {
-      const gm = matches.filter((m) => m.faza === "Grupa" && m.grupa === g && keep(m));
+      const gm = matches.filter((m) => m.faza === "Grupa" && m.grupa === g && keep(m)).sort((a, b) => orderKey(a) - orderKey(b));
       if (!gm.length) return;
       shown += gm.length;
-      const cards = gm.map((m) => matchCard(m, matches.indexOf(m) === nextIdx)).join("");
+      const cards = gm.map((m) => matchCard(m, m.redni === nextRedni)).join("");
       wrap.insertAdjacentHTML(
         "beforeend",
         `<div><h3 class="font-display uppercase tracking-wider text-sm text-club-primary mb-2 mt-4">Grupa ${g}</h3><div class="space-y-2">${cards}</div></div>`
       );
     });
     ["Četvrtfinale", "Polufinale", "Za 3. mjesto", "Finale"].forEach((faza) => {
-      const ms = matches.filter((m) => m.faza === faza && (m.hasTeams || m.played) && keep(m));
+      const ms = matches.filter((m) => m.faza === faza && (m.hasTeams || m.played) && keep(m)).sort((a, b) => orderKey(a) - orderKey(b));
       if (!ms.length) return;
       shown += ms.length;
-      const cards = ms.map((m) => matchCard(m, matches.indexOf(m) === nextIdx)).join("");
+      const cards = ms.map((m) => matchCard(m, m.redni === nextRedni)).join("");
       wrap.insertAdjacentHTML(
         "beforeend",
         `<div><h3 class="font-display uppercase tracking-wider text-sm text-club-accent mb-2 mt-4">${faza}</h3><div class="space-y-2">${cards}</div></div>`
@@ -525,7 +538,7 @@ const TURNIR_PODNASLOV = "„Krunoslav Bencek – Benđo“ · Subota, 04.07.202
   // "Trenutno na terenu" + "Slijedi" — po REDOSLIJEDU igranja (jedan teren), ne po satu
   function renderTop(matches) {
     const sec = $("sec-uzivo");
-    const seq = matches.filter((m) => m.hasTeams).slice().sort((a, b) => a.redni - b.redni);
+    const seq = matches.filter((m) => m.hasTeams).slice().sort((a, b) => orderKey(a) - orderKey(b));
     const played = seq.filter((m) => m.played);
     const pending = seq.filter((m) => !m.played);
     const underway = played.length > 0;
@@ -544,7 +557,7 @@ const TURNIR_PODNASLOV = "„Krunoslav Bencek – Benđo“ · Subota, 04.07.202
         <div class="flex-1 flex items-center justify-end gap-2 text-right font-medium"><span>${esc(cur.home)}</span>${avatar(cur.home, 26)}</div>
         <div class="px-2 text-center shrink-0">
           <div class="text-club-muted text-xs font-display uppercase">${faze(cur)}</div>
-          ${cur.vrijeme ? `<div class="text-club-primary font-display font-bold text-sm">~${esc(cur.vrijeme)}</div>` : `<div class="text-club-muted text-xs">vs</div>`}
+          ${fmtTime(cur.vrijeme) ? `<div class="text-club-primary font-display font-bold text-sm">~${fmtTime(cur.vrijeme)}</div>` : `<div class="text-club-muted text-xs">vs</div>`}
         </div>
         <div class="flex-1 flex items-center gap-2 font-medium">${avatar(cur.away, 26)}<span>${esc(cur.away)}</span></div>
       </div>`;
@@ -558,7 +571,7 @@ const TURNIR_PODNASLOV = "„Krunoslav Bencek – Benđo“ · Subota, 04.07.202
              <div class="flex-1 flex items-center gap-2 min-w-0">${avatar(m.home, 20)}<span class="truncate">${esc(m.home)}</span></div>
              <span class="text-club-muted text-xs shrink-0">vs</span>
              <div class="flex-1 flex items-center justify-end gap-2 min-w-0 text-right"><span class="truncate">${esc(m.away)}</span>${avatar(m.away, 20)}</div>
-             <span class="shrink-0 text-club-muted text-xs tabular-nums w-12 text-right">${m.vrijeme ? "~" + esc(m.vrijeme) : ""}</span>
+             <span class="shrink-0 text-club-muted text-xs tabular-nums w-12 text-right">${fmtTime(m.vrijeme) ? "~" + fmtTime(m.vrijeme) : ""}</span>
            </div>`).join("")}</div>
          <p class="text-xs text-club-muted mt-2">Redoslijed je stvaran; vremena su okvirna i pomiču se ako utakmice traju duže.</p>`
       : `<p class="text-xs text-club-muted mt-2">Vremena su okvirna.</p>`;
