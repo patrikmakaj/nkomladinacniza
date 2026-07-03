@@ -1,8 +1,17 @@
 {
-  "lastUpdated": "2026-07-03T18:45:45.263Z",
+  "lastUpdated": "2026-07-03T20:08:46.451Z",
   "enabled": true,
   "pageId": "55401829691",
   "posts": [
+    {
+      "id": "55401829691_1769157131198782",
+      "message": "",
+      "createdAt": "2026-07-03T19:41:50+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/videos/1769157131198782",
+      "images": [
+        "/images/facebook/55401829691_1769157131198782.jpg"
+      ]
+    },
     {
       "id": "55401829691_1621740209958473",
       "message": "Molim ekipu \"Mlade nade\" da se jave na broj mobitela sa plakata radi dogovora za turnir.",
@@ -241,15 +250,6 @@
       "images": [
         "/images/facebook/55401829691_1559151402884021_0.jpg",
         "/images/facebook/55401829691_1559151402884021_1.jpg"
-      ]
-    },
-    {
-      "id": "55401829691_1557430299722798",
-      "message": "Čestitamo domaćinima koji preokretom pred kraj utakmice dolaze do tri boda. Unatoč dobrom prvom dijelu utakmice, naša momčad nakon bezbroj neiskorištenih prilika pada i Brezik odnosi pobjedu.",
-      "createdAt": "2026-05-02T17:25:19+0000",
-      "permalink": "https://www.facebook.com/1551452460320582/posts/1557430299722798",
-      "images": [
-        "/images/facebook/55401829691_1557430299722798.jpg"
       ]
     }
   ]
