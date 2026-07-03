@@ -1,8 +1,17 @@
 {
-  "lastUpdated": "2026-07-03T20:12:11.249Z",
+  "lastUpdated": "2026-07-03T21:38:55.983Z",
   "enabled": true,
   "pageId": "55401829691",
   "posts": [
+    {
+      "id": "55401829691_1622325779899916",
+      "message": "Preko ovog linka možete pratiti raspored utakmica i rezultate.\nhttps://omladinacniza.hr/turnir/",
+      "createdAt": "2026-07-03T20:19:26+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1622325779899916",
+      "images": [
+        "/images/facebook/55401829691_1622325779899916.jpg"
+      ]
+    },
     {
       "id": "55401829691_1769157131198782",
       "message": "",
@@ -240,16 +249,6 @@
       "permalink": "https://www.facebook.com/1551452460320582/posts/1562614525871042",
       "images": [
         "/images/facebook/55401829691_1562614525871042.jpg"
-      ]
-    },
-    {
-      "id": "55401829691_1559151402884021",
-      "message": "Građevinski radovi na postavljanju reflektora su u tijeku. Od slijedeće sezone i kod nas će se igrati noćne bilo prvenstvene ili prijateljske utakmice.",
-      "createdAt": "2026-05-04T13:52:43+0000",
-      "permalink": "https://www.facebook.com/1551452460320582/posts/1559151402884021",
-      "images": [
-        "/images/facebook/55401829691_1559151402884021_0.jpg",
-        "/images/facebook/55401829691_1559151402884021_1.jpg"
       ]
     }
   ]
