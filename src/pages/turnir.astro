@@ -643,6 +643,19 @@ const TURNIR_PODNASLOV = "„Krunoslav Bencek – Benđo“ · Subota, 04.07.202
     sec.classList.remove("hidden");
   }
 
+  // Strijelci jedne ekipe iz ćelije → "Ime 5', 18' · Drugi 22'"
+  function scorerLine(str, align) {
+    const list = parseScorers(str, "");
+    if (!list.length) return "";
+    const order = [], idx = {};
+    list.forEach((x) => {
+      if (idx[x.name] === undefined) { idx[x.name] = order.length; order.push({ name: x.name, mins: [] }); }
+      if (x.minute) order[idx[x.name]].mins.push(x.minute + "'");
+    });
+    const txt = order.map((p) => esc(p.name) + (p.mins.length ? " " + p.mins.join(", ") : "")).join(" · ");
+    return `<div class="text-[11px] text-club-muted ${align} mt-1 leading-snug">⚽ ${txt}</div>`;
+  }
+
   // "Trenutno na terenu" + "Slijedi" — po REDOSLIJEDU igranja (jedan teren), ne po satu
   function renderTop(matches) {
     const sec = $("sec-uzivo");
@@ -661,15 +674,21 @@ const TURNIR_PODNASLOV = "„Krunoslav Bencek – Benđo“ · Subota, 04.07.202
       : '<span class="w-2.5 h-2.5 rounded-full bg-club-accent"></span>';
     $("uzivo-live").innerHTML = `
       <h2 class="text-lg font-bold mb-2 flex items-center gap-2">${dot}${curLabel}</h2>
-      <div class="flex items-center gap-3 rounded-lg border-2 ${underway ? "border-red-500" : "border-club-accent"} bg-white px-4 py-3 shadow-sm">
-        <div class="flex-1 flex items-center justify-end gap-2 text-right font-medium"><span>${esc(cur.home)}</span>${avatar(cur.home, 26)}</div>
+      <div class="flex items-start gap-3 rounded-lg border-2 ${underway ? "border-red-500" : "border-club-accent"} bg-white px-4 py-3 shadow-sm">
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center justify-end gap-2 text-right font-medium"><span>${esc(cur.home)}</span>${avatar(cur.home, 26)}</div>
+          ${scorerLine(cur.strDom, "text-right")}
+        </div>
         <div class="px-2 text-center shrink-0">
           <div class="text-club-muted text-xs font-display uppercase">${faze(cur)}</div>
           ${underway
             ? `<div class="font-bold text-xl tabular-nums text-red-600">${cur.liveH} : ${cur.liveA}</div><div class="text-[10px] font-display uppercase text-red-600">uživo</div>`
             : (fmtTime(cur.vrijeme) ? `<div class="text-club-primary font-display font-bold text-sm">~${fmtTime(cur.vrijeme)}</div>` : `<div class="text-club-muted text-xs">vs</div>`)}
         </div>
-        <div class="flex-1 flex items-center gap-2 font-medium">${avatar(cur.away, 26)}<span>${esc(cur.away)}</span></div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-2 font-medium">${avatar(cur.away, 26)}<span>${esc(cur.away)}</span></div>
+          ${scorerLine(cur.strGost, "text-left")}
+        </div>
       </div>`;
 
     const nextList = pending.slice(1, 4);
