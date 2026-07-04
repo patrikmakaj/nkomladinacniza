@@ -335,12 +335,17 @@ const TURNIR_PODNASLOV = "„Krunoslav Bencek – Benđo“ · Subota, 04.07.202
       { lbl: "najbolja 3. (gr. " + T1.grupa + ")", name: T1.name },
       { lbl: "2. najbolja 3. (gr. " + T2.grupa + ")", name: T2.name },
     ];
-    // Parovi ČF (unakrsno, bez susreta ekipa iz iste grupe; dvije treće igraju međusobno)
+    // Parovi ČF po principu SP/Euro: pobjednici grupa dobivaju najbolje treće,
+    // drugoplasirani se križaju, nitko ne igra protiv ekipe iz svoje grupe.
+    // 1A vs T (≠A) i 1B vs T (≠B) su na suprotnim polovicama ždrijeba.
+    let Tx, Ty; // Tx ide protiv 1A (ne smije biti gr. A), Ty protiv 1B (ne smije biti gr. B)
+    if (T1.grupa !== "A" && T2.grupa !== "B") { Tx = T1; Ty = T2; }
+    else { Tx = T2; Ty = T1; }
     const qf = [
-      [s.A[0].name, s.C[1].name],
-      [s.B[0].name, s.A[1].name],
-      [s.C[0].name, s.B[1].name],
-      [T1.name, T2.name],
+      [s.A[0].name, Tx.name],       // ČF1 (lijevo): 1A – najbolja treća
+      [s.C[0].name, s.A[1].name],   // ČF2 (lijevo): 1C – 2A
+      [s.B[0].name, Ty.name],       // ČF3 (desno): 1B – druga najbolja treća
+      [s.B[1].name, s.C[1].name],   // ČF4 (desno): 2B – 2C
     ];
     return { list, qf };
   }
@@ -569,7 +574,7 @@ const TURNIR_PODNASLOV = "„Krunoslav Bencek – Benđo“ · Subota, 04.07.202
       <div class="bg-green-50 border border-green-200 rounded-lg p-4">
         <div class="font-display uppercase tracking-wider text-xs text-green-800 mb-3">Prošli u eliminaciju (8 ekipa)</div>
         <div class="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">${chips}</div>
-        <p class="text-[11px] text-club-muted mt-3">Parovi četvrtfinala posloženi automatski (unakrsno; dvije najbolje treće igraju međusobno). Ako u Sheet ručno upišeš ekipe u eliminacijske redove, one imaju prednost.</p>
+        <p class="text-[11px] text-club-muted mt-3">Parovi četvrtfinala automatski: pobjednici grupa igraju protiv najboljih trećih, drugoplasirani se križaju — nitko protiv ekipe iz svoje grupe. Ručni upis ekipa u Sheet ima prednost.</p>
       </div>`;
   }
 
