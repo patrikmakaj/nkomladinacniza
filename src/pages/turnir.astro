@@ -115,6 +115,18 @@ const TURNIR_PODNASLOV = "„Krunoslav Bencek – Benđo“ · Subota, 04.07.202
       <div id="strijelci" class="bg-white rounded-lg shadow-md border border-club-border overflow-hidden max-w-2xl"></div>
     </section>
   </main>
+
+  <!-- Panel ekipe (bottom sheet / popup) -->
+  <div id="team-sheet" class="hidden fixed inset-0 z-[60]">
+    <div id="team-sheet-backdrop" class="absolute inset-0 bg-black/50"></div>
+    <div class="absolute inset-x-0 bottom-0 sm:inset-x-auto sm:left-1/2 sm:-translate-x-1/2 sm:top-1/2 sm:-translate-y-1/2 sm:bottom-auto w-full sm:max-w-lg bg-white rounded-t-2xl sm:rounded-2xl shadow-2xl max-h-[85vh] flex flex-col">
+      <div class="shrink-0 border-b border-club-border px-4 pt-3 pb-2 flex items-center justify-between">
+        <div id="team-sheet-title" class="font-bold text-lg text-club-primary-deep truncate pr-2"></div>
+        <button id="team-sheet-close" class="shrink-0 text-club-muted hover:text-club-secondary text-3xl leading-none px-1" aria-label="Zatvori">×</button>
+      </div>
+      <div id="team-sheet-body" class="overflow-y-auto p-4"></div>
+    </div>
+  </div>
 </BaseLayout>
 
 <script define:vars={{ SHEET_ID }}>
@@ -145,6 +157,8 @@ const TURNIR_PODNASLOV = "„Krunoslav Bencek – Benđo“ · Subota, 04.07.202
     return `<span class="inline-flex items-center justify-center rounded-full text-white font-bold shrink-0" style="width:${size}px;height:${size}px;font-size:${Math.round(size * 0.42)}px;background:${c}">${esc(initials(name))}</span>`;
   };
   const medal = (rank) => (rank === 1 ? "🥇" : rank === 2 ? "🥈" : rank === 3 ? "🥉" : "");
+  // Klikabilno ime ekipe (otvara panel s igračima)
+  const linkTeam = (name) => name ? `<span class="team-link cursor-pointer hover:underline decoration-dotted underline-offset-2" data-team="${esc(name)}">${esc(name)}</span>` : "—";
   // "17:00" → Date danas; za detekciju utakmice u tijeku
   const kickoff = (v) => {
     const m = String(v || "").match(/(\d{1,2}):(\d{2})/);
@@ -257,7 +271,7 @@ const TURNIR_PODNASLOV = "„Krunoslav Bencek – Benđo“ · Subota, 04.07.202
     return out;
   }
 
-  function processData(ekipeRows, utakRows) {
+  function processData(ekipeRows, utakRows, igraciRows) {
     // Ekipe: [Grupa, Ekipa]
     const groups = { A: [], B: [], C: [] };
     ekipeRows.forEach((r) => {
@@ -333,7 +347,21 @@ const TURNIR_PODNASLOV = "„Krunoslav Bencek – Benđo“ · Subota, 04.07.202
       (a, b) => b.golovi - a.golovi || a.igrac.localeCompare(b.igrac, "hr")
     );
 
-    return { groups, matches, standings, scorers, groupsDone, qualifiers };
+    // Igrači: [Ekipa, Broj, Igrač] — ime ekipe je u zaglavlju bloka, igrači ispod (prenosi se zadnja ekipa)
+    const rosters = {};
+    let curTeam = "";
+    (igraciRows || []).forEach((r) => {
+      const t = String(r[0] || "").trim();
+      const broj = String(r[1] || "").trim();
+      const ime = String(r[2] || "").trim();
+      if (t) curTeam = t;
+      if (ime && curTeam) {
+        if (!rosters[curTeam]) rosters[curTeam] = [];
+        rosters[curTeam].push({ broj, igrac: ime });
+      }
+    });
+
+    return { groups, matches, standings, scorers, groupsDone, qualifiers, rosters };
   }
 
   // 8 kvalificiranih: 2 iz svake grupe + 2 najbolje treće; + parovi četvrtfinala
@@ -396,7 +424,7 @@ const TURNIR_PODNASLOV = "„Krunoslav Bencek – Benđo“ · Subota, 04.07.202
           const rk = t.rank === 1 ? "🥇" : t.rank;
           return `<tr class="border-b border-club-border ${qual}">
             <td class="px-2 py-2 font-display text-center">${rk}</td>
-            <td class="px-2 py-2"><div class="flex items-center gap-2">${avatar(t.name, 22)}<span class="font-medium">${esc(t.name)}</span></div></td>
+            <td class="px-2 py-2"><div class="flex items-center gap-2">${avatar(t.name, 22)}<span class="font-medium">${linkTeam(t.name)}</span></div></td>
             <td class="px-1 py-2 text-center">${t.P}</td>
             <td class="px-1 py-2 text-center hidden sm:table-cell">${t.W}</td>
             <td class="px-1 py-2 text-center hidden sm:table-cell">${t.D}</td>
@@ -443,7 +471,7 @@ const TURNIR_PODNASLOV = "„Krunoslav Bencek – Benđo“ · Subota, 04.07.202
         const qual = i < 2 ? "bg-green-50" : "";
         return `<tr class="border-b border-club-border ${qual}">
           <td class="px-3 py-2 font-display text-center">${i + 1}</td>
-          <td class="px-3 py-2"><div class="flex items-center gap-2">${avatar(t.name, 20)}<span class="font-medium">${esc(t.name)}</span></div></td>
+          <td class="px-3 py-2"><div class="flex items-center gap-2">${avatar(t.name, 20)}<span class="font-medium">${linkTeam(t.name)}</span></div></td>
           <td class="px-2 py-2 text-center text-club-muted">Gr. ${t.grupa}</td>
           <td class="px-2 py-2 text-center text-club-muted">${t.GF}:${t.GA}</td>
           <td class="px-3 py-2 text-center font-bold">${t.Pts}</td>
@@ -475,9 +503,9 @@ const TURNIR_PODNASLOV = "„Krunoslav Bencek – Benđo“ · Subota, 04.07.202
     const ring = highlight ? "ring-2 ring-club-accent" : "";
     const liveTag = isLive ? `<div class="text-[10px] font-display uppercase text-red-600 flex items-center justify-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse"></span>uživo</div>` : "";
     return `<div class="flex items-center gap-3 bg-white rounded-lg shadow-sm border border-club-border px-4 py-3 ${ring}">
-      <div class="flex-1 flex items-center justify-end gap-2 text-right ${hw}"><span>${esc(m.home || "—")}</span>${avatar(m.home, 24)}</div>
+      <div class="flex-1 flex items-center justify-end gap-2 text-right ${hw}"><span>${linkTeam(m.home)}</span>${avatar(m.home, 24)}</div>
       <div class="px-2 text-center min-w-[70px]">${score}${liveTag}</div>
-      <div class="flex-1 flex items-center gap-2 ${aw}">${avatar(m.away, 24)}<span>${esc(m.away || "—")}</span></div>
+      <div class="flex-1 flex items-center gap-2 ${aw}">${avatar(m.away, 24)}<span>${linkTeam(m.away)}</span></div>
     </div>`;
   }
 
@@ -581,7 +609,7 @@ const TURNIR_PODNASLOV = "„Krunoslav Bencek – Benđo“ · Subota, 04.07.202
       <div class="flex items-center gap-2 bg-white rounded-lg border border-club-border px-3 py-2 shadow-sm">
         ${avatar(x.name, 22)}
         <div class="min-w-0">
-          <div class="font-medium text-sm truncate">${esc(x.name)}</div>
+          <div class="font-medium text-sm truncate">${linkTeam(x.name)}</div>
           <div class="text-[11px] text-club-muted uppercase font-display">${esc(x.lbl)}</div>
         </div>
       </div>`).join("");
@@ -628,7 +656,7 @@ const TURNIR_PODNASLOV = "„Krunoslav Bencek – Benđo“ · Subota, 04.07.202
         return `<tr class="border-b border-club-border ${i < 3 ? "bg-club-light-2" : ""}">
         <td class="px-3 py-2 font-display text-center">${rk}</td>
         <td class="px-3 py-2"><span class="font-medium">${esc(r.igrac)}</span></td>
-        <td class="px-3 py-2"><div class="flex items-center gap-2">${avatar(r.ekipa, 20)}<span class="text-club-muted">${esc(r.ekipa)}</span></div></td>
+        <td class="px-3 py-2"><div class="flex items-center gap-2">${avatar(r.ekipa, 20)}<span class="text-club-muted">${linkTeam(r.ekipa)}</span></div></td>
         <td class="px-3 py-2 text-center font-bold">${r.golovi}</td>
       </tr>`;
       })
@@ -676,7 +704,7 @@ const TURNIR_PODNASLOV = "„Krunoslav Bencek – Benđo“ · Subota, 04.07.202
       <h2 class="text-lg font-bold mb-2 flex items-center gap-2">${dot}${curLabel}</h2>
       <div class="flex items-start gap-3 rounded-lg border-2 ${underway ? "border-red-500" : "border-club-accent"} bg-white px-4 py-3 shadow-sm">
         <div class="flex-1 min-w-0">
-          <div class="flex items-center justify-end gap-2 text-right font-medium"><span>${esc(cur.home)}</span>${avatar(cur.home, 26)}</div>
+          <div class="flex items-center justify-end gap-2 text-right font-medium"><span>${linkTeam(cur.home)}</span>${avatar(cur.home, 26)}</div>
           ${scorerLine(cur.strDom, "text-right")}
         </div>
         <div class="px-2 text-center shrink-0">
@@ -686,7 +714,7 @@ const TURNIR_PODNASLOV = "„Krunoslav Bencek – Benđo“ · Subota, 04.07.202
             : (fmtTime(cur.vrijeme) ? `<div class="text-club-primary font-display font-bold text-sm">~${fmtTime(cur.vrijeme)}</div>` : `<div class="text-club-muted text-xs">vs</div>`)}
         </div>
         <div class="flex-1 min-w-0">
-          <div class="flex items-center gap-2 font-medium">${avatar(cur.away, 26)}<span>${esc(cur.away)}</span></div>
+          <div class="flex items-center gap-2 font-medium">${avatar(cur.away, 26)}<span>${linkTeam(cur.away)}</span></div>
           ${scorerLine(cur.strGost, "text-left")}
         </div>
       </div>`;
@@ -697,9 +725,9 @@ const TURNIR_PODNASLOV = "„Krunoslav Bencek – Benđo“ · Subota, 04.07.202
          <div class="space-y-2">${nextList.map((m) => `
            <div class="flex items-center gap-3 rounded-lg border border-club-border bg-white px-4 py-2.5 shadow-sm">
              <span class="shrink-0 text-club-muted text-[11px] font-display uppercase w-14">${faze(m)}</span>
-             <div class="flex-1 flex items-center gap-2 min-w-0">${avatar(m.home, 20)}<span class="truncate">${esc(m.home)}</span></div>
+             <div class="flex-1 flex items-center gap-2 min-w-0">${avatar(m.home, 20)}<span class="truncate">${linkTeam(m.home)}</span></div>
              <span class="text-club-muted text-xs shrink-0">vs</span>
-             <div class="flex-1 flex items-center justify-end gap-2 min-w-0 text-right"><span class="truncate">${esc(m.away)}</span>${avatar(m.away, 20)}</div>
+             <div class="flex-1 flex items-center justify-end gap-2 min-w-0 text-right"><span class="truncate">${linkTeam(m.away)}</span>${avatar(m.away, 20)}</div>
              <span class="shrink-0 text-club-muted text-xs tabular-nums w-12 text-right">${estMap[m.redni] != null ? "~" + fmtMin(estMap[m.redni]) : ""}</span>
            </div>`).join("")}</div>
          <p class="text-xs text-club-muted mt-2">Vremena su okvirna i osvježavaju se tijekom dana.</p>`
@@ -765,12 +793,70 @@ const TURNIR_PODNASLOV = "„Krunoslav Bencek – Benđo“ · Subota, 04.07.202
     if (LAST) renderSchedule(LAST.matches, f);
   }
 
+  // Panel ekipe: plasman + popis igrača s golovima + utakmice
+  function openTeamSheet(team) {
+    if (!LAST || !team) return;
+    $("team-sheet-title").innerHTML = `<span class="inline-flex items-center gap-2">${avatar(team, 26)}<span class="truncate">${esc(team)}</span></span>`;
+    let st = null, grp = null;
+    for (const g of ["A", "B", "C"]) { const t = (LAST.standings[g] || []).find((x) => x.name === team); if (t) { st = t; grp = g; } }
+    const goalsMap = {};
+    (LAST.scorers || []).filter((s) => s.ekipa === team).forEach((s) => (goalsMap[s.igrac] = s.golovi));
+    const roster = (LAST.rosters && LAST.rosters[team]) ? LAST.rosters[team].slice() : [];
+    const inRoster = new Set(roster.map((p) => p.igrac));
+    const extras = Object.keys(goalsMap).filter((n) => !inRoster.has(n)).map((n) => ({ broj: "", igrac: n, extra: true }));
+    const players = roster.concat(extras).map((p) => ({ ...p, golovi: goalsMap[p.igrac] || 0 }))
+      .sort((a, b) => b.golovi - a.golovi || a.igrac.localeCompare(b.igrac, "hr"));
+
+    let html = "";
+    if (st) {
+      html += `<div class="grid grid-cols-4 gap-2 mb-4 text-center">
+        <div class="bg-club-light-2 rounded-lg p-2"><div class="text-[10px] text-club-muted font-display uppercase">Grupa</div><div class="font-bold">${grp} · ${st.rank}.</div></div>
+        <div class="bg-club-light-2 rounded-lg p-2"><div class="text-[10px] text-club-muted font-display uppercase">Bodovi</div><div class="font-bold">${st.Pts}</div></div>
+        <div class="bg-club-light-2 rounded-lg p-2"><div class="text-[10px] text-club-muted font-display uppercase">P-N-I</div><div class="font-bold">${st.W}-${st.D}-${st.L}</div></div>
+        <div class="bg-club-light-2 rounded-lg p-2"><div class="text-[10px] text-club-muted font-display uppercase">Golovi</div><div class="font-bold">${st.GF}:${st.GA}</div></div>
+      </div>`;
+    }
+    html += `<div class="font-display uppercase tracking-wider text-xs text-club-muted mb-2">Igrači</div>`;
+    if (players.length) {
+      html += `<div class="rounded-lg border border-club-border overflow-hidden mb-4 divide-y divide-club-border">` + players.map((p) => `
+        <div class="flex items-center gap-3 px-3 py-2">
+          <span class="w-6 text-center text-club-muted text-sm tabular-nums">${esc(p.broj || "")}</span>
+          <span class="flex-1 ${p.extra ? "text-club-muted italic" : ""}">${esc(p.igrac)}</span>
+          ${p.golovi > 0 ? `<span class="font-bold text-club-primary-deep">${p.golovi} ⚽</span>` : `<span class="text-club-border">—</span>`}
+        </div>`).join("") + `</div>`;
+    } else {
+      html += `<p class="text-sm text-club-muted mb-4">Popis igrača još nije unesen u Sheet.</p>`;
+    }
+    const tm = (LAST.matches || []).filter((m) => m.home === team || m.away === team).sort((a, b) => orderKey(a) - orderKey(b));
+    if (tm.length) {
+      html += `<div class="font-display uppercase tracking-wider text-xs text-club-muted mb-2">Utakmice</div><div class="space-y-1.5">` + tm.map((m) => {
+        const isHome = m.home === team, opp = isHome ? m.away : m.home;
+        let right;
+        if (m.played) {
+          const gf = isHome ? m.gd : m.gg, ga = isHome ? m.gg : m.gd;
+          const res = gf > ga ? "P" : gf < ga ? "I" : "N";
+          const col = gf > ga ? "bg-green-100 text-green-700" : gf < ga ? "bg-red-100 text-red-700" : "bg-gray-100 text-gray-700";
+          right = `<span class="tabular-nums font-bold">${gf}:${ga}</span><span class="inline-block w-5 text-center rounded ${col} text-xs font-bold">${res}</span>`;
+        } else {
+          right = `<span class="text-club-muted text-xs">${fmtTime(m.vrijeme) || "—"}</span>`;
+        }
+        return `<div class="flex items-center gap-2 text-sm border border-club-border rounded-lg px-3 py-2"><span class="text-[11px] text-club-muted font-display w-14 shrink-0">${m.faza === "Grupa" ? "Gr. " + m.grupa : m.faza}</span><span class="flex-1 truncate">${esc(opp)}</span>${right}</div>`;
+      }).join("") + `</div>`;
+    }
+    $("team-sheet-body").innerHTML = html;
+    $("team-sheet").classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+  }
+  function closeTeamSheet() { $("team-sheet").classList.add("hidden"); document.body.style.overflow = ""; }
+
   const show = (id) => $(id).classList.remove("hidden");
 
   async function load() {
     try {
       const [ekipe, utak] = await Promise.all([fetchTab("Ekipe"), fetchTab("Utakmice")]);
-      const data = processData(ekipe, utak);
+      let igraci = [];
+      try { igraci = await fetchTab("Igrači"); } catch (e) { igraci = []; }
+      const data = processData(ekipe, utak, igraci);
 
       LAST = data;
       renderTop(data.matches);
@@ -802,6 +888,10 @@ const TURNIR_PODNASLOV = "„Krunoslav Bencek – Benđo“ · Subota, 04.07.202
   }
 
   document.querySelectorAll("#rf .rfbtn").forEach((b) => b.addEventListener("click", () => setFilter(b.dataset.f)));
+  document.addEventListener("click", (e) => { const t = e.target.closest("[data-team]"); if (t) openTeamSheet(t.dataset.team); });
+  $("team-sheet-close").addEventListener("click", closeTeamSheet);
+  $("team-sheet-backdrop").addEventListener("click", closeTeamSheet);
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeTeamSheet(); });
   $("refresh-btn").addEventListener("click", load);
   load();
   setInterval(load, REFRESH_MS);
