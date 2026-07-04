@@ -163,6 +163,20 @@ const TURNIR_PODNASLOV = "„Krunoslav Bencek – Benđo“ · Subota, 04.07.202
   };
   const orderKey = (m) => { const t = timeMin(m.vrijeme); return t === null ? 100000 + (m.redni || 0) : t; };
   const fmtTime = (v) => { const t = timeMin(v); if (t === null) return ""; return String(Math.floor(t / 60)).padStart(2, "0") + ":" + String(t % 60).padStart(2, "0"); };
+  const SLOT_MIN = 20; // trajanje utakmice (min) — za procjenu pomaka satnice
+  const fmtMin = (t) => (t == null ? "" : String(Math.floor(t / 60) % 24).padStart(2, "0") + ":" + String(((t % 60) + 60) % 60).padStart(2, "0"));
+  // Procijenjena vremena preostalih (pomiču se ako se kasni): trenutna = planirano;
+  // k-ta iduća = max(planirano, sada + 20·(k-1)). Redoslijed ostaje po planiranom.
+  function estStartMap(pendingSorted) {
+    const now = new Date();
+    const nowMin = now.getHours() * 60 + now.getMinutes();
+    const map = {};
+    pendingSorted.forEach((m, k) => {
+      const planned = timeMin(m.vrijeme);
+      map[m.redni] = planned == null ? null : (k === 0 ? planned : Math.max(planned, nowMin + SLOT_MIN * (k - 1)));
+    });
+    return map;
+  }
 
   // Vrati redove kao nizove ćelija (po indeksu stupca), koristeći formatiranu vrijednost.
   function parseGviz(text) {
@@ -448,14 +462,14 @@ const TURNIR_PODNASLOV = "„Krunoslav Bencek – Benđo“ · Subota, 04.07.202
     wrap.classList.remove("hidden");
   }
 
-  function matchCard(m, highlight, live) {
+  function matchCard(m, highlight, live, est) {
     const done = m.played;
     const isLive = !done && live;
     const score = done
       ? `<span class="font-bold text-lg tabular-nums">${m.gd} : ${m.gg}</span>`
       : isLive
       ? `<span class="font-bold text-lg tabular-nums text-red-600">${m.liveH} : ${m.liveA}</span>`
-      : `<span class="text-club-muted text-sm font-display">${fmtTime(m.vrijeme) || "—"}</span>`;
+      : `<span class="text-club-muted text-sm font-display">${(est != null ? fmtMin(est) : fmtTime(m.vrijeme)) || "—"}</span>`;
     const hw = done && m.gd > m.gg ? "font-bold" : "";
     const aw = done && m.gg > m.gd ? "font-bold" : "";
     const ring = highlight ? "ring-2 ring-club-accent" : "";
@@ -474,6 +488,7 @@ const TURNIR_PODNASLOV = "„Krunoslav Bencek – Benđo“ · Subota, 04.07.202
     const keep = (m) => (filter === "sve" ? true : filter === "odigrano" ? m.played : !m.played);
     const pend = matches.filter((m) => m.hasTeams && !m.played).sort((a, b) => orderKey(a) - orderKey(b));
     const nextRedni = pend.length ? pend[0].redni : -1;
+    const estMap = estStartMap(pend);
     const underway = matches.some((m) => m.played || m.liveH > 0 || m.liveA > 0);
     const isLive = (m) => underway && !m.played && (m.redni === nextRedni || m.liveH > 0 || m.liveA > 0);
     let shown = 0;
@@ -481,7 +496,7 @@ const TURNIR_PODNASLOV = "„Krunoslav Bencek – Benđo“ · Subota, 04.07.202
       const gm = matches.filter((m) => m.faza === "Grupa" && m.grupa === g && keep(m)).sort((a, b) => orderKey(a) - orderKey(b));
       if (!gm.length) return;
       shown += gm.length;
-      const cards = gm.map((m) => matchCard(m, m.redni === nextRedni, isLive(m))).join("");
+      const cards = gm.map((m) => matchCard(m, m.redni === nextRedni, isLive(m), estMap[m.redni])).join("");
       wrap.insertAdjacentHTML(
         "beforeend",
         `<div><h3 class="font-display uppercase tracking-wider text-sm text-club-primary mb-2 mt-4">Grupa ${g}</h3><div class="space-y-2">${cards}</div></div>`
@@ -491,7 +506,7 @@ const TURNIR_PODNASLOV = "„Krunoslav Bencek – Benđo“ · Subota, 04.07.202
       const ms = matches.filter((m) => m.faza === faza && (m.hasTeams || m.played) && keep(m)).sort((a, b) => orderKey(a) - orderKey(b));
       if (!ms.length) return;
       shown += ms.length;
-      const cards = ms.map((m) => matchCard(m, m.redni === nextRedni, isLive(m))).join("");
+      const cards = ms.map((m) => matchCard(m, m.redni === nextRedni, isLive(m), estMap[m.redni])).join("");
       wrap.insertAdjacentHTML(
         "beforeend",
         `<div><h3 class="font-display uppercase tracking-wider text-sm text-club-accent mb-2 mt-4">${faza}</h3><div class="space-y-2">${cards}</div></div>`
@@ -633,6 +648,7 @@ const TURNIR_PODNASLOV = "„Krunoslav Bencek – Benđo“ · Subota, 04.07.202
     const sec = $("sec-uzivo");
     const seq = matches.filter((m) => m.hasTeams).slice().sort((a, b) => orderKey(a) - orderKey(b));
     const pending = seq.filter((m) => !m.played);
+    const estMap = estStartMap(pending);
     const underway = seq.some((m) => m.played || m.liveH > 0 || m.liveA > 0);
     const faze = (m) => (m.faza === "Grupa" ? "Grupa " + m.grupa : m.faza);
 
@@ -665,9 +681,9 @@ const TURNIR_PODNASLOV = "„Krunoslav Bencek – Benđo“ · Subota, 04.07.202
              <div class="flex-1 flex items-center gap-2 min-w-0">${avatar(m.home, 20)}<span class="truncate">${esc(m.home)}</span></div>
              <span class="text-club-muted text-xs shrink-0">vs</span>
              <div class="flex-1 flex items-center justify-end gap-2 min-w-0 text-right"><span class="truncate">${esc(m.away)}</span>${avatar(m.away, 20)}</div>
-             <span class="shrink-0 text-club-muted text-xs tabular-nums w-12 text-right">${fmtTime(m.vrijeme) ? "~" + fmtTime(m.vrijeme) : ""}</span>
+             <span class="shrink-0 text-club-muted text-xs tabular-nums w-12 text-right">${estMap[m.redni] != null ? "~" + fmtMin(estMap[m.redni]) : ""}</span>
            </div>`).join("")}</div>
-         <p class="text-xs text-club-muted mt-2">Vremena su okvirna (planirana) — stvarni početak može kasniti. Redoslijed se ažurira čim se upiše rezultat.</p>`
+         <p class="text-xs text-club-muted mt-2">Vremena su procijenjena i pomiču se ako se kasni (računato prema trenutnom vremenu). Redoslijed se ažurira čim se upiše rezultat.</p>`
       : `<p class="text-xs text-club-muted mt-2">Vremena su okvirna.</p>`;
 
     sec.classList.remove("hidden");
