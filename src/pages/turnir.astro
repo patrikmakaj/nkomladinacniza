@@ -683,7 +683,7 @@ const TURNIR_PODNASLOV = "„Krunoslav Bencek – Benđo“ · Subota, 04.07.202
              <div class="flex-1 flex items-center justify-end gap-2 min-w-0 text-right"><span class="truncate">${esc(m.away)}</span>${avatar(m.away, 20)}</div>
              <span class="shrink-0 text-club-muted text-xs tabular-nums w-12 text-right">${estMap[m.redni] != null ? "~" + fmtMin(estMap[m.redni]) : ""}</span>
            </div>`).join("")}</div>
-         <p class="text-xs text-club-muted mt-2">Vremena su procijenjena i pomiču se ako se kasni (računato prema trenutnom vremenu). Redoslijed se ažurira čim se upiše rezultat.</p>`
+         <p class="text-xs text-club-muted mt-2">Vremena su okvirna i osvježavaju se tijekom dana.</p>`
       : `<p class="text-xs text-club-muted mt-2">Vremena su okvirna.</p>`;
 
     sec.classList.remove("hidden");
