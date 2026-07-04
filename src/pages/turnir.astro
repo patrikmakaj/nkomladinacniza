@@ -131,7 +131,7 @@ const TURNIR_PODNASLOV = "„Krunoslav Bencek – Benđo“ · Subota, 04.07.202
 
 <script define:vars={{ SHEET_ID }}>
   const REFRESH_MS = 25000;
-  let LAST = null, RFILTER = "sve";
+  let LAST = null, RFILTER = "sve", OFFSET = 0;
   const START = new Date(2026, 6, 4, 17, 0, 0); // 04.07.2026. 17:00
   const gvizUrl = (sheet) =>
     `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&headers=1&sheet=${encodeURIComponent(sheet)}&_=${Date.now()}`;
@@ -177,17 +177,13 @@ const TURNIR_PODNASLOV = "„Krunoslav Bencek – Benđo“ · Subota, 04.07.202
   };
   const orderKey = (m) => { const t = timeMin(m.vrijeme); return t === null ? 100000 + (m.redni || 0) : t; };
   const fmtTime = (v) => { const t = timeMin(v); if (t === null) return ""; return String(Math.floor(t / 60)).padStart(2, "0") + ":" + String(t % 60).padStart(2, "0"); };
-  const SLOT_MIN = 20; // trajanje utakmice (min) — za procjenu pomaka satnice
   const fmtMin = (t) => (t == null ? "" : String(Math.floor(t / 60) % 24).padStart(2, "0") + ":" + String(((t % 60) + 60) % 60).padStart(2, "0"));
-  // Procijenjena vremena preostalih (pomiču se ako se kasni): trenutna = planirano;
-  // k-ta iduća = max(planirano, sada + 20·(k-1)). Redoslijed ostaje po planiranom.
+  // Prikazana vremena = planirano + ručni pomak (OFFSET min iz Sheeta, ćelija Pomak)
   function estStartMap(pendingSorted) {
-    const now = new Date();
-    const nowMin = now.getHours() * 60 + now.getMinutes();
     const map = {};
-    pendingSorted.forEach((m, k) => {
+    pendingSorted.forEach((m) => {
       const planned = timeMin(m.vrijeme);
-      map[m.redni] = planned == null ? null : (k === 0 ? planned : Math.max(planned, nowMin + SLOT_MIN * (k - 1)));
+      map[m.redni] = planned == null ? null : planned + OFFSET;
     });
     return map;
   }
@@ -362,7 +358,11 @@ const TURNIR_PODNASLOV = "„Krunoslav Bencek – Benđo“ · Subota, 04.07.202
       }
     });
 
-    return { groups, matches, standings, scorers, groupsDone, qualifiers, rosters };
+    // Ručni pomak satnice (minute) — stupac "Pomak" (K) u tabu Utakmice; prvi broj vrijedi
+    let offset = 0;
+    for (const r of (utakRows || [])) { if (isNum(r[10])) { offset = Number(r[10]); break; } }
+
+    return { groups, matches, standings, scorers, groupsDone, qualifiers, rosters, offset };
   }
 
   // 8 kvalificiranih: 2 iz svake grupe + 2 najbolje treće; + parovi četvrtfinala
@@ -712,7 +712,7 @@ const TURNIR_PODNASLOV = "„Krunoslav Bencek – Benđo“ · Subota, 04.07.202
           <div class="text-club-muted text-xs font-display uppercase">${faze(cur)}</div>
           ${underway
             ? `<div class="font-bold text-xl tabular-nums text-red-600">${cur.liveH} : ${cur.liveA}</div><div class="text-[10px] font-display uppercase text-red-600">uživo</div>`
-            : (fmtTime(cur.vrijeme) ? `<div class="text-club-primary font-display font-bold text-sm">~${fmtTime(cur.vrijeme)}</div>` : `<div class="text-club-muted text-xs">vs</div>`)}
+            : (estMap[cur.redni] != null ? `<div class="text-club-primary font-display font-bold text-sm">~${fmtMin(estMap[cur.redni])}</div>` : `<div class="text-club-muted text-xs">vs</div>`)}
         </div>
         <div class="flex-1 min-w-0">
           <div class="flex items-center gap-2 font-medium">${avatar(cur.away, 26)}<span>${linkTeam(cur.away)}</span></div>
@@ -731,7 +731,7 @@ const TURNIR_PODNASLOV = "„Krunoslav Bencek – Benđo“ · Subota, 04.07.202
              <div class="flex-1 flex items-center justify-end gap-2 min-w-0 text-right"><span class="truncate">${linkTeam(m.away)}</span>${avatar(m.away, 20)}</div>
              <span class="shrink-0 text-club-muted text-xs tabular-nums w-12 text-right">${estMap[m.redni] != null ? "~" + fmtMin(estMap[m.redni]) : ""}</span>
            </div>`).join("")}</div>
-         <p class="text-xs text-club-muted mt-2">Vremena su okvirna i osvježavaju se tijekom dana.</p>`
+         <p class="text-xs text-club-muted mt-2">Vremena su okvirna.</p>`
       : `<p class="text-xs text-club-muted mt-2">Vremena su okvirna.</p>`;
 
     sec.classList.remove("hidden");
@@ -860,6 +860,7 @@ const TURNIR_PODNASLOV = "„Krunoslav Bencek – Benđo“ · Subota, 04.07.202
       const data = processData(ekipe, utak, igraci);
 
       LAST = data;
+      OFFSET = data.offset || 0;
       renderTop(data.matches);
       renderProgress(data.matches);
       renderGroups(data.standings);
