@@ -84,7 +84,7 @@ const TURNIR_PODNASLOV = "„Krunoslav Bencek – Benđo“ · Subota, 04.07.202
       <h2 class="text-2xl md:text-3xl font-bold mb-1">Grupne tablice</h2>
       <p class="text-club-muted text-sm mb-6">Prolaze prve dvije ekipe iz svake grupe + dvije najbolje trećeplasirane.</p>
       <div id="grupe" class="grid gap-6 md:grid-cols-3"></div>
-      <p class="text-xs text-club-muted mt-3">Kod jednakih bodova: međusobni susret → gol-razlika → postignuti golovi.</p>
+      <p class="text-xs text-club-muted mt-3">Kod jednakih bodova: gol-razlika → međusobni susret → postignuti golovi.</p>
       <div id="najbolje-trece-wrap" class="hidden mt-6">
         <h3 class="text-lg font-bold mb-3">Poredak trećeplasiranih</h3>
         <div id="najbolje-trece" class="bg-white rounded-lg shadow-md border border-club-border overflow-hidden max-w-2xl"></div>
@@ -234,15 +234,17 @@ const TURNIR_PODNASLOV = "„Krunoslav Bencek – Benđo“ · Subota, 04.07.202
     return a.name.localeCompare(b.name, "hr");
   }
 
-  // Poredak grupe: bodovi → međusobni susret (mini-tablica) → gol-razlika → golovi → ime
+  // Poredak grupe: bodovi → gol-razlika → međusobni susret (mini-tablica) → golovi → ime
   function orderGroupH2H(teams, gm) {
-    const byPts = [...teams].sort((a, b) => b.Pts - a.Pts);
+    // primarno: bodovi, pa ukupna gol-razlika
+    const sorted = [...teams].sort((a, b) => (b.Pts - a.Pts) || (b.GD - a.GD));
     const out = [];
     let i = 0;
-    while (i < byPts.length) {
+    while (i < sorted.length) {
       let j = i;
-      while (j < byPts.length && byPts[j].Pts === byPts[i].Pts) j++;
-      const cluster = byPts.slice(i, j);
+      // izjednačeni po bodovima I gol-razlici → odlučuje međusobni omjer
+      while (j < sorted.length && sorted[j].Pts === sorted[i].Pts && sorted[j].GD === sorted[i].GD) j++;
+      const cluster = sorted.slice(i, j);
       if (cluster.length > 1) {
         const names = new Set(cluster.map((t) => t.name));
         const mini = {};
@@ -256,12 +258,11 @@ const TURNIR_PODNASLOV = "„Krunoslav Bencek – Benđo“ · Subota, 04.07.202
         });
         cluster.sort((a, b) => {
           const A = mini[a.name], B = mini[b.name];
-          if (B.p !== A.p) return B.p - A.p;
+          if (B.p !== A.p) return B.p - A.p;                 // međusobni bodovi
           const Agd = A.gf - A.ga, Bgd = B.gf - B.ga;
-          if (Bgd !== Agd) return Bgd - Agd;
-          if (B.gf !== A.gf) return B.gf - A.gf;
-          if (b.GD !== a.GD) return b.GD - a.GD;
-          if (b.GF !== a.GF) return b.GF - a.GF;
+          if (Bgd !== Agd) return Bgd - Agd;                 // međusobna gol-razlika
+          if (B.gf !== A.gf) return B.gf - A.gf;             // međusobni golovi
+          if (b.GF !== a.GF) return b.GF - a.GF;             // ukupni golovi
           return a.name.localeCompare(b.name, "hr");
         });
       }
