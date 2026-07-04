@@ -60,7 +60,7 @@ const TURNIR_PODNASLOV = "„Krunoslav Bencek – Benđo“ · Subota, 04.07.202
     <div class="container-narrow flex gap-2 overflow-x-auto py-2 text-xs font-display uppercase tracking-wider scrollbar-none">
       <a data-target="sec-uzivo" href="#sec-uzivo" class="qn hidden shrink-0 px-3 py-1.5 rounded-full bg-club-light-2 text-club-primary-deep hover:bg-club-light transition">Uživo</a>
       <a data-target="sec-grupe" href="#sec-grupe" class="qn shrink-0 px-3 py-1.5 rounded-full bg-club-light-2 text-club-primary-deep hover:bg-club-light transition">Tablice</a>
-      <a data-target="sec-nokaut" href="#sec-nokaut" class="qn hidden shrink-0 px-3 py-1.5 rounded-full bg-club-light-2 text-club-primary-deep hover:bg-club-light transition">Bracket</a>
+      <a data-target="sec-nokaut" href="#sec-nokaut" class="qn hidden shrink-0 px-3 py-1.5 rounded-full bg-club-light-2 text-club-primary-deep hover:bg-club-light transition">Eliminacija</a>
       <a data-target="sec-raspored" href="#sec-raspored" class="qn shrink-0 px-3 py-1.5 rounded-full bg-club-light-2 text-club-primary-deep hover:bg-club-light transition">Raspored</a>
       <a data-target="sec-strijelci" href="#sec-strijelci" class="qn hidden shrink-0 px-3 py-1.5 rounded-full bg-club-light-2 text-club-primary-deep hover:bg-club-light transition">Strijelci</a>
     </div>
@@ -92,7 +92,8 @@ const TURNIR_PODNASLOV = "„Krunoslav Bencek – Benđo“ · Subota, 04.07.202
     </section>
 
     <section id="sec-nokaut" class="hidden scroll-mt-36">
-      <h2 class="text-2xl md:text-3xl font-bold mb-6">Nokaut faza</h2>
+      <h2 class="text-2xl md:text-3xl font-bold mb-6">Eliminacijska faza</h2>
+      <div id="kvalificirani" class="mb-4"></div>
       <div id="nokaut" class="overflow-x-auto bg-white rounded-lg shadow-md border border-club-border p-4"></div>
     </section>
 
@@ -253,25 +254,25 @@ const TURNIR_PODNASLOV = "„Krunoslav Bencek – Benđo“ · Subota, 04.07.202
 
     // Utakmice: [Redni, Faza, Grupa, Vrijeme, Domaćin, Gost, GolD, GolG, StrDom, StrGost]
     const matches = [];
-    const goals = [];
     utakRows.forEach((r) => {
       const faza = String(r[1] || "").trim();
       if (!faza) return;
-      const grupa = String(r[2] || "").trim();
-      const vrijeme = String(r[3] || "").trim();
       const home = String(r[4] || "").trim();
       const away = String(r[5] || "").trim();
       const played = isNum(r[6]) && isNum(r[7]);
-      const hasTeams = !!(home && away);
+      const strDom = String(r[8] || "").trim();
+      const strGost = String(r[9] || "").trim();
       matches.push({
         redni: isNum(r[0]) ? Number(r[0]) : matches.length + 1,
-        faza, grupa, vrijeme, home, away,
+        faza, grupa: String(r[2] || "").trim(), vrijeme: String(r[3] || "").trim(),
+        home, away,
         gd: played ? Number(r[6]) : null,
         gg: played ? Number(r[7]) : null,
-        played, hasTeams,
+        played, hasTeams: !!(home && away),
+        strDom, strGost,
+        liveH: parseScorers(strDom, home).length,
+        liveA: parseScorers(strGost, away).length,
       });
-      if (home) parseScorers(r[8], home).forEach((x) => goals.push(x));
-      if (away) parseScorers(r[9], away).forEach((x) => goals.push(x));
     });
 
     // Tablice po grupama
@@ -295,7 +296,18 @@ const TURNIR_PODNASLOV = "„Krunoslav Bencek – Benđo“ · Subota, 04.07.202
       standings[g] = ordered;
     }
 
-    // Strijelci: agregiraj po igraču
+    // Je li grupna faza gotova? → auto kvalificirani + auto eliminacija
+    const groupMs = matches.filter((m) => m.faza === "Grupa" && m.hasTeams);
+    const groupsDone = groupMs.length > 0 && groupMs.every((m) => m.played);
+    const qualifiers = groupsDone ? computeQualifiers(standings) : null;
+    if (qualifiers) resolveKnockout(matches, qualifiers);
+
+    // Strijelci (nakon što su eliminacijske ekipe razriješene) — koristi razriješene ekipe
+    const goals = [];
+    matches.forEach((m) => {
+      if (m.home) parseScorers(m.strDom, m.home).forEach((x) => goals.push(x));
+      if (m.away) parseScorers(m.strGost, m.away).forEach((x) => goals.push(x));
+    });
     const scMap = {};
     goals.forEach((x) => {
       const key = x.name + "||" + x.team;
@@ -307,7 +319,51 @@ const TURNIR_PODNASLOV = "„Krunoslav Bencek – Benđo“ · Subota, 04.07.202
       (a, b) => b.golovi - a.golovi || a.igrac.localeCompare(b.igrac, "hr")
     );
 
-    return { groups, matches, standings, scorers };
+    return { groups, matches, standings, scorers, groupsDone, qualifiers };
+  }
+
+  // 8 kvalificiranih: 2 iz svake grupe + 2 najbolje treće; + parovi četvrtfinala
+  function computeQualifiers(s) {
+    if (s.A.length < 4 || s.B.length < 4 || s.C.length < 4) return null;
+    if (!s.A[2] || !s.B[2] || !s.C[2]) return null;
+    const thirds = ["A", "B", "C"].map((g) => ({ ...s[g][2], grupa: g })).sort(cmpTeam);
+    const T1 = thirds[0], T2 = thirds[1];
+    const list = [
+      { lbl: "1. A", name: s.A[0].name }, { lbl: "2. A", name: s.A[1].name },
+      { lbl: "1. B", name: s.B[0].name }, { lbl: "2. B", name: s.B[1].name },
+      { lbl: "1. C", name: s.C[0].name }, { lbl: "2. C", name: s.C[1].name },
+      { lbl: "najbolja 3. (gr. " + T1.grupa + ")", name: T1.name },
+      { lbl: "2. najbolja 3. (gr. " + T2.grupa + ")", name: T2.name },
+    ];
+    // Parovi ČF (unakrsno, bez susreta ekipa iz iste grupe; dvije treće igraju međusobno)
+    const qf = [
+      [s.A[0].name, s.C[1].name],
+      [s.B[0].name, s.A[1].name],
+      [s.C[0].name, s.B[1].name],
+      [T1.name, T2.name],
+    ];
+    return { list, qf };
+  }
+
+  // Popuni eliminacijske ekipe (ako nisu ručno upisane) i propagiraj pobjednike
+  function resolveKnockout(matches, q) {
+    const qf = matches.filter((m) => m.faza === "Četvrtfinale");
+    const sf = matches.filter((m) => m.faza === "Polufinale");
+    const third = matches.filter((m) => m.faza === "Za 3. mjesto")[0];
+    const fin = matches.filter((m) => m.faza === "Finale")[0];
+    const setTeams = (m, h, a) => {
+      if (!m) return;
+      if (!m.home) m.home = h || "";
+      if (!m.away) m.away = a || "";
+      m.hasTeams = !!(m.home && m.away);
+    };
+    const win = (m) => (m && m.played && m.home && m.away ? (m.gd > m.gg ? m.home : (m.gg > m.gd ? m.away : "")) : "");
+    const lose = (m) => (m && m.played && m.home && m.away ? (m.gd > m.gg ? m.away : (m.gg > m.gd ? m.home : "")) : "");
+    for (let i = 0; i < Math.min(4, qf.length); i++) setTeams(qf[i], q.qf[i][0], q.qf[i][1]);
+    setTeams(sf[0], win(qf[0]), win(qf[1]));
+    setTeams(sf[1], win(qf[2]), win(qf[3]));
+    setTeams(fin, win(sf[0]), win(sf[1]));
+    setTeams(third, lose(sf[0]), lose(sf[1]));
   }
 
   // ---------- RENDER ----------
@@ -383,21 +439,25 @@ const TURNIR_PODNASLOV = "„Krunoslav Bencek – Benđo“ · Subota, 04.07.202
         <th class="px-2 py-2 text-center font-display text-xs">G</th>
         <th class="px-3 py-2 text-center font-display text-xs">B</th>
       </tr></thead><tbody>${rows}</tbody></table>
-      <p class="text-xs text-club-muted px-3 py-2">Zelena = prolaz u nokaut fazu.</p>`;
+      <p class="text-xs text-club-muted px-3 py-2">Zelena = prolaz u eliminacijsku fazu.</p>`;
     wrap.classList.remove("hidden");
   }
 
-  function matchCard(m, highlight) {
+  function matchCard(m, highlight, live) {
     const done = m.played;
+    const isLive = !done && live;
     const score = done
       ? `<span class="font-bold text-lg tabular-nums">${m.gd} : ${m.gg}</span>`
+      : isLive
+      ? `<span class="font-bold text-lg tabular-nums text-red-600">${m.liveH} : ${m.liveA}</span>`
       : `<span class="text-club-muted text-sm font-display">${fmtTime(m.vrijeme) || "—"}</span>`;
     const hw = done && m.gd > m.gg ? "font-bold" : "";
     const aw = done && m.gg > m.gd ? "font-bold" : "";
     const ring = highlight ? "ring-2 ring-club-accent" : "";
+    const liveTag = isLive ? `<div class="text-[10px] font-display uppercase text-red-600 flex items-center justify-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-red-600 animate-pulse"></span>uživo</div>` : "";
     return `<div class="flex items-center gap-3 bg-white rounded-lg shadow-sm border border-club-border px-4 py-3 ${ring}">
       <div class="flex-1 flex items-center justify-end gap-2 text-right ${hw}"><span>${esc(m.home || "—")}</span>${avatar(m.home, 24)}</div>
-      <div class="px-2 text-center min-w-[70px]">${score}</div>
+      <div class="px-2 text-center min-w-[70px]">${score}${liveTag}</div>
       <div class="flex-1 flex items-center gap-2 ${aw}">${avatar(m.away, 24)}<span>${esc(m.away || "—")}</span></div>
     </div>`;
   }
@@ -409,12 +469,14 @@ const TURNIR_PODNASLOV = "„Krunoslav Bencek – Benđo“ · Subota, 04.07.202
     const keep = (m) => (filter === "sve" ? true : filter === "odigrano" ? m.played : !m.played);
     const pend = matches.filter((m) => m.hasTeams && !m.played).sort((a, b) => orderKey(a) - orderKey(b));
     const nextRedni = pend.length ? pend[0].redni : -1;
+    const underway = matches.some((m) => m.played || m.liveH > 0 || m.liveA > 0);
+    const isLive = (m) => underway && !m.played && (m.redni === nextRedni || m.liveH > 0 || m.liveA > 0);
     let shown = 0;
     ["A", "B", "C"].forEach((g) => {
       const gm = matches.filter((m) => m.faza === "Grupa" && m.grupa === g && keep(m)).sort((a, b) => orderKey(a) - orderKey(b));
       if (!gm.length) return;
       shown += gm.length;
-      const cards = gm.map((m) => matchCard(m, m.redni === nextRedni)).join("");
+      const cards = gm.map((m) => matchCard(m, m.redni === nextRedni, isLive(m))).join("");
       wrap.insertAdjacentHTML(
         "beforeend",
         `<div><h3 class="font-display uppercase tracking-wider text-sm text-club-primary mb-2 mt-4">Grupa ${g}</h3><div class="space-y-2">${cards}</div></div>`
@@ -424,7 +486,7 @@ const TURNIR_PODNASLOV = "„Krunoslav Bencek – Benđo“ · Subota, 04.07.202
       const ms = matches.filter((m) => m.faza === faza && (m.hasTeams || m.played) && keep(m)).sort((a, b) => orderKey(a) - orderKey(b));
       if (!ms.length) return;
       shown += ms.length;
-      const cards = ms.map((m) => matchCard(m, m.redni === nextRedni)).join("");
+      const cards = ms.map((m) => matchCard(m, m.redni === nextRedni, isLive(m))).join("");
       wrap.insertAdjacentHTML(
         "beforeend",
         `<div><h3 class="font-display uppercase tracking-wider text-sm text-club-accent mb-2 mt-4">${faza}</h3><div class="space-y-2">${cards}</div></div>`
@@ -449,13 +511,18 @@ const TURNIR_PODNASLOV = "„Krunoslav Bencek – Benđo“ · Subota, 04.07.202
       if (!m) m = { home: "", away: "", played: false, hasTeams: false };
       const done = m.played, hw = done && m.gd > m.gg, aw = done && m.gg > m.gd;
       const hn = trunc(m.home || "—"), an = trunc(m.away || "—");
-      const sd = done ? String(m.gd) : "", sg = done ? String(m.gg) : "";
-      parts.push(`<rect x="${x}" y="${y}" width="${BW}" height="${BH}" rx="6" fill="#ffffff" stroke="${BORD}"/>`);
+      const live = !done && (m.liveH > 0 || m.liveA > 0);
+      const RED = "#dc2626";
+      const sd = done ? String(m.gd) : (live ? String(m.liveH) : "");
+      const sg = done ? String(m.gg) : (live ? String(m.liveA) : "");
+      const sdFill = live ? RED : (hw ? PRIM : DEEP);
+      const sgFill = live ? RED : (aw ? PRIM : DEEP);
+      parts.push(`<rect x="${x}" y="${y}" width="${BW}" height="${BH}" rx="6" fill="#ffffff" stroke="${live ? RED : BORD}"/>`);
       parts.push(`<line x1="${x}" y1="${y + BH / 2}" x2="${x + BW}" y2="${y + BH / 2}" stroke="${BORD}"/>`);
       parts.push(`<text x="${x + 10}" y="${y + 18}" font-size="13" font-weight="${hw ? 700 : 500}" fill="${hw ? PRIM : DEEP}">${esc(hn)}</text>`);
-      parts.push(`<text x="${x + BW - 10}" y="${y + 18}" font-size="13" text-anchor="end" font-weight="700" fill="${hw ? PRIM : DEEP}">${esc(sd)}</text>`);
+      parts.push(`<text x="${x + BW - 10}" y="${y + 18}" font-size="13" text-anchor="end" font-weight="700" fill="${sdFill}">${esc(sd)}</text>`);
       parts.push(`<text x="${x + 10}" y="${y + 42}" font-size="13" font-weight="${aw ? 700 : 500}" fill="${aw ? PRIM : DEEP}">${esc(an)}</text>`);
-      parts.push(`<text x="${x + BW - 10}" y="${y + 42}" font-size="13" text-anchor="end" font-weight="700" fill="${aw ? PRIM : DEEP}">${esc(sg)}</text>`);
+      parts.push(`<text x="${x + BW - 10}" y="${y + 42}" font-size="13" text-anchor="end" font-weight="700" fill="${sgFill}">${esc(sg)}</text>`);
     }
     const conn = (pts) => parts.push(`<polyline points="${pts}" fill="none" stroke="${V}" stroke-width="1.5"/>`);
     const lbl = (x, t) => parts.push(`<text x="${x + BW / 2}" y="30" font-size="12" text-anchor="middle" font-family="Oswald,Arial,sans-serif" letter-spacing="1" fill="${MUT}">${t}</text>`);
@@ -487,12 +554,33 @@ const TURNIR_PODNASLOV = "„Krunoslav Bencek – Benđo“ · Subota, 04.07.202
     return `<svg viewBox="0 0 1080 ${H}" xmlns="http://www.w3.org/2000/svg" style="width:100%;min-width:760px;height:auto;font-family:Inter,Arial,sans-serif">${parts.join("")}</svg>`;
   }
 
-  function renderKnockout(matches) {
+  function renderQualifiers(q) {
+    const el = $("kvalificirani");
+    if (!q || !q.list) { el.innerHTML = ""; return; }
+    const chips = q.list.map((x) => `
+      <div class="flex items-center gap-2 bg-white rounded-lg border border-club-border px-3 py-2 shadow-sm">
+        ${avatar(x.name, 22)}
+        <div class="min-w-0">
+          <div class="font-medium text-sm truncate">${esc(x.name)}</div>
+          <div class="text-[11px] text-club-muted uppercase font-display">${esc(x.lbl)}</div>
+        </div>
+      </div>`).join("");
+    el.innerHTML = `
+      <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+        <div class="font-display uppercase tracking-wider text-xs text-green-800 mb-3">Prošli u eliminaciju (8 ekipa)</div>
+        <div class="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">${chips}</div>
+        <p class="text-[11px] text-club-muted mt-3">Parovi četvrtfinala posloženi automatski (unakrsno; dvije najbolje treće igraju međusobno). Ako u Sheet ručno upišeš ekipe u eliminacijske redove, one imaju prednost.</p>
+      </div>`;
+  }
+
+  function renderKnockout(matches, qualifiers) {
     const sec = $("sec-nokaut");
+    renderQualifiers(qualifiers);
     const svg = generateBracket(matches);
-    if (!svg) { sec.classList.add("hidden"); return; }
-    $("nokaut").innerHTML = svg;
-    sec.classList.remove("hidden");
+    $("nokaut").innerHTML = svg || "";
+    $("nokaut").classList.toggle("hidden", !svg);
+    const hasQual = !!(qualifiers && qualifiers.list && qualifiers.list.length);
+    sec.classList.toggle("hidden", !(svg || hasQual));
   }
 
   const golText = (n) => { const a = n % 10, b = n % 100; return (a === 1 && b !== 11) ? "gol" : (a >= 2 && a <= 4 && !(b >= 12 && b <= 14)) ? "gola" : "golova"; };
@@ -539,9 +627,8 @@ const TURNIR_PODNASLOV = "„Krunoslav Bencek – Benđo“ · Subota, 04.07.202
   function renderTop(matches) {
     const sec = $("sec-uzivo");
     const seq = matches.filter((m) => m.hasTeams).slice().sort((a, b) => orderKey(a) - orderKey(b));
-    const played = seq.filter((m) => m.played);
     const pending = seq.filter((m) => !m.played);
-    const underway = played.length > 0;
+    const underway = seq.some((m) => m.played || m.liveH > 0 || m.liveA > 0);
     const faze = (m) => (m.faza === "Grupa" ? "Grupa " + m.grupa : m.faza);
 
     if (!pending.length) { sec.classList.add("hidden"); $("uzivo-live").innerHTML = ""; $("uzivo-next").innerHTML = ""; return false; }
@@ -557,7 +644,9 @@ const TURNIR_PODNASLOV = "„Krunoslav Bencek – Benđo“ · Subota, 04.07.202
         <div class="flex-1 flex items-center justify-end gap-2 text-right font-medium"><span>${esc(cur.home)}</span>${avatar(cur.home, 26)}</div>
         <div class="px-2 text-center shrink-0">
           <div class="text-club-muted text-xs font-display uppercase">${faze(cur)}</div>
-          ${fmtTime(cur.vrijeme) ? `<div class="text-club-primary font-display font-bold text-sm">~${fmtTime(cur.vrijeme)}</div>` : `<div class="text-club-muted text-xs">vs</div>`}
+          ${underway
+            ? `<div class="font-bold text-xl tabular-nums text-red-600">${cur.liveH} : ${cur.liveA}</div><div class="text-[10px] font-display uppercase text-red-600">uživo</div>`
+            : (fmtTime(cur.vrijeme) ? `<div class="text-club-primary font-display font-bold text-sm">~${fmtTime(cur.vrijeme)}</div>` : `<div class="text-club-muted text-xs">vs</div>`)}
         </div>
         <div class="flex-1 flex items-center gap-2 font-medium">${avatar(cur.away, 26)}<span>${esc(cur.away)}</span></div>
       </div>`;
@@ -648,7 +737,7 @@ const TURNIR_PODNASLOV = "„Krunoslav Bencek – Benđo“ · Subota, 04.07.202
       renderProgress(data.matches);
       renderGroups(data.standings);
       renderThirds(data.standings);
-      renderKnockout(data.matches);
+      renderKnockout(data.matches, data.qualifiers);
       renderSchedule(data.matches, RFILTER);
       renderScorers(data.scorers);
 
