@@ -1,8 +1,17 @@
 {
-  "lastUpdated": "2026-07-15T11:10:53.261Z",
+  "lastUpdated": "2026-07-15T12:50:57.427Z",
   "enabled": true,
   "pageId": "55401829691",
   "posts": [
+    {
+      "id": "55401829691_1633134545485706",
+      "message": "",
+      "createdAt": "2026-07-15T11:18:16+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1633134545485706",
+      "images": [
+        "/images/facebook/55401829691_1633134545485706.jpg"
+      ]
+    },
     {
       "id": "55401829691_1633046002161227",
       "message": "",
@@ -251,19 +260,6 @@
       "permalink": "https://www.facebook.com/1551452460320582/posts/1582016370597524",
       "images": [
         "/images/facebook/55401829691_1582016370597524.jpg"
-      ]
-    },
-    {
-      "id": "55401829691_1581875270611634",
-      "message": "Prvaci LNS za 2025/26. Izađite na balkone i pozdravite šampione. Kroz pol sata prolazimo kroz selo...",
-      "createdAt": "2026-05-24T17:30:12+0000",
-      "permalink": "https://www.facebook.com/1551452460320582/posts/1581875270611634",
-      "images": [
-        "/images/facebook/55401829691_1581875270611634_0.jpg",
-        "/images/facebook/55401829691_1581875270611634_1.jpg",
-        "/images/facebook/55401829691_1581875270611634_2.jpg",
-        "/images/facebook/55401829691_1581875270611634_3.jpg",
-        "/images/facebook/55401829691_1581875270611634_4.jpg"
       ]
     }
   ]
