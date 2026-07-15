@@ -1,8 +1,17 @@
 {
-  "lastUpdated": "2026-07-15T07:27:47.568Z",
+  "lastUpdated": "2026-07-15T09:29:12.820Z",
   "enabled": true,
   "pageId": "55401829691",
   "posts": [
+    {
+      "id": "55401829691_1633046002161227",
+      "message": "",
+      "createdAt": "2026-07-15T09:08:42+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1633046002161227",
+      "images": [
+        "/images/facebook/55401829691_1633046002161227.jpg"
+      ]
+    },
     {
       "id": "55401829691_1632519612213866",
       "message": "Veliko hvala našoj reprezentativki, Katarini Vrselji, na vrijednoj donaciji opreme za treninge. Ovo na slikama je samo mali dio svega...\nOvim putem joj čestitamo na povratku u reprezentaciju nakon što je postala majka. ❤️",
@@ -255,15 +264,6 @@
         "/images/facebook/55401829691_1581875270611634_2.jpg",
         "/images/facebook/55401829691_1581875270611634_3.jpg",
         "/images/facebook/55401829691_1581875270611634_4.jpg"
-      ]
-    },
-    {
-      "id": "55401829691_1580498160749345",
-      "message": "Sutra ćemo kod naših sportskih prijatelja iz Seone odigrati zadnju službenu utakmicu ove sezone i podići dugo očekivani trofej Lige NS Našice. 👋",
-      "createdAt": "2026-05-23T06:56:26+0000",
-      "permalink": "https://www.facebook.com/1551452460320582/posts/1580498160749345",
-      "images": [
-        "/images/facebook/55401829691_1580498160749345.jpg"
       ]
     }
   ]
