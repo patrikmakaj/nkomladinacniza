@@ -1,8 +1,17 @@
 {
-  "lastUpdated": "2026-07-19T10:51:53.443Z",
+  "lastUpdated": "2026-07-19T11:54:14.450Z",
   "enabled": true,
   "pageId": "55401829691",
   "posts": [
+    {
+      "id": "55401829691_1636841045115056",
+      "message": "",
+      "createdAt": "2026-07-19T11:14:25+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1636841045115056",
+      "images": [
+        "/images/facebook/55401829691_1636841045115056.jpg"
+      ]
+    },
     {
       "id": "55401829691_1633134545485706",
       "message": "",
@@ -252,16 +261,6 @@
       "images": [
         "/images/facebook/55401829691_1561009728709529.jpg"
       ]
-    },
-    {
-      "id": "55401829691_1582016370597524",
-      "message": "Uskoro više kad se otrijeznimo...",
-      "createdAt": "2026-05-24T21:33:18+0000",
-      "permalink": "https://www.facebook.com/1551452460320582/posts/1582016370597524",
-      "images": [
-        "/images/facebook/55401829691_1582016370597524.jpg"
-      ]
     }
-  ],
-  "lastError": "Graph API HTTP 400: {\"error\":{\"message\":\"This Page access token belongs to a Page that is not accessible.\",\"type\":\"OAuthException\",\"code\":190,\"fbtrace_id\":\"ASbq81Lv7sP5DpENXFd9YPL\"}}"
+  ]
 }
