@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-07-20T08:22:48.974Z",
+  "lastUpdated": "2026-07-20T11:21:02.677Z",
   "enabled": true,
   "pageId": "55401829691",
   "albums": [
@@ -7,367 +7,367 @@
       "id": "482830940516078",
       "name": "Preneseno s mobitela",
       "createdAt": "2022-08-31T22:19:54+0000",
-      "updatedAt": "2026-07-15T11:18:16+0000",
+      "updatedAt": "2026-07-20T09:17:41+0000",
       "permalink": "https://www.facebook.com/album.php?fbid=482830940516078&id=1551452460320582&aid=1073741828",
       "cover": "/images/facebook-albums/482830940516078/cover.jpg",
-      "count": 4598,
+      "count": 4599,
       "photos": [
         {
-          "id": "1633134518819042",
+          "id": "1637629868369507",
           "src": "/images/facebook-albums/482830940516078/0.jpg",
+          "caption": "",
+          "createdAt": "2026-07-20T09:17:41+0000"
+        },
+        {
+          "id": "1633134518819042",
+          "src": "/images/facebook-albums/482830940516078/1.jpg",
           "caption": "",
           "createdAt": "2026-07-15T11:18:16+0000"
         },
         {
           "id": "1632516815547479",
-          "src": "/images/facebook-albums/482830940516078/1.jpg",
-          "caption": "",
-          "createdAt": "2026-07-14T18:50:14+0000"
-        },
-        {
-          "id": "1632516802214147",
           "src": "/images/facebook-albums/482830940516078/2.jpg",
           "caption": "",
           "createdAt": "2026-07-14T18:50:14+0000"
         },
         {
-          "id": "1624332463032581",
+          "id": "1632516802214147",
           "src": "/images/facebook-albums/482830940516078/3.jpg",
           "caption": "",
-          "createdAt": "2026-07-05T19:15:28+0000"
+          "createdAt": "2026-07-14T18:50:14+0000"
         },
         {
-          "id": "1624332406365920",
+          "id": "1624332463032581",
           "src": "/images/facebook-albums/482830940516078/4.jpg",
           "caption": "",
           "createdAt": "2026-07-05T19:15:28+0000"
         },
         {
-          "id": "1624332393032588",
+          "id": "1624332406365920",
           "src": "/images/facebook-albums/482830940516078/5.jpg",
           "caption": "",
           "createdAt": "2026-07-05T19:15:28+0000"
         },
         {
-          "id": "1624332356365925",
+          "id": "1624332393032588",
           "src": "/images/facebook-albums/482830940516078/6.jpg",
           "caption": "",
           "createdAt": "2026-07-05T19:15:28+0000"
         },
         {
-          "id": "1624332336365927",
+          "id": "1624332356365925",
           "src": "/images/facebook-albums/482830940516078/7.jpg",
           "caption": "",
           "createdAt": "2026-07-05T19:15:28+0000"
         },
         {
-          "id": "1624332306365930",
+          "id": "1624332336365927",
           "src": "/images/facebook-albums/482830940516078/8.jpg",
           "caption": "",
           "createdAt": "2026-07-05T19:15:28+0000"
         },
         {
-          "id": "1624332226365938",
+          "id": "1624332306365930",
           "src": "/images/facebook-albums/482830940516078/9.jpg",
           "caption": "",
           "createdAt": "2026-07-05T19:15:28+0000"
         },
         {
-          "id": "1624332176365943",
+          "id": "1624332226365938",
           "src": "/images/facebook-albums/482830940516078/10.jpg",
           "caption": "",
           "createdAt": "2026-07-05T19:15:28+0000"
         },
         {
-          "id": "1624332163032611",
+          "id": "1624332176365943",
           "src": "/images/facebook-albums/482830940516078/11.jpg",
           "caption": "",
           "createdAt": "2026-07-05T19:15:28+0000"
         },
         {
-          "id": "1624332123032615",
+          "id": "1624332163032611",
           "src": "/images/facebook-albums/482830940516078/12.jpg",
           "caption": "",
           "createdAt": "2026-07-05T19:15:28+0000"
         },
         {
-          "id": "1624332109699283",
+          "id": "1624332123032615",
           "src": "/images/facebook-albums/482830940516078/13.jpg",
           "caption": "",
           "createdAt": "2026-07-05T19:15:28+0000"
         },
         {
-          "id": "1624332069699287",
+          "id": "1624332109699283",
           "src": "/images/facebook-albums/482830940516078/14.jpg",
           "caption": "",
           "createdAt": "2026-07-05T19:15:28+0000"
         },
         {
-          "id": "1624332053032622",
+          "id": "1624332069699287",
           "src": "/images/facebook-albums/482830940516078/15.jpg",
           "caption": "",
           "createdAt": "2026-07-05T19:15:28+0000"
         },
         {
-          "id": "1624332009699293",
+          "id": "1624332053032622",
           "src": "/images/facebook-albums/482830940516078/16.jpg",
           "caption": "",
           "createdAt": "2026-07-05T19:15:28+0000"
         },
         {
-          "id": "1624331993032628",
+          "id": "1624332009699293",
           "src": "/images/facebook-albums/482830940516078/17.jpg",
           "caption": "",
           "createdAt": "2026-07-05T19:15:28+0000"
         },
         {
-          "id": "1624331953032632",
+          "id": "1624331993032628",
           "src": "/images/facebook-albums/482830940516078/18.jpg",
           "caption": "",
           "createdAt": "2026-07-05T19:15:28+0000"
         },
         {
-          "id": "1624331946365966",
+          "id": "1624331953032632",
           "src": "/images/facebook-albums/482830940516078/19.jpg",
           "caption": "",
           "createdAt": "2026-07-05T19:15:28+0000"
         },
         {
-          "id": "1623144569818037",
+          "id": "1624331946365966",
           "src": "/images/facebook-albums/482830940516078/20.jpg",
           "caption": "",
-          "createdAt": "2026-07-04T15:36:34+0000"
+          "createdAt": "2026-07-05T19:15:28+0000"
         },
         {
-          "id": "1623144519818042",
+          "id": "1623144569818037",
           "src": "/images/facebook-albums/482830940516078/21.jpg",
           "caption": "",
           "createdAt": "2026-07-04T15:36:34+0000"
         },
         {
-          "id": "1623144486484712",
+          "id": "1623144519818042",
           "src": "/images/facebook-albums/482830940516078/22.jpg",
           "caption": "",
           "createdAt": "2026-07-04T15:36:34+0000"
         },
         {
-          "id": "1623144433151384",
+          "id": "1623144486484712",
           "src": "/images/facebook-albums/482830940516078/23.jpg",
           "caption": "",
           "createdAt": "2026-07-04T15:36:34+0000"
         },
         {
-          "id": "1623144389818055",
+          "id": "1623144433151384",
           "src": "/images/facebook-albums/482830940516078/24.jpg",
           "caption": "",
           "createdAt": "2026-07-04T15:36:34+0000"
         },
         {
-          "id": "1622832329849261",
+          "id": "1623144389818055",
           "src": "/images/facebook-albums/482830940516078/25.jpg",
+          "caption": "",
+          "createdAt": "2026-07-04T15:36:34+0000"
+        },
+        {
+          "id": "1622832329849261",
+          "src": "/images/facebook-albums/482830940516078/26.jpg",
           "caption": "Sve za turnir je spremno. Od 16:30 sati je polaganje cvijeća i paljenje lampiona ispred spomen ploče na pročelju doma postavljene u sjećanje na Benđu. Prva utakmica počinje u 17 sati. Zahvaljujući našoj IT ekipi Ivan Makaj  i Patrik Makaj    ove godine sve rezultate i tablice možete pratiti online, tako da smo i po tom pitanju napravili veliki iskorak što će uvelike olakšati praćenje turnira svim igračima kao i svim gledateljima a i onima koji su daleko ( više na fotki u privitku). Uz naravno dobar nogomet tu su već i tradicionalne na daleko poznate pečene kobasice na tanjuru uz veliki izbor hladne cuge. Za glazbu je zadužen DJ. Poziv svima da provedete zanimljivu večer u Nk Omladinac Niza",
           "createdAt": "2026-07-04T08:59:47+0000"
         },
         {
           "id": "1622325259899968",
-          "src": "/images/facebook-albums/482830940516078/26.jpg",
+          "src": "/images/facebook-albums/482830940516078/27.jpg",
           "caption": "Preko ovog linka možete pratiti raspored utakmica i rezultate.\nhttps://omladinacniza.hr/turnir/",
           "createdAt": "2026-07-03T20:19:26+0000"
         },
         {
           "id": "1621740183291809",
-          "src": "/images/facebook-albums/482830940516078/27.jpg",
+          "src": "/images/facebook-albums/482830940516078/28.jpg",
           "caption": "Molim ekipu \"Mlade nade\" da se jave na broj mobitela sa plakata radi dogovora za turnir.",
           "createdAt": "2026-07-03T08:11:30+0000"
         },
         {
           "id": "1595402849258876",
-          "src": "/images/facebook-albums/482830940516078/28.jpg",
+          "src": "/images/facebook-albums/482830940516078/29.jpg",
           "caption": "Rezervirajte 4.7. za tradicionalni turnir na asfaltu koji od nedavno nosi ime našeg voljenog Benđe. Turnir klasično dobar, kao i kobasice... Vidimo se😉\nPrijave i dodatne informacije kod Danijela...",
           "createdAt": "2026-06-06T12:02:57+0000"
         },
         {
           "id": "1588763329922828",
-          "src": "/images/facebook-albums/482830940516078/29.jpg",
-          "caption": "",
-          "createdAt": "2026-05-31T13:33:45+0000"
-        },
-        {
-          "id": "1588763286589499",
           "src": "/images/facebook-albums/482830940516078/30.jpg",
           "caption": "",
           "createdAt": "2026-05-31T13:33:45+0000"
         },
         {
-          "id": "1588763273256167",
+          "id": "1588763286589499",
           "src": "/images/facebook-albums/482830940516078/31.jpg",
           "caption": "",
           "createdAt": "2026-05-31T13:33:45+0000"
         },
         {
-          "id": "1588763216589506",
+          "id": "1588763273256167",
           "src": "/images/facebook-albums/482830940516078/32.jpg",
           "caption": "",
           "createdAt": "2026-05-31T13:33:45+0000"
         },
         {
-          "id": "1588763196589508",
+          "id": "1588763216589506",
           "src": "/images/facebook-albums/482830940516078/33.jpg",
           "caption": "",
           "createdAt": "2026-05-31T13:33:45+0000"
         },
         {
-          "id": "1587677123364782",
+          "id": "1588763196589508",
           "src": "/images/facebook-albums/482830940516078/34.jpg",
+          "caption": "",
+          "createdAt": "2026-05-31T13:33:45+0000"
+        },
+        {
+          "id": "1587677123364782",
+          "src": "/images/facebook-albums/482830940516078/35.jpg",
           "caption": "Sretan vam Dan državnosti Republike Hrvatske! 🇭🇷\nVidimo se večeras na kirvajskoj zabavi.\nOvim putem čestitamo 80. rođendan NK Željezničaru iz Markovca Našičkog. 💙🤍",
           "createdAt": "2026-05-30T12:29:13+0000"
         },
         {
           "id": "1582855530513608",
-          "src": "/images/facebook-albums/482830940516078/35.jpg",
-          "caption": "",
-          "createdAt": "2026-05-25T19:26:01+0000"
-        },
-        {
-          "id": "1582855493846945",
           "src": "/images/facebook-albums/482830940516078/36.jpg",
           "caption": "",
           "createdAt": "2026-05-25T19:26:01+0000"
         },
         {
-          "id": "1582855473846947",
+          "id": "1582855493846945",
           "src": "/images/facebook-albums/482830940516078/37.jpg",
           "caption": "",
           "createdAt": "2026-05-25T19:26:01+0000"
         },
         {
-          "id": "1582855437180284",
+          "id": "1582855473846947",
           "src": "/images/facebook-albums/482830940516078/38.jpg",
           "caption": "",
           "createdAt": "2026-05-25T19:26:01+0000"
         },
         {
-          "id": "1582855420513619",
+          "id": "1582855437180284",
           "src": "/images/facebook-albums/482830940516078/39.jpg",
           "caption": "",
           "createdAt": "2026-05-25T19:26:01+0000"
         },
         {
-          "id": "1582855387180289",
+          "id": "1582855420513619",
           "src": "/images/facebook-albums/482830940516078/40.jpg",
           "caption": "",
           "createdAt": "2026-05-25T19:26:01+0000"
         },
         {
-          "id": "1582855367180291",
+          "id": "1582855387180289",
           "src": "/images/facebook-albums/482830940516078/41.jpg",
           "caption": "",
           "createdAt": "2026-05-25T19:26:01+0000"
         },
         {
-          "id": "1582855333846961",
+          "id": "1582855367180291",
           "src": "/images/facebook-albums/482830940516078/42.jpg",
           "caption": "",
           "createdAt": "2026-05-25T19:26:01+0000"
         },
         {
-          "id": "1582855317180296",
+          "id": "1582855333846961",
           "src": "/images/facebook-albums/482830940516078/43.jpg",
           "caption": "",
           "createdAt": "2026-05-25T19:26:01+0000"
         },
         {
-          "id": "1582855270513634",
+          "id": "1582855317180296",
           "src": "/images/facebook-albums/482830940516078/44.jpg",
           "caption": "",
           "createdAt": "2026-05-25T19:26:01+0000"
         },
         {
-          "id": "1582855253846969",
+          "id": "1582855270513634",
           "src": "/images/facebook-albums/482830940516078/45.jpg",
           "caption": "",
           "createdAt": "2026-05-25T19:26:01+0000"
         },
         {
-          "id": "1582855220513639",
+          "id": "1582855253846969",
           "src": "/images/facebook-albums/482830940516078/46.jpg",
           "caption": "",
           "createdAt": "2026-05-25T19:26:01+0000"
         },
         {
-          "id": "1582855200513641",
+          "id": "1582855220513639",
           "src": "/images/facebook-albums/482830940516078/47.jpg",
           "caption": "",
           "createdAt": "2026-05-25T19:26:01+0000"
         },
         {
-          "id": "1582855153846979",
+          "id": "1582855200513641",
           "src": "/images/facebook-albums/482830940516078/48.jpg",
           "caption": "",
           "createdAt": "2026-05-25T19:26:01+0000"
         },
         {
-          "id": "1582855140513647",
+          "id": "1582855153846979",
           "src": "/images/facebook-albums/482830940516078/49.jpg",
           "caption": "",
           "createdAt": "2026-05-25T19:26:01+0000"
         },
         {
-          "id": "1582855100513651",
+          "id": "1582855140513647",
           "src": "/images/facebook-albums/482830940516078/50.jpg",
           "caption": "",
           "createdAt": "2026-05-25T19:26:01+0000"
         },
         {
-          "id": "1582855083846986",
+          "id": "1582855100513651",
           "src": "/images/facebook-albums/482830940516078/51.jpg",
           "caption": "",
           "createdAt": "2026-05-25T19:26:01+0000"
         },
         {
-          "id": "1582855043846990",
+          "id": "1582855083846986",
           "src": "/images/facebook-albums/482830940516078/52.jpg",
           "caption": "",
           "createdAt": "2026-05-25T19:26:01+0000"
         },
         {
-          "id": "1582855030513658",
+          "id": "1582855043846990",
           "src": "/images/facebook-albums/482830940516078/53.jpg",
           "caption": "",
           "createdAt": "2026-05-25T19:26:01+0000"
         },
         {
-          "id": "1582854997180328",
+          "id": "1582855030513658",
           "src": "/images/facebook-albums/482830940516078/54.jpg",
           "caption": "",
           "createdAt": "2026-05-25T19:26:01+0000"
         },
         {
-          "id": "1582854977180330",
+          "id": "1582854997180328",
           "src": "/images/facebook-albums/482830940516078/55.jpg",
           "caption": "",
           "createdAt": "2026-05-25T19:26:01+0000"
         },
         {
-          "id": "1582854943847000",
+          "id": "1582854977180330",
           "src": "/images/facebook-albums/482830940516078/56.jpg",
           "caption": "",
           "createdAt": "2026-05-25T19:26:01+0000"
         },
         {
-          "id": "1582854923847002",
+          "id": "1582854943847000",
           "src": "/images/facebook-albums/482830940516078/57.jpg",
           "caption": "",
           "createdAt": "2026-05-25T19:26:01+0000"
         },
         {
-          "id": "1582854887180339",
+          "id": "1582854923847002",
           "src": "/images/facebook-albums/482830940516078/58.jpg",
           "caption": "",
           "createdAt": "2026-05-25T19:26:01+0000"
         },
         {
-          "id": "1582854853847009",
+          "id": "1582854887180339",
           "src": "/images/facebook-albums/482830940516078/59.jpg",
           "caption": "",
           "createdAt": "2026-05-25T19:26:01+0000"

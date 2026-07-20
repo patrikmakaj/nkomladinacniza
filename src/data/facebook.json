@@ -1,8 +1,17 @@
 {
-  "lastUpdated": "2026-07-20T08:22:45.991Z",
+  "lastUpdated": "2026-07-20T11:20:54.818Z",
   "enabled": true,
   "pageId": "55401829691",
   "posts": [
+    {
+      "id": "55401829691_1637630041702823",
+      "message": "",
+      "createdAt": "2026-07-20T09:17:41+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1637630041702823",
+      "images": [
+        "/images/facebook/55401829691_1637630041702823.jpg"
+      ]
+    },
     {
       "id": "55401829691_1636841045115056",
       "message": "",
@@ -251,15 +260,6 @@
       "permalink": "https://www.facebook.com/1551452460320582/posts/1582415067224321",
       "images": [
         "/images/facebook/55401829691_1582415067224321.jpg"
-      ]
-    },
-    {
-      "id": "55401829691_1561009728709529",
-      "message": "",
-      "createdAt": "2026-05-25T09:26:35+0000",
-      "permalink": "https://www.facebook.com/events/1561009728709529/",
-      "images": [
-        "/images/facebook/55401829691_1561009728709529.jpg"
       ]
     }
   ]
