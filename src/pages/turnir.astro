@@ -555,7 +555,11 @@ const PODNASLOV = "DŠA Niza · Subota 25.07. od 17:00 · Igralište u Nizi";
     const faze = (m) => (m.faza === "Grupa" ? "Grupa " + m.grupa : m.faza);
     if (!pending.length) { sec.classList.add("hidden"); $("uzivo-live").innerHTML = ""; $("uzivo-next").innerHTML = ""; return; }
 
-    const cur = pending.slice(0, COURTS);
+    const curR = new Set();
+    const cur = [];
+    ["1", "2"].forEach((tn) => { const m = pending.find((x) => String(x.teren) === tn && !curR.has(x.redni)); if (m) { cur.push(m); curR.add(m.redni); } });
+    for (const m of pending) { if (cur.length >= COURTS) break; if (!curR.has(m.redni)) { cur.push(m); curR.add(m.redni); } }
+    cur.sort((a, b) => orderKey(a) - orderKey(b));
     const dot = underway ? '<span class="w-2.5 h-2.5 rounded-full bg-[#CF2130] animate-pulse"></span>' : '<span class="w-2.5 h-2.5 rounded-full bg-[#F6C500]"></span>';
     const curCards = cur.map((m) => `
       <div class="flex items-center gap-3 rounded-lg border-2 ${underway ? "border-[#CF2130]" : "border-[#F6C500]"} bg-white px-4 py-3 shadow-sm">
@@ -565,7 +569,7 @@ const PODNASLOV = "DŠA Niza · Subota 25.07. od 17:00 · Igralište u Nizi";
       </div>`).join("");
     $("uzivo-live").innerHTML = `<h2 class="text-lg font-bold mb-2 flex items-center gap-2 text-[#10275c]">${dot}${underway ? "Trenutno na terenu" : "Prvo na redu"}</h2><div class="space-y-2">${curCards}</div>`;
 
-    const nextList = pending.slice(COURTS, COURTS + 4);
+    const nextList = pending.filter((m) => !curR.has(m.redni)).slice(0, 4);
     $("uzivo-next").innerHTML = nextList.length ? `<h3 class="text-sm font-display uppercase tracking-wider text-[#64748B] mb-2 mt-4">Slijedi</h3><div class="space-y-2">${nextList.map((m) => `
       <div class="flex items-center gap-3 rounded-lg border border-[#C9D4E8] bg-white px-4 py-2.5 shadow-sm">
         <span class="shrink-0 text-[#64748B] text-[11px] font-display uppercase w-14">${faze(m)}</span>
