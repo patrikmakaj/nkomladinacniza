@@ -237,7 +237,7 @@ const PODNASLOV = "DŠA Niza · Subota 25.07. od 17:00 · Igralište u Nizi";
   const linkTeam = (name) => { if (!name) return "—"; const st = name === FOLLOW ? '<span class="text-[#F6C500]">★</span>' : ""; return `<span class="team-link cursor-pointer hover:underline decoration-dotted underline-offset-2" data-team="${esc(name)}">${st}${esc(name)}</span>`; };
 
   const timeMin = (v) => { const s = String(v || ""); const m = s.match(/(\d{1,2}):(\d{2})/); if (!m) return null; let h = +m[1]; const min = +m[2]; if (/pm/i.test(s) && h < 12) h += 12; if (/am/i.test(s) && h === 12) h = 0; return h * 60 + min; };
-  const orderKey = (m) => { const t = timeMin(m.vrijeme); return t === null ? 100000 + (m.redni || 0) : t; };
+  const orderKey = (m) => { let t = timeMin(m.vrijeme); if (t === null) return 100000 + (m.redni || 0); if (t < 720) t += 1440; return t; };
   const fmtTime = (v) => { const t = timeMin(v); if (t === null) return ""; return String(Math.floor(t / 60)).padStart(2, "0") + ":" + String(t % 60).padStart(2, "0"); };
 
   function parseGviz(text) {
