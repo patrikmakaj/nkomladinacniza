@@ -51,6 +51,7 @@ const PODNASLOV = "DŠA Niza · Subota 25.07. od 17:00 · Igralište u Nizi";
       <a data-target="sec-grupe" href="#sec-grupe" class="qn shrink-0 px-3 py-1.5 rounded-full bg-[#EAF0FB] text-[#10275c]">Tablice</a>
       <a data-target="sec-nokaut" href="#sec-nokaut" class="qn hidden shrink-0 px-3 py-1.5 rounded-full bg-[#EAF0FB] text-[#10275c]">Eliminacija</a>
       <a data-target="sec-raspored" href="#sec-raspored" class="qn shrink-0 px-3 py-1.5 rounded-full bg-[#EAF0FB] text-[#10275c]">Raspored</a>
+      <a data-target="sec-statistika" href="#sec-statistika" class="qn hidden shrink-0 px-3 py-1.5 rounded-full bg-[#EAF0FB] text-[#10275c]">Statistika</a>
     </div>
   </nav>
 
@@ -62,6 +63,7 @@ const PODNASLOV = "DŠA Niza · Subota 25.07. od 17:00 · Igralište u Nizi";
 
     <div id="countdown" class="hidden mb-6"></div>
     <div id="progress" class="hidden mb-6"></div>
+    <div id="tvoja-ekipa" class="hidden mb-6"></div>
 
     <section id="sec-prijave" class="hidden scroll-mt-36">
       <h2 class="text-2xl md:text-3xl font-bold mb-1 text-[#10275c]">Prijavljene ekipe</h2>
@@ -88,8 +90,13 @@ const PODNASLOV = "DŠA Niza · Subota 25.07. od 17:00 · Igralište u Nizi";
     </section>
 
     <section id="sec-raspored" class="hidden scroll-mt-36">
+      <h2 class="text-2xl md:text-3xl font-bold text-[#10275c] mb-4">Raspored i rezultati</h2>
       <div class="flex items-center gap-4 mb-6 flex-wrap">
-        <h2 class="text-2xl md:text-3xl font-bold text-[#10275c]">Raspored i rezultati</h2>
+        <div class="flex gap-1 text-xs font-display uppercase tracking-wider" id="vm">
+          <button data-v="grupe" class="vmbtn px-3 py-1.5 rounded-full bg-[#1e4fa0] text-white">Po grupama</button>
+          <button data-v="teren" class="vmbtn px-3 py-1.5 rounded-full bg-[#EAF0FB] text-[#10275c]">Po terenu</button>
+          <button data-v="vrijeme" class="vmbtn px-3 py-1.5 rounded-full bg-[#EAF0FB] text-[#10275c]">Po vremenu</button>
+        </div>
         <div class="flex gap-1 text-xs font-display uppercase tracking-wider" id="rf">
           <button data-f="sve" class="rfbtn px-3 py-1.5 rounded-full bg-[#1e4fa0] text-white">Sve</button>
           <button data-f="preostalo" class="rfbtn px-3 py-1.5 rounded-full bg-[#EAF0FB] text-[#10275c]">Preostalo</button>
@@ -97,6 +104,11 @@ const PODNASLOV = "DŠA Niza · Subota 25.07. od 17:00 · Igralište u Nizi";
         </div>
       </div>
       <div id="raspored" class="space-y-3"></div>
+    </section>
+
+    <section id="sec-statistika" class="hidden scroll-mt-36">
+      <h2 class="text-2xl md:text-3xl font-bold text-[#10275c] mb-6">Statistika turnira</h2>
+      <div id="statistika" class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3"></div>
     </section>
   </main>
 
@@ -162,7 +174,10 @@ const PODNASLOV = "DŠA Niza · Subota 25.07. od 17:00 · Igralište u Nizi";
 
         <h3 class="font-display font-bold text-[#10275c] uppercase tracking-wide mt-4 mb-1">5. Teren i bacanje</h3>
         <ul class="list-disc pl-5 space-y-1">
-          <li>Baca se <strong>iza označene linije</strong>; prijelaz/gaženje linije pri bacanju = prekršaj (boća se poništava).</li>
+          <li>Baca se <strong>iza označene linije</strong>; prijelaz/gaženje linije za bacanje = prekršaj (boća se poništava).</li>
+          <li>Igra se <strong>do zadnje crte</strong> terena.</li>
+          <li>Boća koja <strong>izađe iz granica terena više se ne računa</strong> (izbacuje se iz igre).</li>
+          <li>Boća koja <strong>dodiruje liniju i dalje se računa</strong> (ostaje u igri).</li>
           <li>Bulin se baca na udaljenost <strong>otprilike 6–10 m</strong> i mora ostati unutar granica terena.</li>
           <li>Ako bulin izađe iz terena — baca se ponovno.</li>
         </ul>
@@ -204,7 +219,8 @@ const PODNASLOV = "DŠA Niza · Subota 25.07. od 17:00 · Igralište u Nizi";
 <script define:vars={{ SHEET_ID }}>
   const REFRESH_MS = 25000;
   const COURTS = 2; // broj terena (paralelno)
-  let LAST = null, RFILTER = "sve";
+  let LAST = null, RFILTER = "sve", VMODE = "grupe", FOLLOW = "";
+  try { FOLLOW = localStorage.getItem("bocanje_follow") || ""; } catch (e) {}
   const START = new Date(2026, 6, 25, 17, 0, 0); // 25.07.2026. 17:00
   const gvizUrl = (sheet) =>
     `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&headers=1&sheet=${encodeURIComponent(sheet)}&_=${Date.now()}`;
@@ -218,7 +234,7 @@ const PODNASLOV = "DŠA Niza · Subota 25.07. od 17:00 · Igralište u Nizi";
   const initials = (name) => { const w = String(name || "").trim().split(/\s+/).filter(Boolean); if (!w.length) return "?"; return (w.length === 1 ? w[0].slice(0, 2) : w[0][0] + w[1][0]).toUpperCase(); };
   const avatar = (name, size = 22) => { if (!name) return ""; const c = AV_COLORS[hashN(name) % AV_COLORS.length]; return `<span class="inline-flex items-center justify-center rounded-full text-white font-bold shrink-0" style="width:${size}px;height:${size}px;font-size:${Math.round(size * 0.42)}px;background:${c}">${esc(initials(name))}</span>`; };
   const medal = (r) => (r === 1 ? "🥇" : r === 2 ? "🥈" : r === 3 ? "🥉" : "");
-  const linkTeam = (name) => name ? `<span class="team-link cursor-pointer hover:underline decoration-dotted underline-offset-2" data-team="${esc(name)}">${esc(name)}</span>` : "—";
+  const linkTeam = (name) => { if (!name) return "—"; const st = name === FOLLOW ? '<span class="text-[#F6C500]">★</span>' : ""; return `<span class="team-link cursor-pointer hover:underline decoration-dotted underline-offset-2" data-team="${esc(name)}">${st}${esc(name)}</span>`; };
 
   const timeMin = (v) => { const s = String(v || ""); const m = s.match(/(\d{1,2}):(\d{2})/); if (!m) return null; let h = +m[1]; const min = +m[2]; if (/pm/i.test(s) && h < 12) h += 12; if (/am/i.test(s) && h === 12) h = 0; return h * 60 + min; };
   const orderKey = (m) => { const t = timeMin(m.vrijeme); return t === null ? 100000 + (m.redni || 0) : t; };
@@ -358,7 +374,7 @@ const PODNASLOV = "DŠA Niza · Subota 25.07. od 17:00 · Igralište u Nizi";
     for (const g of ["A", "B", "C", "D"]) {
       if (!standings[g] || !standings[g].length) continue;
       const rows = standings[g].map((t) => {
-        const qual = t.rank <= 2 ? "bg-green-50" : "";
+        const qual = t.name === FOLLOW ? "bg-[#FFF3C4]" : (t.rank <= 2 ? "bg-green-50" : "");
         const rk = t.rank === 1 ? "🥇" : t.rank;
         return `<tr class="border-b border-[#C9D4E8] ${qual}">
           <td class="px-2 py-2 font-display text-center">${rk}</td>
@@ -395,32 +411,35 @@ const PODNASLOV = "DŠA Niza · Subota 25.07. od 17:00 · Igralište u Nizi";
     const aw = done && m.bg > m.bd ? "font-bold" : "";
     const ring = highlight ? "ring-2 ring-[#F6C500]" : "";
     const terenTag = !done && m.teren ? `<div class="text-[10px] text-[#64748B] font-display uppercase leading-tight">Teren ${esc(m.teren)}</div>` : "";
-    return `<div class="flex items-center gap-3 bg-white rounded-lg shadow-sm border border-[#C9D4E8] px-4 py-3 ${ring}">
+    const foll = (FOLLOW && (m.home === FOLLOW || m.away === FOLLOW)) ? "bg-[#FFF9E0]" : "bg-white";
+    return `<div class="flex items-center gap-3 ${foll} rounded-lg shadow-sm border border-[#C9D4E8] px-4 py-3 ${ring}">
       <div class="flex-1 flex items-center justify-end gap-2 text-right ${hw}"><span>${linkTeam(m.home)}</span>${avatar(m.home, 24)}</div>
       <div class="px-2 text-center min-w-[70px] shrink-0">${score}${terenTag}</div>
       <div class="flex-1 flex items-center gap-2 ${aw}">${avatar(m.away, 24)}<span>${linkTeam(m.away)}</span></div>
     </div>`;
   }
 
-  function renderSchedule(matches, filter) {
-    filter = filter || "sve";
+  function renderSchedule(matches, filter, vmode) {
+    filter = filter || "sve"; vmode = vmode || "grupe";
     const wrap = $("raspored"); wrap.innerHTML = "";
     const keep = (m) => (filter === "sve" ? true : filter === "odigrano" ? m.played : !m.played);
     const pend = matches.filter((m) => m.hasTeams && !m.played).sort((a, b) => orderKey(a) - orderKey(b));
     const nextSet = new Set(pend.slice(0, COURTS).map((m) => m.redni));
+    const grpOk = (m) => (m.faza === "Grupa" ? m.hasTeams : (m.hasTeams || m.played));
+    const pool = matches.filter((m) => grpOk(m) && keep(m));
+    const card = (m) => matchCard(m, nextSet.has(m.redni), fmtTime(m.vrijeme));
+    const byT = (a, b) => orderKey(a) - orderKey(b);
     let shown = 0;
-    ["A", "B", "C", "D"].forEach((g) => {
-      const gm = matches.filter((m) => m.faza === "Grupa" && m.grupa === g && m.hasTeams && keep(m)).sort((a, b) => orderKey(a) - orderKey(b));
-      if (!gm.length) return; shown += gm.length;
-      const cards = gm.map((m) => matchCard(m, nextSet.has(m.redni), fmtTime(m.vrijeme))).join("");
-      wrap.insertAdjacentHTML("beforeend", `<div><h3 class="font-display uppercase tracking-wider text-sm text-[#1e4fa0] mb-2 mt-4">Grupa ${g}</h3><div class="space-y-2">${cards}</div></div>`);
-    });
-    ["Četvrtfinale", "Polufinale", "Za 3. mjesto", "Finale"].forEach((faza) => {
-      const ms = matches.filter((m) => m.faza === faza && (m.hasTeams || m.played) && keep(m)).sort((a, b) => orderKey(a) - orderKey(b));
-      if (!ms.length) return; shown += ms.length;
-      const cards = ms.map((m) => matchCard(m, nextSet.has(m.redni), fmtTime(m.vrijeme))).join("");
-      wrap.insertAdjacentHTML("beforeend", `<div><h3 class="font-display uppercase tracking-wider text-sm text-[#CF2130] mb-2 mt-4">${faza}</h3><div class="space-y-2">${cards}</div></div>`);
-    });
+    const section = (title, cls, arr) => { if (!arr.length) return; shown += arr.length; wrap.insertAdjacentHTML("beforeend", `<div><h3 class="font-display uppercase tracking-wider text-sm ${cls} mb-2 mt-4">${title}</h3><div class="space-y-2">${arr.map(card).join("")}</div></div>`); };
+    if (vmode === "teren") {
+      ["1", "2"].forEach((tn) => section("Teren " + tn, "text-[#1e4fa0]", pool.filter((m) => String(m.teren) === tn).sort(byT)));
+      section("Ostalo / eliminacija", "text-[#CF2130]", pool.filter((m) => String(m.teren) !== "1" && String(m.teren) !== "2").sort(byT));
+    } else if (vmode === "vrijeme") {
+      section("Kronološki", "text-[#1e4fa0]", pool.slice().sort(byT));
+    } else {
+      ["A", "B", "C", "D"].forEach((g) => section("Grupa " + g, "text-[#1e4fa0]", pool.filter((m) => m.faza === "Grupa" && m.grupa === g).sort(byT)));
+      ["Četvrtfinale", "Polufinale", "Za 3. mjesto", "Finale"].forEach((faza) => section(faza, "text-[#CF2130]", pool.filter((m) => m.faza === faza).sort(byT)));
+    }
     if (!shown) wrap.innerHTML = `<p class="text-[#64748B] text-sm py-4">${filter === "odigrano" ? "Još nema odigranih utakmica." : "Nema utakmica za prikaz."}</p>`;
   }
 
@@ -518,15 +537,15 @@ const PODNASLOV = "DŠA Niza · Subota 25.07. od 17:00 · Igralište u Nizi";
     el.classList.remove("hidden");
   }
 
-  function setFilter(f) {
-    RFILTER = f;
-    document.querySelectorAll("#rf .rfbtn").forEach((x) => {
-      const on = x.dataset.f === f;
+  function toggleBtns(sel, val, attr) {
+    document.querySelectorAll(sel).forEach((x) => {
+      const on = x.dataset[attr] === val;
       x.classList.toggle("bg-[#1e4fa0]", on); x.classList.toggle("text-white", on);
       x.classList.toggle("bg-[#EAF0FB]", !on); x.classList.toggle("text-[#10275c]", !on);
     });
-    if (LAST) renderSchedule(LAST.matches, f);
   }
+  function setFilter(f) { RFILTER = f; toggleBtns("#rf .rfbtn", f, "f"); if (LAST) renderSchedule(LAST.matches, RFILTER, VMODE); }
+  function setVMode(v) { VMODE = v; toggleBtns("#vm .vmbtn", v, "v"); if (LAST) renderSchedule(LAST.matches, RFILTER, VMODE); }
 
   function renderTop(matches) {
     const sec = $("sec-uzivo");
@@ -575,6 +594,8 @@ const PODNASLOV = "DŠA Niza · Subota 25.07. od 17:00 · Igralište u Nizi";
     for (const g of ["A", "B", "C", "D"]) { const t = (LAST.standings[g] || []).find((x) => x.name === team); if (t) { st = t; grp = g; } }
     const players = (LAST.rosters && LAST.rosters[team]) ? LAST.rosters[team] : [];
     let html = "";
+    const isFoll = FOLLOW === team;
+    html += `<button id="follow-btn" class="w-full mb-4 px-3 py-2 rounded-lg font-display uppercase text-sm ${isFoll ? "bg-[#EAF0FB] text-[#10275c] border border-[#C9D4E8]" : "bg-[#F6C500] text-[#10275c]"}">${isFoll ? "★ Pratiš — makni praćenje" : "☆ Prati ovu ekipu"}</button>`;
     if (st) {
       html += `<div class="grid grid-cols-4 gap-2 mb-4 text-center">
         <div class="bg-[#EAF0FB] rounded-lg p-2"><div class="text-[10px] text-[#64748B] font-display uppercase">Grupa</div><div class="font-bold">${grp} · ${st.rank}.</div></div>
@@ -601,9 +622,65 @@ const PODNASLOV = "DŠA Niza · Subota 25.07. od 17:00 · Igralište u Nizi";
       }).join("") + `</div>`;
     }
     $("team-sheet-body").innerHTML = html;
+    const fb = $("follow-btn"); if (fb) fb.addEventListener("click", () => { setFollow(isFoll ? "" : team); closeTeamSheet(); });
     $("team-sheet").classList.remove("hidden"); document.body.style.overflow = "hidden";
   }
   function closeTeamSheet() { $("team-sheet").classList.add("hidden"); document.body.style.overflow = ""; }
+
+  function setFollow(team) {
+    FOLLOW = team || "";
+    try { if (FOLLOW) localStorage.setItem("bocanje_follow", FOLLOW); else localStorage.removeItem("bocanje_follow"); } catch (e) {}
+    if (!LAST) return;
+    renderFollow(LAST);
+    if (LAST.drawn) { renderTop(LAST.matches); renderGroups(LAST.standings); renderSchedule(LAST.matches, RFILTER, VMODE); }
+    else renderRegistration(LAST.allTeams);
+  }
+
+  function renderFollow(data) {
+    const el = $("tvoja-ekipa");
+    if (!FOLLOW || !data.rosters[FOLLOW]) { el.classList.add("hidden"); el.innerHTML = ""; return; }
+    const team = FOLLOW;
+    const tm = data.matches.filter((m) => m.home === team || m.away === team);
+    const next = tm.filter((m) => m.hasTeams && !m.played).sort((a, b) => orderKey(a) - orderKey(b))[0];
+    let body;
+    if (next) {
+      const opp = next.home === team ? next.away : next.home;
+      const when = next.teren ? "Teren " + esc(next.teren) : (fmtTime(next.vrijeme) ? "~" + fmtTime(next.vrijeme) : "uskoro");
+      body = `<div class="text-sm mt-0.5">Slijedi: <strong>${esc(opp)}</strong> <span class="text-white/70">· ${next.faza === "Grupa" ? "Gr. " + next.grupa : next.faza} · ${when}</span></div>`;
+    } else {
+      body = data.drawn ? `<div class="text-sm text-white/80 mt-0.5">Nema više utakmica na rasporedu.</div>` : `<div class="text-sm text-white/80 mt-0.5">Čeka se ždrijeb i raspored.</div>`;
+    }
+    el.innerHTML = `<div class="rounded-lg px-4 py-3 text-white shadow-md flex items-center gap-3" style="background:linear-gradient(135deg,#10275c,#1e4fa0)">
+      <span class="text-[#F6C500] text-2xl leading-none">★</span>
+      <div class="min-w-0 flex-1"><div class="font-display uppercase tracking-wider text-[11px] text-white/70">Tvoja ekipa</div><div class="font-bold truncate">${esc(team)}</div>${body}</div>
+      <button id="unfollow-btn" class="shrink-0 text-xs font-display uppercase px-2 py-1 rounded bg-white/15 hover:bg-white/25">Makni</button>
+    </div>`;
+    el.classList.remove("hidden");
+    const ub = $("unfollow-btn"); if (ub) ub.addEventListener("click", () => setFollow(""));
+  }
+
+  function renderStats(data) {
+    const sec = $("sec-statistika");
+    const played = data.matches.filter((m) => m.played && m.hasTeams);
+    if (!played.length) { sec.classList.add("hidden"); return; }
+    let totalBoce = 0, biggest = null;
+    played.forEach((m) => { totalBoce += m.bd + m.bg; const d = Math.abs(m.bd - m.bg); if (!biggest || d > biggest.d) biggest = { d, m }; });
+    const teams = [];
+    ["A", "B", "C", "D"].forEach((g) => (data.standings[g] || []).forEach((t) => teams.push(t)));
+    const topWins = teams.slice().sort((a, b) => b.Pob - a.Pob || b.RAZ - a.RAZ)[0];
+    const topBoce = teams.slice().sort((a, b) => b.BF - a.BF)[0];
+    const bm = biggest.m, bw = bm.bd > bm.bg ? bm.home : bm.away, bl = bm.bd > bm.bg ? bm.away : bm.home;
+    const bs = Math.max(bm.bd, bm.bg) + ":" + Math.min(bm.bd, bm.bg);
+    const c = (lbl, big, sub) => `<div class="bg-white rounded-lg border border-[#C9D4E8] shadow-sm p-4"><div class="font-display uppercase tracking-wider text-[11px] text-[#64748B] mb-1">${lbl}</div><div class="font-bold text-lg text-[#10275c] truncate">${big}</div>${sub ? `<div class="text-sm text-[#64748B] truncate">${sub}</div>` : ""}</div>`;
+    $("statistika").innerHTML = [
+      c("Odigrano mečeva", String(played.length), "od ukupno " + data.matches.filter((m) => m.hasTeams).length),
+      c("Ukupno boća", String(totalBoce), "svi mečevi zajedno"),
+      c("Najviše pobjeda", topWins ? esc(topWins.name) : "—", topWins ? topWins.Pob + " pobjeda" : ""),
+      c("Najviše osvojenih boća", topBoce ? esc(topBoce.name) : "—", topBoce ? topBoce.BF + " boća" : ""),
+      c("Najveća pobjeda", bs, esc(bw) + " protiv " + esc(bl)),
+    ].join("");
+    sec.classList.remove("hidden");
+  }
 
   const show = (id) => $(id).classList.remove("hidden");
 
@@ -612,16 +689,18 @@ const PODNASLOV = "DŠA Niza · Subota 25.07. od 17:00 · Igralište u Nizi";
       const [parovi, utak] = await Promise.all([fetchTab("Parovi"), fetchTab("Utakmice")]);
       const data = processData(parovi, utak);
       LAST = data;
+      renderFollow(data);
       if (data.drawn) {
         $("sec-prijave").classList.add("hidden");
         renderTop(data.matches);
         renderProgress(data.matches);
         renderGroups(data.standings);
         renderKnockout(data.matches, data.qualifiers);
-        renderSchedule(data.matches, RFILTER);
+        renderSchedule(data.matches, RFILTER, VMODE);
+        renderStats(data);
         show("sec-grupe"); show("sec-raspored");
       } else {
-        ["sec-uzivo", "sec-grupe", "sec-nokaut", "sec-raspored"].forEach((id) => $(id).classList.add("hidden"));
+        ["sec-uzivo", "sec-grupe", "sec-nokaut", "sec-raspored", "sec-statistika"].forEach((id) => $(id).classList.add("hidden"));
         $("progress").classList.add("hidden");
         renderRegistration(data.allTeams);
       }
@@ -637,6 +716,7 @@ const PODNASLOV = "DŠA Niza · Subota 25.07. od 17:00 · Igralište u Nizi";
   }
 
   document.querySelectorAll("#rf .rfbtn").forEach((b) => b.addEventListener("click", () => setFilter(b.dataset.f)));
+  document.querySelectorAll("#vm .vmbtn").forEach((b) => b.addEventListener("click", () => setVMode(b.dataset.v)));
   document.addEventListener("click", (e) => { const t = e.target.closest("[data-team]"); if (t) openTeamSheet(t.dataset.team); });
   $("team-sheet-close").addEventListener("click", closeTeamSheet);
   $("team-sheet-backdrop").addEventListener("click", closeTeamSheet);
