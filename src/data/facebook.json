@@ -1,8 +1,28 @@
 {
-  "lastUpdated": "2026-07-26T11:43:52.587Z",
+  "lastUpdated": "2026-07-26T13:11:56.720Z",
   "enabled": true,
   "pageId": "55401829691",
   "posts": [
+    {
+      "id": "55401829691_1643266967805797",
+      "message": "",
+      "createdAt": "2026-07-26T12:06:47+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1643266967805797",
+      "images": [
+        "/images/facebook/55401829691_1643266967805797_0.jpg",
+        "/images/facebook/55401829691_1643266967805797_1.jpg",
+        "/images/facebook/55401829691_1643266967805797_2.jpg",
+        "/images/facebook/55401829691_1643266967805797_3.jpg",
+        "/images/facebook/55401829691_1643266967805797_4.jpg",
+        "/images/facebook/55401829691_1643266967805797_5.jpg",
+        "/images/facebook/55401829691_1643266967805797_6.jpg",
+        "/images/facebook/55401829691_1643266967805797_7.jpg",
+        "/images/facebook/55401829691_1643266967805797_8.jpg",
+        "/images/facebook/55401829691_1643266967805797_9.jpg",
+        "/images/facebook/55401829691_1643266967805797_10.jpg",
+        "/images/facebook/55401829691_1643266967805797_11.jpg"
+      ]
+    },
     {
       "id": "55401829691_1642545757877918",
       "message": "Turnir u boćanju na travi u tijeku. Sudjeluje 21 ekipa...",
@@ -236,19 +256,6 @@
       "permalink": "https://www.facebook.com/1551452460320582/posts/1590622603070234",
       "images": [
         "/images/facebook/55401829691_1590622603070234.jpg"
-      ]
-    },
-    {
-      "id": "55401829691_1588766206589207",
-      "message": "Jučer je odigrana revijalna utakmica između seniora i veterana, a nakon toga se pošteno feštalo. Zahvaljujemo svima na dolasku i uveličavanju ove prigode. Sada na zasluženi odmor... #nizazivivjecno 💙",
-      "createdAt": "2026-05-31T13:33:45+0000",
-      "permalink": "https://www.facebook.com/1551452460320582/posts/1588766206589207",
-      "images": [
-        "/images/facebook/55401829691_1588766206589207_0.jpg",
-        "/images/facebook/55401829691_1588766206589207_1.jpg",
-        "/images/facebook/55401829691_1588766206589207_2.jpg",
-        "/images/facebook/55401829691_1588766206589207_3.jpg",
-        "/images/facebook/55401829691_1588766206589207_4.jpg"
       ]
     }
   ]
