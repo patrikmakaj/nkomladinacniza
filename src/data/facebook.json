@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-08-02T19:15:29.898Z",
+  "lastUpdated": "2026-08-02T20:27:07.536Z",
   "enabled": true,
   "pageId": "55401829691",
   "posts": [
@@ -182,15 +182,6 @@
       ]
     },
     {
-      "id": "55401829691_1769157131198782",
-      "message": "",
-      "createdAt": "2026-07-03T19:41:50+0000",
-      "permalink": "https://www.facebook.com/1551452460320582/videos/1769157131198782",
-      "images": [
-        "/images/facebook/55401829691_1769157131198782.jpg"
-      ]
-    },
-    {
       "id": "55401829691_1621740209958473",
       "message": "Molim ekipu \"Mlade nade\" da se jave na broj mobitela sa plakata radi dogovora za turnir.",
       "createdAt": "2026-07-03T08:11:30+0000",
@@ -248,6 +239,21 @@
         "/images/facebook/55401829691_1596548792477615_0.jpg",
         "/images/facebook/55401829691_1596548792477615_1.jpg",
         "/images/facebook/55401829691_1596548792477615_2.jpg"
+      ]
+    },
+    {
+      "id": "55401829691_1595732245892603",
+      "message": "Pozivamo svu djecu 2016. godište i mlađe (djevojčice 2015.), iz Nize i okolice, na treniranje nogometa u Dječjoj Športskoj Akademiji Niza.",
+      "createdAt": "2026-06-06T18:45:47+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1595732245892603",
+      "images": [
+        "/images/facebook/55401829691_1595732245892603_0.jpg",
+        "/images/facebook/55401829691_1595732245892603_1.jpg",
+        "/images/facebook/55401829691_1595732245892603_2.jpg",
+        "/images/facebook/55401829691_1595732245892603_3.jpg",
+        "/images/facebook/55401829691_1595732245892603_4.jpg",
+        "/images/facebook/55401829691_1595732245892603_5.jpg",
+        "/images/facebook/55401829691_1595732245892603_6.jpg"
       ]
     }
   ]
