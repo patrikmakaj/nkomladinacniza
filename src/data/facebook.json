@@ -1,8 +1,17 @@
 {
-  "lastUpdated": "2026-08-05T05:28:22.724Z",
+  "lastUpdated": "2026-08-05T08:02:49.949Z",
   "enabled": true,
   "pageId": "55401829691",
   "posts": [
+    {
+      "id": "55401829691_1652988296833664",
+      "message": "Il će se viti ili nas neće biti......",
+      "createdAt": "2026-08-05T07:25:30+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1652988296833664",
+      "images": [
+        "/images/facebook/55401829691_1652988296833664.jpg"
+      ]
+    },
     {
       "id": "55401829691_1651431450322682",
       "message": "",
@@ -237,17 +246,6 @@
       "permalink": "https://www.facebook.com/1551452460320582/posts/1597586762373818",
       "images": [
         "/images/facebook/55401829691_1597586762373818.jpg"
-      ]
-    },
-    {
-      "id": "55401829691_1596548792477615",
-      "message": "",
-      "createdAt": "2026-06-07T15:49:49+0000",
-      "permalink": "https://www.facebook.com/1551452460320582/posts/1596548792477615",
-      "images": [
-        "/images/facebook/55401829691_1596548792477615_0.jpg",
-        "/images/facebook/55401829691_1596548792477615_1.jpg",
-        "/images/facebook/55401829691_1596548792477615_2.jpg"
       ]
     }
   ]
