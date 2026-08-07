@@ -1,8 +1,17 @@
 {
-  "lastUpdated": "2026-08-07T06:06:57.903Z",
+  "lastUpdated": "2026-08-07T07:51:07.119Z",
   "enabled": true,
   "pageId": "55401829691",
   "posts": [
+    {
+      "id": "55401829691_1655070583292102",
+      "message": "OBAVIJEST!!!\nUtakmica je premještena na nedjelju u isto vrijeme.",
+      "createdAt": "2026-08-07T07:34:26+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1655070583292102",
+      "images": [
+        "/images/facebook/55401829691_1655070583292102.jpg"
+      ]
+    },
     {
       "id": "55401829691_1652988296833664",
       "message": "Il će se viti ili nas neće biti......",
@@ -237,15 +246,6 @@
       "permalink": "https://www.facebook.com/1551452460320582/posts/1598221852310309",
       "images": [
         "/images/facebook/55401829691_1598221852310309.jpg"
-      ]
-    },
-    {
-      "id": "55401829691_1597586762373818",
-      "message": "",
-      "createdAt": "2026-06-08T16:03:54+0000",
-      "permalink": "https://www.facebook.com/1551452460320582/posts/1597586762373818",
-      "images": [
-        "/images/facebook/55401829691_1597586762373818.jpg"
       ]
     }
   ]
