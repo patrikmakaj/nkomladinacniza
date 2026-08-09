@@ -16,6 +16,12 @@ const matchDetails = (hns.matchDetails ?? {}) as Record<string, unknown>;
 
 const competitionName = hns.competition?.name ?? "Sezona";
 
+// webcal:// natjera kalendar da se PRETPLATI umjesto da jednom preuzme datoteku.
+// Google i Apple tu adresu povremeno sami ponovo dohvate.
+const icsPath = url("/raspored.ics");
+const icsAbsolute = new URL(icsPath, Astro.site ?? "https://omladinacniza.hr").href;
+const icsWebcal = icsAbsolute.replace(/^https?:/, "webcal:");
+
 // Hrvatski format datuma (npr. "ned, 2. svibnja 2026.")
 function formatDate(iso: string): string {
   if (!iso) return "";
@@ -69,6 +75,43 @@ const icsPayload = upcoming.map((m) => ({
   />
 
   <section class="container-narrow mt-12">
+    {/* Cijeli raspored u kalendar */}
+    <div
+      class="bg-club-light-2 border border-club-border rounded-lg p-4 md:p-5 mb-8 flex flex-col sm:flex-row sm:items-center gap-4"
+    >
+      <svg
+        class="w-8 h-8 text-club-primary flex-shrink-0"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+        aria-hidden="true"
+      >
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+      </svg>
+      <div class="flex-1 min-w-0">
+        <p class="font-display font-bold uppercase tracking-wider text-sm text-club-primary-deep">
+          Cijeli raspored u tvom kalendaru
+        </p>
+        <p class="text-sm text-club-muted mt-0.5">
+          Sve utakmice odjednom — liga, kup i prijateljske. Ako se
+          <strong>pretplatiš</strong>, promjene termina i nove utakmice stižu same.
+        </p>
+      </div>
+      <div class="flex gap-2 flex-shrink-0">
+        <a href={icsWebcal} class="btn-primary text-sm whitespace-nowrap">
+          Pretplati se
+        </a>
+        {/* btn-outline je bijeli (za hero), pa na svijetloj podlozi treba svoja boja */}
+        <a
+          href={icsPath}
+          download="omladinac-raspored.ics"
+          class="inline-flex items-center justify-center px-6 py-3 rounded font-display text-sm font-bold uppercase tracking-widest text-club-primary-deep bg-white border-2 border-club-primary hover:bg-club-primary hover:text-white transition-colors whitespace-nowrap"
+        >
+          Preuzmi
+        </a>
+      </div>
+    </div>
+
     {/* Sažetak sezone */}
     <div class="grid grid-cols-3 gap-3 md:gap-6 mb-10">
       <div class="bg-white border border-club-border rounded-lg p-4 text-center">

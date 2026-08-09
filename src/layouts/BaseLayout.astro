@@ -51,6 +51,20 @@ const ogImageUrl = new URL(url(image), Astro.site).toString();
     <link rel="icon" type="image/png" sizes="192x192" href={url("/icon-192.png")} />
     <link rel="icon" type="image/png" sizes="512x512" href={url("/icon-512.png")} />
 
+    <!-- "Dodaj na početni zaslon" na mobitelu -->
+    <link rel="manifest" href={url("/manifest.webmanifest")} />
+    <meta name="apple-mobile-web-app-title" content="Omladinac" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+
+    <!-- Pretplata na raspored utakmica -->
+    <link
+      rel="alternate"
+      type="text/calendar"
+      href={url("/raspored.ics")}
+      title="Raspored NK Omladinac Niza"
+    />
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

@@ -1,0 +1,68 @@
+---
+/**
+ * Klupska 404 stranica.
+ *
+ * GitHub Pages automatski poslužuje /404.html za nepostojeće putanje,
+ * pa je dovoljno da se datoteka izbuilda — nije potrebna nikakva
+ * dodatna konfiguracija.
+ */
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Logo from "../components/Logo.astro";
+import { url } from "../lib/url";
+
+const links = [
+  { href: "/", label: "Početna", desc: "Sljedeća utakmica i tablica" },
+  { href: "/raspored", label: "Raspored", desc: "Sve utakmice sezone" },
+  { href: "/novosti", label: "Novosti", desc: "Najnovije iz kluba" },
+  { href: "/galerija", label: "Galerija", desc: "Fotke s utakmica" },
+];
+---
+
+<BaseLayout
+  title="Stranica nije pronađena"
+  description="Tražena stranica ne postoji na web stranici NK Omladinac Niza."
+  noIndex={true}
+>
+  <section
+    class="relative overflow-hidden bg-gradient-to-br from-club-primary-deep via-club-secondary to-club-primary text-white"
+  >
+    {/* Grb kao vodeni žig */}
+    <div
+      class="absolute -right-24 top-1/2 -translate-y-1/2 opacity-10 pointer-events-none hidden sm:block"
+      aria-hidden="true"
+    >
+      <Logo size={420} />
+    </div>
+
+    <div class="container-narrow relative py-20 md:py-28">
+      <div class="max-w-2xl">
+        <p
+          class="font-display font-bold text-7xl md:text-9xl leading-none text-club-accent"
+        >
+          404
+        </p>
+        <h1 class="text-3xl md:text-4xl mt-4 mb-3">Promašaj s bijele točke</h1>
+        <p class="text-white/80 leading-relaxed mb-8">
+          Stranica koju tražiš ne postoji — možda je link zastario ili se
+          potkrala greška u adresi. Vrati se na jednu od ovih:
+        </p>
+
+        <div class="grid sm:grid-cols-2 gap-3">
+          {
+            links.map((l) => (
+              <a
+                href={url(l.href)}
+                class="group bg-white/10 hover:bg-white/20 border border-white/15 hover:border-club-accent rounded-lg px-4 py-3 transition-colors"
+              >
+                <span class="font-display font-bold uppercase tracking-wider text-sm text-club-accent">
+                  {l.label}
+                </span>
+                <span class="block text-sm text-white/70 mt-0.5">{l.desc}</span>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
