@@ -22,7 +22,7 @@
     "isHome": true,
     "venue": "Niza",
     "competition": "Bujdin memorijal",
-    "score": null,
+    "score": { "home": 0, "away": 2 },
     "scorers": []
   },
   {
