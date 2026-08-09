@@ -139,12 +139,11 @@ jobs:
         run: npm ci
 
       - name: Build site
-        # prebuild script već scrapa, ali to je brzo i daje nam svjeze podatke
-        run: npm run build
-        env:
-          # FB token treba i build step-u jer prebuild ponovo scrapa
-          FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
-          FB_ACCESS_TOKEN: ${{ secrets.FB_ACCESS_TOKEN }}
+        # Namjerno NE scrapamo ponovo — gradimo točno ono što je scrape job
+        # commitao. Ranije je build imao svoj scrape, pa je objavljena stranica
+        # znala imati druge podatke od onih u repou (galerija se znala pojaviti
+        # i nestati između deployeva). `npx astro build` zaobilazi `prebuild`.
+        run: npx astro build
 
       - uses: actions/configure-pages@v5
 
