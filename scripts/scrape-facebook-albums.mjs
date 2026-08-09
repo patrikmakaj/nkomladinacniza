@@ -2,19 +2,25 @@
 /**
  * Facebook Graph API scraper za FB albume NK Omladinac Niza
  *
- * Dohvaća sve albume sa Facebook stranice kluba kroz Graph API,
- * skida fotografije (cover + sve photos) lokalno i sprema strukturiran
- * JSON u src/data/facebook-albums.json.
+ * Dohvaća SVE albume sa stranice kluba (uz paginaciju), pa za svaki album
+ * SVU metapodatke fotki. Zatim sve fotke spoji, sortira po datumu silazno
+ * i primijeni kvotu po godini — tako svaka godina u filteru na galeriji
+ * ima sadržaj, a repo ne naraste na pola gigabajta.
+ *
+ * Slike se spremaju pod imenom `<photo-id>.jpg` (stabilno — indeks se mijenja
+ * kad se doda nova fotka, ID ne). Već skinute slike koje ispadnu iz kvote
+ * i dalje ostaju u galeriji — arhiva tako raste, a git povijest se ne mlati.
  *
  * Pokreće se kroz GitHub Action kao dio `npm run scrape`, ili
  * lokalno preko `npm run scrape:fb-albums`.
  *
- * Environment varijable (obje obavezne za stvarni scrape):
- *   FB_PAGE_ID       — ID Facebook stranice
- *   FB_ACCESS_TOKEN  — Long-lived Page Access Token (treba pages_show_list)
+ * Environment varijable:
+ *   FB_PAGE_ID       — ID Facebook stranice (obavezno)
+ *   FB_ACCESS_TOKEN  — Long-lived Page Access Token (obavezno)
+ *   FB_PHOTOS_PER_YEAR — koliko fotki po godini najviše skidati (default 200)
  *
- * Ako varijable nisu postavljene, script piše prazan JSON i izlazi
- * uspješno (build se ne ruši).
+ * Ako varijable nisu postavljene, script zadrži postojeće podatke (ili
+ * napiše prazan JSON ako ih nema) i izađe uspješno — build se ne ruši.
  */
 
 import { writeFile, mkdir, access, readFile } from "node:fs/promises";
@@ -34,23 +40,32 @@ const PAGE_ID = process.env.FB_PAGE_ID;
 const TOKEN = process.env.FB_ACCESS_TOKEN;
 const API_VERSION = "v21.0";
 
-// Koliko albuma i fotki po albumu maksimalno povlačimo
-const ALBUM_LIMIT = 30;
-const PHOTOS_PER_ALBUM = 60;
+/** Najviše fotki po kalendarskoj godini koje skidamo lokalno. */
+const PHOTOS_PER_YEAR = Number(process.env.FB_PHOTOS_PER_YEAR) || 200;
+/** Koliko zapisa tražimo po API stranici. */
+const ALBUMS_PAGE_SIZE = 50;
+const PHOTOS_PAGE_SIZE = 100;
+/** Zaštita od beskonačne petlje ako paging.next nikad ne prestane. */
+const MAX_PAGES = 200;
+/** Paralelnih downloada slika. */
+const DOWNLOAD_CONCURRENCY = 6;
+/** Slike šire od ovoga ne trebamo — galerija ih ionako prikazuje manje. */
+const MAX_IMAGE_WIDTH = 1600;
 
-// Fields query: nestane sve što trebamo u jednom requestu
-const FIELDS = [
-  "id",
-  "name",
-  "created_time",
-  "updated_time",
-  "count",
-  "link",
-  "cover_photo{id,picture,images}",
-  `photos.limit(${PHOTOS_PER_ALBUM}){id,name,created_time,images,picture}`,
-].join(",");
+// Albumi koje ne želimo u galeriji (profilne i naslovne slike).
+// Facebook vraća nazive na jeziku stranice, pa pokrivamo obje varijante.
+const SKIP_NAMES = new Set([
+  "Profile Pictures",
+  "Cover Photos",
+  "Profilne slike",
+  "Slike profila",
+  "Naslovne fotografije",
+  "Naslovne slike",
+]);
 
 // ───────── Helpers ─────────────────────────────────────────────
+
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 async function exists(p) {
   try {
@@ -63,6 +78,64 @@ async function exists(p) {
 
 function safeId(id) {
   return String(id).replace(/[^0-9A-Za-z_-]/g, "_");
+}
+
+/** "2026-08-07T08:01:54+0000" → "2026"; null ako datum fali. */
+function yearOf(createdTime) {
+  const m = /^(\d{4})-/.exec(createdTime || "");
+  return m ? m[1] : null;
+}
+
+/**
+ * Iz FB `images` niza uzme najveću sliku koja nije šira od MAX_IMAGE_WIDTH.
+ * Ako su sve veće, uzme najmanju od njih (bolje nego skidati 2048px original).
+ */
+function pickImage(images) {
+  if (!Array.isArray(images) || images.length === 0) return null;
+  const sorted = [...images]
+    .filter((i) => i && i.source)
+    .sort((a, b) => (b.width || 0) - (a.width || 0));
+  if (sorted.length === 0) return null;
+  const fitting = sorted.find((i) => (i.width || 0) <= MAX_IMAGE_WIDTH);
+  return (fitting || sorted[sorted.length - 1]).source;
+}
+
+const RETRY_STATUS = new Set([429, 500, 502, 503, 504]);
+
+/** Graph API GET s retryjem na rate-limit i serverske greške. */
+async function apiGet(url, { attempts = 3 } = {}) {
+  let lastErr;
+  for (let i = 0; i < attempts; i++) {
+    if (i > 0) await sleep(2000 * 2 ** (i - 1));
+    let res;
+    try {
+      res = await fetch(url, { signal: AbortSignal.timeout(60_000) });
+    } catch (err) {
+      lastErr = err;
+      continue;
+    }
+    if (res.ok) return await res.json();
+    const body = await res.text();
+    const err = new Error(`Graph API HTTP ${res.status}: ${body.slice(0, 200)}`);
+    if (!RETRY_STATUS.has(res.status)) throw err;
+    lastErr = err;
+  }
+  throw lastErr;
+}
+
+/** Prolazi kroz sve stranice jednog edge-a i vraća spojeni `data` niz. */
+async function fetchAllPages(firstUrl, label) {
+  const all = [];
+  let url = firstUrl;
+  for (let page = 0; page < MAX_PAGES && url; page++) {
+    const json = await apiGet(url);
+    const batch = Array.isArray(json.data) ? json.data : [];
+    all.push(...batch);
+    url = json.paging?.next || null;
+    if (url) await sleep(120); // budimo pristojni prema API-ju
+  }
+  console.log(`[fb-albums]   ${label}: ${all.length} zapisa`);
+  return all;
 }
 
 /** Skida sliku ako još ne postoji. Vraća public/web putanju ili null. */
@@ -79,25 +152,28 @@ async function downloadImage(url, albumId, filename) {
   try {
     const res = await fetch(url, { redirect: "follow" });
     if (!res.ok) {
-      console.warn(`[fb-albums] WARN ${url} → HTTP ${res.status}, preskačem`);
+      console.warn(`[fb-albums] WARN ${filename} → HTTP ${res.status}, preskačem`);
       return null;
     }
     if (!res.body) return null;
     await pipeline(Readable.fromWeb(res.body), createWriteStream(target));
     return publicPath;
   } catch (err) {
-    console.warn(`[fb-albums] WARN download fail za ${url}: ${err.message}`);
+    console.warn(`[fb-albums] WARN download fail (${filename}): ${err.message}`);
     return null;
   }
 }
 
-/** Iz FB images array uzme najveću (prva je obično najveća, ali sortiramo za sigurnost). */
-function pickLargest(images) {
-  if (!Array.isArray(images) || images.length === 0) return null;
-  const sorted = [...images].sort(
-    (a, b) => (b.width || 0) * (b.height || 0) - (a.width || 0) * (a.height || 0),
-  );
-  return sorted[0]?.source || null;
+/** Obrađuje `items` s najviše `limit` paralelnih zadataka. */
+async function inParallel(items, limit, worker) {
+  let cursor = 0;
+  const runners = Array.from({ length: Math.min(limit, items.length) }, async () => {
+    while (cursor < items.length) {
+      const idx = cursor++;
+      await worker(items[idx], idx);
+    }
+  });
+  await Promise.all(runners);
 }
 
 // ───────── Output helpers ──────────────────────────────────────
@@ -114,18 +190,22 @@ async function writeEmpty(reason) {
   console.log(`[fb-albums] ${reason} — zapisan prazan JSON.`);
 }
 
+/**
+ * Zadrži postojeće albume kad scrape ne uspije. Ovo je zaštita zbog koje
+ * galerija preživi istekli token, mrežni ispad ili — što se stvarno događa —
+ * uspješan HTTP 200 s praznim popisom albuma.
+ */
 async function preserveExisting(reason) {
-  // Ako već imamo facebook-albums.json s validnim albumima, ostavi ih.
-  // Time čuvamo galeriju funkcionalnu kad token expire-a.
   try {
     const existing = JSON.parse(await readFile(OUT_JSON, "utf8"));
     if (existing.albums && existing.albums.length > 0) {
       existing.lastUpdated = new Date().toISOString();
       existing.lastError = reason;
       await writeFile(OUT_JSON, JSON.stringify(existing, null, 2) + "\n", "utf8");
+      const n = existing.albums.reduce((s, a) => s + (a.photos?.length ?? 0), 0);
       console.warn(
         `[fb-albums] ⚠️  ${reason}\n` +
-          `[fb-albums] zadržavam postojeći facebook-albums.json (${existing.albums.length} albuma)`,
+          `[fb-albums] zadržavam postojeće podatke (${existing.albums.length} albuma, ${n} fotki)`,
       );
       return;
     }
@@ -139,123 +219,211 @@ async function preserveExisting(reason) {
 
 async function main() {
   if (!PAGE_ID || !TOKEN) {
-    await writeEmpty("FB_PAGE_ID / FB_ACCESS_TOKEN nisu postavljeni");
+    await preserveExisting("FB_PAGE_ID / FB_ACCESS_TOKEN nisu postavljeni");
     return;
   }
 
   await mkdir(IMAGES_ROOT, { recursive: true });
-
-  const url = new URL(`https://graph.facebook.com/${API_VERSION}/${PAGE_ID}/albums`);
-  url.searchParams.set("fields", FIELDS);
-  url.searchParams.set("limit", String(ALBUM_LIMIT));
-  url.searchParams.set("access_token", TOKEN);
-
-  console.log(`[fb-albums] dohvaćam albume (limit=${ALBUM_LIMIT})…`);
   const startedAt = Date.now();
 
-  let res;
-  try {
-    res = await fetch(url);
-  } catch (err) {
-    await preserveExisting(`Network error: ${err.message}`);
-    return;
-  }
+  // ── 1. Svi albumi ────────────────────────────────────────────
+  const albumsUrl = new URL(
+    `https://graph.facebook.com/${API_VERSION}/${PAGE_ID}/albums`,
+  );
+  albumsUrl.searchParams.set(
+    "fields",
+    "id,name,created_time,updated_time,count,link,cover_photo{id,images}",
+  );
+  albumsUrl.searchParams.set("limit", String(ALBUMS_PAGE_SIZE));
+  albumsUrl.searchParams.set("access_token", TOKEN);
 
-  if (!res.ok) {
-    const body = await res.text();
-    const reason = `Graph API HTTP ${res.status}: ${body.slice(0, 200)}`;
-    await preserveExisting(reason);
+  console.log("[fb-albums] dohvaćam popis albuma…");
+  let rawAlbums;
+  try {
+    rawAlbums = await fetchAllPages(albumsUrl.href, "albumi");
+  } catch (err) {
+    await preserveExisting(err.message);
     console.warn(
-      `[fb-albums] Provjeri da je FB_ACCESS_TOKEN valjan i da app ima ` +
-        `pristup pages_show_list + pages_read_engagement.`,
+      "[fb-albums] Provjeri da je FB_ACCESS_TOKEN valjan i da app ima " +
+        "pristup pages_show_list + pages_read_engagement.",
     );
     return;
   }
 
-  const json = await res.json();
-  const rawAlbums = Array.isArray(json.data) ? json.data : [];
+  // Prazan popis uz HTTP 200 nije "nema albuma" — to je greška na FB strani.
+  if (rawAlbums.length === 0) {
+    await preserveExisting("Graph API vratio prazan popis albuma (HTTP 200)");
+    return;
+  }
 
-  // Skip "Profile Pictures", "Cover Photos" i slične default albume bez korisnog sadržaja
-  const SKIP_NAMES = new Set([
-    "Profile Pictures",
-    "Cover Photos",
-    "Profilne slike",
-    "Naslovne fotografije",
-    "Mobile Uploads",
-    "Timeline Photos",
-    "Untitled Album",
-  ]);
-
-  const usable = rawAlbums.filter((a) => {
-    const photoCount = a.photos?.data?.length ?? 0;
-    if (photoCount === 0) return false;
-    if (a.name && SKIP_NAMES.has(a.name)) return false;
-    return true;
-  });
-
+  const usable = rawAlbums.filter((a) => !(a.name && SKIP_NAMES.has(a.name)));
   console.log(
-    `[fb-albums] dobio ${rawAlbums.length} albuma, koristim ${usable.length}`,
+    `[fb-albums] ${rawAlbums.length} albuma, koristim ${usable.length} ` +
+      `(preskačem ${rawAlbums.length - usable.length} profilnih/naslovnih)`,
   );
 
-  const albums = [];
-  for (const a of usable) {
-    const albumId = a.id;
-    const photosRaw = a.photos?.data || [];
+  // ── 2. Metapodaci svih fotki iz svakog albuma ────────────────
+  const allPhotos = []; // { albumIdx, id, caption, createdAt, srcUrl }
+  for (let ai = 0; ai < usable.length; ai++) {
+    const a = usable[ai];
+    const photosUrl = new URL(
+      `https://graph.facebook.com/${API_VERSION}/${a.id}/photos`,
+    );
+    photosUrl.searchParams.set("fields", "id,name,created_time,images");
+    photosUrl.searchParams.set("limit", String(PHOTOS_PAGE_SIZE));
+    photosUrl.searchParams.set("access_token", TOKEN);
 
-    // Skini cover (može biti odvojeno polje ili prva fotka)
-    let coverUrl =
-      pickLargest(a.cover_photo?.images) ||
-      a.cover_photo?.picture ||
-      pickLargest(photosRaw[0]?.images) ||
-      photosRaw[0]?.picture;
-    const cover = await downloadImage(coverUrl, albumId, "cover.jpg");
-
-    // Skini sve fotke
-    const photos = [];
-    for (let i = 0; i < photosRaw.length; i++) {
-      const p = photosRaw[i];
-      const src = pickLargest(p.images) || p.picture;
-      const local = await downloadImage(src, albumId, `${i}.jpg`);
-      if (local) {
-        photos.push({
-          id: p.id,
-          src: local,
-          caption: p.name || "",
-          createdAt: p.created_time,
-        });
-      }
+    let photos;
+    try {
+      photos = await fetchAllPages(
+        photosUrl.href,
+        `"${(a.name || "Album").slice(0, 30)}"`,
+      );
+    } catch (err) {
+      console.warn(`[fb-albums] WARN album "${a.name}" preskočen: ${err.message}`);
+      continue;
     }
 
-    if (photos.length === 0) continue;
+    for (const p of photos) {
+      const srcUrl = pickImage(p.images);
+      if (!srcUrl) continue;
+      allPhotos.push({
+        albumIdx: ai,
+        id: p.id,
+        caption: p.name || "",
+        createdAt: p.created_time,
+        srcUrl,
+      });
+    }
+  }
 
+  if (allPhotos.length === 0) {
+    await preserveExisting("Graph API nije vratio nijednu fotku");
+    return;
+  }
+
+  // ── 3. Sortiraj po datumu silazno i primijeni kvotu po godini ─
+  allPhotos.sort((x, y) => (y.createdAt || "").localeCompare(x.createdAt || ""));
+
+  const perYear = new Map();
+  const selected = [];
+  const skippedByQuota = [];
+  for (const p of allPhotos) {
+    const y = yearOf(p.createdAt) || "0000";
+    const n = perYear.get(y) || 0;
+    if (n < PHOTOS_PER_YEAR) {
+      perYear.set(y, n + 1);
+      selected.push(p);
+    } else {
+      skippedByQuota.push(p);
+    }
+  }
+
+  // Fotke izvan kvote koje su ranije već skinute zadržavamo — arhiva raste,
+  // a git povijest se ne mijenja jer datoteke već postoje.
+  const extras = [];
+  await inParallel(skippedByQuota, 32, async (p) => {
+    const album = usable[p.albumIdx];
+    const file = resolve(IMAGES_ROOT, safeId(album.id), `${safeId(p.id)}.jpg`);
+    if (await exists(file)) extras.push(p);
+  });
+
+  const toKeep = [...selected, ...extras].sort((x, y) =>
+    (y.createdAt || "").localeCompare(x.createdAt || ""),
+  );
+
+  console.log(
+    `[fb-albums] ukupno ${allPhotos.length} fotki na FB-u · ` +
+      `kvota ${PHOTOS_PER_YEAR}/god → ${selected.length} odabrano` +
+      (extras.length ? ` + ${extras.length} već skinutih izvan kvote` : ""),
+  );
+  const yearSummary = [...perYear.entries()]
+    .sort((a, b) => b[0].localeCompare(a[0]))
+    .map(([y, n]) => `${y}:${n}`)
+    .join(" ");
+  console.log(`[fb-albums] po godinama → ${yearSummary}`);
+
+  // ── 4. Skini slike ───────────────────────────────────────────
+  let downloaded = 0;
+  let failed = 0;
+  const localPath = new Map(); // photo.id → public path
+
+  await inParallel(toKeep, DOWNLOAD_CONCURRENCY, async (p) => {
+    const album = usable[p.albumIdx];
+    const local = await downloadImage(p.srcUrl, album.id, `${safeId(p.id)}.jpg`);
+    if (local) {
+      localPath.set(p.id, local);
+      downloaded++;
+    } else {
+      failed++;
+    }
+  });
+  console.log(`[fb-albums] slike · OK ${downloaded} · neuspjelo ${failed}`);
+
+  // ── 5. Složi izlazni JSON (grupirano po albumima, kao i prije) ─
+  const byAlbum = new Map();
+  for (const p of toKeep) {
+    const local = localPath.get(p.id);
+    if (!local) continue;
+    if (!byAlbum.has(p.albumIdx)) byAlbum.set(p.albumIdx, []);
+    byAlbum.get(p.albumIdx).push({
+      id: p.id,
+      src: local,
+      caption: p.caption,
+      createdAt: p.createdAt,
+    });
+  }
+
+  const albums = [];
+  for (const [ai, photos] of byAlbum) {
+    if (photos.length === 0) continue;
+    const a = usable[ai];
+    const coverUrl = pickImage(a.cover_photo?.images);
+    const cover =
+      (await downloadImage(coverUrl, a.id, "cover.jpg")) || photos[0].src;
     albums.push({
-      id: albumId,
+      id: a.id,
       name: a.name || "Album",
       createdAt: a.created_time,
       updatedAt: a.updated_time,
       permalink: a.link || null,
-      cover: cover || photos[0].src,
+      cover,
       count: a.count ?? photos.length,
       photos,
     });
   }
 
-  // Sortiraj albume po updated_time desc (najnoviji prvi)
   albums.sort((x, y) => (y.updatedAt || "").localeCompare(x.updatedAt || ""));
+
+  const totalPhotos = albums.reduce((s, a) => s + a.photos.length, 0);
+  if (totalPhotos === 0) {
+    await preserveExisting("Nijedna slika nije uspješno skinuta");
+    return;
+  }
+
+  // Popis godina za filter na galeriji (silazno)
+  const years = [
+    ...new Set(
+      albums.flatMap((a) => a.photos.map((p) => yearOf(p.createdAt)).filter(Boolean)),
+    ),
+  ].sort((a, b) => b.localeCompare(a));
 
   const data = {
     lastUpdated: new Date().toISOString(),
     enabled: true,
     pageId: PAGE_ID,
+    photosPerYear: PHOTOS_PER_YEAR,
+    totalOnFacebook: allPhotos.length,
+    years,
     albums,
   };
   await mkdir(dirname(OUT_JSON), { recursive: true });
   await writeFile(OUT_JSON, JSON.stringify(data, null, 2) + "\n", "utf8");
 
   const ms = Date.now() - startedAt;
-  const totalPhotos = albums.reduce((s, a) => s + a.photos.length, 0);
   console.log(
-    `[fb-albums] gotovo za ${ms}ms · ${albums.length} albuma · ${totalPhotos} fotki ukupno`,
+    `[fb-albums] gotovo za ${(ms / 1000).toFixed(1)}s · ${albums.length} albuma · ` +
+      `${totalPhotos} fotki · godine ${years[years.length - 1]}–${years[0]}`,
   );
   console.log(`[fb-albums] zapisano: ${OUT_JSON}`);
 }
