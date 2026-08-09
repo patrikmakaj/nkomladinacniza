@@ -1,8 +1,17 @@
 {
-  "lastUpdated": "2026-08-09T21:27:43.394Z",
+  "lastUpdated": "2026-08-09T21:58:46.320Z",
   "enabled": true,
   "pageId": "55401829691",
   "posts": [
+    {
+      "id": "55401829691_1657531309712696",
+      "message": "",
+      "createdAt": "2026-08-09T21:55:05+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1657531309712696",
+      "images": [
+        "/images/facebook/55401829691_1657531309712696.jpg"
+      ]
+    },
     {
       "id": "55401829691_1657470059718821",
       "message": "Danas smo se kroz Memorijalnu utakmica prisjetili Miroslava Kneževića - Bujde kojem je ovih dana obljetnica nesretne pogibije, uz  molitvu svih prisutnih i minutom šutnje. Nakon toga odigrana je prijateljsko- pripremna utakmica pred stotinjak gledatelja sa susjedima iz Koške, NK Seljak. Drugo poluvrijeme odigrano je pod rasvjetom novih reflektora pa je tako ova utakmica ušla u povijest. Gosti su pred kraj utakmice golom sa 11 metara i brzom kontrom dolaze do konačnih 2:0, te im čestitke na pobjedi. Nama predstoji Kup utakmica u srijedu kad nam dolazi u goste NK Brezik. ifo",
@@ -244,19 +253,6 @@
       "permalink": "https://www.facebook.com/events/1757236605625154/",
       "images": [
         "/images/facebook/55401829691_1757236605625154.jpg"
-      ]
-    },
-    {
-      "id": "55401829691_1602674688531692",
-      "message": "",
-      "createdAt": "2026-06-13T15:34:35+0000",
-      "permalink": "https://www.facebook.com/1551452460320582/posts/1602674688531692",
-      "images": [
-        "/images/facebook/55401829691_1602674688531692_0.jpg",
-        "/images/facebook/55401829691_1602674688531692_1.jpg",
-        "/images/facebook/55401829691_1602674688531692_2.jpg",
-        "/images/facebook/55401829691_1602674688531692_3.jpg",
-        "/images/facebook/55401829691_1602674688531692_4.jpg"
       ]
     }
   ]
