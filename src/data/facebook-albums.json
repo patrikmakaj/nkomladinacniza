@@ -1,9 +1,9 @@
 {
-  "lastUpdated": "2026-08-09T19:31:14.464Z",
+  "lastUpdated": "2026-08-09T20:01:06.151Z",
   "enabled": true,
   "pageId": "55401829691",
   "photosPerYear": 200,
-  "totalOnFacebook": 7541,
+  "totalOnFacebook": 7553,
   "years": [
     "2026",
     "2025",
@@ -29,11 +29,83 @@
       "id": "482830940516078",
       "name": "Preneseno s mobitela",
       "createdAt": "2022-08-31T22:19:54+0000",
-      "updatedAt": "2026-08-07T08:01:54+0000",
+      "updatedAt": "2026-08-09T19:57:54+0000",
       "permalink": "https://www.facebook.com/album.php?fbid=482830940516078&id=1551452460320582&aid=1073741828",
       "cover": "/images/facebook-albums/482830940516078/cover.jpg",
-      "count": 4613,
+      "count": 4625,
       "photos": [
+        {
+          "id": "1657470019718825",
+          "src": "/images/facebook-albums/482830940516078/1657470019718825.jpg",
+          "caption": "",
+          "createdAt": "2026-08-09T19:57:54+0000"
+        },
+        {
+          "id": "1657469969718830",
+          "src": "/images/facebook-albums/482830940516078/1657469969718830.jpg",
+          "caption": "",
+          "createdAt": "2026-08-09T19:57:54+0000"
+        },
+        {
+          "id": "1657469916385502",
+          "src": "/images/facebook-albums/482830940516078/1657469916385502.jpg",
+          "caption": "",
+          "createdAt": "2026-08-09T19:57:54+0000"
+        },
+        {
+          "id": "1657469863052174",
+          "src": "/images/facebook-albums/482830940516078/1657469863052174.jpg",
+          "caption": "",
+          "createdAt": "2026-08-09T19:57:54+0000"
+        },
+        {
+          "id": "1657469799718847",
+          "src": "/images/facebook-albums/482830940516078/1657469799718847.jpg",
+          "caption": "",
+          "createdAt": "2026-08-09T19:57:54+0000"
+        },
+        {
+          "id": "1657469726385521",
+          "src": "/images/facebook-albums/482830940516078/1657469726385521.jpg",
+          "caption": "",
+          "createdAt": "2026-08-09T19:57:54+0000"
+        },
+        {
+          "id": "1657469669718860",
+          "src": "/images/facebook-albums/482830940516078/1657469669718860.jpg",
+          "caption": "",
+          "createdAt": "2026-08-09T19:57:54+0000"
+        },
+        {
+          "id": "1657469603052200",
+          "src": "/images/facebook-albums/482830940516078/1657469603052200.jpg",
+          "caption": "",
+          "createdAt": "2026-08-09T19:57:54+0000"
+        },
+        {
+          "id": "1657469543052206",
+          "src": "/images/facebook-albums/482830940516078/1657469543052206.jpg",
+          "caption": "",
+          "createdAt": "2026-08-09T19:57:54+0000"
+        },
+        {
+          "id": "1657469509718876",
+          "src": "/images/facebook-albums/482830940516078/1657469509718876.jpg",
+          "caption": "",
+          "createdAt": "2026-08-09T19:57:54+0000"
+        },
+        {
+          "id": "1657469456385548",
+          "src": "/images/facebook-albums/482830940516078/1657469456385548.jpg",
+          "caption": "",
+          "createdAt": "2026-08-09T19:57:54+0000"
+        },
+        {
+          "id": "1657469403052220",
+          "src": "/images/facebook-albums/482830940516078/1657469403052220.jpg",
+          "caption": "",
+          "createdAt": "2026-08-09T19:57:54+0000"
+        },
         {
           "id": "1655088876623606",
           "src": "/images/facebook-albums/482830940516078/1655088876623606.jpg",
