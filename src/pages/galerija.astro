@@ -51,13 +51,10 @@ const photos = allPhotos;
 
 const yearOf = (iso: string) => (/^(\d{4})-/.exec(iso || "")?.[1] ?? "");
 
-// Godine za filter, silazno, s brojem fotki
-const yearCounts = new Map<string, number>();
-for (const p of photos) {
-  const y = yearOf(p.createdAt);
-  if (y) yearCounts.set(y, (yearCounts.get(y) || 0) + 1);
-}
-const years = [...yearCounts.entries()].sort((a, b) => b[0].localeCompare(a[0]));
+// Godine za filter, silazno
+const years = [...new Set(photos.map((p) => yearOf(p.createdAt)).filter(Boolean))].sort(
+  (a, b) => b.localeCompare(a),
+);
 
 const hasPhotos = photos.length > 0;
 const recentCount = Math.min(RECENT_COUNT, photos.length);
@@ -85,25 +82,20 @@ const lightboxPayload = photos.map((p) => ({
     {
       hasPhotos ? (
         <>
-          {/* Filter po godinama */}
-          <div class="flex flex-wrap gap-2 mb-6 justify-center" role="group" aria-label="Filter po godini">
-            <button
-              type="button"
-              data-year-filter="recent"
-              class="year-btn is-active font-display text-sm uppercase tracking-wider px-3.5 py-1.5 rounded-full border-2 transition-colors"
+          {/* Filter po godini */}
+          <div class="flex items-center justify-center gap-3 mb-8">
+            <label
+              for="year-select"
+              class="font-display text-sm uppercase tracking-wider text-club-muted"
             >
-              Najnovije
-            </button>
-            {years.map(([y, n]) => (
-              <button
-                type="button"
-                data-year-filter={y}
-                class="year-btn font-display text-sm uppercase tracking-wider px-3.5 py-1.5 rounded-full border-2 transition-colors"
-              >
-                {y}
-                <span class="opacity-60 text-xs ml-1">{n}</span>
-              </button>
-            ))}
+              Godina
+            </label>
+            <select id="year-select" class="year-select">
+              <option value="recent">Najnovije</option>
+              {years.map((y) => (
+                <option value={y}>{y}</option>
+              ))}
+            </select>
           </div>
 
           <div
@@ -278,10 +270,6 @@ const lightboxPayload = photos.map((p) => ({
             if (show) visible.push(idx);
           });
 
-          document.querySelectorAll<HTMLButtonElement>(".year-btn").forEach((b) => {
-            b.classList.toggle("is-active", b.dataset.yearFilter === mode);
-          });
-
           if (statusEl) {
             statusEl.textContent =
               mode === "recent"
@@ -334,13 +322,16 @@ const lightboxPayload = photos.map((p) => ({
           });
         });
 
-        document.querySelectorAll<HTMLButtonElement>(".year-btn").forEach((btn) => {
-          btn.addEventListener("click", () => {
-            applyFilter(btn.dataset.yearFilter || "recent");
-          });
+        const yearSelect = document.getElementById("year-select") as HTMLSelectElement | null;
+        yearSelect?.addEventListener("change", () => {
+          applyFilter(yearSelect.value);
+          // Nakon promjene skrolaj na vrh mreže da se odmah vidi rezultat
+          document
+            .getElementById("gallery-grid")
+            ?.scrollIntoView({ block: "start", behavior: "smooth" });
         });
 
-        applyFilter("recent");
+        applyFilter(yearSelect?.value || "recent");
 
         closeBtn?.addEventListener("click", () => {
           dialog?.close();
@@ -369,19 +360,31 @@ const lightboxPayload = photos.map((p) => ({
   )}
 
   <style>
-    .year-btn {
-      border-color: var(--color-club-border);
-      color: var(--color-club-muted);
-      background: #fff;
-    }
-    .year-btn:hover {
-      border-color: var(--color-club-primary);
+    .year-select {
+      font-family: var(--font-display, inherit);
+      font-weight: 700;
+      font-size: 0.95rem;
+      letter-spacing: 0.03em;
       color: var(--color-club-primary-deep);
+      background-color: #fff;
+      border: 2px solid var(--color-club-border);
+      border-radius: 9999px;
+      padding: 0.5rem 2.5rem 0.5rem 1.15rem;
+      cursor: pointer;
+      /* Vlastita strelica — nativna se ne da stilizirati dosljedno */
+      appearance: none;
+      background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%230f2c6e' stroke-width='2.5'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 0.85rem center;
+      background-size: 1rem;
     }
-    .year-btn.is-active {
-      background: var(--color-club-primary);
+    .year-select:hover {
       border-color: var(--color-club-primary);
-      color: #fff;
+    }
+    .year-select:focus-visible {
+      outline: none;
+      border-color: var(--color-club-primary);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-club-primary) 35%, transparent);
     }
     /* [hidden] mora pobijediti display iz utility klasa na istom elementu */
     .gallery-item[hidden] {
