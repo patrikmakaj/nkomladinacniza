@@ -80,7 +80,28 @@ function parseCompetitionMeta($) {
   };
 }
 
-function parseMatches($) {
+/**
+ * Parsira dropdown natjecanja (#cid) — liga, kup, itd.
+ * Vraća [{ name, url, type, selected }]. Tip se određuje iz naziva:
+ * sadrži "kup" → "cup", inače "league".
+ */
+function parseCompetitionOptions($) {
+  const comps = [];
+  $("#cid option").each((_, el) => {
+    const value = ($(el).attr("value") || "").trim();
+    if (!value) return; // placeholder " - odaberi natjecanje - "
+    const name = $(el).text().trim();
+    comps.push({
+      name,
+      url: new URL(value, "https://semafor.hns.family").href,
+      type: /kup/i.test(name) ? "cup" : "league",
+      selected: $(el).attr("selected") != null,
+    });
+  });
+  return comps;
+}
+
+function parseMatches($, competitionType = "league") {
   const matches = [];
   $('#tabContent_1_1 .matchlist li.row[data-match]').each((_, el) => {
     const $li = $(el);
@@ -129,6 +150,7 @@ function parseMatches($) {
 
     matches.push({
       id,
+      type: competitionType,
       round,
       date: dt?.date,
       time: dt?.time,
@@ -143,7 +165,11 @@ function parseMatches($) {
       url,
     });
   });
-  // Sort by date asc; nulls last
+  return sortMatches(matches);
+}
+
+/** Sort by date asc; nulls last. Vraća isti (mutirani) array. */
+function sortMatches(matches) {
   matches.sort((a, b) => {
     if (!a.iso && !b.iso) return 0;
     if (!a.iso) return 1;
@@ -416,15 +442,45 @@ function parseMatchDetail(html) {
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-async function fetchHtml(url) {
-  const res = await fetch(url, {
-    headers: {
-      "User-Agent": UA,
-      "Accept-Language": "hr,en;q=0.8",
-    },
-  });
-  if (!res.ok) throw new Error(`HTTP ${res.status} dohvaćajući ${url}`);
-  return await res.text();
+// Statusi kod kojih ima smisla ponoviti zahtjev — rate limit, serverske
+// greške i Cloudflareovi 52x (npr. 522 = origin nedostupan, viđamo ga
+// povremeno kad HNS-ov server ne odgovori).
+const RETRY_STATUS = new Set([429, 500, 502, 503, 504, 520, 521, 522, 523, 524, 525, 526]);
+
+/**
+ * Dohvaća HTML s retryjem: do `attempts` pokušaja s eksponencijalnim
+ * backoffom (3s, 6s, 12s). Ako svi pokušaji padnu zbog prolazne greške
+ * (mreža/timeout/5xx), baca error s `transient: true` — pozivatelj tada
+ * može graceful odustati umjesto srušiti cijeli scrape.
+ */
+async function fetchHtml(url, { attempts = 4 } = {}) {
+  let lastErr;
+  for (let i = 0; i < attempts; i++) {
+    if (i > 0) {
+      const delay = 3000 * 2 ** (i - 1);
+      console.warn(`[scrape] ponavljam (${i + 1}/${attempts}) za ${delay / 1000}s: ${url}`);
+      await sleep(delay);
+    }
+    try {
+      const res = await fetch(url, {
+        headers: {
+          "User-Agent": UA,
+          "Accept-Language": "hr,en;q=0.8",
+        },
+        signal: AbortSignal.timeout(30_000),
+      });
+      if (res.ok) return await res.text();
+      const err = new Error(`HTTP ${res.status} dohvaćajući ${url}`);
+      err.status = res.status;
+      if (!RETRY_STATUS.has(res.status)) throw err; // trajna greška (404 i sl.) — ne ponavljaj
+      lastErr = err;
+    } catch (err) {
+      if (err.status && !RETRY_STATUS.has(err.status)) throw err;
+      lastErr = err; // mrežna greška ili timeout — ponovi
+    }
+  }
+  lastErr.transient = true;
+  throw lastErr;
 }
 
 /** Učitaj prethodno spremljene matchDetails (radi cache-a — odigrane utakmice se ne mijenjaju). */
@@ -472,12 +528,55 @@ async function main() {
   const startedAt = new Date();
   console.log(`[scrape] dohvaćam ${CLUB_URL}…`);
 
-  const html = await fetchHtml(CLUB_URL);
+  let html;
+  try {
+    html = await fetchHtml(CLUB_URL);
+  } catch (err) {
+    if (err.transient) {
+      // HNS Semafor je privremeno nedostupan (Cloudflare 52x, timeout…).
+      // Zadrži postojeći hns.json i izađi uspješno — cron za 30 min
+      // ionako pokreće novi pokušaj, a deploy ne smije pasti zbog toga.
+      console.warn(
+        `[scrape] ⚠ HNS Semafor nedostupan (${err.message}) — zadržavam postojeće podatke i preskačem ovaj run.`,
+      );
+      return;
+    }
+    throw err;
+  }
   const $ = cheerio.load(html);
 
   const club = parseClubHeader($);
   const competition = parseCompetitionMeta($);
-  const matches = parseMatches($);
+  const competitions = parseCompetitionOptions($);
+
+  // Utakmice iz SVIH natjecanja (liga + kup + …). Defaultno odabrano
+  // natjecanje (liga) već imamo u `$`; ostala dohvaćamo zasebno.
+  // Tablica/igrači/statistike se parsiraju samo s default (ligaške) stranice.
+  const matchesById = new Map();
+  const addMatches = (list) => {
+    for (const m of list) if (!matchesById.has(m.id)) matchesById.set(m.id, m);
+  };
+
+  if (competitions.length === 0) {
+    // Fallback: dropdown nije nađen — ponašaj se kao prije (samo default stranica)
+    addMatches(parseMatches($, "league"));
+  } else {
+    for (const comp of competitions) {
+      if (comp.selected) {
+        addMatches(parseMatches($, comp.type));
+        continue;
+      }
+      try {
+        const compHtml = await fetchHtml(comp.url);
+        addMatches(parseMatches(cheerio.load(compHtml), comp.type));
+      } catch (err) {
+        console.warn(`[scrape] greška za natjecanje "${comp.name}": ${err.message}`);
+      }
+      await sleep(MATCH_FETCH_DELAY_MS);
+    }
+  }
+  const matches = sortMatches([...matchesById.values()]);
+
   const table = parseTable($);
   const players = parsePlayers($);
   const topScorers = parseTopScorers($);
@@ -497,6 +596,7 @@ async function main() {
     sourceUrl: CLUB_URL,
     club,
     competition,
+    competitions: competitions.map(({ name, url, type }) => ({ name, url, type })),
     nextMatch,
     lastResults,
     table,

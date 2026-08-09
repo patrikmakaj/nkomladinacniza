@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-08-09T11:54:38.304Z",
+  "lastUpdated": "2026-08-09T12:15:21.925Z",
   "sourceUrl": "https://semafor.hns.family/klubovi/134/nk-omladinac-niza/",
   "club": {
     "id": 134,
@@ -14,26 +14,39 @@
     "name": "2. ŽNL Našice - Seniori 26/27",
     "season": "2026/27"
   },
-  "nextMatch": {
-    "id": "114378673",
-    "round": 1,
-    "date": "2026-08-30",
-    "time": "17:30",
-    "iso": "2026-08-30T17:30:00",
-    "competition": "2. ŽNL Našice - Seniori 26/27, 1. kolo",
-    "home": {
-      "id": 140,
-      "name": "NK Vihor (J)",
-      "logo": "https://hns.family/files/images_comet/07/3/_resized/073548045a9ffd623cfb00b39796fde20ba35dd0_100_100_wg_t.png"
+  "competitions": [
+    {
+      "name": "2. ŽNL Našice - Seniori 26/27",
+      "url": "https://semafor.hns.family/klubovi/134/nk-omladinac-niza/?cid=114357447",
+      "type": "league"
     },
-    "away": {
+    {
+      "name": "Kup NS Našice 26/27",
+      "url": "https://semafor.hns.family/klubovi/134/nk-omladinac-niza/?cid=114378327",
+      "type": "cup"
+    }
+  ],
+  "nextMatch": {
+    "id": "114378366",
+    "type": "cup",
+    "round": 10003,
+    "date": "2026-08-12",
+    "time": "17:30",
+    "iso": "2026-08-12T17:30:00",
+    "competition": "Kup NS Našice 26/27, 1/16 finala",
+    "home": {
       "id": 134,
       "name": "NK Omladinac Niza",
       "logo": "https://hns.family/files/images_comet/49/b/_resized/49b362069bd38a3154422c8f1c4b7cd4f5aee1b7_100_100_wg_t.png"
     },
+    "away": {
+      "id": 126,
+      "name": "NK Brezik",
+      "logo": "https://hns.family/files/images_comet/03/a/_resized/03ab0f906448fd102ff730818a0931b71e3d4ba6_100_100_wg_t.png"
+    },
     "score": null,
     "played": false,
-    "isHome": false,
+    "isHome": true,
     "result": null,
     "url": null
   },
@@ -312,7 +325,32 @@
   },
   "matches": [
     {
+      "id": "114378366",
+      "type": "cup",
+      "round": 10003,
+      "date": "2026-08-12",
+      "time": "17:30",
+      "iso": "2026-08-12T17:30:00",
+      "competition": "Kup NS Našice 26/27, 1/16 finala",
+      "home": {
+        "id": 134,
+        "name": "NK Omladinac Niza",
+        "logo": "https://hns.family/files/images_comet/49/b/_resized/49b362069bd38a3154422c8f1c4b7cd4f5aee1b7_100_100_wg_t.png"
+      },
+      "away": {
+        "id": 126,
+        "name": "NK Brezik",
+        "logo": "https://hns.family/files/images_comet/03/a/_resized/03ab0f906448fd102ff730818a0931b71e3d4ba6_100_100_wg_t.png"
+      },
+      "score": null,
+      "played": false,
+      "isHome": true,
+      "result": null,
+      "url": null
+    },
+    {
       "id": "114378673",
+      "type": "league",
       "round": 1,
       "date": "2026-08-30",
       "time": "17:30",
@@ -336,6 +374,7 @@
     },
     {
       "id": "114378676",
+      "type": "league",
       "round": 2,
       "date": "2026-09-05",
       "time": "19:00",
@@ -359,6 +398,7 @@
     },
     {
       "id": "114378688",
+      "type": "league",
       "round": 3,
       "date": "2026-09-13",
       "time": "17:00",
@@ -382,6 +422,7 @@
     },
     {
       "id": "114378689",
+      "type": "league",
       "round": 4,
       "date": "2026-09-19",
       "time": "16:30",
@@ -405,6 +446,7 @@
     },
     {
       "id": "114378702",
+      "type": "league",
       "round": 5,
       "date": "2026-09-26",
       "time": "19:00",
@@ -428,6 +470,7 @@
     },
     {
       "id": "114378704",
+      "type": "league",
       "round": 6,
       "date": "2026-10-04",
       "time": "16:00",
@@ -451,6 +494,7 @@
     },
     {
       "id": "114378715",
+      "type": "league",
       "round": 7,
       "date": "2026-10-10",
       "time": "19:00",
@@ -474,6 +518,7 @@
     },
     {
       "id": "114378719",
+      "type": "league",
       "round": 8,
       "date": "2026-10-18",
       "time": "15:00",
@@ -497,6 +542,7 @@
     },
     {
       "id": "114378728",
+      "type": "league",
       "round": 9,
       "date": "2026-10-24",
       "time": "19:00",
@@ -520,6 +566,7 @@
     },
     {
       "id": "114378734",
+      "type": "league",
       "round": 10,
       "date": "2026-11-01",
       "time": "14:00",
@@ -543,6 +590,7 @@
     },
     {
       "id": "114378741",
+      "type": "league",
       "round": 11,
       "date": "2026-11-07",
       "time": "19:00",
@@ -566,6 +614,7 @@
     },
     {
       "id": "114378749",
+      "type": "league",
       "round": 12,
       "date": "2026-11-14",
       "time": "13:30",
@@ -589,6 +638,7 @@
     },
     {
       "id": "114378754",
+      "type": "league",
       "round": 13,
       "date": "2026-11-21",
       "time": "19:00",
