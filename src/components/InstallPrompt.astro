@@ -1,0 +1,281 @@
+---
+/**
+ * Poziv na instalaciju stranice kao aplikacije.
+ *
+ * Dvije platforme, dva različita puta:
+ *  - Android/Chrome/Edge imaju `beforeinstallprompt`, pa gumb otvara
+ *    pravi sistemski dijalog za instalaciju (jedan tap).
+ *  - iOS Safari NEMA nikakav API za to — jedino što se smije je lijepo
+ *    objasniti korake, jer "Podijeli → Dodaj na početni zaslon" nitko
+ *    ne otkrije sam.
+ *
+ * Traka se ne prikazuje ako je stranica već instalirana, ako ju je
+ * korisnik zatvorio (pamti se 60 dana) niti prije nego prođe koja
+ * sekunda — da ne skoči u lice čim se stranica otvori.
+ *
+ * Footer poziva window.omladinacInstall() da bi isto bilo dostupno
+ * i trajno, a ne samo kad traka iskoči.
+ */
+import Logo from "./Logo.astro";
+---
+
+<!-- Donja traka -->
+<div
+  id="install-banner"
+  hidden
+  class="fixed inset-x-0 bottom-0 z-40 p-3 sm:p-4 pointer-events-none"
+>
+  <div
+    class="pointer-events-auto mx-auto max-w-2xl bg-white border-2 border-club-primary rounded-xl shadow-2xl p-4 flex items-center gap-3 sm:gap-4"
+  >
+    <div class="w-12 h-12 flex-shrink-0 flex items-center justify-center">
+      <Logo size={48} />
+    </div>
+    <div class="flex-1 min-w-0">
+      <p
+        class="font-display font-bold uppercase tracking-wider text-sm text-club-primary-deep leading-tight"
+      >
+        Omladinac na tvom zaslonu
+      </p>
+      <p class="text-xs sm:text-sm text-club-muted mt-0.5">
+        Dodaj stranicu kao aplikaciju — rezultati i raspored na jedan dodir.
+      </p>
+    </div>
+    <div class="flex items-center gap-1.5 flex-shrink-0">
+      <button
+        id="install-action"
+        type="button"
+        class="bg-club-primary hover:bg-club-primary-deep text-white font-display font-bold uppercase tracking-wider text-xs sm:text-sm px-3.5 sm:px-5 py-2.5 rounded-lg transition-colors"
+      >
+        Dodaj
+      </button>
+      <button
+        id="install-dismiss"
+        type="button"
+        aria-label="Zatvori"
+        class="w-9 h-9 flex items-center justify-center rounded-lg text-club-muted hover:text-club-secondary hover:bg-club-light transition-colors"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Upute za iPhone (nema API-ja, samo objašnjenje) -->
+<dialog
+  id="ios-install-help"
+  class="m-0 p-0 w-full h-full max-w-none max-h-none bg-transparent backdrop:bg-black/70"
+>
+  <div class="w-full h-full flex items-end sm:items-center justify-center p-3 sm:p-6">
+    <div class="bg-white rounded-2xl w-full max-w-md overflow-hidden shadow-2xl">
+      <div
+        class="bg-gradient-to-r from-club-primary-deep to-club-primary text-white px-5 py-4 flex items-center gap-3"
+      >
+        <div class="w-11 h-11 flex-shrink-0 bg-white rounded-lg flex items-center justify-center">
+          <Logo size={38} />
+        </div>
+        <div class="flex-1">
+          <p class="font-display font-bold uppercase tracking-wider text-sm">
+            Dodaj na početni zaslon
+          </p>
+          <p class="text-xs text-white/75">Tri koraka, traje 10 sekundi</p>
+        </div>
+        <button
+          id="ios-help-close"
+          type="button"
+          aria-label="Zatvori"
+          class="w-9 h-9 flex items-center justify-center rounded-lg hover:bg-white/15 transition-colors"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <ol class="p-5 space-y-4">
+        <li class="flex gap-3 items-start">
+          <span
+            class="flex-shrink-0 w-7 h-7 rounded-full bg-club-primary text-white font-display font-bold text-sm flex items-center justify-center"
+            >1</span
+          >
+          <p class="text-sm text-club-secondary/90 pt-0.5">
+            Tapni gumb <strong>Podijeli</strong> na dnu Safarija — ovaj:
+            <span
+              class="inline-flex items-center justify-center w-7 h-7 align-middle mx-0.5 rounded border border-club-border bg-club-light-2"
+            >
+              <svg class="w-4 h-4 text-club-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-label="Podijeli">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 3v12m0-12L8.5 6.5M12 3l3.5 3.5" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M5 12v7a1.5 1.5 0 001.5 1.5h11A1.5 1.5 0 0019 19v-7" />
+              </svg>
+            </span>
+          </p>
+        </li>
+        <li class="flex gap-3 items-start">
+          <span
+            class="flex-shrink-0 w-7 h-7 rounded-full bg-club-primary text-white font-display font-bold text-sm flex items-center justify-center"
+            >2</span
+          >
+          <p class="text-sm text-club-secondary/90 pt-0.5">
+            Skrolaj popis prema dolje i odaberi
+            <strong>„Dodaj na početni zaslon"</strong>.
+          </p>
+        </li>
+        <li class="flex gap-3 items-start">
+          <span
+            class="flex-shrink-0 w-7 h-7 rounded-full bg-club-primary text-white font-display font-bold text-sm flex items-center justify-center"
+            >3</span
+          >
+          <p class="text-sm text-club-secondary/90 pt-0.5">
+            Potvrdi s <strong>Dodaj</strong> gore desno. Grb kluba pojavit će se
+            među tvojim aplikacijama.
+          </p>
+        </li>
+      </ol>
+
+      <div class="px-5 pb-5">
+        <button
+          id="ios-help-ok"
+          type="button"
+          class="w-full bg-club-primary hover:bg-club-primary-deep text-white font-display font-bold uppercase tracking-wider text-sm py-3 rounded-lg transition-colors"
+        >
+          Jasno mi je
+        </button>
+      </div>
+    </div>
+  </div>
+</dialog>
+
+<script>
+  const DISMISS_KEY = "omladinac-install-dismissed";
+  const DISMISS_DAYS = 60;
+  const SHOW_DELAY_MS = 2500;
+
+  const banner = document.getElementById("install-banner");
+  const actionBtn = document.getElementById("install-action");
+  const dismissBtn = document.getElementById("install-dismiss");
+  const iosDialog = document.getElementById("ios-install-help") as HTMLDialogElement | null;
+
+  /** Već instalirana? Tada nema što nuditi. */
+  function isInstalled(): boolean {
+    return (
+      window.matchMedia("(display-mode: standalone)").matches ||
+      // iOS Safari koristi vlastito, nestandardno svojstvo
+      (navigator as unknown as { standalone?: boolean }).standalone === true
+    );
+  }
+
+  function isIOS(): boolean {
+    const ua = navigator.userAgent;
+    return (
+      /iPad|iPhone|iPod/.test(ua) ||
+      // iPad se od iPadOS-a 13 predstavlja kao Mac — razlikuje ga dodir
+      (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1)
+    );
+  }
+
+  function recentlyDismissed(): boolean {
+    try {
+      const at = Number(localStorage.getItem(DISMISS_KEY));
+      if (!at) return false;
+      return Date.now() - at < DISMISS_DAYS * 864e5;
+    } catch {
+      return false;
+    }
+  }
+
+  function rememberDismissal() {
+    try {
+      localStorage.setItem(DISMISS_KEY, String(Date.now()));
+    } catch {
+      /* private mode — nema veze, traka se pojavi idući put */
+    }
+  }
+
+  function openIosHelp() {
+    iosDialog?.showModal();
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeIosHelp() {
+    iosDialog?.close();
+    document.body.style.overflow = "";
+  }
+
+  function hideBanner() {
+    if (banner) banner.hidden = true;
+  }
+
+  // Android/Chrome: pravi sistemski dijalog. Događaj stigne sam kad
+  // preglednik procijeni da stranica ispunjava uvjete za instalaciju.
+  let deferredPrompt: (Event & { prompt: () => Promise<void> }) | null = null;
+
+  window.addEventListener("beforeinstallprompt", (e) => {
+    e.preventDefault();
+    deferredPrompt = e as Event & { prompt: () => Promise<void> };
+    if (!recentlyDismissed()) showBannerSoon();
+  });
+
+  window.addEventListener("appinstalled", () => {
+    deferredPrompt = null;
+    hideBanner();
+    rememberDismissal();
+  });
+
+  function showBannerSoon() {
+    if (isInstalled() || !banner) return;
+    setTimeout(() => {
+      if (!isInstalled()) banner.hidden = false;
+    }, SHOW_DELAY_MS);
+  }
+
+  actionBtn?.addEventListener("click", async () => {
+    if (deferredPrompt) {
+      hideBanner();
+      await deferredPrompt.prompt();
+      deferredPrompt = null;
+      return;
+    }
+    // iOS (i svi bez API-ja): objasni korake
+    hideBanner();
+    openIosHelp();
+  });
+
+  dismissBtn?.addEventListener("click", () => {
+    hideBanner();
+    rememberDismissal();
+  });
+
+  document.getElementById("ios-help-close")?.addEventListener("click", closeIosHelp);
+  document.getElementById("ios-help-ok")?.addEventListener("click", () => {
+    closeIosHelp();
+    rememberDismissal();
+  });
+  iosDialog?.addEventListener("click", (e) => {
+    if (e.target === iosDialog) closeIosHelp();
+  });
+  iosDialog?.addEventListener("close", () => {
+    document.body.style.overflow = "";
+  });
+
+  // Na iPhoneu nema `beforeinstallprompt`, pa traku pokazujemo sami
+  if (isIOS() && !isInstalled() && !recentlyDismissed()) showBannerSoon();
+
+  /**
+   * Trajni ulaz iz footera — radi neovisno o tome je li traka
+   * ikad iskočila ili ju je korisnik davno zatvorio.
+   */
+  (window as unknown as { omladinacInstall: () => void }).omladinacInstall = () => {
+    if (isInstalled()) {
+      alert("Stranica je već dodana na tvoj početni zaslon.");
+      return;
+    }
+    if (deferredPrompt) {
+      deferredPrompt.prompt();
+      deferredPrompt = null;
+      return;
+    }
+    openIosHelp();
+  };
+</script>

@@ -36,7 +36,9 @@ export const GET: APIRoute = () => {
         purpose: "any",
       },
       {
-        src: url("/icon-512.png"),
+        // Android obrezuje ikonu u krug/squircle — ova ima punu podlogu
+        // i grb unutar sigurne zone, pa se rubovi nemaju što odsjeći.
+        src: url("/icon-maskable-512.png"),
         sizes: "512x512",
         type: "image/png",
         purpose: "maskable",
