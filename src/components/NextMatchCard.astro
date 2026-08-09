@@ -1,8 +1,6 @@
 ---
 import Logo from "./Logo.astro";
-import hns from "../data/hns.json";
-
-const nextMatch = hns.nextMatch;
+import { nextMatch } from "../lib/matches";
 
 let dateLabel = "";
 let dayLabel = "";
@@ -15,12 +13,12 @@ if (nextMatch?.iso) {
     year: "numeric",
   });
   dayLabel = dateObj.toLocaleDateString("hr-HR", { weekday: "long" });
-  timeLabel = nextMatch.time || "";
+  timeLabel = nextMatch.time || "uskoro";
 }
 
 const venue = nextMatch?.isHome
   ? "Grbavica, Niza"
-  : `Gosti · ${nextMatch?.away?.name ?? ""}`;
+  : `Gosti · ${nextMatch?.venue ?? nextMatch?.home?.name ?? ""}`;
 ---
 
 {

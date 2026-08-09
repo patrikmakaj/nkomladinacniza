@@ -17,11 +17,11 @@ import Logo from "./Logo.astro";
 interface Props {
   match: {
     iso: string;
-    time: string;
+    time: string | null;
     competition: string;
     isHome: boolean;
-    home: { id: number; name: string; logo: string | null };
-    away: { id: number; name: string; logo: string | null };
+    home: { id: number | null; name: string; logo: string | null };
+    away: { id: number | null; name: string; logo: string | null };
   };
 }
 

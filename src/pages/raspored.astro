@@ -4,37 +4,17 @@ import Hero from "../components/Hero.astro";
 import Logo from "../components/Logo.astro";
 import { url } from "../lib/url";
 import hns from "../data/hns.json";
+import {
+  allMatches,
+  upcoming,
+  played,
+  matchBadge,
+  badgeClass,
+} from "../lib/matches";
 
 const matchDetails = (hns.matchDetails ?? {}) as Record<string, unknown>;
 
-type Match = {
-  id: string;
-  round: number;
-  date: string;
-  time: string;
-  iso: string;
-  competition: string;
-  home: { id: number; name: string; logo: string | null };
-  away: { id: number; name: string; logo: string | null };
-  score: { home: number; away: number } | null;
-  played: boolean;
-  isHome: boolean;
-  result: "W" | "D" | "L" | null;
-  url: string | null;
-};
-
-const allMatches = (hns.matches ?? []) as Match[];
 const competitionName = hns.competition?.name ?? "Sezona";
-
-// Sortirano po datumu — predstojeće uzlazno, odigrane silazno
-const upcoming = allMatches
-  .filter((m) => !m.played)
-  .sort((a, b) => a.iso.localeCompare(b.iso));
-const played = allMatches
-  .filter((m) => m.played)
-  .sort((a, b) => b.iso.localeCompare(a.iso));
-
-const totalRounds = Math.max(...allMatches.map((m) => m.round || 0), 0);
 
 // Hrvatski format datuma (npr. "ned, 2. svibnja 2026.")
 function formatDate(iso: string): string {
@@ -68,11 +48,13 @@ const outcomeTitle = { W: "Pobjeda", D: "Neriješeno", L: "Poraz" };
 const icsPayload = upcoming.map((m) => ({
   id: m.id,
   iso: m.iso,
+  date: m.date,
+  time: m.time,
   homeName: m.home.name,
   awayName: m.away.name,
   isHome: m.isHome,
   competition: m.competition,
-  round: m.round,
+  venue: m.venue,
 }));
 ---
 
@@ -134,13 +116,15 @@ const icsPayload = upcoming.map((m) => ({
               {/* Header: kolo + datum + venue */}
               <div class="bg-club-light-2 px-4 py-2 flex flex-wrap items-center justify-between gap-2 text-xs border-b border-club-border">
                 <div class="flex items-center gap-2">
-                  <span class="font-display font-bold uppercase tracking-wider bg-club-primary text-white px-2 py-0.5 rounded">
-                    {m.round}. kolo
+                  <span class={`font-display font-bold uppercase tracking-wider px-2 py-0.5 rounded ${badgeClass[m.type]}`}>
+                    {matchBadge(m)}
                   </span>
                   <span class="text-club-muted">{formatDate(m.iso)}</span>
                 </div>
                 <span class="font-display uppercase tracking-wider text-club-muted">
-                  {m.isHome ? "Doma · Grbavica" : `Gosti · ${m.home.name}`}
+                  {m.isHome
+                    ? "Doma · Grbavica"
+                    : `Gosti · ${m.venue ?? m.home.name}`}
                 </span>
               </div>
 
@@ -245,16 +229,21 @@ const icsPayload = upcoming.map((m) => ({
           {played.map((m) => {
             const outcome = (m.result as "W" | "D" | "L") || "D";
             const hasDetail = !!matchDetails[m.id];
-            const href = hasDetail
-              ? url(`/utakmica/${m.id}`)
-              : m.url || "#";
+            const isLink = hasDetail || !!m.url;
+            const Tag = isLink ? "a" : "article";
+            const href = hasDetail ? url(`/utakmica/${m.id}`) : m.url || undefined;
             const externalLink = !hasDetail && !!m.url;
+            const scorersLabel = m.scorers
+              .map((s) => (s.goals > 1 ? `${s.name} ×${s.goals}` : s.name))
+              .join(", ");
             return (
-              <a
+              <Tag
                 href={href}
                 target={externalLink ? "_blank" : undefined}
                 rel={externalLink ? "noopener" : undefined}
-                class="block bg-white border border-club-border hover:border-club-primary hover:shadow-md rounded-lg p-3 md:p-4 transition-all"
+                class={`block bg-white border border-club-border rounded-lg p-3 md:p-4 transition-all ${
+                  isLink ? "hover:border-club-primary hover:shadow-md" : ""
+                }`}
               >
                 <div class="grid grid-cols-[auto_auto_1fr_auto] items-center gap-3 md:gap-4">
                   {/* Outcome badge */}
@@ -265,10 +254,10 @@ const icsPayload = upcoming.map((m) => ({
                     {outcomeLabel[outcome]}
                   </div>
 
-                  {/* Round + date */}
+                  {/* Natjecanje + datum */}
                   <div class="text-xs text-club-muted w-20 flex-shrink-0">
                     <p class="font-display uppercase tracking-wider font-bold text-club-primary-deep">
-                      {m.round}. kolo
+                      {matchBadge(m)}
                     </p>
                     <p>{new Date(m.iso).toLocaleDateString("hr-HR", { day: "numeric", month: "short" })}</p>
                   </div>
@@ -287,11 +276,20 @@ const icsPayload = upcoming.map((m) => ({
                   </div>
 
                   {/* Arrow */}
-                  <svg class="w-4 h-4 text-club-muted flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                  </svg>
+                  {isLink && (
+                    <svg class="w-4 h-4 text-club-muted flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                  )}
                 </div>
-              </a>
+
+                {/* Strijelci (prijateljske — nema stranice s detaljima) */}
+                {scorersLabel && (
+                  <p class="mt-2 pt-2 border-t border-club-border/60 text-xs text-club-muted text-center">
+                    ⚽ {scorersLabel}
+                  </p>
+                )}
+              </Tag>
             );
           })}
         </div>
@@ -319,11 +317,13 @@ const icsPayload = upcoming.map((m) => ({
     type IcsMatch = {
       id: string;
       iso: string;
+      date: string;
+      time: string | null;
       homeName: string;
       awayName: string;
       isHome: boolean;
       competition: string;
-      round: number;
+      venue: string | null;
     };
 
     const dataEl = document.getElementById("ics-data");
@@ -345,15 +345,34 @@ const icsPayload = upcoming.map((m) => ({
     }
 
     function buildIcs(m: IcsMatch): string {
-      const dtStart = fmtIcsLocal(m.iso);
-      // Pretpostavljamo 90 min trajanje + 15 min poluvrijeme = 105 min, zaokruženo na 2h
-      const endDate = new Date(new Date(m.iso).getTime() + 2 * 60 * 60 * 1000);
-      const dtEnd = fmtIcsLocal(endDate.toISOString().replace("Z", ""));
       const summary = `${m.homeName} – ${m.awayName}`;
-      const location = m.isHome ? "Grbavica, Niza" : m.homeName;
+      const location = m.isHome ? "Grbavica, Niza" : m.venue || m.homeName;
       const description = `${m.competition}\\nNK Omladinac Niza`;
       const uid = `match-${m.id}@nkomladinacniza.hr`;
       const stamp = fmtIcsLocal(new Date().toISOString().replace("Z", ""));
+
+      let dtLines: string[];
+      if (m.time) {
+        const dtStart = fmtIcsLocal(m.iso);
+        // Pretpostavljamo 90 min trajanje + 15 min poluvrijeme = 105 min, zaokruženo na 2h
+        const endDate = new Date(new Date(m.iso).getTime() + 2 * 60 * 60 * 1000);
+        const dtEnd = fmtIcsLocal(endDate.toISOString().replace("Z", ""));
+        dtLines = [
+          `DTSTART;TZID=Europe/Zagreb:${dtStart}`,
+          `DTEND;TZID=Europe/Zagreb:${dtEnd}`,
+        ];
+      } else {
+        // Vrijeme još nije poznato — cjelodnevni događaj
+        const day = m.date.replace(/-/g, "");
+        const next = new Date(`${m.date}T12:00:00`);
+        next.setDate(next.getDate() + 1);
+        const pad = (n: number) => String(n).padStart(2, "0");
+        const nextDay = `${next.getFullYear()}${pad(next.getMonth() + 1)}${pad(next.getDate())}`;
+        dtLines = [
+          `DTSTART;VALUE=DATE:${day}`,
+          `DTEND;VALUE=DATE:${nextDay}`,
+        ];
+      }
 
       return [
         "BEGIN:VCALENDAR",
@@ -364,8 +383,7 @@ const icsPayload = upcoming.map((m) => ({
         "BEGIN:VEVENT",
         `UID:${uid}`,
         `DTSTAMP:${stamp}`,
-        `DTSTART;TZID=Europe/Zagreb:${dtStart}`,
-        `DTEND;TZID=Europe/Zagreb:${dtEnd}`,
+        ...dtLines,
         `SUMMARY:${summary}`,
         `LOCATION:${location}`,
         `DESCRIPTION:${description}`,
@@ -380,7 +398,7 @@ const icsPayload = upcoming.map((m) => ({
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `omladinac-${m.iso.slice(0, 10)}-${m.round}kolo.ics`;
+      a.download = `omladinac-${m.date}.ics`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);

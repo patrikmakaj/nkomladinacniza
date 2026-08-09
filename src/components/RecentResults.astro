@@ -1,6 +1,7 @@
 ---
 import { url } from "../lib/url";
 import hns from "../data/hns.json";
+import { lastResults } from "../lib/matches";
 
 interface Props {
   limit?: number;
@@ -12,8 +13,7 @@ const wrapperClass = grid
   ? "grid grid-cols-1 md:grid-cols-2 gap-3"
   : "space-y-3";
 
-const allResults = hns.lastResults ?? [];
-const results = limit ? allResults.slice(0, limit) : allResults;
+const results = lastResults(limit ?? 10);
 const matchDetails = (hns.matchDetails ?? {}) as Record<string, unknown>;
 
 const outcomeColor = {
