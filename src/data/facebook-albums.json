@@ -1,6 +1,6 @@
 {
-  "lastUpdated": "2026-08-09T12:11:39.945Z",
-  "enabled": false,
-  "reason": "FB_PAGE_ID / FB_ACCESS_TOKEN nisu postavljeni",
+  "lastUpdated": "2026-08-09T12:18:15.881Z",
+  "enabled": true,
+  "pageId": "55401829691",
   "albums": []
 }
