@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-08-10T07:25:24.563Z",
+  "lastUpdated": "2026-08-10T08:56:39.301Z",
   "enabled": true,
   "pageId": "55401829691",
   "photosPerYear": 200,
@@ -19207,5 +19207,6 @@
         }
       ]
     }
-  ]
+  ],
+  "lastError": "Graph API vratio prazan popis albuma (HTTP 200)"
 }
