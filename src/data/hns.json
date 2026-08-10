@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-08-10T05:54:06.871Z",
+  "lastUpdated": "2026-08-10T07:24:04.663Z",
   "sourceUrl": "https://semafor.hns.family/klubovi/134/nk-omladinac-niza/",
   "club": {
     "id": 134,
@@ -31,8 +31,8 @@
     "type": "cup",
     "round": 10003,
     "date": "2026-08-12",
-    "time": "17:30",
-    "iso": "2026-08-12T17:30:00",
+    "time": "19:30",
+    "iso": "2026-08-12T19:30:00",
     "competition": "Kup NS Našice 26/27, 1/16 finala",
     "home": {
       "id": 134,
@@ -329,8 +329,8 @@
       "type": "cup",
       "round": 10003,
       "date": "2026-08-12",
-      "time": "17:30",
-      "iso": "2026-08-12T17:30:00",
+      "time": "19:30",
+      "iso": "2026-08-12T19:30:00",
       "competition": "Kup NS Našice 26/27, 1/16 finala",
       "home": {
         "id": 134,
