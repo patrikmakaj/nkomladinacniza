@@ -1,9 +1,9 @@
 {
-  "lastUpdated": "2026-08-10T08:56:39.301Z",
+  "lastUpdated": "2026-08-10T10:16:45.264Z",
   "enabled": true,
   "pageId": "55401829691",
   "photosPerYear": 200,
-  "totalOnFacebook": 7554,
+  "totalOnFacebook": 7555,
   "years": [
     "2026",
     "2025",
@@ -29,11 +29,17 @@
       "id": "482830940516078",
       "name": "Preneseno s mobitela",
       "createdAt": "2022-08-31T22:19:54+0000",
-      "updatedAt": "2026-08-09T21:55:05+0000",
+      "updatedAt": "2026-08-10T08:33:00+0000",
       "permalink": "https://www.facebook.com/album.php?fbid=482830940516078&id=1551452460320582&aid=1073741828",
       "cover": "/images/facebook-albums/482830940516078/cover.jpg",
-      "count": 4626,
+      "count": 4628,
       "photos": [
+        {
+          "id": "1657931403006020",
+          "src": "/images/facebook-albums/482830940516078/1657931403006020.jpg",
+          "caption": "Iduća na redu je utakmica s Brezikom u kupu na domaćem terenu. Ovih dana ćemo predstaviti pojačanja, a klub su napustili Leon Budić i Matko Cvetanić kojima zahvaljujemo i želimo sreću u nastavku karijere!\nVidimo se u srijedu od 19:30h...",
+          "createdAt": "2026-08-10T08:33:00+0000"
+        },
         {
           "id": "1657531219712705",
           "src": "/images/facebook-albums/482830940516078/1657531219712705.jpg",
@@ -19207,6 +19213,5 @@
         }
       ]
     }
-  ],
-  "lastError": "Graph API vratio prazan popis albuma (HTTP 200)"
+  ]
 }
