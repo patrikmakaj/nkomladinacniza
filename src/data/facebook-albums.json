@@ -1,9 +1,9 @@
 {
-  "lastUpdated": "2026-08-11T15:57:16.698Z",
+  "lastUpdated": "2026-08-11T17:00:03.319Z",
   "enabled": true,
   "pageId": "55401829691",
   "photosPerYear": 200,
-  "totalOnFacebook": 7556,
+  "totalOnFacebook": 7557,
   "years": [
     "2026",
     "2025",
@@ -29,11 +29,17 @@
       "id": "482830940516078",
       "name": "Preneseno s mobitela",
       "createdAt": "2022-08-31T22:19:54+0000",
-      "updatedAt": "2026-08-11T09:57:55+0000",
+      "updatedAt": "2026-08-11T14:02:54+0000",
       "permalink": "https://www.facebook.com/album.php?fbid=482830940516078&id=1551452460320582&aid=1073741828",
       "cover": "/images/facebook-albums/482830940516078/cover.jpg",
-      "count": 4629,
+      "count": 4630,
       "photos": [
+        {
+          "id": "1659128486219645",
+          "src": "/images/facebook-albums/482830940516078/1659128486219645.jpg",
+          "caption": "",
+          "createdAt": "2026-08-11T14:02:54+0000"
+        },
         {
           "id": "1658929516239542",
           "src": "/images/facebook-albums/482830940516078/1658929516239542.jpg",
@@ -15843,15 +15849,15 @@
           "createdAt": "2016-07-14T21:43:32+0000"
         },
         {
-          "id": "10154946300974692",
-          "src": "/images/facebook-albums/10154946300909692/10154946300974692.jpg",
-          "caption": "Seniori 1. str.",
-          "createdAt": "2016-07-14T21:41:14+0000"
-        },
-        {
           "id": "10154946300969692",
           "src": "/images/facebook-albums/10154946300909692/10154946300969692.jpg",
           "caption": "Seniori 2. str.",
+          "createdAt": "2016-07-14T21:41:14+0000"
+        },
+        {
+          "id": "10154946300974692",
+          "src": "/images/facebook-albums/10154946300909692/10154946300974692.jpg",
+          "caption": "Seniori 1. str.",
           "createdAt": "2016-07-14T21:41:14+0000"
         },
         {
@@ -18770,14 +18776,14 @@
           "createdAt": "2017-06-25T21:03:49+0000"
         },
         {
-          "id": "10156242943439692",
-          "src": "/images/facebook-albums/482830957182743/10156242943439692.jpg",
+          "id": "10156242943509692",
+          "src": "/images/facebook-albums/482830957182743/10156242943509692.jpg",
           "caption": "",
           "createdAt": "2017-06-25T21:03:49+0000"
         },
         {
-          "id": "10156242943509692",
-          "src": "/images/facebook-albums/482830957182743/10156242943509692.jpg",
+          "id": "10156242943439692",
+          "src": "/images/facebook-albums/482830957182743/10156242943439692.jpg",
           "caption": "",
           "createdAt": "2017-06-25T21:03:49+0000"
         },
@@ -19496,14 +19502,14 @@
           "createdAt": "2017-01-28T16:09:44+0000"
         },
         {
-          "id": "10155670708159692",
-          "src": "/images/facebook-albums/482830957182743/10155670708159692.jpg",
+          "id": "10155670708144692",
+          "src": "/images/facebook-albums/482830957182743/10155670708144692.jpg",
           "caption": "",
           "createdAt": "2017-01-28T16:09:44+0000"
         },
         {
-          "id": "10155670708144692",
-          "src": "/images/facebook-albums/482830957182743/10155670708144692.jpg",
+          "id": "10155670708159692",
+          "src": "/images/facebook-albums/482830957182743/10155670708159692.jpg",
           "caption": "",
           "createdAt": "2017-01-28T16:09:44+0000"
         },
@@ -20486,14 +20492,14 @@
           "createdAt": "2016-07-03T09:49:51+0000"
         },
         {
-          "id": "10154911747924692",
-          "src": "/images/facebook-albums/482830957182743/10154911747924692.jpg",
+          "id": "10154911748104692",
+          "src": "/images/facebook-albums/482830957182743/10154911748104692.jpg",
           "caption": "",
           "createdAt": "2016-07-03T09:49:51+0000"
         },
         {
-          "id": "10154911748104692",
-          "src": "/images/facebook-albums/482830957182743/10154911748104692.jpg",
+          "id": "10154911747924692",
+          "src": "/images/facebook-albums/482830957182743/10154911747924692.jpg",
           "caption": "",
           "createdAt": "2016-07-03T09:49:51+0000"
         },
@@ -21560,15 +21566,15 @@
           "createdAt": "2015-09-02T17:18:19+0000"
         },
         {
-          "id": "10154103546509692",
-          "src": "/images/facebook-albums/482830957182743/10154103546509692.jpg",
-          "caption": "Katarina i Ivan Pranješ (sestra i brat)",
-          "createdAt": "2015-09-02T17:18:19+0000"
-        },
-        {
           "id": "10154103546734692",
           "src": "/images/facebook-albums/482830957182743/10154103546734692.jpg",
           "caption": "",
+          "createdAt": "2015-09-02T17:18:19+0000"
+        },
+        {
+          "id": "10154103546509692",
+          "src": "/images/facebook-albums/482830957182743/10154103546509692.jpg",
+          "caption": "Katarina i Ivan Pranješ (sestra i brat)",
           "createdAt": "2015-09-02T17:18:19+0000"
         },
         {
@@ -21590,14 +21596,14 @@
           "createdAt": "2015-08-30T20:42:56+0000"
         },
         {
-          "id": "10154083161484692",
-          "src": "/images/facebook-albums/482830957182743/10154083161484692.jpg",
+          "id": "10154083161529692",
+          "src": "/images/facebook-albums/482830957182743/10154083161529692.jpg",
           "caption": "",
           "createdAt": "2015-08-26T11:44:10+0000"
         },
         {
-          "id": "10154083161529692",
-          "src": "/images/facebook-albums/482830957182743/10154083161529692.jpg",
+          "id": "10154083161484692",
+          "src": "/images/facebook-albums/482830957182743/10154083161484692.jpg",
           "caption": "",
           "createdAt": "2015-08-26T11:44:10+0000"
         },
@@ -21782,14 +21788,14 @@
           "createdAt": "2015-07-05T00:13:35+0000"
         },
         {
-          "id": "10153940104959692",
-          "src": "/images/facebook-albums/482830957182743/10153940104959692.jpg",
+          "id": "10153940105474692",
+          "src": "/images/facebook-albums/482830957182743/10153940105474692.jpg",
           "caption": "",
           "createdAt": "2015-07-05T00:13:35+0000"
         },
         {
-          "id": "10153940105474692",
-          "src": "/images/facebook-albums/482830957182743/10153940105474692.jpg",
+          "id": "10153940104959692",
+          "src": "/images/facebook-albums/482830957182743/10153940104959692.jpg",
           "caption": "",
           "createdAt": "2015-07-05T00:13:35+0000"
         },
@@ -23265,6 +23271,5 @@
         }
       ]
     }
-  ],
-  "lastError": "Graph API vratio prazan popis albuma (HTTP 200)"
+  ]
 }
