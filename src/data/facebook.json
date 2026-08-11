@@ -1,8 +1,17 @@
 {
-  "lastUpdated": "2026-08-11T13:52:25.059Z",
+  "lastUpdated": "2026-08-11T14:53:57.511Z",
   "enabled": true,
   "pageId": "55401829691",
   "posts": [
+    {
+      "id": "55401829691_1659128632886297",
+      "message": "",
+      "createdAt": "2026-08-11T14:02:54+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1659128632886297",
+      "images": [
+        "/images/facebook/55401829691_1659128632886297.jpg"
+      ]
+    },
     {
       "id": "55401829691_1658929589572868",
       "message": "",
@@ -253,15 +262,6 @@
       "permalink": "https://www.facebook.com/1551452460320582/posts/1622325779899916",
       "images": [
         "/images/facebook/55401829691_1622325779899916.jpg"
-      ]
-    },
-    {
-      "id": "55401829691_1621740209958473",
-      "message": "Molim ekipu \"Mlade nade\" da se jave na broj mobitela sa plakata radi dogovora za turnir.",
-      "createdAt": "2026-07-03T08:11:30+0000",
-      "permalink": "https://www.facebook.com/1551452460320582/posts/1621740209958473",
-      "images": [
-        "/images/facebook/55401829691_1621740209958473.jpg"
       ]
     }
   ]
