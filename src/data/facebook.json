@@ -1,8 +1,17 @@
 {
-  "lastUpdated": "2026-08-12T10:57:34.469Z",
+  "lastUpdated": "2026-08-12T11:46:41.242Z",
   "enabled": true,
   "pageId": "55401829691",
   "posts": [
+    {
+      "id": "55401829691_1660000472799113",
+      "message": "",
+      "createdAt": "2026-08-12T11:04:20+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1660000472799113",
+      "images": [
+        "/images/facebook/55401829691_1660000472799113.jpg"
+      ]
+    },
     {
       "id": "55401829691_1659904396142054",
       "message": "",
@@ -249,19 +258,6 @@
         "/images/facebook/55401829691_1624332496365911_9.jpg",
         "/images/facebook/55401829691_1624332496365911_10.jpg",
         "/images/facebook/55401829691_1624332496365911_11.jpg"
-      ]
-    },
-    {
-      "id": "55401829691_1623144616484699",
-      "message": "Turnir je počeo. Poziv svima!",
-      "createdAt": "2026-07-04T15:36:34+0000",
-      "permalink": "https://www.facebook.com/1551452460320582/posts/1623144616484699",
-      "images": [
-        "/images/facebook/55401829691_1623144616484699_0.jpg",
-        "/images/facebook/55401829691_1623144616484699_1.jpg",
-        "/images/facebook/55401829691_1623144616484699_2.jpg",
-        "/images/facebook/55401829691_1623144616484699_3.jpg",
-        "/images/facebook/55401829691_1623144616484699_4.jpg"
       ]
     }
   ]
