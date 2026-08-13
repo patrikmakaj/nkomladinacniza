@@ -1,7 +1,7 @@
 [
   {
     "date": "2026-08-01",
-    "time": null,
+    "time": "18:00",
     "opponent": "NK Papuk (O)",
     "opponentId": 1484,
     "opponentLogo": "https://hns.family/files/images_comet/Club/_resized/1484_-1018464555_280_280_wg_t.jpg",
@@ -27,7 +27,7 @@
   },
   {
     "date": "2026-08-16",
-    "time": null,
+    "time": "19:00",
     "opponent": "NK Mladost Stipanovci",
     "opponentId": 133,
     "opponentLogo": "https://hns.family/files/images_comet/2b/2/2b29ebd8980577c3191bac933b14de4e196a2405.png",
