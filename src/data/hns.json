@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-08-16T18:22:30.359Z",
+  "lastUpdated": "2026-08-16T18:54:51.721Z",
   "sourceUrl": "https://semafor.hns.family/klubovi/134/nk-omladinac-niza/",
   "club": {
     "id": 134,
@@ -27,26 +27,26 @@
     }
   ],
   "nextMatch": {
-    "id": "114378673",
-    "type": "league",
-    "round": 1,
-    "date": "2026-08-30",
-    "time": "17:30",
-    "iso": "2026-08-30T17:30:00",
-    "competition": "2. ŽNL Našice - Seniori 26/27, 1. kolo",
+    "id": "114378377",
+    "type": "cup",
+    "round": 10004,
+    "date": "2026-08-20",
+    "time": "19:30",
+    "iso": "2026-08-20T19:30:00",
+    "competition": "Kup NS Našice 26/27, 1/8 finala",
     "home": {
-      "id": 140,
-      "name": "NK Vihor (J)",
-      "logo": "https://hns.family/files/images_comet/07/3/_resized/073548045a9ffd623cfb00b39796fde20ba35dd0_100_100_wg_t.png"
-    },
-    "away": {
       "id": 134,
       "name": "NK Omladinac Niza",
       "logo": "https://hns.family/files/images_comet/49/b/_resized/49b362069bd38a3154422c8f1c4b7cd4f5aee1b7_100_100_wg_t.png"
     },
+    "away": {
+      "id": 127,
+      "name": "NK Đurđenovac",
+      "logo": "https://hns.family/files/images_comet/a5/0/_resized/a5019da3fed2f68e88845d5dd31abaa0f550b0ec_100_100_wg_t.png"
+    },
     "score": null,
     "played": false,
-    "isHome": false,
+    "isHome": true,
     "result": null,
     "url": null
   },
@@ -378,6 +378,30 @@
       "isHome": true,
       "result": "W",
       "url": "https://semafor.hns.family/utakmice/114378366/nk-omladinac-niza-nk-brezik-2-1/"
+    },
+    {
+      "id": "114378377",
+      "type": "cup",
+      "round": 10004,
+      "date": "2026-08-20",
+      "time": "19:30",
+      "iso": "2026-08-20T19:30:00",
+      "competition": "Kup NS Našice 26/27, 1/8 finala",
+      "home": {
+        "id": 134,
+        "name": "NK Omladinac Niza",
+        "logo": "https://hns.family/files/images_comet/49/b/_resized/49b362069bd38a3154422c8f1c4b7cd4f5aee1b7_100_100_wg_t.png"
+      },
+      "away": {
+        "id": 127,
+        "name": "NK Đurđenovac",
+        "logo": "https://hns.family/files/images_comet/a5/0/_resized/a5019da3fed2f68e88845d5dd31abaa0f550b0ec_100_100_wg_t.png"
+      },
+      "score": null,
+      "played": false,
+      "isHome": true,
+      "result": null,
+      "url": null
     },
     {
       "id": "114378673",
