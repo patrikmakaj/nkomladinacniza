@@ -1,8 +1,17 @@
 {
-  "lastUpdated": "2026-08-17T10:27:46.124Z",
+  "lastUpdated": "2026-08-17T10:57:24.302Z",
   "enabled": true,
   "pageId": "55401829691",
   "posts": [
+    {
+      "id": "55401829691_1664952438970583",
+      "message": "",
+      "createdAt": "2026-08-17T10:29:42+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1664952438970583",
+      "images": [
+        "/images/facebook/55401829691_1664952438970583.jpg"
+      ]
+    },
     {
       "id": "55401829691_1664766722322488",
       "message": "Čestitke gostima.",
@@ -237,15 +246,6 @@
       "permalink": "https://www.facebook.com/1551452460320582/posts/1633134545485706",
       "images": [
         "/images/facebook/55401829691_1633134545485706.jpg"
-      ]
-    },
-    {
-      "id": "55401829691_1633046002161227",
-      "message": "",
-      "createdAt": "2026-07-15T09:08:42+0000",
-      "permalink": "https://www.facebook.com/1551452460320582/posts/1633046002161227",
-      "images": [
-        "/images/facebook/55401829691_1633046002161227.jpg"
       ]
     }
   ]
