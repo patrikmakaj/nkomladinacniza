@@ -35,7 +35,7 @@
     "isHome": true,
     "venue": "Niza",
     "competition": "Prijateljska utakmica",
-    "score": null,
+    "score": { "home": 0, "away": 3 },
     "scorers": []
   },
   {
