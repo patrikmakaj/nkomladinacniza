@@ -1,8 +1,19 @@
 {
-  "lastUpdated": "2026-08-19T19:48:41.314Z",
+  "lastUpdated": "2026-08-19T20:21:43.092Z",
   "enabled": true,
   "pageId": "55401829691",
   "posts": [
+    {
+      "id": "55401829691_1667389192060241",
+      "message": "Večeras početnici odigrali prijateljsku s Vihorom. Sutra seniori igraju kup protiv Đurđenovca stoga poziv svima!",
+      "createdAt": "2026-08-19T20:00:49+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1667389192060241",
+      "images": [
+        "/images/facebook/55401829691_1667389192060241_0.jpg",
+        "/images/facebook/55401829691_1667389192060241_1.jpg",
+        "/images/facebook/55401829691_1667389192060241_2.jpg"
+      ]
+    },
     {
       "id": "55401829691_1666911705441323",
       "message": "",
@@ -237,15 +248,6 @@
       "permalink": "https://www.facebook.com/1551452460320582/posts/1637630041702823",
       "images": [
         "/images/facebook/55401829691_1637630041702823.jpg"
-      ]
-    },
-    {
-      "id": "55401829691_1636841045115056",
-      "message": "",
-      "createdAt": "2026-07-19T11:14:25+0000",
-      "permalink": "https://www.facebook.com/1551452460320582/posts/1636841045115056",
-      "images": [
-        "/images/facebook/55401829691_1636841045115056.jpg"
       ]
     }
   ]
