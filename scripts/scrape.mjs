@@ -18,6 +18,13 @@ const CLUB_ID = 134;
 const CLUB_URL = `https://semafor.hns.family/klubovi/${CLUB_ID}/nk-omladinac-niza/`;
 const OUR_CLUB_NAME = "NK Omladinac Niza";
 
+// Handler kojim Semafor puni #cid dropdown kad se promijeni uzrast.
+const COMPETITIONS_API = "https://semafor.hns.family/handlers/getCompetitions/";
+
+// Uzrasti u kojima klub nastupa — vrijednosti iz #acat dropdowna.
+// "Seniors" je seniorska momčad, "Beginners" su početnici (U-11).
+const AGE_CATEGORIES = ["Seniors", "Beginners"];
+
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const OUT_PATH = resolve(__dirname, "../src/data/hns.json");
 
@@ -55,6 +62,35 @@ function parseInt0(text) {
   return Number.isFinite(n) ? n : null;
 }
 
+/**
+ * Semafor NEMA fiksne indekse tabova. Liga ima 4 taba (Raspored, Ljestvica,
+ * Igrači, Statistika), a kup nema ljestvicu pa se Igrači i Statistika pomaknu
+ * za jedan (tabContent_1_2 i _1_3 umjesto _1_3 i _1_4).
+ *
+ * Zato container tražimo po NAZIVU taba iz navigacije, ne po rednom broju.
+ * Fallback na ligaške indekse ako navigacija nije pronađena.
+ */
+const FALLBACK_TABS = {
+  matches: "#tabContent_1_1",
+  table: "#tabContent_1_2",
+  players: "#tabContent_1_3",
+  stats: "#tabContent_1_4",
+};
+
+function resolveTabs($) {
+  const tabs = {};
+  $("li[data-content^='tabContent_']").each((_, el) => {
+    const id = $(el).attr("data-content");
+    if (!id) return;
+    const label = $(el).text().trim().toLowerCase();
+    if (label.includes("raspored")) tabs.matches = `#${id}`;
+    else if (label.includes("ljestvica")) tabs.table = `#${id}`;
+    else if (label.includes("igrač")) tabs.players = `#${id}`;
+    else if (label.includes("statistika")) tabs.stats = `#${id}`;
+  });
+  return { ...FALLBACK_TABS, ...tabs };
+}
+
 // ───────── Parsers ─────────────────────────────────────────────────────
 
 function parseClubHeader($) {
@@ -80,30 +116,81 @@ function parseCompetitionMeta($) {
   };
 }
 
-/**
- * Parsira dropdown natjecanja (#cid) — liga, kup, itd.
- * Vraća [{ name, url, type, selected }]. Tip se određuje iz naziva:
- * sadrži "kup" → "cup", inače "league".
- */
-function parseCompetitionOptions($) {
-  const comps = [];
-  $("#cid option").each((_, el) => {
-    const value = ($(el).attr("value") || "").trim();
-    if (!value) return; // placeholder " - odaberi natjecanje - "
-    const name = $(el).text().trim();
-    comps.push({
-      name,
-      url: new URL(value, "https://semafor.hns.family").href,
-      type: /kup/i.test(name) ? "cup" : "league",
-      selected: $(el).attr("selected") != null,
-    });
-  });
-  return comps;
+/** Vrijednost odabrane sezone za API ("2026/2027"), ne prikazna ("2026/27"). */
+function parseSeasonValue($) {
+  return $("#season option[selected]").first().attr("value")?.trim() || null;
 }
 
-function parseMatches($, competitionType = "league") {
+/** cid natjecanja koje je Semafor sam označio kao odabrano na klupskoj stranici. */
+function parseSelectedCid($) {
+  const value = $("#cid option[selected]").first().attr("value") || "";
+  return parseInt0(value.match(/[?&]cid=(\d+)/)?.[1]);
+}
+
+/** Tip natjecanja iz naziva: sadrži "kup" → "cup", inače "league". */
+function competitionType(name) {
+  return /kup/i.test(name) ? "cup" : "league";
+}
+
+/**
+ * Dohvaća popis natjecanja za jedan uzrast.
+ *
+ * Dropdown #cid na stranici prikazuje samo trenutno odabrani uzrast (Seniors),
+ * a prebacivanje uzrasta ide kroz AJAX — `?acat=Beginners` u URL-u NE radi.
+ * Zato zovemo isti handler koji zove i njihov frontend; vraća čisti JSON.
+ */
+async function fetchCompetitions(ageCategory, season) {
+  const params = new URLSearchParams({
+    season,
+    acat: ageCategory,
+    t: String(Date.now()),
+    lang: "hr",
+    clubID: String(CLUB_ID),
+    linkType: "club_profile",
+    linkConstructor: `/klubovi/${CLUB_ID}/nk-omladinac-niza/?cid={cid}`,
+  });
+  const raw = await fetchHtml(`${COMPETITIONS_API}?${params}`, {
+    headers: { "X-Requested-With": "XMLHttpRequest" },
+  });
+  const list = JSON.parse(raw);
+  return list.map((c) => ({
+    id: c.id,
+    name: String(c.value || "").trim(),
+    url: new URL(c.url, "https://semafor.hns.family").href,
+    type: competitionType(c.value || ""),
+    ageCategory,
+  }));
+}
+
+/**
+ * HNS zna otvoriti NOVO natjecanje za istu ligu usred sezone (npr. kad klubovi
+ * odustanu), a staro ostavi u dropdownu. Ako obje verzije pustimo u raspored,
+ * svaki protivnik se pojavi dvaput.
+ *
+ * Zato od ligaških natjecanja jednog uzrasta zadržavamo samo jedno — ono koje
+ * je Semafor označio kao odabrano, a ako odabrano nije liga, onda ono s
+ * najvišim id-em (HNS ih dodjeljuje rastuće, pa je to najnovije).
+ * Kupovi prolaze svi — klub može igrati više kupova paralelno.
+ */
+function pickActiveCompetitions(comps, selectedCid) {
+  const leagues = comps.filter((c) => c.type === "league");
+  const rest = comps.filter((c) => c.type !== "league");
+  if (leagues.length <= 1) return [...leagues, ...rest];
+
+  const selected = leagues.find((c) => c.id === selectedCid);
+  const active = selected ?? leagues.reduce((a, b) => (b.id > a.id ? b : a));
+  const dropped = leagues.filter((c) => c.id !== active.id);
+  console.warn(
+    `[scrape] ⚠ ${leagues.length} ligaška natjecanja za ${active.ageCategory}` +
+      ` — koristim cid=${active.id}${selected ? " (odabrano)" : " (najnovije)"},` +
+      ` preskačem ${dropped.map((c) => c.id).join(", ")}`,
+  );
+  return [active, ...rest];
+}
+
+function parseMatches($, tabs, competitionType = "league") {
   const matches = [];
-  $('#tabContent_1_1 .matchlist li.row[data-match]').each((_, el) => {
+  $(`${tabs.matches} .matchlist li.row[data-match]`).each((_, el) => {
     const $li = $(el);
     const id = $li.attr("data-match");
     const round = parseInt0($li.attr("data-round"));
@@ -179,9 +266,9 @@ function sortMatches(matches) {
   return matches;
 }
 
-function parseTable($) {
+function parseTable($, tabs) {
   const rows = [];
-  $('#tabContent_1_2 .competition_table li.row[data-clubid]').each((_, el) => {
+  $(`${tabs.table} .competition_table li.row[data-clubid]`).each((_, el) => {
     const $li = $(el);
     const clubId = parseInt0($li.attr("data-clubid"));
     const $club = $li.find(".club a").first();
@@ -220,9 +307,9 @@ function parseTable($) {
 }
 
 /** Parsira ranking tablicu (Strijelci, Kartoni, Nastupi) iz tabContent_1_4 */
-function parseRankingList($, blockClass, valueSelector) {
+function parseRankingList($, tabs, blockClass, valueSelector) {
   const items = [];
-  $(`#tabContent_1_4 .${blockClass} li.row[data-personid]`).each((_, el) => {
+  $(`${tabs.stats} .${blockClass} li.row[data-personid]`).each((_, el) => {
     const $li = $(el);
     const $name = $li.find(".playerName h3 a").first();
     const $img = $li.find(".playerPhoto img").first();
@@ -239,15 +326,15 @@ function parseRankingList($, blockClass, valueSelector) {
   return items;
 }
 
-function parseTopScorers($) {
-  return parseRankingList($, "statsGoals", ".goals").map((p) => ({
+function parseTopScorers($, tabs) {
+  return parseRankingList($, tabs, "statsGoals", ".goals").map((p) => ({
     ...p,
     goals: parseInt0(p.value) ?? 0,
   }));
 }
 
-function parseTopCards($) {
-  return parseRankingList($, "statsCards", ".cards").map((p) => {
+function parseTopCards($, tabs) {
+  return parseRankingList($, tabs, "statsCards", ".cards").map((p) => {
     const m = p.value.match(/(\d+)\s*\/\s*(\d+)/);
     return {
       ...p,
@@ -257,8 +344,8 @@ function parseTopCards($) {
   });
 }
 
-function parseTopApps($) {
-  return parseRankingList($, "statsApps", ".apps_minutes").map((p) => {
+function parseTopApps($, tabs) {
+  return parseRankingList($, tabs, "statsApps", ".apps_minutes").map((p) => {
     const m = p.value.match(/(\d+)\s*\/\s*(\d+)/);
     return {
       ...p,
@@ -268,9 +355,9 @@ function parseTopApps($) {
   });
 }
 
-function parsePlayers($) {
+function parsePlayers($, tabs) {
   const players = [];
-  $('#tabContent_1_3 .playerslist li.row[data-personid]').each((_, el) => {
+  $(`${tabs.players} .playerslist li.row[data-personid]`).each((_, el) => {
     const $li = $(el);
     const id = parseInt0($li.attr("data-personid"));
     const $name = $li.find(".playerName");
@@ -301,6 +388,119 @@ function parsePlayers($) {
     });
   });
   return players;
+}
+
+// ───────── Spajanje natjecanja ─────────────────────────────────────────
+
+/** "1 / 0" → { yellow: 1, red: 0 } */
+function parseCards(text) {
+  const m = String(text ?? "").match(/(\d+)\s*\/\s*(\d+)/);
+  return { yellow: m ? parseInt(m[1], 10) : 0, red: m ? parseInt(m[2], 10) : 0 };
+}
+
+/**
+ * Spaja rostere kroz više natjecanja u jedan popis.
+ *
+ * Razlog: HNS zna objaviti sastav samo pod jednim natjecanjem (trenutno pod
+ * kupom, dok je ligaški roster prazan). Igrač koji nastupa i u ligi i u kupu
+ * pojavi se dvaput, pa ga spajamo po `personId` i zbrajamo statistiku.
+ *
+ * `perCompetition` čuva razlomljene brojke — profil igrača ih prikazuje
+ * po natjecanju, a /momcad koristi zbroj.
+ */
+function mergePlayers(comps) {
+  const byId = new Map();
+
+  for (const comp of comps) {
+    for (const p of comp.players) {
+      if (p.id == null) continue;
+      const cards = parseCards(p.stats.cards);
+      const entry = byId.get(p.id) ?? {
+        id: p.id,
+        number: null,
+        name: p.name,
+        position: null,
+        photo: null,
+        profileUrl: null,
+        stats: { appearances: 0, minutes: 0, goals: 0, cards: "0 / 0" },
+        perCompetition: [],
+      };
+
+      // Prvi natjecanje koje ih ima popunjava broj/poziciju/sliku.
+      entry.number ??= p.number;
+      entry.position ??= p.position;
+      entry.photo ??= p.photo;
+      entry.profileUrl ??= p.profileUrl;
+      if (p.name) entry.name = p.name;
+
+      const prev = parseCards(entry.stats.cards);
+      entry.stats.appearances += p.stats.appearances ?? 0;
+      entry.stats.minutes += p.stats.minutes ?? 0;
+      entry.stats.goals += p.stats.goals ?? 0;
+      entry.stats.cards = `${prev.yellow + cards.yellow} / ${prev.red + cards.red}`;
+
+      entry.perCompetition.push({
+        competitionId: comp.id,
+        competition: comp.name,
+        type: comp.type,
+        stats: { ...p.stats },
+      });
+
+      byId.set(p.id, entry);
+    }
+  }
+
+  return [...byId.values()].sort(
+    (a, b) => (a.number ?? 999) - (b.number ?? 999) || a.name.localeCompare(b.name, "hr"),
+  );
+}
+
+/** Spaja jednu ranking listu kroz natjecanja, zbroji `sum` i ponovo poredaj. */
+function mergeRanking(comps, key, sum, format, rank) {
+  const byId = new Map();
+  for (const comp of comps) {
+    for (const item of comp.stats[key]) {
+      if (item.personId == null) continue;
+      const entry = byId.get(item.personId);
+      if (entry) sum(entry, item);
+      else byId.set(item.personId, { ...item });
+    }
+  }
+  const items = [...byId.values()].sort((a, b) => rank(b) - rank(a));
+  return items.map((item, i) => ({ ...item, position: i + 1, value: format(item) }));
+}
+
+/** Objedinjene ranking liste (strijelci, kartoni, nastupi) kroz sva natjecanja. */
+function mergeStats(comps) {
+  return {
+    topScorers: mergeRanking(
+      comps,
+      "topScorers",
+      (a, b) => (a.goals += b.goals ?? 0),
+      (p) => String(p.goals),
+      (p) => p.goals,
+    ),
+    topCards: mergeRanking(
+      comps,
+      "topCards",
+      (a, b) => {
+        a.yellow += b.yellow ?? 0;
+        a.red += b.red ?? 0;
+      },
+      (p) => `${p.yellow} / ${p.red}`,
+      (p) => p.yellow + p.red * 10, // crveni teže od žutih
+    ),
+    topApps: mergeRanking(
+      comps,
+      "topApps",
+      (a, b) => {
+        a.appearances += b.appearances ?? 0;
+        a.minutes += b.minutes ?? 0;
+      },
+      (p) => `${p.appearances} / ${p.minutes}`,
+      (p) => p.appearances * 10000 + p.minutes,
+    ),
+  };
 }
 
 // ───────── Match detail parsers ────────────────────────────────────────
@@ -453,7 +653,7 @@ const RETRY_STATUS = new Set([429, 500, 502, 503, 504, 520, 521, 522, 523, 524, 
  * (mreža/timeout/5xx), baca error s `transient: true` — pozivatelj tada
  * može graceful odustati umjesto srušiti cijeli scrape.
  */
-async function fetchHtml(url, { attempts = 4 } = {}) {
+async function fetchHtml(url, { attempts = 4, headers = {} } = {}) {
   let lastErr;
   for (let i = 0; i < attempts; i++) {
     if (i > 0) {
@@ -466,6 +666,7 @@ async function fetchHtml(url, { attempts = 4 } = {}) {
         headers: {
           "User-Agent": UA,
           "Accept-Language": "hr,en;q=0.8",
+          ...headers,
         },
         signal: AbortSignal.timeout(30_000),
       });
@@ -547,41 +748,91 @@ async function main() {
 
   const club = parseClubHeader($);
   const competition = parseCompetitionMeta($);
-  const competitions = parseCompetitionOptions($);
+  const seasonValue = parseSeasonValue($);
+  const selectedCid = parseSelectedCid($);
 
-  // Utakmice iz SVIH natjecanja (liga + kup + …). Defaultno odabrano
-  // natjecanje (liga) već imamo u `$`; ostala dohvaćamo zasebno.
-  // Tablica/igrači/statistike se parsiraju samo s default (ligaške) stranice.
-  const matchesById = new Map();
-  const addMatches = (list) => {
-    for (const m of list) if (!matchesById.has(m.id)) matchesById.set(m.id, m);
-  };
-
-  if (competitions.length === 0) {
-    // Fallback: dropdown nije nađen — ponašaj se kao prije (samo default stranica)
-    addMatches(parseMatches($, "league"));
-  } else {
-    for (const comp of competitions) {
-      if (comp.selected) {
-        addMatches(parseMatches($, comp.type));
-        continue;
-      }
+  // ── Popis natjecanja po uzrastu ────────────────────────────────────
+  // Dropdown na stranici pokriva samo trenutni uzrast, pa natjecanja
+  // dohvaćamo kroz handler za svaki uzrast zasebno.
+  let competitions = [];
+  if (seasonValue) {
+    for (const acat of AGE_CATEGORIES) {
       try {
-        const compHtml = await fetchHtml(comp.url);
-        addMatches(parseMatches(cheerio.load(compHtml), comp.type));
+        const list = await fetchCompetitions(acat, seasonValue);
+        competitions.push(...pickActiveCompetitions(list, selectedCid));
       } catch (err) {
-        console.warn(`[scrape] greška za natjecanje "${comp.name}": ${err.message}`);
+        console.warn(`[scrape] popis natjecanja za ${acat} nije dohvaćen: ${err.message}`);
       }
       await sleep(MATCH_FETCH_DELAY_MS);
     }
   }
+  if (competitions.length === 0) {
+    // Fallback: handler nedostupan — barem odradi trenutno otvorenu stranicu.
+    console.warn("[scrape] ⚠ popis natjecanja prazan — koristim samo default stranicu");
+    competitions = [
+      {
+        id: selectedCid,
+        name: competition.name || "Natjecanje",
+        url: CLUB_URL,
+        type: competitionType(competition.name || ""),
+        ageCategory: "Seniors",
+      },
+    ];
+  }
+
+  // ── Parsiranje svakog natjecanja zasebno ──────────────────────────
+  // Svako natjecanje ima vlastiti raspored, ljestvicu, roster i statistiku.
+  // Default stranicu već imamo učitanu, nju ne dohvaćamo ponovo.
+  const parsed = [];
+  for (const comp of competitions) {
+    let $comp = $;
+    if (comp.id !== selectedCid) {
+      try {
+        $comp = cheerio.load(await fetchHtml(comp.url));
+      } catch (err) {
+        console.warn(`[scrape] greška za natjecanje "${comp.name}": ${err.message}`);
+        continue;
+      }
+      await sleep(MATCH_FETCH_DELAY_MS);
+    }
+    const tabs = resolveTabs($comp);
+    parsed.push({
+      ...comp,
+      selected: comp.id === selectedCid,
+      matches: parseMatches($comp, tabs, comp.type),
+      table: parseTable($comp, tabs),
+      players: parsePlayers($comp, tabs),
+      stats: {
+        topScorers: parseTopScorers($comp, tabs),
+        topCards: parseTopCards($comp, tabs),
+        topApps: parseTopApps($comp, tabs),
+      },
+    });
+  }
+
+  // ── Objedinjeni pogled za seniore ─────────────────────────────────
+  // Stranice koje ne razlikuju natjecanja (naslovnica, raspored, .ics)
+  // čitaju ove top-level ključeve; U-11 namjerno NIJE u njima da ne
+  // upadne u seniorski raspored — živi samo u `competitions`.
+  const seniors = parsed.filter((c) => c.ageCategory === "Seniors");
+
+  const matchesById = new Map();
+  for (const comp of seniors) {
+    for (const m of comp.matches) {
+      if (!matchesById.has(m.id)) {
+        matchesById.set(m.id, { ...m, competitionId: comp.id, ageCategory: comp.ageCategory });
+      }
+    }
+  }
   const matches = sortMatches([...matchesById.values()]);
 
-  const table = parseTable($);
-  const players = parsePlayers($);
-  const topScorers = parseTopScorers($);
-  const topCards = parseTopCards($);
-  const topApps = parseTopApps($);
+  // Ljestvica dolazi iz aktivne seniorske lige (kup je nema).
+  const table = seniors.find((c) => c.type === "league" && c.table.length)?.table ?? [];
+
+  // Roster: unija kroz sva seniorska natjecanja, statistika zbrojena.
+  // (HNS zna objaviti sastav samo pod kupom, a ligu ostaviti praznom.)
+  const players = mergePlayers(seniors);
+  const stats = mergeStats(seniors);
 
   // Derived: next match (first unplayed) + last result (last played)
   const nextMatch = matches.find((m) => !m.played) || null;
@@ -596,18 +847,14 @@ async function main() {
     sourceUrl: CLUB_URL,
     club,
     competition,
-    competitions: competitions.map(({ name, url, type }) => ({ name, url, type })),
+    competitions: parsed,
     nextMatch,
     lastResults,
     table,
     ourRow,
     matches,
     players,
-    stats: {
-      topScorers,
-      topCards,
-      topApps,
-    },
+    stats,
     matchDetails,
   };
 
@@ -618,10 +865,16 @@ async function main() {
   console.log(
     `[scrape] gotovo za ${ms}ms · ${matches.length} utakmica · ` +
       `${table.length} klubova · ${players.length} igrača · ` +
-      `${topScorers.length} strijelaca · ${topCards.length} kartonjera · ` +
+      `${stats.topScorers.length} strijelaca · ${stats.topCards.length} kartonjera · ` +
       `${Object.keys(matchDetails).length} detalja · ` +
       `naša pozicija: ${ourRow?.position ?? "?"}`,
   );
+  for (const c of parsed) {
+    console.log(
+      `[scrape]   · ${c.name} (${c.type}/${c.ageCategory}) — ` +
+        `${c.matches.length} utakmica, ${c.table.length} klubova, ${c.players.length} igrača`,
+    );
+  }
   console.log(`[scrape] zapisano: ${OUT_PATH}`);
 }
 

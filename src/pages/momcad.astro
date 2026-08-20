@@ -73,13 +73,17 @@ const lastUpdated = new Date(hns.lastUpdated).toLocaleString("hr-HR", {
   timeStyle: "short",
   timeZone: "Europe/Zagreb",
 });
-const competition = hns.competition?.name ?? "Sezona";
+// Roster i statistika se zbrajaju kroz sva seniorska natjecanja (liga + kup),
+// pa se ovdje NE smije navesti samo liga — HNS zna sastav objaviti pod kupom.
+const seasonLabel = hns.competition?.season
+  ? `Sezona ${hns.competition.season}`
+  : "Tekuća sezona";
 ---
 
 <BaseLayout title="Momčad" description="Igrači prve momčadi NK Omladinac Niza u tekućoj sezoni.">
   <Hero
     title="Momčad"
-    subtitle={`Igrači koji nose dres NK Omladinac Niza · ${competition}`}
+    subtitle={`Igrači koji nose dres NK Omladinac Niza · ${seasonLabel}`}
     height="md"
   />
 
@@ -138,12 +142,12 @@ const competition = hns.competition?.name ?? "Sezona";
     <div class="mt-12">
       <h2 class="text-2xl mb-4">Statistika sezone</h2>
       <p class="text-sm text-club-muted mb-6">
-        Najbolji u {hns.competition?.name ?? "ligi"} prema podacima HNS Semafora.
+        Zbrojeno kroz sva natjecanja — ligu i kup — prema podacima HNS Semafora.
       </p>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <StatRanking
           title="Strijelci"
-          subtitle="Najbolji strijelci lige"
+          subtitle="Najbolji strijelci sezone"
           items={topScorersItems}
           valueLabel="Golovi"
         />
