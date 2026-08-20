@@ -1,15 +1,20 @@
 ---
 import hns from "../data/hns.json";
 import { url } from "../lib/url";
+import type { LeagueRow } from "../lib/matches";
 
 interface Props {
   preview?: boolean;
+  /** Redovi ljestvice; bez ovoga se koristi seniorska liga. */
+  rows?: LeagueRow[];
+  /** Naslov u preview headeru; bez ovoga naziv seniorskog natjecanja. */
+  title?: string;
 }
 
-const { preview = false } = Astro.props;
+const { preview = false, rows, title } = Astro.props;
 
-const fullTable = hns.table;
-const competitionName = hns.competition?.name ?? "Tablica lige";
+const fullTable: LeagueRow[] = rows ?? hns.table;
+const competitionName = title ?? hns.competition?.name ?? "Tablica lige";
 
 // Za preview na početnoj: prvih 5 + naš red ako nije u top 5
 const usIdx = fullTable.findIndex((t) => t.isUs);

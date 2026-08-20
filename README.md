@@ -141,6 +141,11 @@ Galerija se puni **isključivo** iz Facebook albuma — objavi fotke na FB stran
 ### Prijateljske utakmice i rezultati
 Uredi `src/data/friendlies.json` — vidi [upute](./src/data/friendlies.README.md).
 
+### Raspored i ljestvica U11
+Ništa se ne unosi ručno — scraper dohvaća natjecanje početnika s HNS Semafora, a
+`/mladje-kategorije` prikazuje sljedeće utakmice, odigrane rezultate i ljestvicu.
+Sekcija se sama sakrije dok HNS nema ništa objavljeno.
+
 ### Klupske boje
 Definirane su kao CSS varijable u `src/styles/global.css` u `@theme` bloku.
 

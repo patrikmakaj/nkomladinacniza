@@ -102,13 +102,17 @@ function friendlyToMatch(f: FriendlyEntry): UnifiedMatch {
 }
 
 // HNS utakmice — starije verzije hns.json nemaju `type` ni `competitionId`
-const hnsMatches: UnifiedMatch[] = ((hns.matches ?? []) as any[]).map((m) => ({
-  ...m,
-  type: (m.type as MatchType) ?? "league",
-  competitionId: (m.competitionId as number | undefined) ?? null,
-  venue: null,
-  scorers: [],
-}));
+function hnsToUnified(m: any): UnifiedMatch {
+  return {
+    ...m,
+    type: (m.type as MatchType) ?? "league",
+    competitionId: (m.competitionId as number | undefined) ?? null,
+    venue: null,
+    scorers: [],
+  };
+}
+
+const hnsMatches: UnifiedMatch[] = ((hns.matches ?? []) as any[]).map(hnsToUnified);
 
 const friendlyMatches = (friendlies as FriendlyEntry[]).map(friendlyToMatch);
 
@@ -188,4 +192,55 @@ export function countByType(list: UnifiedMatch[]): Record<MatchType, number> {
   const counts: Record<MatchType, number> = { league: 0, cup: 0, friendly: 0 };
   for (const m of list) counts[m.type]++;
   return counts;
+}
+
+// ───────── Natjecanja po uzrastu ────────────────────────────────────────
+// Gornji izvozi pokrivaju seniore. Mlađe kategorije žive samo u
+// `hns.competitions` — namjerno nisu u `allMatches` da ne upadnu u seniorski
+// raspored i .ics. Do njih se dolazi kroz `competitionsFor()`.
+
+export type AgeCategory = "Seniors" | "Beginners";
+
+/** Jedan red ljestvice. */
+export type LeagueRow = {
+  position: number | null;
+  club: { id: number | null; name: string; logo: string | null };
+  played: number | null;
+  wins: number | null;
+  draws: number | null;
+  losses: number | null;
+  gf: number | null;
+  ga: number | null;
+  gd: string | null;
+  points: number | null;
+  form: string[];
+  isUs: boolean;
+};
+
+export type Competition = {
+  id: number | null;
+  name: string;
+  type: MatchType;
+  ageCategory: AgeCategory;
+  url: string | null;
+  matches: UnifiedMatch[];
+  table: LeagueRow[];
+};
+
+/**
+ * Natjecanja jednog uzrasta — "Seniors" (seniori) ili "Beginners" (početnici U-11).
+ * Vraća prazan niz ako HNS za taj uzrast nema ništa objavljeno.
+ */
+export function competitionsFor(age: AgeCategory): Competition[] {
+  return ((hns.competitions ?? []) as any[])
+    .filter((c) => c.ageCategory === age)
+    .map((c) => ({
+      id: c.id ?? null,
+      name: c.name ?? "",
+      type: (c.type as MatchType) ?? "league",
+      ageCategory: c.ageCategory as AgeCategory,
+      url: c.url ?? null,
+      matches: ((c.matches ?? []) as any[]).map(hnsToUnified),
+      table: (c.table ?? []) as LeagueRow[],
+    }));
 }

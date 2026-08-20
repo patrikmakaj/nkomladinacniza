@@ -94,7 +94,11 @@ i `stats`, uz `type` (`league`/`cup`) i `ageCategory` (`Seniors`/`Beginners`).
 
 Top-level `matches`, `table`, `players` i `stats` su **objedinjeni pogled samo za
 seniore** (U-11 namjerno nije u njima da ne upadne u seniorski raspored i `.ics`).
-Za bilo što vezano uz mlađe kategorije čitaj `competitions[]`.
+Za mlađe kategorije koristi `competitionsFor("Beginners")` iz `lib/matches.ts` —
+vraća `Competition[]` s već normaliziranim `matches` (`UnifiedMatch[]`) i `table`
+(`LeagueRow[]`). Tako radi U-11 sekcija na `/mladje-kategorije`.
+
+`LeagueTable` prima `rows` i `title`; bez njih pada na seniorsku ligu.
 
 Dvije zamke koje su već jednom ugrizle:
 
