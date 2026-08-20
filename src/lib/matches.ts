@@ -217,6 +217,37 @@ export type LeagueRow = {
   isUs: boolean;
 };
 
+/** Jedan zapis u ranking listi (strijelci / kartoni / nastupi). */
+export type RankingEntry = {
+  personId: number | null;
+  position: number | null;
+  name: string;
+  photo: string | null;
+  profileUrl: string | null;
+  value: string;
+  goals?: number;
+  yellow?: number;
+  red?: number;
+  appearances?: number;
+  minutes?: number;
+};
+
+export type CompetitionStats = {
+  topScorers: RankingEntry[];
+  topCards: RankingEntry[];
+  topApps: RankingEntry[];
+};
+
+export type SquadPlayer = {
+  id: number | null;
+  number: number | null;
+  name: string;
+  position: string | null;
+  photo: string | null;
+  profileUrl: string | null;
+  stats: { appearances: number; minutes: number; goals: number; cards: string };
+};
+
 export type Competition = {
   id: number | null;
   name: string;
@@ -225,11 +256,26 @@ export type Competition = {
   url: string | null;
   matches: UnifiedMatch[];
   table: LeagueRow[];
+  players: SquadPlayer[];
+  stats: CompetitionStats;
 };
+
+/** Ima li natjecanje ijednu objavljenu ranking listu. */
+export function hasStats(stats: CompetitionStats): boolean {
+  return (
+    stats.topScorers.length > 0 ||
+    stats.topCards.length > 0 ||
+    stats.topApps.length > 0
+  );
+}
 
 /**
  * Natjecanja jednog uzrasta — "Seniors" (seniori) ili "Beginners" (početnici U-11).
  * Vraća prazan niz ako HNS za taj uzrast nema ništa objavljeno.
+ *
+ * `players` i `stats` su prazni dok se ne odigraju prve utakmice — HNS ih
+ * objavi tek tada (kod seniora se to vidjelo na kupu). Stranice ih zato
+ * moraju znati sakriti.
  */
 export function competitionsFor(age: AgeCategory): Competition[] {
   return ((hns.competitions ?? []) as any[])
@@ -242,5 +288,11 @@ export function competitionsFor(age: AgeCategory): Competition[] {
       url: c.url ?? null,
       matches: ((c.matches ?? []) as any[]).map(hnsToUnified),
       table: (c.table ?? []) as LeagueRow[],
+      players: (c.players ?? []) as SquadPlayer[],
+      stats: {
+        topScorers: (c.stats?.topScorers ?? []) as RankingEntry[],
+        topCards: (c.stats?.topCards ?? []) as RankingEntry[],
+        topApps: (c.stats?.topApps ?? []) as RankingEntry[],
+      } satisfies CompetitionStats,
     }));
 }

@@ -3,12 +3,16 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import Hero from "../components/Hero.astro";
 import Logo from "../components/Logo.astro";
 import LeagueTable from "../components/LeagueTable.astro";
+import StatRanking from "../components/StatRanking.astro";
 import { url } from "../lib/url";
+import { golLabel, nastupLabel } from "../lib/croatian";
 import {
   competitionsFor,
+  hasStats,
   todayInZagreb,
   OUR_CLUB_ID,
   type UnifiedMatch,
+  type CompetitionStats,
 } from "../lib/matches";
 
 // Natjecanja početnika (U-11) s HNS Semafora. Prazno dok HNS ne objavi
@@ -40,6 +44,51 @@ function formatMatchDate(iso: string): string {
 const outcomeColor = { W: "bg-green-600", D: "bg-yellow-500", L: "bg-red-600" };
 const outcomeLetter = { W: "P", D: "N", L: "I" };
 const outcomeTitle = { W: "Pobjeda", D: "Neriješeno", L: "Poraz" };
+
+// ── Ranking liste ─────────────────────────────────────────────────────
+// Iste komponente kao na /momcad. Igrači mlađih kategorija nemaju profil na
+// našoj stranici (/igrac/[id] se gradi samo iz seniorskog rostera), pa se
+// linka ravno na HNS Semafor.
+
+const cardSvg = (color: string) =>
+  `<svg width="10" height="14" viewBox="0 0 10 14" fill="${color}" xmlns="http://www.w3.org/2000/svg" class="inline-block"><rect width="10" height="14" rx="1"/></svg>`;
+
+function rankingItems(stats: CompetitionStats) {
+  return {
+    scorers: stats.topScorers.slice(0, 10).map((p) => ({
+      position: p.position,
+      name: p.name,
+      photo: p.photo,
+      profileUrl: p.profileUrl,
+      valueHtml:
+        `<span>${p.goals ?? 0}</span>` +
+        `<span class="text-club-muted text-xs font-normal">${golLabel(p.goals ?? 0)}</span>`,
+    })),
+    cards: stats.topCards.slice(0, 10).map((p) => {
+      const parts: string[] = [];
+      if ((p.yellow ?? 0) > 0) parts.push(`${cardSvg("#eab308")} <span>${p.yellow}</span>`);
+      if ((p.red ?? 0) > 0) parts.push(`${cardSvg("#dc2626")} <span>${p.red}</span>`);
+      return {
+        position: p.position,
+        name: p.name,
+        photo: p.photo,
+        profileUrl: p.profileUrl,
+        valueHtml: parts.length
+          ? parts.join(' <span class="w-1"></span> ')
+          : '<span class="text-club-muted">—</span>',
+      };
+    }),
+    apps: stats.topApps.slice(0, 10).map((p) => ({
+      position: p.position,
+      name: p.name,
+      photo: p.photo,
+      profileUrl: p.profileUrl,
+      valueHtml:
+        `<span>${p.appearances ?? 0}</span>` +
+        `<span class="text-club-muted text-xs font-normal">${nastupLabel(p.appearances ?? 0)}</span>`,
+    })),
+  };
+}
 
 const categories = [
   {
@@ -229,6 +278,43 @@ const categories = [
               </div>
             )}
           </div>
+
+          {/* Statistika — HNS je objavi tek nakon prvih odigranih utakmica,
+              pa se cijeli blok do tad ne renderira. */}
+          {hasStats(comp.stats) && (() => {
+            const items = rankingItems(comp.stats);
+            return (
+              <div class="mt-10">
+                <h3 class="text-lg mb-1">Statistika</h3>
+                <p class="text-sm text-club-muted mb-4">
+                  Prema podacima HNS Semafora za {comp.name}.
+                </p>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <StatRanking
+                    title="Strijelci"
+                    subtitle="Najbolji strijelci"
+                    items={items.scorers}
+                    valueLabel="Golovi"
+                    emptyText="Još nema postignutih golova."
+                  />
+                  <StatRanking
+                    title="Kartoni"
+                    subtitle="Najviše opomena"
+                    items={items.cards}
+                    valueLabel="Žuti / Crveni"
+                    emptyText="Još nema kartona."
+                  />
+                  <StatRanking
+                    title="Nastupi"
+                    subtitle="Najveći broj nastupa"
+                    items={items.apps}
+                    valueLabel="Nastupi"
+                    emptyText="Još nema zabilježenih nastupa."
+                  />
+                </div>
+              </div>
+            );
+          })()}
         </div>
       );
     })}
