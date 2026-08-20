@@ -102,8 +102,15 @@ i `stats`, uz `type` (`league`/`cup`) i `ageCategory` (`Seniors`/`Beginners`).
 Top-level `matches`, `table`, `players` i `stats` su **objedinjeni pogled samo za
 seniore** (U-11 namjerno nije u njima da ne upadne u seniorski raspored i `.ics`).
 Za mlađe kategorije koristi `competitionsFor("Beginners")` iz `lib/matches.ts` —
-vraća `Competition[]` s već normaliziranim `matches` (`UnifiedMatch[]`) i `table`
-(`LeagueRow[]`). Tako radi U-11 sekcija na `/mladje-kategorije`.
+vraća `Competition[]` s već normaliziranim `matches` (`UnifiedMatch[]`), `table`
+(`LeagueRow[]`), `players` i `stats`. Tako radi U-11 sekcija na
+`/mladje-kategorije`.
+
+`players` i `stats` HNS objavi **tek nakon prvih odigranih utakmica** — zato
+seniorska liga ima prazne, a kup pune. Sve što ih prikazuje mora se znati
+sakriti; koristi `hasStats(comp.stats)`. Igrači mlađih kategorija nemaju
+`/igrac/[id]` profil (te se rute grade samo iz seniorskog `hns.players`), pa se
+linka na njihov `profileUrl` na Semaforu.
 
 `LeagueTable` prima `rows` i `title`; bez njih pada na seniorsku ligu.
 
