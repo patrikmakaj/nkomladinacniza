@@ -86,10 +86,16 @@ Scraper `scripts/scrape.mjs` parsira [stranicu kluba na HNS Semaforu](https://se
 - Igrači (slike, brojevi, pozicije, statistike nastupa)
 - Ranking liste: strijelci, kartoni, najveći broj nastupa
 
-Output: `src/data/hns.json` (commit-an u repo).
+Scrapea **sva natjecanja u kojima klub nastupa**, po uzrastu (seniori + početnici U-11).
+Popis natjecanja dolazi kroz Semaforov `getCompetitions` handler jer se uzrast ne može
+prebaciti URL parametrom.
 
-> Na početku sezone HNS još nije objavio sastav ni statistiku, pa `players` i `stats`
-> znaju biti prazni. Stranice to podnose — nije greška u scraperu.
+Output: `src/data/hns.json` (commit-an u repo) — `competitions[]` s podacima po
+natjecanju, plus objedinjeni seniorski pogled u top-level ključevima.
+
+> HNS zna objaviti sastav samo pod jednim natjecanjem (npr. pod kupom, dok je
+> ligaški roster prazan), pa se roster i statistika zbrajaju kroz sva seniorska
+> natjecanja. Prazni nizovi na početku sezone su normalni — nije greška u scraperu.
 
 ### 2. Facebook (novosti i objave)
 Scraper `scripts/scrape-facebook.mjs` koristi Graph API v21.0 za dohvat zadnjih objava sa [@omladinacniza](https://www.facebook.com/omladinacniza/) FB stranice. Slike se skidaju lokalno u `public/images/facebook/` (jer FB CDN URL-ovi ekspirira za 1-2 tjedna).

@@ -80,19 +80,42 @@ Nikad `href="/raspored"` direktno. Vanjske URL-ove (`http`, `mailto`, `tel`, `#`
 
 `lib/matches.ts` spaja HNS (liga + kup) i `friendlies.json` u jedinstveni
 `UnifiedMatch[]`. Izvozi `allMatches`, `upcoming`, `played`, `nextMatch`,
-`lastResults()`, `matchBadge()`, `badgeClass`, `todayInZagreb`.
+`lastResults()`, `matchBadge()`, `badgeClass`, `todayInZagreb`, te za filtriranje
+`typeLabel`, `typeSlug`, `typeOrder` i `countByType()`.
 
 Ako čitaš `hns.matches` direktno, prijateljske utakmice ti nestanu s ekrana.
 (Iznimka: `matchDetails`, `table`, `players`, `stats` postoje samo u `hns.json`.)
 
-### 3. HNS polja znaju biti prazna
+### 3. Natjecanje je dimenzija, ne jedna vrijednost
 
-Na početku sezone HNS još nije objavio sastav ni statistiku — **trenutno su
-`hns.players` i `hns.stats.*` prazni**. Uvijek `?? []` i pripazi da stranica
-izgleda smisleno bez podataka (`/momcad`, `/igrac/[id]`).
+Klub istovremeno igra ligu, kup i (kao početnici) U-11 ligu. `hns.json` zato ima
+`competitions[]` — svako natjecanje nosi **svoj** `matches`, `table`, `players`
+i `stats`, uz `type` (`league`/`cup`) i `ageCategory` (`Seniors`/`Beginners`).
 
-Isto vrijedi za `matchDetails` — postoji samo za odigrane utakmice koje smo uspjeli
+Top-level `matches`, `table`, `players` i `stats` su **objedinjeni pogled samo za
+seniore** (U-11 namjerno nije u njima da ne upadne u seniorski raspored i `.ics`).
+Za bilo što vezano uz mlađe kategorije čitaj `competitions[]`.
+
+Dvije zamke koje su već jednom ugrizle:
+
+- **Tabovi na Semaforu nemaju fiksne indekse.** Liga ima 4 taba, kup nema
+  "Ljestvicu" pa se Igrači i Statistika pomaknu za jedan. `resolveTabs()` u
+  scraperu ih traži po nazivu — nikad ne hardkodiraj `#tabContent_1_3`.
+- **HNS zna objaviti sastav pod kupom, a ligu ostaviti praznu.** Zato je
+  `players` unija kroz sva seniorska natjecanja sa zbrojenom statistikom
+  (`mergePlayers`), a `perCompetition` čuva razlomljene brojke.
+  Ne piši na `/momcad` da statistika dolazi iz lige.
+
+Uvijek `?? []` — natjecanje bez objavljenih podataka vraća prazne nizove.
+Isto vrijedi za `matchDetails`: postoji samo za odigrane utakmice koje smo uspjeli
 dohvatiti. `/utakmica/[id]` i `/utakmica/[id].png` generiraju se samo za te utakmice.
+
+### 3a. HNS zna duplirati natjecanje usred sezone
+
+Ako klubovi odustanu, HNS otvori **novi cid za istu ligu** i stari ostavi u
+dropdownu. Ako se puste oba, svaki protivnik se pojavi dvaput u rasporedu
+(dogodilo se u kolovozu 2026.). `pickActiveCompetitions()` zato od ligaških
+natjecanja jednog uzrasta zadrži samo označeno (`selected`), a kupove sve.
 
 ### 4. Client skripte moraju preživjeti View Transitions
 
@@ -202,7 +225,9 @@ Lokalni scrape FB-a bez tokena je bezopasan — skripte samo zadrže postojeće 
 
 - Zaboravljen `url()` → linkovi pucaju ako se ikad promijeni `base`.
 - Čitanje `hns.matches` umjesto `lib/matches` → nestanu prijateljske.
-- Pretpostavka da `hns.players` ima sadržaj → prazna/slomljena `/momcad`.
+- Hardkodiran `#tabContent_1_N` → kup se tiho parsira krivo.
+- `element.hidden` za skrivanje kartica s Tailwind `block` klasom → ne radi
+  (preflight `[hidden]` je u `:where()`, klasa pobjeđuje). Koristi `style.display`.
 - `npm run build` umjesto `npx astro build` → nepotreban scrape i prljav git status.
 - Skripta bez `astro:page-load` → radi na reload, puca na navigaciju.
 - Ručna izmjena `hns.json` / `facebook*.json` → CI je prepiše za max 30 minuta.
