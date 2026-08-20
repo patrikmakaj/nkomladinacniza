@@ -21,6 +21,8 @@ export type Scorer = { name: string; goals: number };
 export type UnifiedMatch = {
   id: string;
   type: MatchType;
+  /** cid natjecanja na HNS Semaforu; null za prijateljske. */
+  competitionId: number | null;
   round: number | null;
   date: string;
   time: string | null;
@@ -81,6 +83,7 @@ function friendlyToMatch(f: FriendlyEntry): UnifiedMatch {
   return {
     id: `pr-${f.date}`,
     type: "friendly",
+    competitionId: null,
     round: null,
     date: f.date,
     time,
@@ -98,10 +101,11 @@ function friendlyToMatch(f: FriendlyEntry): UnifiedMatch {
   };
 }
 
-// HNS utakmice — starije verzije hns.json nemaju `type`, pa fallback na "league"
+// HNS utakmice — starije verzije hns.json nemaju `type` ni `competitionId`
 const hnsMatches: UnifiedMatch[] = ((hns.matches ?? []) as any[]).map((m) => ({
   ...m,
   type: (m.type as MatchType) ?? "league",
+  competitionId: (m.competitionId as number | undefined) ?? null,
   venue: null,
   scorers: [],
 }));
@@ -161,3 +165,27 @@ export const badgeClass: Record<MatchType, string> = {
   cup: "bg-club-accent text-club-primary-deep",
   friendly: "bg-slate-500 text-white",
 };
+
+/** Naziv tipa natjecanja za filtere i naslove. */
+export const typeLabel: Record<MatchType, string> = {
+  league: "Liga",
+  cup: "Kup",
+  friendly: "Prijateljske",
+};
+
+/** Redoslijed kojim se tipovi prikazuju u filteru. */
+export const typeOrder: MatchType[] = ["league", "cup", "friendly"];
+
+/** Slug za URL hash — /raspored#kup je čitljivije od /raspored#cup. */
+export const typeSlug: Record<MatchType, string> = {
+  league: "liga",
+  cup: "kup",
+  friendly: "prijateljske",
+};
+
+/** Koliko utakmica po tipu ima u zadanom popisu — za brojke uz filter. */
+export function countByType(list: UnifiedMatch[]): Record<MatchType, number> {
+  const counts: Record<MatchType, number> = { league: 0, cup: 0, friendly: 0 };
+  for (const m of list) counts[m.type]++;
+  return counts;
+}

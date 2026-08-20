@@ -10,6 +10,10 @@ import {
   played,
   matchBadge,
   badgeClass,
+  typeLabel,
+  typeOrder,
+  typeSlug,
+  countByType,
 } from "../lib/matches";
 
 const matchDetails = (hns.matchDetails ?? {}) as Record<string, unknown>;
@@ -49,6 +53,22 @@ const outcomeColor = {
 };
 const outcomeLabel = { W: "P", D: "N", L: "I" };
 const outcomeTitle = { W: "Pobjeda", D: "Neriješeno", L: "Poraz" };
+
+// Filter po natjecanju — prikazujemo samo tipove kojih stvarno ima.
+// Ako klub igra samo ligu, filter nema smisla pa se uopće ne renderira.
+const counts = countByType(allMatches);
+const filters = [
+  { slug: "sve", type: "", label: "Sve", count: allMatches.length },
+  ...typeOrder
+    .filter((t) => counts[t] > 0)
+    .map((t) => ({
+      slug: typeSlug[t],
+      type: t,
+      label: typeLabel[t],
+      count: counts[t],
+    })),
+];
+const showFilters = filters.length > 2;
 
 // Embed-amo predstojeće utakmice u client-side payload za .ics download
 const icsPayload = upcoming.map((m) => ({
@@ -134,13 +154,50 @@ const icsPayload = upcoming.map((m) => ({
       </div>
     </div>
 
+    {/* Filter po natjecanju */}
+    {showFilters && (
+      <div
+        id="type-filter"
+        class="flex flex-wrap gap-2 mb-8"
+        role="group"
+        aria-label="Filtriraj utakmice po natjecanju"
+      >
+        {filters.map((f) => (
+          <button
+            type="button"
+            data-filter={f.slug}
+            data-type={f.type}
+            aria-pressed={f.slug === "sve" ? "true" : "false"}
+            class="filter-btn px-4 py-2 rounded-full border-2 font-display text-xs uppercase tracking-wider transition-colors border-club-border bg-white text-club-secondary hover:border-club-primary aria-pressed:bg-club-primary aria-pressed:border-club-primary aria-pressed:text-white"
+          >
+            {f.label}
+            <span class="ml-1.5 opacity-60">{f.count}</span>
+          </button>
+        ))}
+      </div>
+    )}
+
     {/* PREDSTOJEĆE */}
-    <div class="mb-12">
+    <div class="mb-12" data-section="upcoming">
       <div class="flex items-baseline justify-between mb-4">
         <h2 class="text-2xl">Predstojeće utakmice</h2>
-        <span class="text-xs font-display uppercase tracking-wider text-club-muted">
-          {upcoming.length} {upcoming.length === 1 ? "utakmica" : "utakmica"}
+        <span
+          class="text-xs font-display uppercase tracking-wider text-club-muted"
+          data-count-label
+        >
+          {upcoming.length} utakmica
         </span>
+      </div>
+
+      {/* Prazno stanje kad filter ne pogodi nijednu utakmicu */}
+      <div
+        data-filter-empty
+        style="display: none"
+        class="bg-club-light border-l-4 border-club-primary p-6 rounded text-center"
+      >
+        <p class="text-club-secondary/80">
+          Nema predstojećih utakmica u odabranom natjecanju.
+        </p>
       </div>
 
       {upcoming.length === 0 ? (
@@ -154,6 +211,7 @@ const icsPayload = upcoming.map((m) => ({
           {upcoming.map((m) => (
             <article
               data-match-id={m.id}
+              data-match-type={m.type}
               class="bg-white border-2 border-club-border hover:border-club-primary rounded-lg overflow-hidden transition-colors"
             >
               {/* Header: kolo + datum + venue */}
@@ -260,12 +318,25 @@ const icsPayload = upcoming.map((m) => ({
 
     {/* ODIGRANE */}
     {played.length > 0 && (
-      <div>
+      <div data-section="played">
         <div class="flex items-baseline justify-between mb-4">
           <h2 class="text-2xl">Odigrane utakmice</h2>
-          <span class="text-xs font-display uppercase tracking-wider text-club-muted">
+          <span
+            class="text-xs font-display uppercase tracking-wider text-club-muted"
+            data-count-label
+          >
             {played.length} odigrano
           </span>
+        </div>
+
+        <div
+          data-filter-empty
+          style="display: none"
+          class="bg-club-light border-l-4 border-club-primary p-6 rounded text-center"
+        >
+          <p class="text-club-secondary/80">
+            Nema odigranih utakmica u odabranom natjecanju.
+          </p>
         </div>
 
         <div class="space-y-2">
@@ -282,6 +353,7 @@ const icsPayload = upcoming.map((m) => ({
             return (
               <Tag
                 href={href}
+                data-match-type={m.type}
                 target={externalLink ? "_blank" : undefined}
                 rel={externalLink ? "noopener" : undefined}
                 class={`block bg-white border border-club-border rounded-lg p-3 md:p-4 transition-all ${
@@ -448,13 +520,96 @@ const icsPayload = upcoming.map((m) => ({
       URL.revokeObjectURL(url);
     }
 
-    document.querySelectorAll<HTMLButtonElement>(".ics-btn").forEach((btn) => {
-      btn.addEventListener("click", (e) => {
-        e.preventDefault();
-        const id = btn.dataset.icsId;
-        const m = matches.find((x) => x.id === id);
-        if (m) downloadIcs(m);
+    function setupIcsButtons() {
+      document.querySelectorAll<HTMLButtonElement>(".ics-btn").forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+          e.preventDefault();
+          const id = btn.dataset.icsId;
+          const m = matches.find((x) => x.id === id);
+          if (m) downloadIcs(m);
+        });
       });
+    }
+
+    // ── Filter po natjecanju (liga / kup / prijateljske) ───────────────
+    // Sve utakmice su već u HTML-u; filter samo skriva one koje ne odgovaraju,
+    // pa nema ni reloada ni drugog dohvata.
+
+    /** 1 utakmica · 2 utakmice · 5 utakmica */
+    function utakmicaLabel(n: number): string {
+      const mod10 = n % 10;
+      const mod100 = n % 100;
+      if (mod100 >= 11 && mod100 <= 14) return "utakmica";
+      if (mod10 === 1) return "utakmica";
+      if (mod10 >= 2 && mod10 <= 4) return "utakmice";
+      return "utakmica";
+    }
+
+    /** `slug` je iz URL-a ("liga", "kup", "prijateljske", "sve"). */
+    function applyFilter(slug: string) {
+      const active = document.querySelector<HTMLButtonElement>(
+        `.filter-btn[data-filter="${CSS.escape(slug)}"]`,
+      );
+      const type = active?.dataset.type || "";
+
+      document.querySelectorAll<HTMLElement>("[data-section]").forEach((section) => {
+        const cards = section.querySelectorAll<HTMLElement>("[data-match-type]");
+        let visible = 0;
+
+        cards.forEach((card) => {
+          const show = !type || card.dataset.matchType === type;
+          // NE koristimo `hidden` atribut — Tailwind `block` na odigranim
+          // karticama ima veću specifičnost od preflight `[hidden]` pravila
+          // pa bi kartice ostale vidljive.
+          card.style.display = show ? "" : "none";
+          if (show) visible++;
+        });
+
+        // Prazno stanje se prikazuje samo kad je filter sve odrezao,
+        // a ne kad sekcija ionako nema utakmica (tu već postoji svoja poruka).
+        const empty = section.querySelector<HTMLElement>("[data-filter-empty]");
+        if (empty) {
+          empty.style.display = cards.length > 0 && visible === 0 ? "" : "none";
+        }
+
+        const label = section.querySelector<HTMLElement>("[data-count-label]");
+        if (label) {
+          label.textContent =
+            section.dataset.section === "played"
+              ? `${visible} odigrano`
+              : `${visible} ${utakmicaLabel(visible)}`;
+        }
+      });
+
+      document.querySelectorAll<HTMLButtonElement>(".filter-btn").forEach((btn) => {
+        btn.setAttribute("aria-pressed", String(btn.dataset.filter === slug));
+      });
+    }
+
+    function setupFilter() {
+      const group = document.getElementById("type-filter");
+      if (!group) return;
+
+      group.querySelectorAll<HTMLButtonElement>(".filter-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const slug = btn.dataset.filter || "sve";
+          applyFilter(slug);
+          // Hash čuva izbor kroz reload i omogućuje dijeljenje linka (/raspored#kup)
+          history.replaceState(null, "", slug === "sve" ? location.pathname : `#${slug}`);
+        });
+      });
+
+      const fromHash = decodeURIComponent(location.hash.replace("#", ""));
+      const valid = [...group.querySelectorAll<HTMLButtonElement>(".filter-btn")].some(
+        (b) => b.dataset.filter === fromHash,
+      );
+      applyFilter(valid ? fromHash : "sve");
+    }
+
+    // ClientRouter ne pokreće <script> ponovo pri navigaciji — veži na page-load.
+    document.addEventListener("astro:page-load", () => {
+      setupIcsButtons();
+      setupFilter();
     });
   </script>
 </BaseLayout>
