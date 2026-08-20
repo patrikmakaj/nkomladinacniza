@@ -147,6 +147,13 @@ Vidi `components/Header.astro` (hamburger meni je već jednom puknuo zbog ovoga)
 Tako rade `galerija.astro` i `raspored.astro`. Ne koristi `define:vars` osim za
 skalare (kao `turnir.astro` sa `SHEET_ID`).
 
+Kad je podataka puno, inline payload nije opcija. Galerija ima 4000+ fotki kroz
+18 godina — u HTML ide samo najnovijih 100, a starije godine se dohvaćaju s
+`/galerija/{godina}.json` (`pages/galerija/[year].json.ts`) tek kad ih netko
+odabere. Prije toga je stranica težila 5,5 MB. Kartice za dohvaćene godine
+gradi klon `<template id="card-template">` iz iste datoteke, da markup kartice
+ostane na jednom mjestu.
+
 ### 6. Tailwind v4 — nema `tailwind.config.js`
 
 Sve je u `src/styles/global.css`:

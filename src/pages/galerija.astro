@@ -45,21 +45,24 @@ for (const album of albums) {
   }
 }
 
-// Sve fotke idu u DOM (skrivene dok se ne odabere godina), sortirane najnovije prvo
 allPhotos.sort((a, b) => (b.createdAt || "").localeCompare(a.createdAt || ""));
-const photos = allPhotos;
 
 const yearOf = (iso: string) => (/^(\d{4})-/.exec(iso || "")?.[1] ?? "");
 
 // Godine za filter, silazno
-const years = [...new Set(photos.map((p) => yearOf(p.createdAt)).filter(Boolean))].sort(
+const years = [...new Set(allPhotos.map((p) => yearOf(p.createdAt)).filter(Boolean))].sort(
   (a, b) => b.localeCompare(a),
 );
 
-const hasPhotos = photos.length > 0;
-const recentCount = Math.min(RECENT_COUNT, photos.length);
+const hasPhotos = allPhotos.length > 0;
 
-// Payload za client-side lightbox (samo ono što treba)
+// U HTML ide SAMO najnovijih 100. Starije godine se dohvaćaju s
+// /galerija/{godina}.json tek kad ih korisnik odabere — inače bi stranica
+// nosila preko 4000 kartica (5,5 MB) prije prve učitane slike.
+const photos = allPhotos.slice(0, RECENT_COUNT);
+const recentCount = photos.length;
+
+// Payload za lightbox — samo za ono što je u HTML-u.
 const lightboxPayload = photos.map((p) => ({
   src: url(p.src),
   caption: p.caption,
@@ -106,8 +109,6 @@ const lightboxPayload = photos.map((p) => ({
               <button
                 type="button"
                 data-photo-idx={idx}
-                data-year={yearOf(p.createdAt)}
-                hidden={idx >= RECENT_COUNT}
                 class="gallery-item group relative block w-full mb-3 md:mb-4 break-inside-avoid overflow-hidden rounded-lg cursor-pointer focus:outline-none focus:ring-2 focus:ring-club-primary bg-club-light"
                 aria-label={p.caption || `Fotka ${idx + 1}`}
               >
@@ -130,6 +131,30 @@ const lightboxPayload = photos.map((p) => ({
               </button>
             ))}
           </div>
+          {/* Predložak za kartice koje se grade na klijentu (odabrana godina).
+              Držimo ga ovdje da markup kartice postoji na jednom mjestu. */}
+          <template id="card-template">
+            <button
+              type="button"
+              class="gallery-item group relative block w-full mb-3 md:mb-4 break-inside-avoid overflow-hidden rounded-lg cursor-pointer focus:outline-none focus:ring-2 focus:ring-club-primary bg-club-light"
+            >
+              <img
+                loading="lazy"
+                class="block w-full h-auto group-hover:scale-105 transition-transform duration-500"
+              />
+              <div class="absolute inset-0 bg-black/0 group-hover:bg-black/35 transition-colors flex items-center justify-center pointer-events-none">
+                <svg
+                  class="w-10 h-10 text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m-3-3h6" />
+                </svg>
+              </div>
+            </button>
+          </template>
+
           <p id="gallery-status" class="text-center text-xs text-club-muted mt-8">
             Prikazano posljednjih {recentCount} fotki — odaberi godinu za stariji sadržaj.
             Automatski sinkronizirano s Facebook stranice kluba.
@@ -230,12 +255,17 @@ const lightboxPayload = photos.map((p) => ({
       <script type="application/json" id="gallery-data" set:html={JSON.stringify(lightboxPayload)} />
 
       <script>
+        import { url } from "../lib/url";
+
         type Photo = {
           src: string;
           caption: string;
           albumName: string;
           albumPermalink: string | null;
         };
+
+        /** Odakle se dohvaćaju fotke po godini — poštuje Astro `base`. */
+        const GALLERY_BASE = url("/galerija");
 
         const dataEl = document.getElementById("gallery-data");
         const photos: Photo[] = dataEl ? JSON.parse(dataEl.textContent || "[]") : [];
@@ -250,41 +280,88 @@ const lightboxPayload = photos.map((p) => ({
         const prevBtn = document.getElementById("lightbox-prev");
         const nextBtn = document.getElementById("lightbox-next");
 
-        const RECENT_COUNT = 100;
-        const items = Array.from(
-          document.querySelectorAll<HTMLButtonElement>(".gallery-item"),
-        );
         const statusEl = document.getElementById("gallery-status");
+        const grid = document.getElementById("gallery-grid");
+        const template = document.getElementById("card-template") as HTMLTemplateElement | null;
 
-        // Globalni indeksi trenutno vidljivih fotki — lightbox se kreće po njima
-        let visible: number[] = [];
-        // Pozicija unutar `visible`, ne globalni indeks
+        // Kartice najnovijih fotki dolaze već renderirane sa servera — čuvamo ih
+        // da se povratak na "Najnovije" ne mora ponovo graditi.
+        const recentCards = grid ? Array.from(grid.children) : [];
+
+        /** Fotke koje su trenutno u mreži; lightbox se kreće po njima. */
+        let current: Photo[] = photos;
         let pos = 0;
 
-        function applyFilter(mode: string) {
-          visible = [];
-          items.forEach((el, idx) => {
-            const show =
-              mode === "recent" ? idx < RECENT_COUNT : el.dataset.year === mode;
-            el.hidden = !show;
-            if (show) visible.push(idx);
-          });
+        /** Već dohvaćene godine — svaka se skine najviše jednom po posjetu. */
+        const cache = new Map<string, Photo[]>();
 
-          if (statusEl) {
-            statusEl.textContent =
-              mode === "recent"
-                ? `Prikazano posljednjih ${visible.length} fotki — odaberi godinu za stariji sadržaj.`
-                : `Prikazano ${visible.length} ${visible.length === 1 ? "fotka" : "fotki"} iz ${mode}.`;
+        function fotkiLabel(n: number): string {
+          const mod10 = n % 10;
+          const mod100 = n % 100;
+          if (mod100 >= 11 && mod100 <= 14) return "fotki";
+          if (mod10 === 1) return "fotka";
+          if (mod10 >= 2 && mod10 <= 4) return "fotke";
+          return "fotki";
+        }
+
+        function setStatus(text: string) {
+          if (statusEl) statusEl.textContent = text;
+        }
+
+        /** Sagradi kartice iz predloška i zamijeni sadržaj mreže. */
+        function renderGrid(list: Photo[]) {
+          if (!grid || !template) return;
+          const frag = document.createDocumentFragment();
+          list.forEach((p, idx) => {
+            const card = template.content.firstElementChild!.cloneNode(true) as HTMLElement;
+            card.dataset.photoIdx = String(idx);
+            card.setAttribute("aria-label", p.caption || `Fotka ${idx + 1}`);
+            const image = card.querySelector("img")!;
+            image.src = p.src;
+            image.alt = p.caption || p.albumName;
+            frag.appendChild(card);
+          });
+          grid.replaceChildren(frag);
+        }
+
+        async function showYear(year: string) {
+          if (year === "recent") {
+            current = photos;
+            grid?.replaceChildren(...recentCards);
+            setStatus(
+              `Prikazano posljednjih ${photos.length} fotki — odaberi godinu za stariji sadržaj.`,
+            );
+            return;
           }
+
+          let list = cache.get(year);
+          if (!list) {
+            setStatus(`Učitavam fotke iz ${year}…`);
+            try {
+              const res = await fetch(`${GALLERY_BASE}/${year}.json`);
+              if (!res.ok) throw new Error(`HTTP ${res.status}`);
+              list = (await res.json()) as Photo[];
+              cache.set(year, list);
+            } catch {
+              setStatus(
+                `Fotke iz ${year} se trenutno ne mogu učitati. Pokušaj ponovo ili odaberi drugu godinu.`,
+              );
+              return;
+            }
+          }
+
+          current = list;
+          renderGrid(list);
+          setStatus(`Prikazano ${list.length} ${fotkiLabel(list.length)} iz ${year}.`);
         }
 
         function render() {
-          if (!img || visible.length === 0) return;
-          const p = photos[visible[pos]];
+          if (!img || current.length === 0) return;
+          const p = current[pos];
           img.src = p.src;
           img.alt = p.caption || p.albumName;
           if (captionEl) captionEl.textContent = p.caption || "";
-          if (counterEl) counterEl.textContent = `${pos + 1} / ${visible.length}`;
+          if (counterEl) counterEl.textContent = `${pos + 1} / ${current.length}`;
           if (albumNameEl) albumNameEl.textContent = p.albumName ? `Album: ${p.albumName}` : "";
           if (fbLinkEl) {
             if (p.albumPermalink) {
@@ -296,42 +373,39 @@ const lightboxPayload = photos.map((p) => ({
           }
         }
 
-        function open(globalIdx: number) {
-          if (!dialog || visible.length === 0) return;
-          const at = visible.indexOf(globalIdx);
-          pos = at === -1 ? 0 : at;
+        function open(idx: number) {
+          if (!dialog || current.length === 0) return;
+          pos = idx >= 0 && idx < current.length ? idx : 0;
           render();
           dialog.showModal();
           document.body.style.overflow = "hidden";
         }
 
         function next() {
-          pos = (pos + 1) % visible.length;
+          pos = (pos + 1) % current.length;
           render();
         }
 
         function prev() {
-          pos = (pos - 1 + visible.length) % visible.length;
+          pos = (pos - 1 + current.length) % current.length;
           render();
         }
 
-        items.forEach((card) => {
-          card.addEventListener("click", () => {
-            const idx = Number(card.dataset.photoIdx);
-            if (!Number.isNaN(idx)) open(idx);
-          });
+        // Delegirano — kartice se zamjenjuju pri promjeni godine, pa se
+        // pojedinačni listeneri ne bi preživjeli.
+        grid?.addEventListener("click", (e) => {
+          const card = (e.target as HTMLElement).closest<HTMLElement>(".gallery-item");
+          if (!card) return;
+          const idx = Number(card.dataset.photoIdx);
+          if (!Number.isNaN(idx)) open(idx);
         });
 
         const yearSelect = document.getElementById("year-select") as HTMLSelectElement | null;
         yearSelect?.addEventListener("change", () => {
-          applyFilter(yearSelect.value);
+          void showYear(yearSelect.value);
           // Nakon promjene skrolaj na vrh mreže da se odmah vidi rezultat
-          document
-            .getElementById("gallery-grid")
-            ?.scrollIntoView({ block: "start", behavior: "smooth" });
+          grid?.scrollIntoView({ block: "start", behavior: "smooth" });
         });
-
-        applyFilter(yearSelect?.value || "recent");
 
         closeBtn?.addEventListener("click", () => {
           dialog?.close();
@@ -385,10 +459,6 @@ const lightboxPayload = photos.map((p) => ({
       outline: none;
       border-color: var(--color-club-primary);
       box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-club-primary) 35%, transparent);
-    }
-    /* [hidden] mora pobijediti display iz utility klasa na istom elementu */
-    .gallery-item[hidden] {
-      display: none;
     }
   </style>
 </BaseLayout>
