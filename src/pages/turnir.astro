@@ -9,9 +9,13 @@ const NAZIV = "Turnir u boćanju na travi";
 const PODNASLOV = "DŠA Niza · Subota 25.07. od 17:00 · Igralište u Nizi";
 ---
 
+{/* Jednokratni događaj — nije u navigaciji i ne treba biti u tražilicama.
+    Stranica i dalje radi na direktan link; kad se turnir ponovi, makni
+    `noIndex` ovdje i /turnir iz EXCLUDED u astro.config.mjs. */}
 <BaseLayout
   title="Turnir u boćanju"
   description="Rezultati uživo — Turnir u boćanju na travi, DŠA Niza, igralište u Nizi. Grupne tablice, raspored, eliminacija u stvarnom vremenu."
+  noIndex
 >
   <!-- HERO -->
   <section class="relative overflow-hidden py-12 md:py-16" style="background:linear-gradient(135deg,#0b1c44 0%,#10275c 55%,#1e4fa0 100%)">

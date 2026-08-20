@@ -12,7 +12,7 @@
  * Postojeći thumbovi se preskaču; `--force` ih pregenerira.
  */
 
-import { readFile, writeFile, readdir, access, unlink } from "node:fs/promises";
+import { readFile, writeFile, access, unlink } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import sharp from "sharp";

@@ -696,7 +696,18 @@ async function loadExistingMatchDetails() {
 }
 
 async function fetchMatchDetails(matches, existing) {
-  const details = { ...existing };
+  // Detalji su cache, ali cache koji nikad ne istječe. Prošle sezone su ostajale
+  // u hns.json zauvijek (22 zapisa od kojih 2 aktualna) i napuhavale datoteku
+  // koja se prepisuje svakih 30 minuta. Stranica ionako gradi /utakmica/[id]
+  // samo za utakmice iz `matches`, pa ostatak nikome ne treba.
+  const live = new Set(matches.map((m) => m.id));
+  const details = Object.fromEntries(
+    Object.entries(existing).filter(([id]) => live.has(id)),
+  );
+  const dropped = Object.keys(existing).length - Object.keys(details).length;
+  if (dropped > 0) {
+    console.log(`[scrape] izbačeno ${dropped} detalja utakmica izvan aktualne sezone`);
+  }
   // Skupi sve odigrane utakmice s URL-om koje još nemaju detalje
   const toFetch = matches.filter(
     (m) => m.played && m.url && !details[m.id],

@@ -138,6 +138,25 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # OG slike po utakmici se generiraju satorijem + resvg-om (~1,4s po
+      # utakmici) i cache-aju po hashu sadržaja u .cache/og. Bez ovog koraka
+      # se cijeli set regenerira na svakom deployu, a deploy ide svakih 30 min.
+      # Key se mijenja kad se promijene podaci; restore-keys vrati zadnji
+      # cache pa se ponovo generiraju samo utakmice koje su se stvarno promijenile.
+      # `astro build` ne provjerava tipove u .astro frontmatteru. Podaci dolaze
+      # iz scrapera vanjske stranice koja mijenja strukturu, pa ovo hvata
+      # razilaženja prije nego završe na produkciji.
+      - name: Provjera tipova
+        run: npm run check
+
+      - name: Cache OG slika
+        uses: actions/cache@v4
+        with:
+          path: .cache/og
+          key: og-${{ hashFiles('src/data/hns.json') }}
+          restore-keys: |
+            og-
+
       - name: Build site
         # Namjerno NE scrapamo ponovo — gradimo točno ono što je scrape job
         # commitao. Ranije je build imao svoj scrape, pa je objavljena stranica
