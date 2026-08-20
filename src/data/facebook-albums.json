@@ -1,9 +1,9 @@
 {
-  "lastUpdated": "2026-08-20T19:28:43.164Z",
+  "lastUpdated": "2026-08-20T19:52:34.631Z",
   "enabled": true,
   "pageId": "55401829691",
   "photosPerYear": 200,
-  "totalOnFacebook": 7563,
+  "totalOnFacebook": 7564,
   "years": [
     "2026",
     "2025",
@@ -29,11 +29,17 @@
       "id": "482830940516078",
       "name": "Preneseno s mobitela",
       "createdAt": "2022-08-31T22:19:54+0000",
-      "updatedAt": "2026-08-17T10:29:42+0000",
+      "updatedAt": "2026-08-20T19:41:07+0000",
       "permalink": "https://www.facebook.com/album.php?fbid=482830940516078&id=1551452460320582&aid=1073741828",
       "cover": "/images/facebook-albums/482830940516078/cover.jpg",
-      "count": 4636,
+      "count": 4637,
       "photos": [
+        {
+          "id": "1668397605292733",
+          "src": "/images/facebook-albums/482830940516078/1668397605292733.jpg",
+          "caption": "Čestitke gostima na prolasku u 3. kolo!",
+          "createdAt": "2026-08-20T19:41:07+0000"
+        },
         {
           "id": "1664952188970608",
           "src": "/images/facebook-albums/482830940516078/1664952188970608.jpg",
@@ -10475,14 +10481,14 @@
           "createdAt": "2018-06-03T17:48:36+0000"
         },
         {
-          "id": "10157381401969692",
-          "src": "/images/facebook-albums/482830940516078/10157381401969692.jpg",
+          "id": "10157381402079692",
+          "src": "/images/facebook-albums/482830940516078/10157381402079692.jpg",
           "caption": "",
           "createdAt": "2018-06-03T17:48:36+0000"
         },
         {
-          "id": "10157381402079692",
-          "src": "/images/facebook-albums/482830940516078/10157381402079692.jpg",
+          "id": "10157381401969692",
+          "src": "/images/facebook-albums/482830940516078/10157381401969692.jpg",
           "caption": "",
           "createdAt": "2018-06-03T17:48:36+0000"
         },
@@ -11651,14 +11657,14 @@
           "createdAt": "2017-06-10T20:01:08+0000"
         },
         {
-          "id": "10156184096424692",
-          "src": "/images/facebook-albums/482830940516078/10156184096424692.jpg",
+          "id": "10156184096144692",
+          "src": "/images/facebook-albums/482830940516078/10156184096144692.jpg",
           "caption": "",
           "createdAt": "2017-06-10T20:01:07+0000"
         },
         {
-          "id": "10156184096144692",
-          "src": "/images/facebook-albums/482830940516078/10156184096144692.jpg",
+          "id": "10156184096424692",
+          "src": "/images/facebook-albums/482830940516078/10156184096424692.jpg",
           "caption": "",
           "createdAt": "2017-06-10T20:01:07+0000"
         },
@@ -12701,14 +12707,14 @@
           "createdAt": "2016-08-14T18:57:00+0000"
         },
         {
-          "id": "10155047498644692",
-          "src": "/images/facebook-albums/482830940516078/10155047498644692.jpg",
+          "id": "10155047498779692",
+          "src": "/images/facebook-albums/482830940516078/10155047498779692.jpg",
           "caption": "",
           "createdAt": "2016-08-14T18:57:00+0000"
         },
         {
-          "id": "10155047498779692",
-          "src": "/images/facebook-albums/482830940516078/10155047498779692.jpg",
+          "id": "10155047498644692",
+          "src": "/images/facebook-albums/482830940516078/10155047498644692.jpg",
           "caption": "",
           "createdAt": "2016-08-14T18:57:00+0000"
         },
@@ -12779,26 +12785,26 @@
           "createdAt": "2016-08-14T18:56:58+0000"
         },
         {
-          "id": "10155047493014692",
-          "src": "/images/facebook-albums/482830940516078/10155047493014692.jpg",
-          "caption": "",
-          "createdAt": "2016-08-14T18:56:57+0000"
-        },
-        {
           "id": "10155047492714692",
           "src": "/images/facebook-albums/482830940516078/10155047492714692.jpg",
           "caption": "",
           "createdAt": "2016-08-14T18:56:57+0000"
         },
         {
-          "id": "10155047492279692",
-          "src": "/images/facebook-albums/482830940516078/10155047492279692.jpg",
+          "id": "10155047493014692",
+          "src": "/images/facebook-albums/482830940516078/10155047493014692.jpg",
           "caption": "",
           "createdAt": "2016-08-14T18:56:57+0000"
         },
         {
           "id": "10155047492499692",
           "src": "/images/facebook-albums/482830940516078/10155047492499692.jpg",
+          "caption": "",
+          "createdAt": "2016-08-14T18:56:57+0000"
+        },
+        {
+          "id": "10155047492279692",
+          "src": "/images/facebook-albums/482830940516078/10155047492279692.jpg",
           "caption": "",
           "createdAt": "2016-08-14T18:56:57+0000"
         },
@@ -12875,14 +12881,14 @@
           "createdAt": "2016-08-06T19:00:09+0000"
         },
         {
-          "id": "10155019714044692",
-          "src": "/images/facebook-albums/482830940516078/10155019714044692.jpg",
+          "id": "10155019713849692",
+          "src": "/images/facebook-albums/482830940516078/10155019713849692.jpg",
           "caption": "",
           "createdAt": "2016-08-06T19:00:08+0000"
         },
         {
-          "id": "10155019713849692",
-          "src": "/images/facebook-albums/482830940516078/10155019713849692.jpg",
+          "id": "10155019714044692",
+          "src": "/images/facebook-albums/482830940516078/10155019714044692.jpg",
           "caption": "",
           "createdAt": "2016-08-06T19:00:08+0000"
         },
@@ -16882,14 +16888,14 @@
           "createdAt": "2014-05-31T18:21:12+0000"
         },
         {
-          "id": "10152845021964692",
-          "src": "/images/facebook-albums/10152845003144692/10152845021964692.jpg",
+          "id": "10152845021929692",
+          "src": "/images/facebook-albums/10152845003144692/10152845021929692.jpg",
           "caption": "",
           "createdAt": "2014-05-31T18:21:11+0000"
         },
         {
-          "id": "10152845021929692",
-          "src": "/images/facebook-albums/10152845003144692/10152845021929692.jpg",
+          "id": "10152845021964692",
+          "src": "/images/facebook-albums/10152845003144692/10152845021964692.jpg",
           "caption": "",
           "createdAt": "2014-05-31T18:21:11+0000"
         },
@@ -21902,27 +21908,27 @@
           "createdAt": "2016-08-19T09:07:20+0000"
         },
         {
-          "id": "10155063868009692",
-          "src": "/images/facebook-albums/482830957182743/10155063868009692.jpg",
-          "caption": "Juniori - LM NS Našice 1. stranica",
-          "createdAt": "2016-08-19T09:07:20+0000"
-        },
-        {
           "id": "10155063868064692",
           "src": "/images/facebook-albums/482830957182743/10155063868064692.jpg",
           "caption": "Juniori - LM NS Našice 2. stranica",
           "createdAt": "2016-08-19T09:07:20+0000"
         },
         {
-          "id": "10155063867899692",
-          "src": "/images/facebook-albums/482830957182743/10155063867899692.jpg",
-          "caption": "Seniori - 2. Žnl Našice 1 stranica",
+          "id": "10155063868009692",
+          "src": "/images/facebook-albums/482830957182743/10155063868009692.jpg",
+          "caption": "Juniori - LM NS Našice 1. stranica",
           "createdAt": "2016-08-19T09:07:20+0000"
         },
         {
           "id": "10155063867904692",
           "src": "/images/facebook-albums/482830957182743/10155063867904692.jpg",
           "caption": "Seniori - 2. Žnl Našice 3 stranica",
+          "createdAt": "2016-08-19T09:07:20+0000"
+        },
+        {
+          "id": "10155063867899692",
+          "src": "/images/facebook-albums/482830957182743/10155063867899692.jpg",
+          "caption": "Seniori - 2. Žnl Našice 1 stranica",
           "createdAt": "2016-08-19T09:07:20+0000"
         },
         {
@@ -22004,14 +22010,14 @@
           "createdAt": "2016-08-02T20:18:01+0000"
         },
         {
-          "id": "10155006748869692",
-          "src": "/images/facebook-albums/482830957182743/10155006748869692.jpg",
+          "id": "10155006748844692",
+          "src": "/images/facebook-albums/482830957182743/10155006748844692.jpg",
           "caption": "",
           "createdAt": "2016-08-02T20:18:01+0000"
         },
         {
-          "id": "10155006748844692",
-          "src": "/images/facebook-albums/482830957182743/10155006748844692.jpg",
+          "id": "10155006748869692",
+          "src": "/images/facebook-albums/482830957182743/10155006748869692.jpg",
           "caption": "",
           "createdAt": "2016-08-02T20:18:01+0000"
         },
@@ -22220,15 +22226,15 @@
           "createdAt": "2016-07-03T09:49:51+0000"
         },
         {
-          "id": "10154911746784692",
-          "src": "/images/facebook-albums/482830957182743/10154911746784692.jpg",
-          "caption": "Hana Koška - 4 mjesto",
-          "createdAt": "2016-07-03T09:49:51+0000"
-        },
-        {
           "id": "10154911746549692",
           "src": "/images/facebook-albums/482830957182743/10154911746549692.jpg",
           "caption": "Rotel - 3 mjesto",
+          "createdAt": "2016-07-03T09:49:51+0000"
+        },
+        {
+          "id": "10154911746784692",
+          "src": "/images/facebook-albums/482830957182743/10154911746784692.jpg",
+          "caption": "Hana Koška - 4 mjesto",
           "createdAt": "2016-07-03T09:49:51+0000"
         },
         {
@@ -23282,14 +23288,14 @@
           "createdAt": "2015-08-30T20:42:56+0000"
         },
         {
-          "id": "10154083161529692",
-          "src": "/images/facebook-albums/482830957182743/10154083161529692.jpg",
+          "id": "10154083161484692",
+          "src": "/images/facebook-albums/482830957182743/10154083161484692.jpg",
           "caption": "",
           "createdAt": "2015-08-26T11:44:10+0000"
         },
         {
-          "id": "10154083161484692",
-          "src": "/images/facebook-albums/482830957182743/10154083161484692.jpg",
+          "id": "10154083161529692",
+          "src": "/images/facebook-albums/482830957182743/10154083161529692.jpg",
           "caption": "",
           "createdAt": "2015-08-26T11:44:10+0000"
         },
@@ -23444,14 +23450,14 @@
           "createdAt": "2015-07-05T00:13:35+0000"
         },
         {
-          "id": "10153940107084692",
-          "src": "/images/facebook-albums/482830957182743/10153940107084692.jpg",
+          "id": "10153940106744692",
+          "src": "/images/facebook-albums/482830957182743/10153940106744692.jpg",
           "caption": "",
           "createdAt": "2015-07-05T00:13:35+0000"
         },
         {
-          "id": "10153940106744692",
-          "src": "/images/facebook-albums/482830957182743/10153940106744692.jpg",
+          "id": "10153940107084692",
+          "src": "/images/facebook-albums/482830957182743/10153940107084692.jpg",
           "caption": "",
           "createdAt": "2015-07-05T00:13:35+0000"
         },
