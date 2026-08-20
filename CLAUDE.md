@@ -157,6 +157,9 @@ Naslovi `h1–h4` su globalno Oswald + uppercase.
 Za brojeve koristi `lib/croatian.ts` (`pluralCroatian`, `golLabel`, `nastupLabel`) —
 1 → jednina, 2-4 → paucal, 5+ → množina, uz iznimku 11-14. Ne piši "3 golova".
 
+Ishod utakmice se kratica **P / N / I** (pobjeda, neriješeno, izgubljeno).
+Ne "P" za poraz — razlikuje se od pobjede samo bojom, a daltonisti je ne vide.
+
 Datumi i vremena: `toLocaleDateString("hr-HR", …)`, vremenska zona **`Europe/Zagreb`**
 (`todayInZagreb` u `lib/matches.ts`). Nikad ne oslanjaj se na lokalnu zonu build servera.
 

@@ -4,6 +4,14 @@ import Logo from "../../components/Logo.astro";
 import { golLabel, nastupLabel } from "../../lib/croatian";
 import { url } from "../../lib/url";
 import hns from "../../data/hns.json";
+import {
+  matchBadge,
+  badgeClass,
+  typeLabel,
+  typeOrder,
+  type MatchType,
+  type UnifiedMatch,
+} from "../../lib/matches";
 
 const OUR_CLUB_ID = 134;
 
@@ -28,9 +36,13 @@ type LineupPlayer = {
 
 type Match = {
   id: string;
-  round: number;
+  round: number | null;
   date: string;
   iso: string;
+  /** Nedostaje u starijim verzijama hns.json — fallback na "league". */
+  type?: MatchType;
+  competition?: string;
+  competitionId?: number | null;
   home: { id: number; name: string; logo: string | null };
   away: { id: number; name: string; logo: string | null };
   score: { home: number; away: number } | null;
@@ -110,6 +122,55 @@ const totalAppearances = appearances.length;
 const totalGoals = appearances.reduce((s, a) => s + a.goals, 0);
 const totalYellow = appearances.reduce((s, a) => s + a.yellow, 0);
 const totalRed = appearances.reduce((s, a) => s + a.red, 0);
+
+// ── Razdvajanje po natjecanju ─────────────────────────────────────────
+// Igrač nastupa u ligi i kupu, a kartice gore prikazuju zbroj. Ovdje se vidi
+// koliko je od toga koje natjecanje. Brojke se izvode iz istih nastupa kao i
+// popis utakmica ispod, pa ne mogu razići jedne od drugih.
+
+/** "Kup NS Našice 26/27, 1/16 finala" → "Kup NS Našice 26/27" */
+function competitionName(c: string | undefined): string {
+  return (c || "").split(",")[0].trim();
+}
+
+type CompetitionStats = {
+  key: string;
+  name: string;
+  type: MatchType;
+  appearances: number;
+  goals: number;
+  yellow: number;
+  red: number;
+};
+
+const byCompetition: CompetitionStats[] = [];
+for (const a of appearances) {
+  const type = (a.match.type ?? "league") as MatchType;
+  const key = String(a.match.competitionId ?? type);
+  let row = byCompetition.find((r) => r.key === key);
+  if (!row) {
+    row = {
+      key,
+      name: competitionName(a.match.competition) || typeLabel[type],
+      type,
+      appearances: 0,
+      goals: 0,
+      yellow: 0,
+      red: 0,
+    };
+    byCompetition.push(row);
+  }
+  row.appearances++;
+  row.goals += a.goals;
+  row.yellow += a.yellow;
+  row.red += a.red;
+}
+byCompetition.sort(
+  (a, b) => typeOrder.indexOf(a.type) - typeOrder.indexOf(b.type),
+);
+
+// Kod jednog natjecanja razdvajanje ne govori ništa novo — kartice već sve kažu.
+const showBreakdown = byCompetition.length > 1;
 const firstAppearance = appearances[appearances.length - 1]?.match;
 const matchesWithGoals = appearances.filter((a) => a.goals > 0).length;
 
@@ -157,7 +218,7 @@ const positionGroup = (player.position || "")
   : "Igrač";
 
 const pageTitle = player.name;
-const pageDescription = `Profil igrača ${player.name} u sezoni ${hns.competition?.name ?? ""} — golovi, nastupi, kartoni i sve utakmice.`;
+const pageDescription = `Profil igrača ${player.name} u sezoni ${hns.competition?.season ?? ""} — golovi, nastupi, kartoni i sve utakmice kroz ligu i kup.`;
 ---
 
 <BaseLayout title={pageTitle} description={pageDescription}>
@@ -221,8 +282,11 @@ const pageDescription = `Profil igrača ${player.name} u sezoni ${hns.competitio
   {/* Statistike sezone */}
   <section class="container-narrow mt-8 mb-12">
     <h2 class="text-xl font-display font-bold uppercase tracking-wider text-club-primary-deep mb-4">
-      Sezona {hns.competition?.name ?? ""}
+      Sezona {hns.competition?.season ?? ""}
     </h2>
+    <p class="text-sm text-club-muted -mt-3 mb-4">
+      Zbrojeno kroz sva natjecanja.
+    </p>
 
     <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
       <div class="bg-white border border-club-border rounded-lg p-4 text-center">
@@ -256,6 +320,75 @@ const pageDescription = `Profil igrača ${player.name} u sezoni ${hns.competitio
         <p class="text-xs md:text-sm text-club-muted mt-1">crveni kartoni</p>
       </div>
     </div>
+
+    {/* Razdvajanje po natjecanju */}
+    {showBreakdown && (
+      <div class="mt-6 bg-white border border-club-border rounded-lg overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="bg-club-light-2 text-club-muted">
+                <th
+                  scope="col"
+                  class="text-left font-display uppercase tracking-wider text-xs px-4 py-2.5"
+                >
+                  Natjecanje
+                </th>
+                <th scope="col" class="font-display uppercase tracking-wider text-xs px-3 py-2.5 text-center">
+                  Nastupi
+                </th>
+                <th scope="col" class="font-display uppercase tracking-wider text-xs px-3 py-2.5 text-center">
+                  Golovi
+                </th>
+                <th scope="col" class="font-display uppercase tracking-wider text-xs px-3 py-2.5 text-center">
+                  🟨
+                </th>
+                <th scope="col" class="font-display uppercase tracking-wider text-xs px-3 py-2.5 text-center">
+                  🟥
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {byCompetition.map((c) => (
+                <tr class="border-t border-club-border">
+                  <td class="px-4 py-3">
+                    <span
+                      class={`font-display font-bold uppercase tracking-wider text-[10px] px-2 py-0.5 rounded mr-2 ${badgeClass[c.type]}`}
+                    >
+                      {typeLabel[c.type]}
+                    </span>
+                    <span class="text-club-secondary">{c.name}</span>
+                  </td>
+                  <td class="px-3 py-3 text-center font-display font-bold text-club-primary-deep">
+                    {c.appearances}
+                  </td>
+                  <td class="px-3 py-3 text-center font-display font-bold text-club-primary">
+                    {c.goals}
+                  </td>
+                  <td class="px-3 py-3 text-center text-club-muted">{c.yellow}</td>
+                  <td class="px-3 py-3 text-center text-club-muted">{c.red}</td>
+                </tr>
+              ))}
+            </tbody>
+            <tfoot>
+              <tr class="border-t-2 border-club-border bg-club-light/30">
+                <td class="px-4 py-3 font-display uppercase tracking-wider text-xs text-club-muted">
+                  Ukupno
+                </td>
+                <td class="px-3 py-3 text-center font-display font-bold text-club-primary-deep">
+                  {totalAppearances}
+                </td>
+                <td class="px-3 py-3 text-center font-display font-bold text-club-primary">
+                  {totalGoals}
+                </td>
+                <td class="px-3 py-3 text-center text-club-muted">{totalYellow}</td>
+                <td class="px-3 py-3 text-center text-club-muted">{totalRed}</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+    )}
 
     {/* Dodatne info */}
     {totalAppearances > 0 && (
@@ -317,9 +450,11 @@ const pageDescription = `Profil igrača ${player.name} u sezoni ${hns.competitio
               : a.match.result === "L"
               ? "bg-red-600"
               : "bg-yellow-500";
+          // Pobjeda i Poraz oba počinju na "P" — poraz je "I" (izgubljeno),
+          // isto kao na /raspored, inače se ishodi razlikuju samo po boji.
           const resultLetter =
             a.match.result === "W" ? "P"
-            : a.match.result === "L" ? "P"
+            : a.match.result === "L" ? "I"
             : "N";
           const resultTitle =
             a.match.result === "W" ? "Pobjeda"
@@ -340,10 +475,11 @@ const pageDescription = `Profil igrača ${player.name} u sezoni ${hns.competitio
                   {resultLetter}
                 </span>
 
-                {/* Kolo + datum */}
-                <div class="flex-shrink-0 w-16 text-xs">
-                  <p class="font-display font-bold text-club-primary-deep">
-                    {a.match.round}. kolo
+                {/* Natjecanje + datum — matchBadge jer kup nema "kolo"
+                    nego fazu (HNS mu upiše round 10003 i sl.) */}
+                <div class="flex-shrink-0 w-24 text-xs">
+                  <p class="font-display font-bold text-club-primary-deep leading-tight">
+                    {matchBadge(a.match as unknown as UnifiedMatch)}
                   </p>
                   <p class="text-club-muted">{formatShortDate(a.match.iso)}</p>
                 </div>
