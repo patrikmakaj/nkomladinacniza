@@ -23,6 +23,8 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { Readable } from "node:stream";
 import { pipeline } from "node:stream/promises";
+import sharp from "sharp";
+import { writeJsonIfChanged } from "./lib/write-json.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
@@ -34,6 +36,10 @@ const PAGE_ID = process.env.FB_PAGE_ID;
 const TOKEN = process.env.FB_ACCESS_TOKEN;
 const API_VERSION = "v21.0";
 const FETCH_LIMIT = 25; // dohvati malo više nego što prikazujemo
+
+// Vidi ensureThumb — mora ostati usklađeno s backfill-thumbs.mjs
+const THUMB_WIDTH = 700;
+const THUMB_QUALITY = 78;
 
 // Polja koja tražimo iz Graph API-ja
 const FIELDS = [
@@ -90,6 +96,36 @@ async function downloadImage(url, postId, idx = null) {
   }
 }
 
+/**
+ * WebP thumbnail za slike uz objavu. Feed ih prikazuje u uskom stupcu
+ * (jedna slika do ~600px, mreža kvadratića kad ih je više), pa im original
+ * od 1600px nije trebao. Dimenzije idu na `<img>` protiv poskakivanja layouta.
+ *
+ * Isti pristup kao u scrape-facebook-albums.mjs, samo malo veći thumb jer se
+ * jedna slika uz objavu prikazuje krupnije nego kartica u galeriji.
+ */
+async function ensureThumb(filename) {
+  const base = filename.replace(/\.[^.]+$/, "");
+  const source = resolve(IMAGES_DIR, filename);
+  const target = resolve(IMAGES_DIR, `${base}.webp`);
+  const thumb = `${PUBLIC_IMAGE_PATH}/${base}.webp`;
+
+  try {
+    if (!(await exists(target))) {
+      if (!(await exists(source))) return null;
+      await sharp(source)
+        .resize({ width: THUMB_WIDTH, withoutEnlargement: true })
+        .webp({ quality: THUMB_QUALITY })
+        .toFile(target);
+    }
+    const { width, height } = await sharp(target).metadata();
+    return { thumb, width: width ?? null, height: height ?? null };
+  } catch (err) {
+    console.warn(`[fb-scrape] WARN thumb fail (${filename}): ${err.message}`);
+    return null;
+  }
+}
+
 /** Izvuče sve slike iz posta - full_picture + subattachments za albume */
 async function collectPostImages(post) {
   const urls = [];
@@ -111,12 +147,16 @@ async function collectPostImages(post) {
   // Skidamo sve, čuvamo samo uspješne
   const downloaded = [];
   for (let i = 0; i < urls.length; i++) {
-    const local = await downloadImage(
-      urls[i],
-      post.id,
-      urls.length > 1 ? i : null,
-    );
-    if (local) downloaded.push(local);
+    const idx = urls.length > 1 ? i : null;
+    const local = await downloadImage(urls[i], post.id, idx);
+    if (!local) continue;
+    const thumb = await ensureThumb(imageFilename(post.id, idx));
+    downloaded.push({
+      src: local,
+      thumb: thumb?.thumb ?? null,
+      width: thumb?.width ?? null,
+      height: thumb?.height ?? null,
+    });
   }
   return downloaded;
 }
@@ -145,7 +185,7 @@ async function preserveExisting(reason) {
     if (existing.posts && existing.posts.length > 0) {
       existing.lastUpdated = new Date().toISOString();
       existing.lastError = reason;
-      await writeFile(OUT_JSON, JSON.stringify(existing, null, 2) + "\n", "utf8");
+      await writeJsonIfChanged(OUT_JSON, existing, { label: "[fb-scrape]" });
       console.warn(
         `[fb-scrape] ⚠️  ${reason}\n` +
           `[fb-scrape] zadržavam postojeći facebook.json (${existing.posts.length} postova)`,
@@ -160,7 +200,10 @@ async function preserveExisting(reason) {
 
 async function main() {
   if (!PAGE_ID || !TOKEN) {
-    await writeEmpty("FB_PAGE_ID / FB_ACCESS_TOKEN nisu postavljeni");
+    // NE writeEmpty — to bi obrisalo postojeće postove svakome tko pokrene
+    // `npm run scrape` lokalno bez FB tajni. preserveExisting ionako padne
+    // na prazan JSON ako nema što sačuvati.
+    await preserveExisting("FB_PAGE_ID / FB_ACCESS_TOKEN nisu postavljeni");
     return;
   }
 
@@ -222,8 +265,7 @@ async function main() {
     pageId: PAGE_ID,
     posts,
   };
-  await mkdir(dirname(OUT_JSON), { recursive: true });
-  await writeFile(OUT_JSON, JSON.stringify(data, null, 2) + "\n", "utf8");
+  await writeJsonIfChanged(OUT_JSON, data, { label: "[fb-scrape]" });
 
   const ms = Date.now() - startedAt;
   console.log(

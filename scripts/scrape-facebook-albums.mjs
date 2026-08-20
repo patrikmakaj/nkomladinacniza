@@ -30,6 +30,7 @@ import { fileURLToPath } from "node:url";
 import { Readable } from "node:stream";
 import { pipeline } from "node:stream/promises";
 import sharp from "sharp";
+import { writeJsonIfChanged } from "./lib/write-json.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
@@ -188,25 +189,29 @@ async function downloadImage(url, albumId, filename) {
 
 /**
  * Napravi thumbnail za već skinutu fotku ako ga još nema.
- * Vraća public putanju do thumba, ili null ako konverzija ne uspije
- * (tada galerija pada natrag na original).
+ *
+ * Vraća `{ thumb, width, height }` — dimenzije idu na `<img>` u galeriji da
+ * mreža ne poskakuje dok se slike učitavaju (masonry stupci se inače pomiču
+ * sa svakom učitanom slikom). Null ako konverzija ne uspije; galerija tada
+ * pada natrag na original.
  */
 async function ensureThumb(albumId, filename) {
   const dir = safeId(albumId);
   const base = filename.replace(/\.[^.]+$/, "");
   const source = resolve(IMAGES_ROOT, dir, filename);
   const target = resolve(IMAGES_ROOT, dir, `${base}.webp`);
-  const publicPath = `${PUBLIC_IMAGE_PATH}/${dir}/${base}.webp`;
-
-  if (await exists(target)) return publicPath;
-  if (!(await exists(source))) return null;
+  const thumb = `${PUBLIC_IMAGE_PATH}/${dir}/${base}.webp`;
 
   try {
-    await sharp(source)
-      .resize({ width: THUMB_WIDTH, withoutEnlargement: true })
-      .webp({ quality: THUMB_QUALITY })
-      .toFile(target);
-    return publicPath;
+    if (!(await exists(target))) {
+      if (!(await exists(source))) return null;
+      await sharp(source)
+        .resize({ width: THUMB_WIDTH, withoutEnlargement: true })
+        .webp({ quality: THUMB_QUALITY })
+        .toFile(target);
+    }
+    const { width, height } = await sharp(target).metadata();
+    return { thumb, width: width ?? null, height: height ?? null };
   } catch (err) {
     console.warn(`[fb-albums] WARN thumb fail (${filename}): ${err.message}`);
     return null;
@@ -263,7 +268,7 @@ async function preserveExisting(reason) {
     if (existing.albums && existing.albums.length > 0) {
       existing.lastUpdated = new Date().toISOString();
       existing.lastError = reason;
-      await writeFile(OUT_JSON, JSON.stringify(existing, null, 2) + "\n", "utf8");
+      await writeJsonIfChanged(OUT_JSON, existing, { label: "[fb-albums]" });
       const n = existing.albums.reduce((s, a) => s + (a.photos?.length ?? 0), 0);
       console.warn(
         `[fb-albums] ⚠️  ${reason}\n` +
@@ -457,9 +462,11 @@ async function main() {
     byAlbum.get(p.albumIdx).push({
       id: p.id,
       src: local,
-      // Mali WebP za mrežu; null ako konverzija nije uspjela — galerija
-      // tada koristi `src`.
-      thumb: thumbPath.get(p.id) ?? null,
+      // Mali WebP za mrežu + njegove dimenzije (protiv poskakivanja layouta).
+      // null ako konverzija nije uspjela — galerija tada koristi `src`.
+      thumb: thumbPath.get(p.id)?.thumb ?? null,
+      width: thumbPath.get(p.id)?.width ?? null,
+      height: thumbPath.get(p.id)?.height ?? null,
       caption: p.caption,
       createdAt: p.createdAt,
     });
@@ -508,15 +515,13 @@ async function main() {
     years,
     albums,
   };
-  await mkdir(dirname(OUT_JSON), { recursive: true });
-  await writeFile(OUT_JSON, JSON.stringify(data, null, 2) + "\n", "utf8");
+  await writeJsonIfChanged(OUT_JSON, data, { label: "[fb-albums]" });
 
   const ms = Date.now() - startedAt;
   console.log(
     `[fb-albums] gotovo za ${(ms / 1000).toFixed(1)}s · ${albums.length} albuma · ` +
       `${totalPhotos} fotki · godine ${years[years.length - 1]}–${years[0]}`,
   );
-  console.log(`[fb-albums] zapisano: ${OUT_JSON}`);
 }
 
 main().catch((err) => {

@@ -59,12 +59,21 @@ Scrape job commita svježe podatke, build job gradi točno ono što je commitano
 
 | Datoteka | Ručno uređivati? |
 |---|---|
-| `hns.json` | **NE** — generira `scripts/scrape.mjs`, CI ga prepisuje svakih 30 min |
+| `hns.json` | **NE** — generira `scripts/scrape.mjs`, CI ga osvježava svakih 30 min |
 | `facebook.json` | **NE** — generira `scripts/scrape-facebook.mjs` |
 | `facebook-albums.json` | **NE** — generira `scripts/scrape-facebook-albums.mjs` |
 | `friendlies.json` | **DA** — jedini ručni izvor. Format: `friendlies.README.md` |
 
 Prijateljske, memorijali i turniri nisu na HNS Semaforu → unose se u `friendlies.json`.
+
+**Scraperi pišu samo kad se sadržaj promijenio.** Prije su na svakom prolazu
+upisivali svjež `lastUpdated`, pa je CI commitao i deployao stranicu svakih 30
+minuta bez razloga — od 39 uzastopnih botovskih commitova njih 35 mijenjalo je
+samo taj timestamp. Sad ide kroz `writeJsonIfChanged` iz `scripts/lib/write-json.mjs`,
+koji uspoređuje sadržaj bez `lastUpdated`. Novi scraper mora koristiti isti helper.
+
+Posljedica: `lastUpdated` znači **zadnja promjena podataka**, ne zadnja provjera.
+Zato na stranicama piše „podaci od", a ne „zadnje ažurirano".
 
 ## Pravila koja se lako prekrše
 
@@ -168,17 +177,29 @@ odabere. Prije toga je stranica težila 5,5 MB. Kartice za dohvaćene godine
 gradi klon `<template id="card-template">` iz iste datoteke, da markup kartice
 ostane na jednom mjestu.
 
-### 5a. Galerija ima dvije veličine slike
+### 5a. FB slike imaju dvije veličine i zapisane dimenzije
 
-Svaka album fotka ima `src` (originalni JPEG do 1600 px) i `thumb`
-(WebP 500 px). **Mreža koristi `thumb`, lightbox `src`** — kartica je široka
-180-280 CSS px, pa joj original nije trebao (100 fotki: 30 MB → 5 MB).
+Svaka Facebook slika — i album fotka i slika uz objavu — ima `src` (original),
+`thumb` (WebP) te `width`/`height` **thumba**.
 
-Thumbove radi `scrape-facebook-albums.mjs` pri svakom scrapeu, a
-`npm run thumbs` (`scripts/backfill-thumbs.mjs`) ih može napraviti lokalno bez
-FB tokena. `THUMB_WIDTH` i `THUMB_QUALITY` moraju ostati isti u obje skripte.
+| | thumb | gdje se koristi |
+|---|---|---|
+| album fotke | 500 px | mreža u `/galerija`; lightbox otvara `src` |
+| slike uz objave | 700 px | feed u `/novosti`; klik otvara `src` |
 
-Uvijek piši `p.thumb || p.src` — fotka bez thumba mora se i dalje prikazati.
+Kartica u mreži je široka 180-280 CSS px, pa joj original od 1600 px nije trebao
+(100 fotki: 30 MB → 5 MB; `/novosti`: 2,8 MB → 1,4 MB). `width`/`height` idu na
+`<img>` da masonry mreža ne poskakuje dok se slike učitavaju.
+
+Thumbove rade scraperi pri svakom prolazu, a `npm run thumbs`
+(`scripts/backfill-thumbs.mjs`) ih napravi lokalno bez FB tokena. Širine su
+definirane na oba mjesta i **moraju ostati usklađene**.
+
+Uvijek piši `thumb || src` — slika bez thumba mora se i dalje prikazati.
+RSS namjerno koristi `src`, ne thumb.
+
+`post.images` su **objekti**; stariji `facebook.json` ima obične stringove, pa
+potrošači imaju `normalizeImage` fallback dok ga CI ne pregazi.
 
 Originale NEMOJ konvertirati u WebP iste dimenzije: FB ih je već stisnuo, pa
 ušteda je samo ~22 % uz slaganje artefakata, a stari JPEG-ovi svejedno ostaju
@@ -281,7 +302,10 @@ Inter i Oswald su self-hostani (`src/assets/fonts/*.woff2`, `@font-face` u
 | Umami analytics | `BaseLayout.astro` | `cloud.umami.is`, website id hardkodiran |
 | Google Fonts | `BaseLayout.astro` | Inter + Oswald |
 
-Lokalni scrape FB-a bez tokena je bezopasan — skripte samo zadrže postojeće podatke.
+Lokalni scrape FB-a bez tokena je bezopasan — skripte zadrže postojeće podatke.
+(Do 21.08.2026. nije bilo tako: `scrape-facebook.mjs` je bez tokena pisao prazan
+JSON i brisao sve objave. Ako ikad dodaješ novi scraper, put "nema tajni" mora
+ići kroz `preserveExisting`, nikad kroz `writeEmpty`.)
 
 ## Česte greške
 
