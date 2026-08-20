@@ -14,7 +14,8 @@
     "scrape:facebook": "node scripts/scrape-facebook.mjs",
     "scrape:fb-albums": "node scripts/scrape-facebook-albums.mjs",
     "scrape": "npm run scrape:hns && npm run scrape:facebook && npm run scrape:fb-albums",
-    "prebuild": "npm run scrape"
+    "prebuild": "npm run scrape",
+    "thumbs": "node scripts/backfill-thumbs.mjs"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.18",
@@ -26,7 +27,8 @@
     "tailwindcss": "^4.2.4"
   },
   "devDependencies": {
-    "cheerio": "^1.2.0"
+    "cheerio": "^1.2.0",
+    "sharp": "^0.34.5"
   },
   "allowScripts": {
     "esbuild@0.27.7": true,

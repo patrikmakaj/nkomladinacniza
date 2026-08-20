@@ -24,6 +24,7 @@ npm run dev    # http://localhost:4321
 | `npm run scrape:facebook` | Dohvati zadnje FB postove u `src/data/facebook.json` (treba env varijable) |
 | `npm run scrape:fb-albums` | Dohvati FB albume i fotke za galeriju (treba env varijable) |
 | `npm run scrape` | Pokrene sva tri scraper-a |
+| `npm run thumbs` | Napravi WebP thumbove za album fotke (bez FB tokena, radi lokalno) |
 | `npm run build` | Produkcijski build u `dist/` (automatski prvo scrape-a) |
 | `npx astro build` | Build **bez** scrape-a — ovo koristi za brzu provjeru da kod radi |
 | `npm run preview` | Lokalni preview produkcijskog builda |
@@ -112,6 +113,11 @@ Generiranje tokena: vidi [Facebook Pages API docs](https://developers.facebook.c
 Scraper `scripts/scrape-facebook-albums.mjs` dohvaća **sve** albume stranice i metapodatke fotki, pa primijeni kvotu po kalendarskoj godini (`FB_PHOTOS_PER_YEAR`, default 200) da repo ne naraste bez kontrole. Već skinute fotke ostaju u galeriji i kad ispadnu iz kvote — arhiva raste, git povijest se ne prepisuje. Profilne i naslovne slike se preskaču.
 
 Koristi iste `FB_PAGE_ID` i `FB_ACCESS_TOKEN` secrets.
+
+Uz svaku fotku sprema i WebP thumbnail od 500 px (`<id>.webp` pored `<id>.jpg`).
+Mreža u galeriji prikazuje thumb, lightbox otvara original — kartica je široka
+180-280 px, pa je serviranje slike od 1600 px značilo 30 MB za prvih 100 fotki
+umjesto 5 MB.
 
 Output: `src/data/facebook-albums.json` + slike u `public/images/facebook-albums/`.
 
