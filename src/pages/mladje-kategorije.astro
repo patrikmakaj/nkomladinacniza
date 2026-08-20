@@ -1,7 +1,45 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Hero from "../components/Hero.astro";
+import Logo from "../components/Logo.astro";
+import LeagueTable from "../components/LeagueTable.astro";
 import { url } from "../lib/url";
+import {
+  competitionsFor,
+  todayInZagreb,
+  OUR_CLUB_ID,
+  type UnifiedMatch,
+} from "../lib/matches";
+
+// Natjecanja početnika (U-11) s HNS Semafora. Prazno dok HNS ne objavi
+// raspored — cijela sekcija se tada jednostavno ne renderira.
+const youthCompetitions = competitionsFor("Beginners");
+
+/** Predstojeće utakmice (neodigrane čiji datum nije prošao), najbliža prva. */
+function upcomingOf(matches: UnifiedMatch[]): UnifiedMatch[] {
+  return matches.filter((m) => !m.played && m.date >= todayInZagreb);
+}
+
+/** Odigrane utakmice, najnovija prva. */
+function playedOf(matches: UnifiedMatch[]): UnifiedMatch[] {
+  return matches
+    .filter((m) => m.played)
+    .sort((a, b) => b.iso.localeCompare(a.iso));
+}
+
+function formatMatchDate(iso: string): string {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return iso;
+  return d.toLocaleDateString("hr-HR", {
+    weekday: "short",
+    day: "numeric",
+    month: "short",
+  });
+}
+
+const outcomeColor = { W: "bg-green-600", D: "bg-yellow-500", L: "bg-red-600" };
+const outcomeLetter = { W: "P", D: "N", L: "I" };
+const outcomeTitle = { W: "Pobjeda", D: "Neriješeno", L: "Poraz" };
 
 const categories = [
   {
@@ -21,7 +59,7 @@ const categories = [
 
 <BaseLayout
   title="Mlađe kategorije"
-  description="NK Omladinac Niza prima prijave za mlađe kategorije U9 i U11. Kroz povijest kluba afirmiralo se više od 100 djece iz Nize i okolice."
+  description="Mlađe kategorije NK Omladinac Niza — raspored i ljestvica početnika U11, prijave za U9 i U11. Kroz povijest kluba afirmiralo se više od 100 djece iz Nize i okolice."
 >
   <Hero
     title="Mlađe kategorije"
@@ -77,6 +115,123 @@ const categories = [
         ))
       }
     </div>
+
+    <!-- Natjecanje U-11: raspored i ljestvica s HNS Semafora -->
+    {youthCompetitions.map((comp) => {
+      const upcoming = upcomingOf(comp.matches);
+      const results = playedOf(comp.matches);
+      if (upcoming.length === 0 && results.length === 0 && comp.table.length === 0) {
+        return null;
+      }
+      return (
+        <div class="mb-10">
+          <div class="flex flex-wrap items-baseline justify-between gap-2 mb-1">
+            <h2 class="text-2xl">U11 u natjecanju</h2>
+            {comp.url && (
+              <a
+                href={comp.url}
+                target="_blank"
+                rel="noopener"
+                class="text-xs font-display uppercase tracking-wider text-club-primary hover:underline"
+              >
+                HNS Semafor →
+              </a>
+            )}
+          </div>
+          <p class="text-sm text-club-muted mb-6">{comp.name}</p>
+
+          <div class="grid lg:grid-cols-2 gap-6 items-start">
+            {/* Utakmice */}
+            <div class="space-y-6">
+              {upcoming.length > 0 && (
+                <div>
+                  <h3 class="text-lg mb-3">Sljedeće utakmice</h3>
+                  <ul class="space-y-2">
+                    {upcoming.slice(0, 5).map((m) => {
+                      const opponent = m.isHome ? m.away : m.home;
+                      return (
+                        <li class="bg-white border border-club-border rounded-lg px-3 py-3 flex items-center gap-3">
+                          <div class="w-20 flex-shrink-0 text-xs">
+                            <p class="font-display font-bold text-club-primary-deep">
+                              {formatMatchDate(m.iso)}
+                            </p>
+                            <p class="text-club-muted">{m.time ?? "—"}</p>
+                          </div>
+                          <div class="w-7 h-7 flex-shrink-0 flex items-center justify-center">
+                            {opponent.id === OUR_CLUB_ID ? (
+                              <Logo size={28} />
+                            ) : opponent.logo ? (
+                              <img
+                                src={opponent.logo}
+                                alt=""
+                                width="28"
+                                height="28"
+                                class="object-contain w-full h-full"
+                                loading="lazy"
+                              />
+                            ) : null}
+                          </div>
+                          <span class="text-sm text-club-secondary truncate flex-1">
+                            {m.isHome ? "vs" : "@"} {opponent.name}
+                          </span>
+                          <span class="text-[10px] font-display uppercase tracking-wider text-club-muted flex-shrink-0">
+                            {m.isHome ? "Doma" : "Gosti"}
+                          </span>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              )}
+
+              {results.length > 0 && (
+                <div>
+                  <h3 class="text-lg mb-3">Odigrano</h3>
+                  <ul class="space-y-2">
+                    {results.slice(0, 8).map((m) => {
+                      const opponent = m.isHome ? m.away : m.home;
+                      const ours = m.isHome ? m.score!.home : m.score!.away;
+                      const theirs = m.isHome ? m.score!.away : m.score!.home;
+                      const outcome = (m.result ?? "D") as "W" | "D" | "L";
+                      return (
+                        <li class="bg-white border border-club-border rounded-lg px-3 py-3 flex items-center gap-3">
+                          <span
+                            class={`flex-shrink-0 w-7 h-7 rounded-full ${outcomeColor[outcome]} text-white font-display font-bold text-xs flex items-center justify-center`}
+                            title={outcomeTitle[outcome]}
+                          >
+                            {outcomeLetter[outcome]}
+                          </span>
+                          <span class="text-sm text-club-secondary truncate flex-1">
+                            {m.isHome ? "vs" : "@"} {opponent.name}
+                          </span>
+                          <span class="font-display font-bold text-club-primary-deep whitespace-nowrap">
+                            {ours} : {theirs}
+                          </span>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              )}
+
+              {upcoming.length === 0 && results.length === 0 && (
+                <p class="text-sm text-club-muted bg-club-light/30 rounded-lg py-6 text-center">
+                  Raspored još nije objavljen.
+                </p>
+              )}
+            </div>
+
+            {/* Ljestvica */}
+            {comp.table.length > 0 && (
+              <div>
+                <h3 class="text-lg mb-3">Ljestvica</h3>
+                <LeagueTable rows={comp.table} title={comp.name} />
+              </div>
+            )}
+          </div>
+        </div>
+      );
+    })}
 
     <!-- Poznati igrači -->
     <div class="bg-gradient-to-br from-club-primary-deep to-club-primary text-white rounded-lg p-8 md:p-10 mb-10">
