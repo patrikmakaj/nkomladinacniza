@@ -154,6 +154,22 @@ odabere. Prije toga je stranica težila 5,5 MB. Kartice za dohvaćene godine
 gradi klon `<template id="card-template">` iz iste datoteke, da markup kartice
 ostane na jednom mjestu.
 
+### 5a. Galerija ima dvije veličine slike
+
+Svaka album fotka ima `src` (originalni JPEG do 1600 px) i `thumb`
+(WebP 500 px). **Mreža koristi `thumb`, lightbox `src`** — kartica je široka
+180-280 CSS px, pa joj original nije trebao (100 fotki: 30 MB → 5 MB).
+
+Thumbove radi `scrape-facebook-albums.mjs` pri svakom scrapeu, a
+`npm run thumbs` (`scripts/backfill-thumbs.mjs`) ih može napraviti lokalno bez
+FB tokena. `THUMB_WIDTH` i `THUMB_QUALITY` moraju ostati isti u obje skripte.
+
+Uvijek piši `p.thumb || p.src` — fotka bez thumba mora se i dalje prikazati.
+
+Originale NEMOJ konvertirati u WebP iste dimenzije: FB ih je već stisnuo, pa
+ušteda je samo ~22 % uz slaganje artefakata, a stari JPEG-ovi svejedno ostaju
+u git povijesti.
+
 ### 6. Tailwind v4 — nema `tailwind.config.js`
 
 Sve je u `src/styles/global.css`:

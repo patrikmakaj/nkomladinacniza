@@ -10,12 +10,21 @@ import type { APIRoute, GetStaticPaths } from "astro";
 import albumsData from "../../data/facebook-albums.json";
 import { url } from "../../lib/url";
 
-type SourcePhoto = { id: string; src: string; caption: string; createdAt: string };
+type SourcePhoto = {
+  id: string;
+  src: string;
+  thumb?: string | null;
+  caption: string;
+  createdAt: string;
+};
 type Album = { name: string; permalink: string | null; photos: SourcePhoto[] };
 
 /** Oblik koji troši client — bez `createdAt`, jer je godina već u imenu datoteke. */
 export type GalleryPhoto = {
+  /** Original — otvara ga lightbox. */
   src: string;
+  /** Mali WebP za mrežu; pada natrag na `src` ako thumb još ne postoji. */
+  thumb: string;
   caption: string;
   albumName: string;
   albumPermalink: string | null;
@@ -28,6 +37,7 @@ const allPhotos = albums
   .flatMap((album) =>
     (album.photos ?? []).map((p) => ({
       src: url(p.src),
+      thumb: url(p.thumb || p.src),
       caption: p.caption,
       albumName: album.name,
       albumPermalink: album.permalink ?? null,

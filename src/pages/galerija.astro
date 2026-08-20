@@ -4,7 +4,14 @@ import Hero from "../components/Hero.astro";
 import { url } from "../lib/url";
 import albumsData from "../data/facebook-albums.json";
 
-type Photo = { id: string; src: string; caption: string; createdAt: string };
+type Photo = {
+  id: string;
+  src: string;
+  /** Mali WebP za mrežu; null dok scraper ne napravi thumb. */
+  thumb?: string | null;
+  caption: string;
+  createdAt: string;
+};
 type Album = {
   id: string;
   name: string;
@@ -19,6 +26,7 @@ type Album = {
 type FlatPhoto = {
   id: string;
   src: string;
+  thumb: string | null;
   caption: string;
   createdAt: string;
   albumName: string;
@@ -37,6 +45,7 @@ for (const album of albums) {
     allPhotos.push({
       id: p.id,
       src: p.src,
+      thumb: p.thumb ?? null,
       caption: p.caption,
       createdAt: p.createdAt,
       albumName: album.name,
@@ -65,6 +74,7 @@ const recentCount = photos.length;
 // Payload za lightbox — samo za ono što je u HTML-u.
 const lightboxPayload = photos.map((p) => ({
   src: url(p.src),
+  thumb: url(p.thumb || p.src),
   caption: p.caption,
   albumName: p.albumName,
   albumPermalink: p.albumPermalink,
@@ -112,8 +122,9 @@ const lightboxPayload = photos.map((p) => ({
                 class="gallery-item group relative block w-full mb-3 md:mb-4 break-inside-avoid overflow-hidden rounded-lg cursor-pointer focus:outline-none focus:ring-2 focus:ring-club-primary bg-club-light"
                 aria-label={p.caption || `Fotka ${idx + 1}`}
               >
+                {/* Mreža koristi thumb; lightbox otvara original iz payloada */}
                 <img
-                  src={url(p.src)}
+                  src={url(p.thumb || p.src)}
                   alt={p.caption || p.albumName}
                   loading="lazy"
                   class="block w-full h-auto group-hover:scale-105 transition-transform duration-500"
@@ -259,6 +270,7 @@ const lightboxPayload = photos.map((p) => ({
 
         type Photo = {
           src: string;
+          thumb: string;
           caption: string;
           albumName: string;
           albumPermalink: string | null;
@@ -317,7 +329,7 @@ const lightboxPayload = photos.map((p) => ({
             card.dataset.photoIdx = String(idx);
             card.setAttribute("aria-label", p.caption || `Fotka ${idx + 1}`);
             const image = card.querySelector("img")!;
-            image.src = p.src;
+            image.src = p.thumb || p.src;
             image.alt = p.caption || p.albumName;
             frag.appendChild(card);
           });

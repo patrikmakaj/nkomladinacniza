@@ -29,6 +29,7 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { Readable } from "node:stream";
 import { pipeline } from "node:stream/promises";
+import sharp from "sharp";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
@@ -51,6 +52,27 @@ const MAX_PAGES = 200;
 const DOWNLOAD_CONCURRENCY = 6;
 /** Slike šire od ovoga ne trebamo — galerija ih ionako prikazuje manje. */
 const MAX_IMAGE_WIDTH = 1600;
+
+/**
+ * Uz svaku fotku spremamo i mali WebP thumbnail za mrežu u galeriji.
+ *
+ * Kartica u mreži je široka 180-280 CSS px, a servirali smo joj sliku od
+ * 1600 px — prolazak kroz 100 fotki znao je povući 10 MB. Thumb od 500 px
+ * to spušta na 2,8 MB, a lightbox i dalje otvara netaknuti original.
+ *
+ * Konverzija originala u WebP se NE isplati: fotke su već Facebookovom
+ * kompresijom stisnute, pa ista dimenzija u WebP-u štedi samo ~22 % uz
+ * slaganje artefakata na već lossy izvor.
+ */
+const THUMB_WIDTH = 500;
+const THUMB_QUALITY = 78;
+
+/**
+ * Koliki dio prošlog broja fotki Graph API mora vratiti da mu vjerujemo.
+ * Ispod toga zaključujemo da je odgovor djelomičan i zadržimo staro stanje.
+ * 0.8 ostavlja prostora za stvarno brisanje albuma, a hvata prepolovljenja.
+ */
+const MIN_TOTAL_RATIO = 0.8;
 
 // Albumi koje ne želimo u galeriji (profilne i naslovne slike).
 // Facebook vraća nazive na jeziku stranice, pa pokrivamo obje varijante.
@@ -164,6 +186,33 @@ async function downloadImage(url, albumId, filename) {
   }
 }
 
+/**
+ * Napravi thumbnail za već skinutu fotku ako ga još nema.
+ * Vraća public putanju do thumba, ili null ako konverzija ne uspije
+ * (tada galerija pada natrag na original).
+ */
+async function ensureThumb(albumId, filename) {
+  const dir = safeId(albumId);
+  const base = filename.replace(/\.[^.]+$/, "");
+  const source = resolve(IMAGES_ROOT, dir, filename);
+  const target = resolve(IMAGES_ROOT, dir, `${base}.webp`);
+  const publicPath = `${PUBLIC_IMAGE_PATH}/${dir}/${base}.webp`;
+
+  if (await exists(target)) return publicPath;
+  if (!(await exists(source))) return null;
+
+  try {
+    await sharp(source)
+      .resize({ width: THUMB_WIDTH, withoutEnlargement: true })
+      .webp({ quality: THUMB_QUALITY })
+      .toFile(target);
+    return publicPath;
+  } catch (err) {
+    console.warn(`[fb-albums] WARN thumb fail (${filename}): ${err.message}`);
+    return null;
+  }
+}
+
 /** Obrađuje `items` s najviše `limit` paralelnih zadataka. */
 async function inParallel(items, limit, worker) {
   let cursor = 0;
@@ -195,6 +244,19 @@ async function writeEmpty(reason) {
  * galerija preživi istekli token, mrežni ispad ili — što se stvarno događa —
  * uspješan HTTP 200 s praznim popisom albuma.
  */
+/**
+ * Koliko je fotki Graph API vratio prošli put (`totalOnFacebook`).
+ * 0 ako nema prethodnog zapisa — tada usporedba nema smisla.
+ */
+async function previousPhotoTotal() {
+  try {
+    const existing = JSON.parse(await readFile(OUT_JSON, "utf8"));
+    return Number(existing.totalOnFacebook) || 0;
+  } catch {
+    return 0;
+  }
+}
+
 async function preserveExisting(reason) {
   try {
     const existing = JSON.parse(await readFile(OUT_JSON, "utf8"));
@@ -302,6 +364,19 @@ async function main() {
     return;
   }
 
+  // Graph API zna vratiti DJELOMIČAN popis (HTTP 200, bez greške) — 20.08.2026.
+  // je jedan run vratio 3952 umjesto 7564 fotki i galerija je pala s 4083 na
+  // 2467. Zaštita za "nula fotki" to nije uhvatila. Ako je popis osjetno manji
+  // nego prošli put, radije zadržimo postojeće i pustimo idući cron da pokuša.
+  const previousTotal = await previousPhotoTotal();
+  if (previousTotal > 0 && allPhotos.length < previousTotal * MIN_TOTAL_RATIO) {
+    await preserveExisting(
+      `Graph API vratio ${allPhotos.length} fotki, a prošli put ${previousTotal}` +
+        ` — izgleda kao djelomičan odgovor`,
+    );
+    return;
+  }
+
   // ── 3. Sortiraj po datumu silazno i primijeni kvotu po godini ─
   allPhotos.sort((x, y) => (y.createdAt || "").localeCompare(x.createdAt || ""));
 
@@ -346,19 +421,32 @@ async function main() {
   // ── 4. Skini slike ───────────────────────────────────────────
   let downloaded = 0;
   let failed = 0;
-  const localPath = new Map(); // photo.id → public path
+  let thumbed = 0;
+  const localPath = new Map(); // photo.id → public path originala
+  const thumbPath = new Map(); // photo.id → public path thumbnaila
 
   await inParallel(toKeep, DOWNLOAD_CONCURRENCY, async (p) => {
     const album = usable[p.albumIdx];
-    const local = await downloadImage(p.srcUrl, album.id, `${safeId(p.id)}.jpg`);
-    if (local) {
-      localPath.set(p.id, local);
-      downloaded++;
-    } else {
+    const filename = `${safeId(p.id)}.jpg`;
+    const local = await downloadImage(p.srcUrl, album.id, filename);
+    if (!local) {
       failed++;
+      return;
+    }
+    localPath.set(p.id, local);
+    downloaded++;
+
+    // Thumb se radi i za ranije skinute fotke — tako se arhiva popuni
+    // postupno, bez zasebne migracijske skripte.
+    const thumb = await ensureThumb(album.id, filename);
+    if (thumb) {
+      thumbPath.set(p.id, thumb);
+      thumbed++;
     }
   });
-  console.log(`[fb-albums] slike · OK ${downloaded} · neuspjelo ${failed}`);
+  console.log(
+    `[fb-albums] slike · OK ${downloaded} · neuspjelo ${failed} · thumbova ${thumbed}`,
+  );
 
   // ── 5. Složi izlazni JSON (grupirano po albumima, kao i prije) ─
   const byAlbum = new Map();
@@ -369,6 +457,9 @@ async function main() {
     byAlbum.get(p.albumIdx).push({
       id: p.id,
       src: local,
+      // Mali WebP za mrežu; null ako konverzija nije uspjela — galerija
+      // tada koristi `src`.
+      thumb: thumbPath.get(p.id) ?? null,
       caption: p.caption,
       createdAt: p.createdAt,
     });
