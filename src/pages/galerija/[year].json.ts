@@ -14,6 +14,8 @@ type SourcePhoto = {
   id: string;
   src: string;
   thumb?: string | null;
+  width?: number | null;
+  height?: number | null;
   caption: string;
   createdAt: string;
 };
@@ -25,6 +27,9 @@ export type GalleryPhoto = {
   src: string;
   /** Mali WebP za mrežu; pada natrag na `src` ako thumb još ne postoji. */
   thumb: string;
+  /** Dimenzije thumba — protiv poskakivanja mreže dok se učitava. */
+  width: number | null;
+  height: number | null;
   caption: string;
   albumName: string;
   albumPermalink: string | null;
@@ -38,6 +43,8 @@ const allPhotos = albums
     (album.photos ?? []).map((p) => ({
       src: url(p.src),
       thumb: url(p.thumb || p.src),
+      width: p.width ?? null,
+      height: p.height ?? null,
       caption: p.caption,
       albumName: album.name,
       albumPermalink: album.permalink ?? null,

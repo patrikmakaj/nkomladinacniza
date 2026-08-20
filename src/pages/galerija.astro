@@ -9,6 +9,9 @@ type Photo = {
   src: string;
   /** Mali WebP za mrežu; null dok scraper ne napravi thumb. */
   thumb?: string | null;
+  /** Dimenzije thumba — bez njih masonry mreža poskakuje dok se učitava. */
+  width?: number | null;
+  height?: number | null;
   caption: string;
   createdAt: string;
 };
@@ -27,6 +30,8 @@ type FlatPhoto = {
   id: string;
   src: string;
   thumb: string | null;
+  width: number | null;
+  height: number | null;
   caption: string;
   createdAt: string;
   albumName: string;
@@ -46,6 +51,8 @@ for (const album of albums) {
       id: p.id,
       src: p.src,
       thumb: p.thumb ?? null,
+      width: p.width ?? null,
+      height: p.height ?? null,
       caption: p.caption,
       createdAt: p.createdAt,
       albumName: album.name,
@@ -75,6 +82,8 @@ const recentCount = photos.length;
 const lightboxPayload = photos.map((p) => ({
   src: url(p.src),
   thumb: url(p.thumb || p.src),
+  width: p.width,
+  height: p.height,
   caption: p.caption,
   albumName: p.albumName,
   albumPermalink: p.albumPermalink,
@@ -126,6 +135,8 @@ const lightboxPayload = photos.map((p) => ({
                 <img
                   src={url(p.thumb || p.src)}
                   alt={p.caption || p.albumName}
+                  width={p.width ?? undefined}
+                  height={p.height ?? undefined}
                   loading="lazy"
                   class="block w-full h-auto group-hover:scale-105 transition-transform duration-500"
                 />
@@ -271,6 +282,8 @@ const lightboxPayload = photos.map((p) => ({
         type Photo = {
           src: string;
           thumb: string;
+          width?: number | null;
+          height?: number | null;
           caption: string;
           albumName: string;
           albumPermalink: string | null;
@@ -330,6 +343,8 @@ const lightboxPayload = photos.map((p) => ({
             card.setAttribute("aria-label", p.caption || `Fotka ${idx + 1}`);
             const image = card.querySelector("img")!;
             image.src = p.thumb || p.src;
+            if (p.width) image.width = p.width;
+            if (p.height) image.height = p.height;
             image.alt = p.caption || p.albumName;
             frag.appendChild(card);
           });

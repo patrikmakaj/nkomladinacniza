@@ -24,7 +24,7 @@ npm run dev    # http://localhost:4321
 | `npm run scrape:facebook` | Dohvati zadnje FB postove u `src/data/facebook.json` (treba env varijable) |
 | `npm run scrape:fb-albums` | Dohvati FB albume i fotke za galeriju (treba env varijable) |
 | `npm run scrape` | Pokrene sva tri scraper-a |
-| `npm run thumbs` | Napravi WebP thumbove za album fotke (bez FB tokena, radi lokalno) |
+| `npm run thumbs` | Napravi WebP thumbove i dimenzije za sve FB slike (bez tokena, radi lokalno) |
 | `npm run build` | Produkcijski build u `dist/` (automatski prvo scrape-a) |
 | `npx astro build` | Build **bez** scrape-a — ovo koristi za brzu provjeru da kod radi |
 | `npm run check` | Provjera tipova (`astro check`), uključujući `.astro` frontmatter |
@@ -115,10 +115,14 @@ Scraper `scripts/scrape-facebook-albums.mjs` dohvaća **sve** albume stranice i 
 
 Koristi iste `FB_PAGE_ID` i `FB_ACCESS_TOKEN` secrets.
 
-Uz svaku fotku sprema i WebP thumbnail od 500 px (`<id>.webp` pored `<id>.jpg`).
-Mreža u galeriji prikazuje thumb, lightbox otvara original — kartica je široka
-180-280 px, pa je serviranje slike od 1600 px značilo 30 MB za prvih 100 fotki
-umjesto 5 MB.
+Uz svaku fotku sprema i WebP thumbnail od 500 px (`<id>.webp` pored `<id>.jpg`)
+te njegove dimenzije. Mreža u galeriji prikazuje thumb, lightbox otvara original —
+kartica je široka 180-280 px, pa je serviranje slike od 1600 px značilo 30 MB za
+prvih 100 fotki umjesto 5 MB. Isto radi i scraper objava (thumb 700 px), pa je
+`/novosti` pao s 2,8 MB na 1,4 MB.
+
+Scraperi datoteku diraju **samo kad se sadržaj promijenio**, pa ne generiraju
+commit i deploy kad se ništa nije dogodilo.
 
 Output: `src/data/facebook-albums.json` + slike u `public/images/facebook-albums/`.
 

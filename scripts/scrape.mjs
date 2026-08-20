@@ -13,6 +13,7 @@ import { writeFile, mkdir, readFile } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import * as cheerio from "cheerio";
+import { writeJsonIfChanged } from "./lib/write-json.mjs";
 
 const CLUB_ID = 134;
 const CLUB_URL = `https://semafor.hns.family/klubovi/${CLUB_ID}/nk-omladinac-niza/`;
@@ -869,8 +870,7 @@ async function main() {
     matchDetails,
   };
 
-  await mkdir(dirname(OUT_PATH), { recursive: true });
-  await writeFile(OUT_PATH, JSON.stringify(data, null, 2) + "\n", "utf8");
+  await writeJsonIfChanged(OUT_PATH, data, { label: "[scrape]" });
 
   const ms = Date.now() - startedAt.getTime();
   console.log(
@@ -886,7 +886,6 @@ async function main() {
         `${c.matches.length} utakmica, ${c.table.length} klubova, ${c.players.length} igrača`,
     );
   }
-  console.log(`[scrape] zapisano: ${OUT_PATH}`);
 }
 
 main().catch((err) => {

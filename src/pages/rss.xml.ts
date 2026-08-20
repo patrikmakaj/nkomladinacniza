@@ -2,13 +2,20 @@ import rss from "@astrojs/rss";
 import type { APIContext } from "astro";
 import facebook from "../data/facebook.json";
 
+/** Stariji facebook.json ima obične stringove umjesto objekata. */
+type PostImage = { src: string; thumb?: string | null };
+
 type Post = {
   id: string;
   message: string;
   createdAt: string;
   permalink: string | null;
-  images: string[];
+  images: (string | PostImage)[];
 };
+
+/** Čitači feeda dobivaju original, ne thumb. */
+const imageSrc = (img: string | PostImage): string =>
+  typeof img === "string" ? img : img.src;
 
 function firstLine(message: string): string {
   const trimmed = (message || "").trim();
@@ -39,6 +46,7 @@ export async function GET(context: APIContext) {
     items: posts.slice(0, 25).map((p) => {
       const text = (p.message || "").trim();
       const imagesHtml = (p.images || [])
+        .map(imageSrc)
         .map((src) => {
           // Apsolutni URL ako je relativan (počinje s /)
           const absUrl = src.startsWith("/")

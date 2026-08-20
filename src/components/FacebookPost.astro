@@ -2,13 +2,27 @@
 import { url } from "../lib/url";
 import { linkify, formatPostDate, formatRelative } from "../lib/facebook";
 
+/**
+ * Slika uz objavu. Stariji facebook.json ima obične stringove — dok ga CI ne
+ * pregazi novim formatom, `normalizeImage` ih izjednači.
+ */
+type PostImage = {
+  src: string;
+  thumb?: string | null;
+  width?: number | null;
+  height?: number | null;
+};
+
 interface Post {
   id: string;
   message: string;
   createdAt: string;
   permalink: string | null;
-  images: string[];
+  images: (string | PostImage)[];
 }
+
+const normalizeImage = (img: string | PostImage): PostImage =>
+  typeof img === "string" ? { src: img } : img;
 
 interface Props {
   post: Post;
@@ -64,18 +78,22 @@ const isFeaturedFirst = post.images.length === 3;
   {
     post.images.length > 0 && (
       <div class={`grid ${imageGridClass} gap-1`}>
-        {post.images.map((img, idx) => {
+        {post.images.map((raw, idx) => {
+          const img = normalizeImage(raw);
           const featured = isFeaturedFirst && idx === 0;
           return (
             <a
-              href={url(img)}
+              href={url(img.src)}
               target="_blank"
               rel="noopener noreferrer"
               class={`block overflow-hidden ${featured ? "col-span-2 row-span-2" : ""}`}
             >
+              {/* Feed prikazuje thumb; klik otvara original */}
               <img
-                src={url(img)}
+                src={url(img.thumb || img.src)}
                 alt={`Slika iz Facebook objave`}
+                width={img.width ?? undefined}
+                height={img.height ?? undefined}
                 loading="lazy"
                 class={`w-full h-full object-cover hover:opacity-95 transition-opacity ${
                   post.images.length === 1 ? "max-h-[600px]" : "aspect-square"
