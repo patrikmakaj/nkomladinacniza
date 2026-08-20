@@ -27,6 +27,7 @@ npm run dev    # http://localhost:4321
 | `npm run thumbs` | Napravi WebP thumbove za album fotke (bez FB tokena, radi lokalno) |
 | `npm run build` | Produkcijski build u `dist/` (automatski prvo scrape-a) |
 | `npx astro build` | Build **bez** scrape-a — ovo koristi za brzu provjeru da kod radi |
+| `npm run check` | Provjera tipova (`astro check`), uključujući `.astro` frontmatter |
 | `npm run preview` | Lokalni preview produkcijskog builda |
 
 ## Struktura

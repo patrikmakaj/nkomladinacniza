@@ -34,7 +34,14 @@ npm run scrape:facebook    # FB postovi → src/data/facebook.json (treba FB_* e
 npm run scrape:fb-albums   # FB albumi → src/data/facebook-albums.json (treba FB_* env)
 ```
 
-Nema testova, lintera ni formattera. **Provjera prije commita = `npx astro build` mora proći.**
+Nema testova ni formattera, ali postoji typecheck:
+
+```bash
+npm run check     # astro check — provjerava i .astro frontmatter
+```
+
+**Provjera prije commita: `npm run check` i `npx astro build` moraju proći.**
+CI vrti oba, `check` prije builda.
 
 ## Tok podataka
 
@@ -224,6 +231,24 @@ public/     CNAME, favicons/ikone, images/ (logo.svg, og-image.png, facebook/, f
 
 Nova stranica → dodaj i u `navItems` u `components/Header.astro` te u `serialize()`
 prioritete u `astro.config.mjs` (sitemap) ako joj treba drukčiji prioritet.
+
+### Sitemap i indeksiranje
+
+`astro.config.mjs` postavlja `lastmod` **samo** stranicama koje ga mogu
+potkrijepiti izvorom (`hns.lastUpdated` / `facebook.lastUpdated`). Statične
+stranice (`klub`, `povijest`, `sponzori`) ga nemaju — build ide svakih 30
+minuta, pa bi im `new Date()` na svakoj izgradnji tvrdio da su se promijenile
+i tražilice bi polje prestale gledati.
+
+Stranice koje ne smiju u indeks idu u `EXCLUDED` u configu **i** dobiju
+`noIndex` na `BaseLayout` (trenutno `/turnir`, jednokratni događaj).
+
+### Fontovi
+
+Inter i Oswald su self-hostani (`src/assets/fonts/*.woff2`, `@font-face` u
+`global.css`). Oba su **variable** — jedna datoteka po podskupu pokriva
+400-700, zato su samo 4 datoteke. Podskup `latin-ext` je obavezan: bez njega
+č, ć, š, ž, đ padaju na fallback font. Ne vraćaj Google Fonts `<link>`.
 
 ## Deploy i git
 

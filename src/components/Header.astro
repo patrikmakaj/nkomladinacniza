@@ -43,9 +43,6 @@ const currentPath = (rawPath.startsWith(base) ? rawPath.slice(base.length) : raw
               }`}
             >
               {item.label}
-              {item.live && (
-                <span class="inline-block w-1.5 h-1.5 rounded-full bg-red-500 ml-1 align-middle animate-pulse" />
-              )}
             </a>
           );
         })
@@ -80,9 +77,6 @@ const currentPath = (rawPath.startsWith(base) ? rawPath.slice(base.length) : raw
               }`}
             >
               {item.label}
-              {item.live && (
-                <span class="inline-block w-1.5 h-1.5 rounded-full bg-red-500 ml-1 align-middle animate-pulse" />
-              )}
             </a>
           );
         })
