@@ -1,8 +1,22 @@
 {
-  "lastUpdated": "2026-08-20T23:49:26.509Z",
+  "lastUpdated": "2026-08-21T10:25:18.500Z",
   "enabled": true,
   "pageId": "55401829691",
   "posts": [
+    {
+      "id": "55401829691_1668934738572353",
+      "message": "Sutra (subota 22.8.) gostujemo u prijateljskoj utakmici kod NK Mladost u Breznici od 19:30 sati. Utakmica je memorijalna u sjećanje na Vladislava Oreškog - Babca poginulog vukovarskog branitelja. Od19 sati biti polaganje cvijeća i paljenje lampiona ispred spomen obilježja.",
+      "createdAt": "2026-08-21T10:22:57+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1668934738572353",
+      "images": [
+        {
+          "src": "/images/facebook/55401829691_1668934738572353.jpg",
+          "thumb": "/images/facebook/55401829691_1668934738572353.webp",
+          "width": 700,
+          "height": 874
+        }
+      ]
+    },
     {
       "id": "55401829691_1668397785292715",
       "message": "Čestitke gostima na prolasku u 3. kolo!",
@@ -508,20 +522,6 @@
           "thumb": "/images/facebook/55401829691_1640878844711276.webp",
           "width": 700,
           "height": 875
-        }
-      ]
-    },
-    {
-      "id": "55401829691_1640835638048930",
-      "message": "Prozivka seniorske ekipe je zakazana u nedjelju 26.7. u 19 sati. U planu je kraći sastanak i dogovor u svezi daljnjeg rada i lagani trening.",
-      "createdAt": "2026-07-23T19:01:48+0000",
-      "permalink": "https://www.facebook.com/1551452460320582/posts/1640835638048930",
-      "images": [
-        {
-          "src": "/images/facebook/55401829691_1640835638048930.jpg",
-          "thumb": "/images/facebook/55401829691_1640835638048930.webp",
-          "width": 700,
-          "height": 525
         }
       ]
     }
