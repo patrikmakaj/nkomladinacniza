@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-08-21T02:42:25.633Z",
+  "lastUpdated": "2026-08-21T10:56:45.959Z",
   "sourceUrl": "https://semafor.hns.family/klubovi/134/nk-omladinac-niza/",
   "club": {
     "id": 134,
@@ -597,7 +597,7 @@
           "number": 12,
           "name": "Jan Rajs",
           "position": "Vratar",
-          "photo": "/static/images/nophoto_player_m.png",
+          "photo": "https://hns.family/files/images_comet/12/f/_resized/12fca5adb4d1c93e67868a3e218418be760a0478_80_100_cut_wg_top.jpg",
           "profileUrl": "https://semafor.hns.family/igraci/365472/jan-rajs/",
           "stats": {
             "appearances": 2,
@@ -625,7 +625,7 @@
           "number": 17,
           "name": "Petar Barišić",
           "position": "Igrač",
-          "photo": "/static/images/nophoto_player_m.png",
+          "photo": "https://hns.family/files/images_comet/d8/9/_resized/d8931c5584d5b6fddb84eedf1db5103e8f0c3db6_80_100_cut_wg_top.jpg",
           "profileUrl": "https://semafor.hns.family/igraci/389840/petar-barisic/",
           "stats": {
             "appearances": 2,
@@ -695,7 +695,7 @@
           "number": 20,
           "name": "Karlo Grubač",
           "position": "Igrač",
-          "photo": "/static/images/nophoto_player_m.png",
+          "photo": "https://hns.family/files/images_comet/0c/5/_resized/0c5b7fdbff352e6983a9b126458e9e5fe19de758_80_100_cut_wg_top.png",
           "profileUrl": "https://semafor.hns.family/igraci/375906/karlo-grubac/",
           "stats": {
             "appearances": 2,
@@ -751,7 +751,7 @@
           "number": 22,
           "name": "Josip Matić",
           "position": "Igrač",
-          "photo": "/static/images/nophoto_player_m.png",
+          "photo": "https://hns.family/files/images_comet/Person/_resized/125673_2f9825dc-889e-490b-8c18-4d7a41ed47c4_80_100_cut_wg_top.jpg",
           "profileUrl": "https://semafor.hns.family/igraci/125673/josip-matic/",
           "stats": {
             "appearances": 2,
@@ -838,7 +838,7 @@
             "position": 1,
             "name": "Josip Matić",
             "profileUrl": "https://semafor.hns.family/igraci/125673/josip-matic/",
-            "photo": "/static/images/nophoto_player_m.png",
+            "photo": "https://hns.family/files/images_comet/Person/_resized/125673_2f9825dc-889e-490b-8c18-4d7a41ed47c4_80_100_cut_wg_top.jpg",
             "value": "2",
             "goals": 2
           },
@@ -847,7 +847,7 @@
             "position": 2,
             "name": "Karlo Grubač",
             "profileUrl": "https://semafor.hns.family/igraci/375906/karlo-grubac/",
-            "photo": "/static/images/nophoto_player_m.png",
+            "photo": "https://hns.family/files/images_comet/0c/5/_resized/0c5b7fdbff352e6983a9b126458e9e5fe19de758_80_100_cut_wg_top.png",
             "value": "1",
             "goals": 1
           }
@@ -890,7 +890,7 @@
             "position": 1,
             "name": "Petar Barišić",
             "profileUrl": "https://semafor.hns.family/igraci/389840/petar-barisic/",
-            "photo": "/static/images/nophoto_player_m.png",
+            "photo": "https://hns.family/files/images_comet/d8/9/_resized/d8931c5584d5b6fddb84eedf1db5103e8f0c3db6_80_100_cut_wg_top.jpg",
             "value": "2 / 0",
             "appearances": 2,
             "minutes": 0
@@ -920,7 +920,7 @@
             "position": 1,
             "name": "Karlo Grubač",
             "profileUrl": "https://semafor.hns.family/igraci/375906/karlo-grubac/",
-            "photo": "/static/images/nophoto_player_m.png",
+            "photo": "https://hns.family/files/images_comet/0c/5/_resized/0c5b7fdbff352e6983a9b126458e9e5fe19de758_80_100_cut_wg_top.png",
             "value": "2 / 0",
             "appearances": 2,
             "minutes": 0
@@ -950,7 +950,7 @@
             "position": 1,
             "name": "Josip Matić",
             "profileUrl": "https://semafor.hns.family/igraci/125673/josip-matic/",
-            "photo": "/static/images/nophoto_player_m.png",
+            "photo": "https://hns.family/files/images_comet/Person/_resized/125673_2f9825dc-889e-490b-8c18-4d7a41ed47c4_80_100_cut_wg_top.jpg",
             "value": "2 / 0",
             "appearances": 2,
             "minutes": 0
@@ -980,7 +980,7 @@
             "position": 1,
             "name": "Jan Rajs",
             "profileUrl": "https://semafor.hns.family/igraci/365472/jan-rajs/",
-            "photo": "/static/images/nophoto_player_m.png",
+            "photo": "https://hns.family/files/images_comet/12/f/_resized/12fca5adb4d1c93e67868a3e218418be760a0478_80_100_cut_wg_top.jpg",
             "value": "2 / 0",
             "appearances": 2,
             "minutes": 0
@@ -2316,7 +2316,7 @@
       "number": 12,
       "name": "Jan Rajs",
       "position": "Vratar",
-      "photo": "/static/images/nophoto_player_m.png",
+      "photo": "https://hns.family/files/images_comet/12/f/_resized/12fca5adb4d1c93e67868a3e218418be760a0478_80_100_cut_wg_top.jpg",
       "profileUrl": "https://semafor.hns.family/igraci/365472/jan-rajs/",
       "stats": {
         "appearances": 2,
@@ -2370,7 +2370,7 @@
       "number": 17,
       "name": "Petar Barišić",
       "position": "Igrač",
-      "photo": "/static/images/nophoto_player_m.png",
+      "photo": "https://hns.family/files/images_comet/d8/9/_resized/d8931c5584d5b6fddb84eedf1db5103e8f0c3db6_80_100_cut_wg_top.jpg",
       "profileUrl": "https://semafor.hns.family/igraci/389840/petar-barisic/",
       "stats": {
         "appearances": 2,
@@ -2478,7 +2478,7 @@
       "number": 20,
       "name": "Karlo Grubač",
       "position": "Igrač",
-      "photo": "/static/images/nophoto_player_m.png",
+      "photo": "https://hns.family/files/images_comet/0c/5/_resized/0c5b7fdbff352e6983a9b126458e9e5fe19de758_80_100_cut_wg_top.png",
       "profileUrl": "https://semafor.hns.family/igraci/375906/karlo-grubac/",
       "stats": {
         "appearances": 2,
@@ -2505,7 +2505,7 @@
       "number": 22,
       "name": "Josip Matić",
       "position": "Igrač",
-      "photo": "/static/images/nophoto_player_m.png",
+      "photo": "https://hns.family/files/images_comet/Person/_resized/125673_2f9825dc-889e-490b-8c18-4d7a41ed47c4_80_100_cut_wg_top.jpg",
       "profileUrl": "https://semafor.hns.family/igraci/125673/josip-matic/",
       "stats": {
         "appearances": 2,
@@ -2616,7 +2616,7 @@
         "position": 1,
         "name": "Josip Matić",
         "profileUrl": "https://semafor.hns.family/igraci/125673/josip-matic/",
-        "photo": "/static/images/nophoto_player_m.png",
+        "photo": "https://hns.family/files/images_comet/Person/_resized/125673_2f9825dc-889e-490b-8c18-4d7a41ed47c4_80_100_cut_wg_top.jpg",
         "value": "2",
         "goals": 2
       },
@@ -2625,7 +2625,7 @@
         "position": 2,
         "name": "Karlo Grubač",
         "profileUrl": "https://semafor.hns.family/igraci/375906/karlo-grubac/",
-        "photo": "/static/images/nophoto_player_m.png",
+        "photo": "https://hns.family/files/images_comet/0c/5/_resized/0c5b7fdbff352e6983a9b126458e9e5fe19de758_80_100_cut_wg_top.png",
         "value": "1",
         "goals": 1
       }
@@ -2668,7 +2668,7 @@
         "position": 2,
         "name": "Petar Barišić",
         "profileUrl": "https://semafor.hns.family/igraci/389840/petar-barisic/",
-        "photo": "/static/images/nophoto_player_m.png",
+        "photo": "https://hns.family/files/images_comet/d8/9/_resized/d8931c5584d5b6fddb84eedf1db5103e8f0c3db6_80_100_cut_wg_top.jpg",
         "value": "2 / 0",
         "appearances": 2,
         "minutes": 0
@@ -2698,7 +2698,7 @@
         "position": 5,
         "name": "Karlo Grubač",
         "profileUrl": "https://semafor.hns.family/igraci/375906/karlo-grubac/",
-        "photo": "/static/images/nophoto_player_m.png",
+        "photo": "https://hns.family/files/images_comet/0c/5/_resized/0c5b7fdbff352e6983a9b126458e9e5fe19de758_80_100_cut_wg_top.png",
         "value": "2 / 0",
         "appearances": 2,
         "minutes": 0
@@ -2728,7 +2728,7 @@
         "position": 8,
         "name": "Josip Matić",
         "profileUrl": "https://semafor.hns.family/igraci/125673/josip-matic/",
-        "photo": "/static/images/nophoto_player_m.png",
+        "photo": "https://hns.family/files/images_comet/Person/_resized/125673_2f9825dc-889e-490b-8c18-4d7a41ed47c4_80_100_cut_wg_top.jpg",
         "value": "2 / 0",
         "appearances": 2,
         "minutes": 0
@@ -2758,7 +2758,7 @@
         "position": 11,
         "name": "Jan Rajs",
         "profileUrl": "https://semafor.hns.family/igraci/365472/jan-rajs/",
-        "photo": "/static/images/nophoto_player_m.png",
+        "photo": "https://hns.family/files/images_comet/12/f/_resized/12fca5adb4d1c93e67868a3e218418be760a0478_80_100_cut_wg_top.jpg",
         "value": "2 / 0",
         "appearances": 2,
         "minutes": 0
