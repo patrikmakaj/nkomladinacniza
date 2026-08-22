@@ -56,6 +56,42 @@ function onOpen() {
     .addToUi();
 }
 
+/**
+ * Upozorenje kad se upiše neriješen rezultat.
+ *
+ * Turnir nema neriješenih — kod izjednačenja ide raspucavanje, pa se upisuje
+ * konačan ishod. Jednak rezultat s obje strane stranica ne zna razriješiti:
+ * ekipa ne bi dobila pobjedu, a eliminacijski par bi ostao prazan. Zato ga
+ * odmah označimo crveno umjesto da se to otkrije tek pred finale.
+ *
+ * Ovo je jednostavan okidač — radi sam, bez posebnog odobravanja.
+ */
+function onEdit(e) {
+  if (!e || !e.range) return;
+  var sh = e.range.getSheet();
+  if (sh.getName() !== TAB_UTAKMICE) return;
+
+  var col = e.range.getColumn();
+  if (col < 8 || col > 9) return; // samo Golovi D / Golovi G
+
+  var red = e.range.getRow();
+  if (red < 2) return;
+
+  var par = sh.getRange(red, 8, 1, 2);
+  var v = par.getValues()[0];
+  var oba = v[0] !== "" && v[1] !== "";
+  var izjednaceno = oba && Number(v[0]) === Number(v[1]);
+
+  par.setBackground(izjednaceno ? "#fde2e2" : null);
+  if (izjednaceno) {
+    SpreadsheetApp.getActiveSpreadsheet().toast(
+      "Nema neriješenih — upiši ishod raspucavanja.",
+      "Redak " + red,
+      5
+    );
+  }
+}
+
 /** Napravi oba taba sa zaglavljima i formatiranjem. Sigurno je pokrenuti više puta. */
 function postaviTablicu() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
@@ -81,6 +117,13 @@ function postaviTablicu() {
   shU.getRange("A2:E").setHorizontalAlignment("center");
   // Rezultat kao tekst bi razbio stranicu — drži ga brojčanim.
   shU.getRange("H2:I").setNumberFormat("0").setHorizontalAlignment("center");
+
+  // Nema neriješenih, pa se upisuje konačan ishod uključujući raspucavanje.
+  var napomena =
+    "Serija od 5 jedanaesteraca.\n" +
+    "Ako je izjednačeno, ide raspucavanje — upiši KONAČAN ishod, uključujući raspucavanje.\n" +
+    "Jednak rezultat s obje strane stranica ne zna razriješiti.";
+  shU.getRange("H1:I1").setNote(napomena);
 
   // Makni početni prazni „Sheet1" ako je ostao neiskorišten.
   var prvi = ss.getSheetByName("Sheet1") || ss.getSheetByName("List1");
