@@ -14,25 +14,25 @@ import TurnirLive from "../../components/TurnirLive.astro";
 import type { TurnirConfig } from "../../lib/turnir";
 
 const config: TurnirConfig = {
-  // TODO: zamijeniti ID-jem novog Sheeta za penale.
-  sheetId: "1uSdnYjVSAiq5p0lN89gn7GBQPQrRbufqHHsNOENbl3s",
+  // „Turnir u pucanju jedanaesteraca — DŠA Niza 28.08.2026." u klupskom Driveu.
+  sheetId: "1Gi3OUo0QViOwJyK1DR_ccijA_aKcBoHqfXJf__J9IpE",
   tabs: { teams: "Ekipe", matches: "Utakmice" },
   // Ekipe: Grupa | Ekipa | Igrač 1..4 | Vratar | Kotizacija
   teamCols: { group: 0, name: 1, players: [2, 3, 4, 5, 6] },
-  // Utakmice: Redni | Faza | Grupa | Vrijeme | Domaćin | Gost | Golovi D | Golovi G
-  // Bez terena — puca se na jedan gol, meč po meč.
+  // Utakmice: Redni | Faza | Grupa | Vrijeme | Teren | Domaćin | Gost | Golovi D | Golovi G
   matchCols: {
     redni: 0,
     faza: 1,
     grupa: 2,
     vrijeme: 3,
-    teren: null,
-    home: 4,
-    away: 5,
-    scoreHome: 6,
-    scoreAway: 7,
+    teren: 4,
+    home: 5,
+    away: 6,
+    scoreHome: 7,
+    scoreAway: 8,
   },
-  courts: 1,
+  // Dva gola paralelno.
+  courts: 2,
   unit: {
     label: "Golovi",
     totalLabel: "Ukupno golova",
@@ -80,6 +80,7 @@ const config: TurnirConfig = {
         <li>U grupi se igra <strong>svako sa svakim</strong> (jedan meč).</li>
         <li>Iz svake grupe prolaze <strong>prve dvije ekipe</strong> u eliminaciju.</li>
         <li>Eliminacija ide do <strong>finala</strong>, uz meč <strong>za 3. mjesto</strong>.</li>
+        <li>Puca se na <strong>dva gola paralelno</strong> — dva meča idu istovremeno.</li>
         <li>Parovi eliminacije slažu se <strong>unakrsno</strong> — nitko ne igra protiv ekipe iz svoje grupe.</li>
       </ul>
 
@@ -123,7 +124,7 @@ const config: TurnirConfig = {
       <h3 class="font-display font-bold text-[#10275c] uppercase tracking-wide mt-4 mb-1">8. Raspored i satnica</h3>
       <ul class="list-disc pl-5 space-y-1">
         <li>Raspored i rezultati uživo: <strong>omladinacniza.hr/turnir/penali</strong>.</li>
-        <li>Vremena su <strong>okvirna</strong> i mogu se pomicati ovisno o tijeku turnira.</li>
+        <li>Vremena su <strong>okvirna</strong> i mogu se pomicati ovisno o tijeku turnira; uz svaki meč piše <strong>na kojem se golu</strong> puca.</li>
         <li>Ekipa koja se ne pojavi u roku <strong>5 min</strong> od poziva gubi meč bez borbe.</li>
       </ul>
 
