@@ -18,8 +18,15 @@
 export type TurnirConfig = {
   sheetId: string;
   tabs: { teams: string; matches: string };
-  /** Indeksi stupaca u tabu s ekipama. */
-  teamCols: { group: number; name: number; players: number[] };
+  /** Indeksi stupaca u tabu s ekipama; `fee` je kotizacija, bez nje nema fonda. */
+  teamCols: { group: number; name: number; players: number[]; fee?: number };
+  /**
+   * Udjeli nagradnog fonda po mjestima, npr. [0.5, 0.3, 0.2]. Bez ovoga se
+   * fond i iznosi ne prikazuju — turnir može imati pehare umjesto novca.
+   */
+  prizes?: number[];
+  /** Valuta uz iznose. */
+  currency?: string;
   /** Indeksi stupaca u tabu s utakmicama; `teren` null ako turnir nema terene. */
   matchCols: {
     redni: number;
@@ -98,6 +105,10 @@ type Data = {
   } | null;
   /** Koliko ekipa iz grupe ide dalje — kod jedne grupe to su prve četiri. */
   prolazi: number;
+  /** Zbroj kotizacija svih prijavljenih ekipa. */
+  fond: number;
+  /** Konačni poredak s iznosima — tek kad se odigra finale. */
+  poredak: { mjesto: number; name: string; iznos: number }[] | null;
   drawn: boolean;
 };
 
@@ -236,6 +247,7 @@ export function initTurnir(cfg: TurnirConfig): () => void {
     const allTeams: Team[] = [];
     const groups: Record<string, string[]> = {};
 
+    let fond = 0;
     teamRows.forEach((r) => {
       const name = cell(r, tc.name);
       if (!name) return;
@@ -243,6 +255,11 @@ export function initTurnir(cfg: TurnirConfig): () => void {
       rosters[name] = tc.players.map((i) => cell(r, i)).filter(Boolean);
       allTeams.push({ name, grupa: g });
       if (g) (groups[g] ||= []).push(name);
+      // Kotizacija zna biti upisana kao "20 €" ili prazna dok se ne plati.
+      if (tc.fee != null) {
+        const iznos = parseFloat(cell(r, tc.fee).replace(",", ".").replace(/[^\d.]/g, ""));
+        if (!Number.isNaN(iznos)) fond += iznos;
+      }
     });
 
     // Grupe se izvode iz podataka, ne hardkodiraju — broj ekipa se zna tek
@@ -302,7 +319,48 @@ export function initTurnir(cfg: TurnirConfig): () => void {
     return {
       groups, groupKeys, rosters, allTeams, matches, standings, groupsDone, qualifiers, drawn,
       prolazi: prolaziZa(groupKeys.length),
+      fond,
+      poredak: konacniPoredak(matches, fond),
     };
+  }
+
+  /**
+   * Konačni poredak i podjela nagradnog fonda — tek kad se odigra finale.
+   *
+   * Zadnje mjesto dobiva ostatak umjesto zaokruženog udjela, da zbroj iznosa
+   * uvijek bude točno onoliko koliko je skupljeno. Inače bi zaokruživanje
+   * znalo dati euro viška ili manjka na stolu.
+   */
+  function konacniPoredak(matches: Match[], fond: number) {
+    if (!cfg.prizes || !cfg.prizes.length) return null;
+    const fin = matches.filter((m) => m.faza === "Finale")[0];
+    if (!fin || !fin.played || !fin.home || !fin.away) return null;
+    if (fin.bd === fin.bg) return null; // nema neriješenih; čeka se ispravak
+
+    const prvi = fin.bd! > fin.bg! ? fin.home : fin.away;
+    const drugi = fin.bd! > fin.bg! ? fin.away : fin.home;
+
+    const treciM = matches.filter((m) => m.faza === "Za 3. mjesto")[0];
+    const treci =
+      treciM && treciM.played && treciM.home && treciM.away && treciM.bd !== treciM.bg
+        ? treciM.bd! > treciM.bg!
+          ? treciM.home
+          : treciM.away
+        : null;
+
+    const imena = [prvi, drugi, treci].filter(Boolean) as string[];
+    const udjeli = cfg.prizes.slice(0, imena.length);
+
+    const iznosi: number[] = [];
+    let podijeljeno = 0;
+    udjeli.forEach((u, i) => {
+      const zadnji = i === udjeli.length - 1;
+      const iznos = zadnji ? fond - podijeljeno : Math.round(fond * u);
+      iznosi.push(Math.max(0, iznos));
+      podijeljeno += iznos;
+    });
+
+    return imena.map((name, i) => ({ mjesto: i + 1, name, iznos: iznosi[i] ?? 0 }));
   }
 
   /** Koliko ekipa iz grupe ide dalje. Kod jedne grupe idu prve četiri. */
@@ -398,6 +456,56 @@ export function initTurnir(cfg: TurnirConfig): () => void {
       .join("");
     if (naslov) naslov.textContent = "Prijavljene ekipe (" + list.length + ")";
     $("sec-prijave").classList.remove("hidden");
+  }
+
+  const novac = (n: number) => `${Math.round(n)} ${cfg.currency || "€"}`;
+
+  /** Nagradni fond uz popis prijava — raste kako ekipe stižu. */
+  function renderFond(data: Data) {
+    const el = $("prijave-fond");
+    if (!cfg.prizes || !cfg.prizes.length || data.fond <= 0) {
+      el.classList.add("hidden");
+      el.innerHTML = "";
+      return;
+    }
+    const razrada = cfg.prizes
+      .map((u, i) => `${i + 1}. ${novac(data.fond * u)}`)
+      .join(" · ");
+    el.innerHTML =
+      `<span class="font-display uppercase tracking-wider text-xs text-[#64748B]">Nagradni fond</span> ` +
+      `<strong class="text-[#10275c] text-base">${novac(data.fond)}</strong> ` +
+      `<span class="text-[#64748B]">— ${esc(razrada)}</span>`;
+    el.classList.remove("hidden");
+  }
+
+  /** Konačni poredak s iznosima — pojavi se čim je finale odigrano. */
+  function renderPoredak(data: Data) {
+    const sec = $("sec-poredak");
+    if (!data.poredak || !data.poredak.length) {
+      sec.classList.add("hidden");
+      sec.innerHTML = "";
+      return;
+    }
+    const medalja = ["🥇", "🥈", "🥉"];
+    const boja = ["#F6C500", "#C0C7D1", "#CD7F32"];
+    const kartice = data.poredak
+      .map((p, i) => `
+      <div class="flex items-center gap-3 bg-white rounded-lg border border-[#C9D4E8] px-4 py-3 shadow-sm" style="border-left:5px solid ${boja[i] || "#C9D4E8"}">
+        <span class="text-2xl leading-none shrink-0">${medalja[i] || p.mjesto + "."}</span>
+        ${avatar(p.name, 30)}
+        <div class="min-w-0 flex-1">
+          <div class="font-bold text-[#10275c] truncate">${linkTeam(p.name)}</div>
+          <div class="text-[11px] font-display uppercase tracking-wider text-[#64748B]">${p.mjesto}. mjesto</div>
+        </div>
+        <div class="font-display font-bold text-lg text-[#10275c] shrink-0 tabular-nums">${novac(p.iznos)}</div>
+      </div>`)
+      .join("");
+
+    sec.innerHTML = `
+      <h2 class="text-2xl md:text-3xl font-bold mb-1 text-[#10275c]">Konačni poredak</h2>
+      <p class="text-[#64748B] text-sm mb-4">Nagradni fond ${novac(data.fond)}, podijeljen na prva tri mjesta.</p>
+      <div class="grid gap-2 sm:grid-cols-3">${kartice}</div>`;
+    sec.classList.remove("hidden");
   }
 
   function renderGroups(data: Data) {
@@ -823,6 +931,8 @@ export function initTurnir(cfg: TurnirConfig): () => void {
       const data = processData(teamRows, matchRows);
       LAST = data;
       renderFollow(data);
+      renderFond(data);
+      renderPoredak(data);
       if (data.drawn) {
         $("sec-prijave").classList.add("hidden");
         renderTop(data.matches);
