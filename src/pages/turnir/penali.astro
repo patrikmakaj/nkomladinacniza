@@ -18,7 +18,10 @@ const config: TurnirConfig = {
   sheetId: "1Gi3OUo0QViOwJyK1DR_ccijA_aKcBoHqfXJf__J9IpE",
   tabs: { teams: "Ekipe", matches: "Utakmice" },
   // Ekipe: Grupa | Ekipa | Igrač 1..4 | Vratar | Kotizacija
-  teamCols: { group: 0, name: 1, players: [2, 3, 4, 5, 6] },
+  teamCols: { group: 0, name: 1, players: [2, 3, 4, 5, 6], fee: 7 },
+  // Nagrade 50/30/20 % ukupne kotizacije.
+  prizes: [0.5, 0.3, 0.2],
+  currency: "€",
   // Utakmice: Redni | Faza | Grupa | Vrijeme | Teren | Domaćin | Gost | Golovi D | Golovi G
   matchCols: {
     redni: 0,
@@ -179,6 +182,10 @@ const config: TurnirConfig = {
         <li>2. mjesto — <strong>30 %</strong> ukupne kotizacije</li>
         <li>3. mjesto — <strong>20 %</strong> ukupne kotizacije</li>
       </ul>
+      <p class="mt-2">
+        Nagradni fond raste sa svakom prijavom i vidi se na ovoj stranici, a nakon
+        finala se prikazuje konačni poredak s iznosima.
+      </p>
 
       <h3 class="font-display font-bold text-[#10275c] uppercase tracking-wide mt-4 mb-1">8. Raspored i satnica</h3>
       <ul class="list-disc pl-5 space-y-1">

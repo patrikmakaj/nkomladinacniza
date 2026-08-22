@@ -290,6 +290,12 @@ Dvije stvari koje se ne smiju izgubiti iz vida:
 `initTurnir` vraća `dispose` koji gasi pollanje Sheeta; komponenta ga zove na
 `astro:before-swap`, inače interval nastavi raditi nakon odlaska sa stranice.
 
+**Nagradni fond** je opcionalan: `teamCols.fee` (stupac s kotizacijom) plus
+`prizes` (udjeli, npr. `[0.5, 0.3, 0.2]`). Bez njih se ne prikazuje — turnir
+može imati pehare umjesto novca. Zadnje mjesto dobiva ostatak umjesto
+zaokruženog udjela, da zbroj iznosa uvijek bude točno onoliko koliko je
+skupljeno.
+
 ### Sitemap i indeksiranje
 
 `astro.config.mjs` postavlja `lastmod` **samo** stranicama koje ga mogu

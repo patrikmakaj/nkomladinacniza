@@ -88,6 +88,7 @@ const hasCourts = config.courts > 1;
   <div
     class="container-narrow flex gap-2 overflow-x-auto py-2 text-xs font-display uppercase tracking-wider"
   >
+    <a data-target="sec-poredak" href="#sec-poredak" class="qn hidden shrink-0 px-3 py-1.5 rounded-full bg-[#F6C500] text-[#10275c] font-bold">Poredak</a>
     <a data-target="sec-uzivo" href="#sec-uzivo" class="qn hidden shrink-0 px-3 py-1.5 rounded-full bg-[#EAF0FB] text-[#10275c]">Uživo</a>
     <a data-target="sec-grupe" href="#sec-grupe" class="qn shrink-0 px-3 py-1.5 rounded-full bg-[#EAF0FB] text-[#10275c]">Tablice</a>
     <a data-target="sec-nokaut" href="#sec-nokaut" class="qn hidden shrink-0 px-3 py-1.5 rounded-full bg-[#EAF0FB] text-[#10275c]">Eliminacija</a>
@@ -106,6 +107,9 @@ const hasCourts = config.courts > 1;
   <div id="progress" class="hidden mb-6"></div>
   <div id="tvoja-ekipa" class="hidden mb-6"></div>
 
+  {/* Konačni poredak i podjela nagradnog fonda — nakon finala. */}
+  <section id="sec-poredak" class="hidden scroll-mt-36"></section>
+
   {/* Poziv na prijavu — stoji dok se ne odradi ždrijeb. */}
   <section id="sec-prazno" class="hidden">
     <slot name="prazno" />
@@ -113,7 +117,9 @@ const hasCourts = config.courts > 1;
 
   <section id="sec-prijave" class="hidden scroll-mt-36">
     <h2 class="text-2xl md:text-3xl font-bold mb-1 text-[#10275c]">Prijavljene ekipe</h2>
-    <p class="text-[#64748B] text-sm mb-6">{registrationNote}</p>
+    <p class="text-[#64748B] text-sm mb-2">{registrationNote}</p>
+    {/* Nagradni fond — puni ga lib, raste kako stižu prijave. */}
+    <p id="prijave-fond" class="hidden text-sm mb-6"></p>
     <div id="prijave" class="grid gap-2 sm:grid-cols-2 lg:grid-cols-3"></div>
   </section>
 
