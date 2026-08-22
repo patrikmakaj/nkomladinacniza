@@ -260,6 +260,36 @@ public/     CNAME, favicons/ikone, images/ (logo.svg, og-image.png, facebook/, f
 Nova stranica → dodaj i u `navItems` u `components/Header.astro` te u `serialize()`
 prioritete u `astro.config.mjs` (sitemap) ako joj treba drukčiji prioritet.
 
+### Turniri
+
+Stranice turnira uživo dijele motor: `lib/turnir.ts` (dohvat Sheeta, tablice,
+eliminacija, render) + `components/TurnirLive.astro` (markup). Stranica turnira
+sadrži samo `TurnirConfig` i pravila u slotu — vidi `pages/turnir.astro`
+(boćanje) i `pages/turnir/penali.astro`.
+
+Novi turnir = nova datoteka pod `pages/turnir/`, nova konfiguracija, nova
+pravila. Ništa se ne kopira.
+
+Dvije stvari koje se ne smiju izgubiti iz vida:
+
+- **Ždrijeb se NE generira na stranici.** Skripta u pregledniku dala bi svakom
+  posjetitelju i svakom refreshu drugačiji raspored. Ždrijeb radi Apps Script u
+  samom Sheetu (`scripts/apps-script/zdrijeb.gs`) i zapisuje ga jednom.
+  Stranica sama popunjava samo eliminacijske parove, kad grupe završe.
+- **Ni satnica se ne pomiče na stranici.** Prvi pokušaj (commit `c029b585`)
+  računao je kašnjenje iz sata posjetitelja i bio nepouzdan; zamijenjen je
+  ručnim stupcem „Pomak", pa sad time upravlja Apps Script: `onEdit` zapiše
+  stvarno vrijeme završetka u stupac `Završeno`, a `pomakniRaspored` preračuna
+  neodigrane termine po terenima, uz poštovanje redoslijeda faza.
+- **Grupe se izvode iz podataka**, ne hardkodiraju — broj ekipa se zna tek kad
+  se zatvore prijave. Automatsko slaganje parova podržano je za:
+  1 grupu (tablica je poredak → finale 1-2, meč za 3. mjesto 3-4), 2 grupe
+  (odmah polufinale) i 4 grupe (četvrtfinale). Za drugi broj grupa parovi se
+  upisuju ručno u Sheet. Bracket ima tri oblika i sam bira po tome što postoji.
+
+`initTurnir` vraća `dispose` koji gasi pollanje Sheeta; komponenta ga zove na
+`astro:before-swap`, inače interval nastavi raditi nakon odlaska sa stranice.
+
 ### Sitemap i indeksiranje
 
 `astro.config.mjs` postavlja `lastmod` **samo** stranicama koje ga mogu
@@ -268,8 +298,8 @@ stranice (`klub`, `povijest`, `sponzori`) ga nemaju — build ide svakih 30
 minuta, pa bi im `new Date()` na svakoj izgradnji tvrdio da su se promijenile
 i tražilice bi polje prestale gledati.
 
-Stranice koje ne smiju u indeks idu u `EXCLUDED` u configu **i** dobiju
-`noIndex` na `BaseLayout` (trenutno `/turnir`, jednokratni događaj).
+Stranice koje ne smiju u indeks idu u `EXCLUDED_PREFIXES` u configu **i** dobiju
+`noIndex` na `BaseLayout`. Prefiks `/turnir` pokriva sve turnire odjednom.
 
 ### Fontovi
 

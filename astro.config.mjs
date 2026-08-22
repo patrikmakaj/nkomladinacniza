@@ -37,9 +37,10 @@ const STATIC_PAGES = /\/(klub|povijest|sponzori)\/?$/;
 /** Apsolutni URL naslovnice, bez dvostrukih kosih crta. */
 const HOMEPAGE_URL = new URL(BASE, SITE).href;
 
-// /turnir je jednokratni događaj iz srpnja, nije u navigaciji i ne želimo ga
-// u indeksu. Stranica i dalje radi na direktan link.
-const EXCLUDED = ["/turnir"];
+// Turniri su jednokratni događaji, nisu u navigaciji i ne želimo ih u indeksu.
+// Stranice i dalje rade na direktan link. Prefiks hvata i /turnir/penali i
+// svaki idući turnir, pa se ovdje ne treba ništa dopisivati.
+const EXCLUDED_PREFIXES = ["/turnir"];
 
 // https://astro.build/config
 export default defineConfig({
@@ -48,8 +49,10 @@ export default defineConfig({
   trailingSlash: "ignore",
   integrations: [
     sitemap({
-      filter: (page) =>
-        !EXCLUDED.some((path) => new URL(page).pathname.replace(/\/$/, "").endsWith(path)),
+      filter: (page) => {
+        const path = new URL(page).pathname.replace(/\/$/, "");
+        return !EXCLUDED_PREFIXES.some((p) => path === p || path.startsWith(p + "/"));
+      },
       // SEO config: sve stranice imaju sličnu važnost,
       // priority malo veća za /
       changefreq: EnumChangefreq.DAILY,

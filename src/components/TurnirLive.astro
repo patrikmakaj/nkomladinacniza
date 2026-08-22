@@ -1,0 +1,222 @@
+---
+/**
+ * Kostur stranice turnira uživo. Logika je u `lib/turnir.ts`, ovdje je samo
+ * markup i konfiguracija — tako isti kod poslužuje boćanje, penale i što god
+ * dođe idući put.
+ *
+ * Konfiguracija ide klijentu kroz JSON script tag (isto kao galerija i
+ * raspored), a ne kroz `define:vars`, da skripta ostane obična modul-datoteka
+ * koju provjerava `astro check`.
+ */
+import type { TurnirConfig } from "../lib/turnir";
+
+interface Props {
+  title: string;
+  subtitle: string;
+  config: TurnirConfig;
+  /** Napomena ispod naslova „Prijavljene ekipe" — npr. kad je ždrijeb. */
+  registrationNote: string;
+  /** Napomena ispod grupnih tablica — tie-break pravila. */
+  groupsNote: string;
+}
+
+const { title, subtitle, config, registrationNote, groupsNote } = Astro.props;
+const hasCourts = config.courts > 1;
+---
+
+<!-- HERO -->
+<section
+  class="relative overflow-hidden py-12 md:py-16"
+  style="background:linear-gradient(135deg,#0b1c44 0%,#10275c 55%,#1e4fa0 100%)"
+>
+  <div
+    class="absolute inset-0 opacity-10"
+    style="background:repeating-linear-gradient(45deg,transparent,transparent 30px,#ffffff 30px,#ffffff 31px)"
+  >
+  </div>
+  <div class="relative container-narrow">
+    <div class="flex items-center gap-4 mb-4 flex-wrap">
+      <img
+        src="/images/dsa-niza.png"
+        alt="DŠA Niza"
+        width="80"
+        height="120"
+        class="h-20 md:h-24 w-auto drop-shadow-lg shrink-0"
+      />
+      <div
+        class="inline-flex items-center gap-2 px-3 py-1 bg-[#F6C500] text-[#10275c] text-xs font-display uppercase tracking-widest font-bold rounded-sm"
+      >
+        <span class="w-2 h-2 rounded-full bg-[#CF2130] animate-pulse"></span>
+        Rezultati uživo
+      </div>
+      <button
+        id="pravila-btn"
+        class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/15 hover:bg-white/25 text-white text-xs font-display uppercase tracking-wider font-bold rounded transition border border-white/30"
+        >📖 Pravila</button
+      >
+    </div>
+    <h1 class="text-white text-4xl md:text-6xl font-bold leading-none mb-3 drop-shadow-lg">
+      {title}
+    </h1>
+    <p class="text-white/90 text-base md:text-lg max-w-2xl">{subtitle}</p>
+  </div>
+</section>
+
+<!-- STATUS -->
+<div class="border-b-2 border-[#F6C500]" style="background:#10275c">
+  <div class="container-narrow py-3 flex flex-wrap items-center justify-between gap-3 text-white">
+    <div class="flex items-center gap-2 text-sm">
+      <span id="live-dot" class="w-2.5 h-2.5 rounded-full bg-green-400 animate-pulse"></span>
+      <span id="status-text" class="font-display uppercase tracking-wider text-xs">Učitavam…</span>
+    </div>
+    <div class="flex items-center gap-3">
+      <span id="last-updated" class="text-xs text-white/70"></span>
+      <button
+        id="refresh-btn"
+        class="text-xs font-display uppercase tracking-wider px-3 py-1.5 rounded bg-[#F6C500] text-[#10275c] font-bold hover:brightness-110 transition"
+        >Osvježi</button
+      >
+    </div>
+  </div>
+</div>
+
+<!-- QUICK NAV -->
+<nav
+  id="quicknav"
+  class="hidden sticky top-20 z-40 bg-white/95 backdrop-blur border-b border-[#C9D4E8]"
+>
+  <div
+    class="container-narrow flex gap-2 overflow-x-auto py-2 text-xs font-display uppercase tracking-wider"
+  >
+    <a data-target="sec-uzivo" href="#sec-uzivo" class="qn hidden shrink-0 px-3 py-1.5 rounded-full bg-[#EAF0FB] text-[#10275c]">Uživo</a>
+    <a data-target="sec-grupe" href="#sec-grupe" class="qn shrink-0 px-3 py-1.5 rounded-full bg-[#EAF0FB] text-[#10275c]">Tablice</a>
+    <a data-target="sec-nokaut" href="#sec-nokaut" class="qn hidden shrink-0 px-3 py-1.5 rounded-full bg-[#EAF0FB] text-[#10275c]">Eliminacija</a>
+    <a data-target="sec-raspored" href="#sec-raspored" class="qn shrink-0 px-3 py-1.5 rounded-full bg-[#EAF0FB] text-[#10275c]">Raspored</a>
+    <a data-target="sec-statistika" href="#sec-statistika" class="qn hidden shrink-0 px-3 py-1.5 rounded-full bg-[#EAF0FB] text-[#10275c]">Statistika</a>
+  </div>
+</nav>
+
+<main class="container-narrow py-8 md:py-12 space-y-12">
+  <div id="load-msg" class="text-center text-[#64748B] py-8">
+    <div class="inline-block w-8 h-8 border-4 border-[#EAF0FB] border-t-[#1e4fa0] rounded-full animate-spin"></div>
+    <p class="mt-3 font-display uppercase tracking-wider text-sm">Učitavam rezultate…</p>
+  </div>
+
+  <div id="countdown" class="hidden mb-6"></div>
+  <div id="progress" class="hidden mb-6"></div>
+  <div id="tvoja-ekipa" class="hidden mb-6"></div>
+
+  {/* Poziv na prijavu — stoji dok se ne odradi ždrijeb. */}
+  <section id="sec-prazno" class="hidden">
+    <slot name="prazno" />
+  </section>
+
+  <section id="sec-prijave" class="hidden scroll-mt-36">
+    <h2 class="text-2xl md:text-3xl font-bold mb-1 text-[#10275c]">Prijavljene ekipe</h2>
+    <p class="text-[#64748B] text-sm mb-6">{registrationNote}</p>
+    <div id="prijave" class="grid gap-2 sm:grid-cols-2 lg:grid-cols-3"></div>
+  </section>
+
+  <section id="sec-uzivo" class="hidden scroll-mt-36">
+    <div id="uzivo-live" class="mb-4"></div>
+    <div id="uzivo-next"></div>
+  </section>
+
+  <section id="sec-grupe" class="hidden scroll-mt-36">
+    <h2 class="text-2xl md:text-3xl font-bold mb-1 text-[#10275c]">Grupne tablice</h2>
+    {/* Tekst ovisi o broju grupa, koji se zna tek iz Sheeta — lib ga prepiše. */}
+    <p id="grupe-info" class="text-[#64748B] text-sm mb-6">Prolazak u eliminaciju.</p>
+    <div id="grupe" class="grid gap-6 md:grid-cols-2"></div>
+    <p class="text-xs text-[#64748B] mt-3">{groupsNote}</p>
+  </section>
+
+  <section id="sec-nokaut" class="hidden scroll-mt-36">
+    <h2 class="text-2xl md:text-3xl font-bold mb-6 text-[#10275c]">Eliminacijska faza</h2>
+    <div id="kvalificirani" class="mb-4"></div>
+    <div id="nokaut" class="overflow-x-auto bg-white rounded-lg shadow-md border border-[#C9D4E8] p-4"></div>
+  </section>
+
+  <section id="sec-raspored" class="hidden scroll-mt-36">
+    <h2 class="text-2xl md:text-3xl font-bold text-[#10275c] mb-4">Raspored i rezultati</h2>
+    <div class="flex items-center gap-4 mb-6 flex-wrap">
+      <div class="flex gap-1 text-xs font-display uppercase tracking-wider" id="vm">
+        <button data-v="grupe" class="vmbtn px-3 py-1.5 rounded-full bg-[#1e4fa0] text-white">Po grupama</button>
+        {hasCourts && (
+          <button data-v="teren" class="vmbtn px-3 py-1.5 rounded-full bg-[#EAF0FB] text-[#10275c]">Po terenu</button>
+        )}
+        <button data-v="vrijeme" class="vmbtn px-3 py-1.5 rounded-full bg-[#EAF0FB] text-[#10275c]">Po vremenu</button>
+      </div>
+      <div class="flex gap-1 text-xs font-display uppercase tracking-wider" id="rf">
+        <button data-f="sve" class="rfbtn px-3 py-1.5 rounded-full bg-[#1e4fa0] text-white">Sve</button>
+        <button data-f="preostalo" class="rfbtn px-3 py-1.5 rounded-full bg-[#EAF0FB] text-[#10275c]">Preostalo</button>
+        <button data-f="odigrano" class="rfbtn px-3 py-1.5 rounded-full bg-[#EAF0FB] text-[#10275c]">Odigrano</button>
+      </div>
+    </div>
+    <div id="raspored" class="space-y-3"></div>
+  </section>
+
+  <section id="sec-statistika" class="hidden scroll-mt-36">
+    <h2 class="text-2xl md:text-3xl font-bold text-[#10275c] mb-6">Statistika turnira</h2>
+    <div id="statistika" class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3"></div>
+  </section>
+</main>
+
+<!-- Panel ekipe (bottom sheet) -->
+<div id="team-sheet" class="hidden fixed inset-0 z-[60]">
+  <div id="team-sheet-backdrop" class="absolute inset-0 bg-black/50"></div>
+  <div
+    class="absolute inset-x-0 bottom-0 max-h-[85vh] overflow-y-auto bg-white rounded-t-2xl shadow-2xl sm:inset-x-auto sm:right-4 sm:top-4 sm:bottom-4 sm:w-[420px] sm:rounded-2xl"
+  >
+    <div class="sticky top-0 bg-white border-b border-[#C9D4E8] px-5 py-3 flex items-center justify-between">
+      <h3 id="team-sheet-title" class="font-bold text-[#10275c] truncate"></h3>
+      <button
+        id="team-sheet-close"
+        class="shrink-0 w-8 h-8 rounded-full bg-[#EAF0FB] text-[#10275c] font-bold"
+        aria-label="Zatvori">✕</button
+      >
+    </div>
+    <div id="team-sheet-body" class="px-5 py-4"></div>
+  </div>
+</div>
+
+<!-- Modal s pravilima -->
+<div id="pravila-modal" class="hidden fixed inset-0 z-[70]">
+  <div id="pravila-backdrop" class="absolute inset-0 bg-black/50"></div>
+  <div
+    class="absolute inset-x-0 bottom-0 max-h-[85vh] overflow-y-auto bg-white rounded-t-2xl shadow-2xl sm:inset-0 sm:m-auto sm:h-fit sm:max-w-2xl sm:rounded-2xl"
+  >
+    <div class="sticky top-0 bg-white border-b border-[#C9D4E8] px-5 py-3 flex items-center justify-between">
+      <h3 class="font-bold text-[#10275c]">Pravila</h3>
+      <button
+        id="pravila-close"
+        class="shrink-0 w-8 h-8 rounded-full bg-[#EAF0FB] text-[#10275c] font-bold"
+        aria-label="Zatvori">✕</button
+      >
+    </div>
+    <div class="px-5 py-4 text-sm text-[#334155] space-y-3">
+      <slot name="pravila" />
+    </div>
+  </div>
+</div>
+
+<script type="application/json" id="turnir-config" set:html={JSON.stringify(config)} />
+
+<script>
+  import { initTurnir, type TurnirConfig } from "../lib/turnir";
+
+  let dispose: (() => void) | null = null;
+
+  // ClientRouter ne pokreće modul ponovo pri navigaciji, a pri odlasku sa
+  // stranice treba ugasiti pollanje Sheeta — inače ostane vrtjeti u pozadini.
+  document.addEventListener("astro:page-load", () => {
+    const el = document.getElementById("turnir-config");
+    if (!el?.textContent) return;
+    dispose?.();
+    dispose = initTurnir(JSON.parse(el.textContent) as TurnirConfig);
+  });
+
+  document.addEventListener("astro:before-swap", () => {
+    dispose?.();
+    dispose = null;
+  });
+</script>

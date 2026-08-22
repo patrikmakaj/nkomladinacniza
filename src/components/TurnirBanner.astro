@@ -1,0 +1,75 @@
+---
+/**
+ * Najava turnira na naslovnici.
+ *
+ * Nestaje sama nakon `until` — build se vrti svakih 30 min, ali kad se podaci
+ * ne mijenjaju zna proći i duže, pa isti rok provjerava i mala skripta u
+ * pregledniku. Bez toga bi „turnir večeras" znao ostati do idućeg deploya.
+ */
+interface Props {
+  href: string;
+  /** Kratki naziv iznad naslova, npr. organizator. */
+  kicker: string;
+  title: string;
+  /** Kad i gdje — uvijek vidljivo. */
+  meta: string;
+  /** Detalji koji se na mobitelu skrivaju da baner ne pojede pola ekrana. */
+  metaExtra?: string;
+  /** Dokad se najava prikazuje (ISO). */
+  until: string;
+}
+
+const { href, kicker, title, meta, metaExtra, until } = Astro.props;
+
+const untilMs = new Date(until).getTime();
+const prikazi = Number.isNaN(untilMs) || Date.now() < untilMs;
+---
+
+{
+  prikazi && (
+    <aside
+      id="turnir-najava"
+      data-until={untilMs}
+      class="border-b-2 border-[#F6C500]"
+      style="background:linear-gradient(135deg,#0b1c44 0%,#10275c 55%,#1e4fa0 100%)"
+    >
+      <a
+        href={href}
+        class="container-narrow flex items-center gap-3 sm:gap-5 py-3 sm:py-4 group"
+      >
+        <span class="inline-flex items-center gap-1.5 px-2 py-1 bg-[#F6C500] text-[#10275c] text-[10px] sm:text-[11px] font-display uppercase tracking-widest font-bold rounded-sm shrink-0 self-start sm:self-center">
+          <span class="w-1.5 h-1.5 rounded-full bg-[#CF2130] animate-pulse" />
+          {kicker}
+        </span>
+
+        <div class="min-w-0 flex-1">
+          <p class="font-display font-bold uppercase tracking-wide text-white leading-tight text-base sm:text-lg md:text-xl">
+            {title}
+          </p>
+          <p class="text-white/80 text-xs sm:text-sm leading-snug">
+            {meta}
+            {metaExtra && <span class="hidden sm:inline"> · {metaExtra}</span>}
+          </p>
+        </div>
+
+        <span class="inline-flex items-center gap-1.5 text-[#F6C500] font-display uppercase tracking-wider text-xs font-bold shrink-0 group-hover:gap-2.5 transition-all">
+          <span class="hidden sm:inline">Prijave i rezultati</span>
+          <svg class="w-5 h-5 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
+          </svg>
+        </span>
+      </a>
+    </aside>
+  )
+}
+
+<script>
+  // Backstop za slučaj da se stranica nije rebuildala nakon isteka.
+  function sakrijIsteklu() {
+    const el = document.getElementById("turnir-najava");
+    if (!el) return;
+    const until = Number(el.dataset.until);
+    if (until && Date.now() > until) el.remove();
+  }
+  document.addEventListener("astro:page-load", sakrijIsteklu);
+</script>
