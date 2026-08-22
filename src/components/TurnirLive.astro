@@ -51,9 +51,18 @@ const hasCourts = config.courts > 1;
       </div>
       <button
         id="pravila-btn"
-        class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/15 hover:bg-white/25 text-white text-xs font-display uppercase tracking-wider font-bold rounded transition border border-white/30"
+        class="inline-flex items-center gap-1.5 px-3 py-2 sm:py-1.5 min-h-10 sm:min-h-0 bg-white/15 hover:bg-white/25 text-white text-xs font-display uppercase tracking-wider font-bold rounded transition border border-white/30"
         >📖 Pravila</button
       >
+      <button
+        id="podijeli-btn"
+        class="inline-flex items-center gap-1.5 px-3 py-2 sm:py-1.5 min-h-10 sm:min-h-0 bg-white/15 hover:bg-white/25 text-white text-xs font-display uppercase tracking-wider font-bold rounded transition border border-white/30"
+      >
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.7 10.7a3 3 0 100 2.6m0-2.6l6.6-3.4m-6.6 6l6.6 3.4M18 8a3 3 0 100-6 3 3 0 000 6zm0 14a3 3 0 100-6 3 3 0 000 6z" />
+        </svg>
+        <span id="podijeli-tekst">Podijeli</span>
+      </button>
     </div>
     <h1 class="text-white text-4xl md:text-6xl font-bold leading-none mb-3 drop-shadow-lg">
       {title}

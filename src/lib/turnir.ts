@@ -27,6 +27,8 @@ export type TurnirConfig = {
   prizes?: number[];
   /** Valuta uz iznose. */
   currency?: string;
+  /** Tekst uz link kod dijeljenja; bez njega ide naslov stranice. */
+  shareText?: string;
   /** Indeksi stupaca u tabu s utakmicama; `teren` null ako turnir nema terene. */
   matchCols: {
     redni: number;
@@ -986,6 +988,60 @@ export function initTurnir(cfg: TurnirConfig): () => void {
   $("pravila-close").addEventListener("click", closePravila);
   $("pravila-backdrop").addEventListener("click", closePravila);
   $("refresh-btn").addEventListener("click", load);
+
+  // ── Dijeljenje ──────────────────────────────────────────────────────
+  // Na mobitelu otvara sustavni izbornik (WhatsApp, Viber…), na desktopu
+  // kopira link. Oboje traži HTTPS, pa lokalno preko IP-a radi samo fallback.
+  const podijeliTekst = $("podijeli-tekst");
+  let vratiNatpis: number | null = null;
+
+  function natpis(tekst: string) {
+    if (vratiNatpis) clearTimeout(vratiNatpis);
+    podijeliTekst.textContent = tekst;
+    vratiNatpis = window.setTimeout(() => {
+      podijeliTekst.textContent = "Podijeli";
+      vratiNatpis = null;
+    }, 2500);
+  }
+
+  /** Za preglednike bez clipboard API-ja — stari, ali radi svugdje. */
+  function kopirajFallback(url: string): boolean {
+    const polje = document.createElement("textarea");
+    polje.value = url;
+    polje.setAttribute("readonly", "");
+    polje.style.cssText = "position:fixed;top:-9999px";
+    document.body.appendChild(polje);
+    polje.select();
+    let ok = false;
+    try {
+      ok = document.execCommand("copy");
+    } catch {
+      ok = false;
+    }
+    polje.remove();
+    return ok;
+  }
+
+  $("podijeli-btn").addEventListener("click", async () => {
+    const url = location.href;
+    const naslov = document.title;
+
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: naslov, text: cfg.shareText || naslov, url });
+      } catch {
+        // Korisnik je odustao — to nije greška, ne javljamo ništa.
+      }
+      return;
+    }
+
+    try {
+      await navigator.clipboard.writeText(url);
+      natpis("Link kopiran");
+    } catch {
+      natpis(kopirajFallback(url) ? "Link kopiran" : "Kopiraj iz adresne trake");
+    }
+  });
 
   load();
   const pollId = window.setInterval(load, REFRESH_MS);
