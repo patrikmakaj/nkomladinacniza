@@ -384,17 +384,19 @@ export function initTurnir(cfg: TurnirConfig): () => void {
 
   function renderRegistration(teams: Team[]) {
     const wrap = $("prijave");
+    const naslov = document.querySelector("#sec-prijave h2");
     const list = (teams || []).slice().sort((a, b) => a.name.localeCompare(b.name, "hr"));
     if (!list.length) {
       $("sec-prijave").classList.add("hidden");
       wrap.innerHTML = "";
+      // Bez ovoga bi naslov zadržao broj od prošlog osvježavanja.
+      if (naslov) naslov.textContent = "Prijavljene ekipe";
       return;
     }
     wrap.innerHTML = list
       .map((t, i) => `<div class="team-link flex items-center gap-3 bg-white rounded-lg border border-[#C9D4E8] px-3 py-2.5 shadow-sm cursor-pointer hover:border-[#1e4fa0]" data-team="${esc(t.name)}"><span class="text-[#64748B] text-xs font-display w-5 text-center shrink-0">${i + 1}</span>${avatar(t.name, 26)}<span class="font-medium truncate">${esc(t.name)}</span></div>`)
       .join("");
-    const hh = document.querySelector("#sec-prijave h2");
-    if (hh) hh.textContent = "Prijavljene ekipe (" + list.length + ")";
+    if (naslov) naslov.textContent = "Prijavljene ekipe (" + list.length + ")";
     $("sec-prijave").classList.remove("hidden");
   }
 
@@ -836,8 +838,9 @@ export function initTurnir(cfg: TurnirConfig): () => void {
         $("progress").classList.add("hidden");
         renderRegistration(data.allTeams);
       }
-      // Prazno stanje samo dok nije stigla nijedna prijava.
-      $("sec-prazno").classList.toggle("hidden", data.allTeams.length > 0);
+      // Poziv na prijavu stoji sve do ždrijeba, i kad popis već ima ekipa —
+      // dok su prijave otvorene, cijena i rok su ono zbog čega ljudi dolaze.
+      $("sec-prazno").classList.toggle("hidden", data.drawn);
       $("load-msg").classList.add("hidden");
       syncQuickNav();
       tickCountdown();
