@@ -3,6 +3,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import Hero from "../components/Hero.astro";
 import NextMatchCard from "../components/NextMatchCard.astro";
 import MatchDayHero from "../components/MatchDayHero.astro";
+import TurnirBanner from "../components/TurnirBanner.astro";
 import LeagueTable from "../components/LeagueTable.astro";
 import RecentResults from "../components/RecentResults.astro";
 import LatestPostBlock from "../components/LatestPostBlock.astro";
@@ -22,6 +23,17 @@ const isMatchDay = !!nextMatch && matchDate === todayInZagreb && !!nextMatch.tim
   description="Službena web stranica nogometnog kluba NK Omladinac Niza - rezultati, tablica, momčad i sve novosti iz kluba."
 >
   <SchemaSportsTeam slot="head" />
+
+  {/* Najava turnira — nestaje sama kad turnir prođe. Kad završi, obriši ovaj
+      blok i stavku "Turnir" iz Header.astro. */}
+  <TurnirBanner
+    href={url("/turnir/penali")}
+    kicker="DŠA Niza"
+    title="Turnir u pucanju jedanaesteraca"
+    meta="Petak 28.08. u 19:00 · Igralište u Nizi"
+    metaExtra="ekipe 4+1 · kotizacija 20 €"
+    until="2026-08-29T02:00:00"
+  />
 
   {/* Match-day hero — prikazuje se samo na dan utakmice */}
   {isMatchDay && nextMatch && <MatchDayHero match={nextMatch} />}
