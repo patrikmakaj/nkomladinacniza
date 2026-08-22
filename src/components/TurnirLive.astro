@@ -106,6 +106,11 @@ const hasCourts = config.courts > 1;
   <div id="progress" class="hidden mb-6"></div>
   <div id="tvoja-ekipa" class="hidden mb-6"></div>
 
+  {/* Prije prve prijave nema što prikazati — ovdje ide poziv na prijavu. */}
+  <section id="sec-prazno" class="hidden">
+    <slot name="prazno" />
+  </section>
+
   <section id="sec-prijave" class="hidden scroll-mt-36">
     <h2 class="text-2xl md:text-3xl font-bold mb-1 text-[#10275c]">Prijavljene ekipe</h2>
     <p class="text-[#64748B] text-sm mb-6">{registrationNote}</p>

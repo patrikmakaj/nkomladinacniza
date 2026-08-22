@@ -836,6 +836,8 @@ export function initTurnir(cfg: TurnirConfig): () => void {
         $("progress").classList.add("hidden");
         renderRegistration(data.allTeams);
       }
+      // Prazno stanje samo dok nije stigla nijedna prijava.
+      $("sec-prazno").classList.toggle("hidden", data.allTeams.length > 0);
       $("load-msg").classList.add("hidden");
       syncQuickNav();
       tickCountdown();
