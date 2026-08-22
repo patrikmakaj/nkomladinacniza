@@ -1,12 +1,30 @@
 ---
+/**
+ * Turnir u boćanju na travi (25.07.2026.) — arhiva.
+ *
+ * Sva logika je u components/TurnirLive.astro + lib/turnir.ts; ovdje su samo
+ * konfiguracija Sheeta i pravila ovog turnira.
+ */
 import BaseLayout from "../layouts/BaseLayout.astro";
+import TurnirLive from "../components/TurnirLive.astro";
+import type { TurnirConfig } from "../lib/turnir";
 
-// Google Sheet s rezultatima boćanja (native Google Sheet, tabovi: Parovi, Utakmice).
-// VAŽNO: zamijeniti nakon uploada. Mora biti dijeljen: "Bilo tko s poveznicom → Preglednik".
-const SHEET_ID = "1uSdnYjVSAiq5p0lN89gn7GBQPQrRbufqHHsNOENbl3s";
-
-const NAZIV = "Turnir u boćanju na travi";
-const PODNASLOV = "DŠA Niza · Subota 25.07. od 17:00 · Igralište u Nizi";
+// Google Sheet mora biti dijeljen: "Bilo tko s poveznicom → Preglednik".
+const config: TurnirConfig = {
+  sheetId: "1uSdnYjVSAiq5p0lN89gn7GBQPQrRbufqHHsNOENbl3s",
+  tabs: { teams: "Parovi", matches: "Utakmice" },
+  // Parovi: Grupa | Par (ekipa) | Igrač 1 | Igrač 2 | Kašnjenje | Kotizacija
+  teamCols: { group: 0, name: 1, players: [2, 3] },
+  // Utakmice: Redni | Faza | Grupa | Vrijeme | Teren | Domaćin | Gost | Boće D | Boće G
+  matchCols: { redni: 0, faza: 1, grupa: 2, vrijeme: 3, teren: 4, home: 5, away: 6, scoreHome: 7, scoreAway: 8 },
+  courts: 2,
+  unit: { label: "Boće", totalLabel: "Ukupno boća", mostLabel: "Najviše osvojenih boća", countWord: "boća" },
+  teamWord: "Par",
+  playersLabel: "Igrači (par)",
+  start: "2026-07-25T17:00:00",
+  followKey: "bocanje_follow",
+  qualifiersPerGroup: 2,
+};
 ---
 
 {/* Jednokratni događaj — nije u navigaciji i ne treba biti u tražilicama.
@@ -17,724 +35,92 @@ const PODNASLOV = "DŠA Niza · Subota 25.07. od 17:00 · Igralište u Nizi";
   description="Rezultati uživo — Turnir u boćanju na travi, DŠA Niza, igralište u Nizi. Grupne tablice, raspored, eliminacija u stvarnom vremenu."
   noIndex
 >
-  <!-- HERO -->
-  <section class="relative overflow-hidden py-12 md:py-16" style="background:linear-gradient(135deg,#0b1c44 0%,#10275c 55%,#1e4fa0 100%)">
-    <div class="absolute inset-0 opacity-10" style="background:repeating-linear-gradient(45deg,transparent,transparent 30px,#ffffff 30px,#ffffff 31px)"></div>
-    <div class="relative container-narrow">
-      <div class="flex items-center gap-4 mb-4">
-        <img src="/images/dsa-niza.png" alt="DŠA Niza" width="80" height="120" class="h-20 md:h-24 w-auto drop-shadow-lg shrink-0" />
-        <div class="inline-flex items-center gap-2 px-3 py-1 bg-[#F6C500] text-[#10275c] text-xs font-display uppercase tracking-widest font-bold rounded-sm">
-          <span class="w-2 h-2 rounded-full bg-[#CF2130] animate-pulse"></span>
-          Rezultati uživo
-        </div>
-        <button id="pravila-btn" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/15 hover:bg-white/25 text-white text-xs font-display uppercase tracking-wider font-bold rounded transition border border-white/30">📖 Pravila</button>
-      </div>
-      <h1 class="text-white text-4xl md:text-6xl font-bold leading-none mb-3 drop-shadow-lg">{NAZIV}</h1>
-      <p class="text-white/90 text-base md:text-lg max-w-2xl">{PODNASLOV}</p>
-    </div>
-  </section>
+  <TurnirLive
+    title="Turnir u boćanju na travi"
+    subtitle="DŠA Niza · Subota 25.07. od 17:00 · Igralište u Nizi"
+    config={config}
+    registrationNote="Ždrijeb grupa i raspored u subotu (25.07.) nakon 17:00. Klikni ekipu za igrače."
+    groupsNote="Kod jednakog broja pobjeda: međusobni susret → razlika boća → osvojene boće."
+  >
+    <Fragment slot="pravila">
+    <p class="text-[#64748B] mb-4">Turnir u boćanju na travi · DŠA Niza · igralište u Nizi</p>
 
-  <!-- STATUS -->
-  <div class="border-b-2 border-[#F6C500]" style="background:#10275c">
-    <div class="container-narrow py-3 flex flex-wrap items-center justify-between gap-3 text-white">
-      <div class="flex items-center gap-2 text-sm">
-        <span id="live-dot" class="w-2.5 h-2.5 rounded-full bg-green-400 animate-pulse"></span>
-        <span id="status-text" class="font-display uppercase tracking-wider text-xs">Učitavam…</span>
-      </div>
-      <div class="flex items-center gap-3">
-        <span id="last-updated" class="text-xs text-white/70"></span>
-        <button id="refresh-btn" class="text-xs font-display uppercase tracking-wider px-3 py-1.5 rounded bg-[#F6C500] text-[#10275c] font-bold hover:brightness-110 transition">Osvježi</button>
-      </div>
-    </div>
-  </div>
+    <h3 class="font-display font-bold text-[#10275c] uppercase tracking-wide mt-4 mb-1">1. Format natjecanja</h3>
+    <ul class="list-disc pl-5 space-y-1">
+      <li>Igra se <strong>u parovima</strong> (2 igrača po ekipi).</li>
+      <li>Ekipe se ždrijebom raspoređuju u <strong>4 grupe</strong>.</li>
+      <li>U grupi se igra <strong>svako sa svakim</strong> (jedan meč).</li>
+      <li>Iz svake grupe prolaze <strong>prve dvije ekipe</strong> → ukupno <strong>8 ekipa</strong> u eliminaciju.</li>
+      <li>Eliminacija: <strong>četvrtfinale → polufinale → finale</strong>, uz meč <strong>za 3. mjesto</strong>.</li>
+      <li>Igra se na <strong>2 terena paralelno</strong>; svaki meč traje <strong>okvirno 20 min</strong>.</li>
+      <li>Kotizacija: <strong>10 € po paru</strong>. Nagrade/trofeji za <strong>prva tri mjesta</strong>.</li>
+    </ul>
 
-  <!-- QUICK NAV -->
-  <nav id="quicknav" class="hidden sticky top-20 z-40 bg-white/95 backdrop-blur border-b border-[#C9D4E8]">
-    <div class="container-narrow flex gap-2 overflow-x-auto py-2 text-xs font-display uppercase tracking-wider">
-      <a data-target="sec-uzivo" href="#sec-uzivo" class="qn hidden shrink-0 px-3 py-1.5 rounded-full bg-[#EAF0FB] text-[#10275c]">Uživo</a>
-      <a data-target="sec-grupe" href="#sec-grupe" class="qn shrink-0 px-3 py-1.5 rounded-full bg-[#EAF0FB] text-[#10275c]">Tablice</a>
-      <a data-target="sec-nokaut" href="#sec-nokaut" class="qn hidden shrink-0 px-3 py-1.5 rounded-full bg-[#EAF0FB] text-[#10275c]">Eliminacija</a>
-      <a data-target="sec-raspored" href="#sec-raspored" class="qn shrink-0 px-3 py-1.5 rounded-full bg-[#EAF0FB] text-[#10275c]">Raspored</a>
-      <a data-target="sec-statistika" href="#sec-statistika" class="qn hidden shrink-0 px-3 py-1.5 rounded-full bg-[#EAF0FB] text-[#10275c]">Statistika</a>
-    </div>
-  </nav>
+    <h3 class="font-display font-bold text-[#10275c] uppercase tracking-wide mt-4 mb-1">2. Bodovanje meča</h3>
+    <ul class="list-disc pl-5 space-y-1">
+      <li>Meč se igra <strong>do 11 boća (bodova)</strong>.</li>
+      <li>Kod izjednačenja <strong>10:10 igra se na dvije razlike</strong> (npr. 12:10, 13:11) — nema neriješenih, samo pobjeda/poraz.</li>
+      <li>Pobjednik je ekipa koja prva dosegne 11 uz razliku od najmanje dvije na kraju.</li>
+    </ul>
 
-  <main class="container-narrow py-8 md:py-12 space-y-12">
-    <div id="load-msg" class="text-center text-[#64748B] py-8">
-      <div class="inline-block w-8 h-8 border-4 border-[#EAF0FB] border-t-[#1e4fa0] rounded-full animate-spin"></div>
-      <p class="mt-3 font-display uppercase tracking-wider text-sm">Učitavam rezultate…</p>
-    </div>
+    <h3 class="font-display font-bold text-[#10275c] uppercase tracking-wide mt-4 mb-1">3. Kako se osvajaju boće</h3>
+    <ul class="list-disc pl-5 space-y-1">
+      <li>Cilj je <strong>svoje boće dobaciti bliže bulinu</strong> (cilju) nego protivnik.</li>
+      <li>U svakom krugu bodove osvaja <strong>samo jedna ekipa</strong> — ona čija je boća najbliža bulinu.</li>
+      <li>Osvaja <strong>onoliko bodova koliko ima svojih boća bližih</strong> od najbliže protivničke boće.</li>
+      <li>Svaki par igra sa <strong>4 boće</strong> (2 po igraču).</li>
+      <li>Ako ekipa u jednom bacanju ima <strong>sve 4 boće bliže bulinu</strong> od protivnika, osvaja <strong>8 bodova (dvostruko)</strong> umjesto 4.</li>
+    </ul>
 
-    <div id="countdown" class="hidden mb-6"></div>
-    <div id="progress" class="hidden mb-6"></div>
-    <div id="tvoja-ekipa" class="hidden mb-6"></div>
+    <h3 class="font-display font-bold text-[#10275c] uppercase tracking-wide mt-4 mb-1">4. Tijek igre</h3>
+    <ul class="list-disc pl-5 space-y-1">
+      <li>Bacanjem novčića ili dogovorom određuje se ekipa koja prva baca <strong>bulin</strong>.</li>
+      <li>Ta ekipa baca bulin, zatim svoju prvu boću.</li>
+      <li>Dalje baca <strong>ekipa koja NIJE najbliža</strong> bulinu, dok ne potroši boće; tada baca druga ekipa.</li>
+      <li>Kad su sve boće bačene, mjeri se i pribrajaju bodovi.</li>
+      <li>Sljedeći krug <strong>prva baca ekipa koja je osvojila bodove</strong> u prethodnom.</li>
+      <li><strong>Bulin i protivničke boće smiju se izbijati.</strong></li>
+    </ul>
 
-    <section id="sec-prijave" class="hidden scroll-mt-36">
-      <h2 class="text-2xl md:text-3xl font-bold mb-1 text-[#10275c]">Prijavljene ekipe</h2>
-      <p class="text-[#64748B] text-sm mb-6">Ždrijeb grupa i raspored u subotu (25.07.) nakon 17:00. Klikni ekipu za igrače.</p>
-      <div id="prijave" class="grid gap-2 sm:grid-cols-2 lg:grid-cols-3"></div>
-    </section>
+    <h3 class="font-display font-bold text-[#10275c] uppercase tracking-wide mt-4 mb-1">5. Teren i bacanje</h3>
+    <ul class="list-disc pl-5 space-y-1">
+      <li>Baca se <strong>iza označene linije</strong>; prijelaz/gaženje linije za bacanje = prekršaj (boća se poništava).</li>
+      <li>Igra se <strong>do zadnje crte</strong> terena.</li>
+      <li>Boća koja <strong>izađe iz granica terena više se ne računa</strong> (izbacuje se iz igre).</li>
+      <li>Boća koja <strong>dodiruje liniju i dalje se računa</strong> (ostaje u igri).</li>
+      <li>Bulin se baca na udaljenost <strong>otprilike 6–10 m</strong> i mora ostati unutar granica terena.</li>
+      <li>Ako bulin izađe iz terena — baca se ponovno.</li>
+    </ul>
 
-    <section id="sec-uzivo" class="hidden scroll-mt-36">
-      <div id="uzivo-live" class="mb-4"></div>
-      <div id="uzivo-next"></div>
-    </section>
+    <h3 class="font-display font-bold text-[#10275c] uppercase tracking-wide mt-4 mb-1">6. Mjerenje i sporne situacije</h3>
+    <ul class="list-disc pl-5 space-y-1">
+      <li>Kod bliskih boća <strong>mjeri se</strong> (metar/špaga).</li>
+      <li>Ako se ne može odlučiti čija je boća bliža za bod — taj se bod <strong>poništava</strong>.</li>
+      <li>Sve <strong>sporne odluke rješava sudac/organizator</strong> i njegova je odluka konačna.</li>
+    </ul>
 
-    <section id="sec-grupe" class="hidden scroll-mt-36">
-      <h2 class="text-2xl md:text-3xl font-bold mb-1 text-[#10275c]">Grupne tablice</h2>
-      <p class="text-[#64748B] text-sm mb-6">Prolaze prve dvije ekipe iz svake grupe.</p>
-      <div id="grupe" class="grid gap-6 md:grid-cols-2"></div>
-      <p class="text-xs text-[#64748B] mt-3">Kod jednakog broja pobjeda: međusobni susret → razlika boća → osvojene boće.</p>
-    </section>
+    <h3 class="font-display font-bold text-[#10275c] uppercase tracking-wide mt-4 mb-1">7. Poredak u grupi</h3>
+    <p>Kod jednakog broja pobjeda redoslijed određuje: <strong>1) međusobni susret</strong>, <strong>2) razlika boća</strong> (osvojene − primljene), <strong>3) ukupno osvojene boće</strong>.</p>
 
-    <section id="sec-nokaut" class="hidden scroll-mt-36">
-      <h2 class="text-2xl md:text-3xl font-bold mb-6 text-[#10275c]">Eliminacijska faza</h2>
-      <div id="kvalificirani" class="mb-4"></div>
-      <div id="nokaut" class="overflow-x-auto bg-white rounded-lg shadow-md border border-[#C9D4E8] p-4"></div>
-    </section>
+    <h3 class="font-display font-bold text-[#10275c] uppercase tracking-wide mt-4 mb-1">8. Raspored i satnica</h3>
+    <ul class="list-disc pl-5 space-y-1">
+      <li>Raspored i rezultati uživo: <strong>omladinacniza.hr/turnir</strong>.</li>
+      <li>Vremena su <strong>okvirna</strong> (~20 min po meču) i mogu se pomicati ovisno o tijeku.</li>
+      <li>Ekipa koja se ne pojavi na terenu u roku <strong>5 min</strong> od poziva gubi meč bez borbe (0:11).</li>
+    </ul>
 
-    <section id="sec-raspored" class="hidden scroll-mt-36">
-      <h2 class="text-2xl md:text-3xl font-bold text-[#10275c] mb-4">Raspored i rezultati</h2>
-      <div class="flex items-center gap-4 mb-6 flex-wrap">
-        <div class="flex gap-1 text-xs font-display uppercase tracking-wider" id="vm">
-          <button data-v="grupe" class="vmbtn px-3 py-1.5 rounded-full bg-[#1e4fa0] text-white">Po grupama</button>
-          <button data-v="teren" class="vmbtn px-3 py-1.5 rounded-full bg-[#EAF0FB] text-[#10275c]">Po terenu</button>
-          <button data-v="vrijeme" class="vmbtn px-3 py-1.5 rounded-full bg-[#EAF0FB] text-[#10275c]">Po vremenu</button>
-        </div>
-        <div class="flex gap-1 text-xs font-display uppercase tracking-wider" id="rf">
-          <button data-f="sve" class="rfbtn px-3 py-1.5 rounded-full bg-[#1e4fa0] text-white">Sve</button>
-          <button data-f="preostalo" class="rfbtn px-3 py-1.5 rounded-full bg-[#EAF0FB] text-[#10275c]">Preostalo</button>
-          <button data-f="odigrano" class="rfbtn px-3 py-1.5 rounded-full bg-[#EAF0FB] text-[#10275c]">Odigrano</button>
-        </div>
-      </div>
-      <div id="raspored" class="space-y-3"></div>
-    </section>
+    <h3 class="font-display font-bold text-[#10275c] uppercase tracking-wide mt-4 mb-1">9. Ponašanje i fair play</h3>
+    <ul class="list-disc pl-5 space-y-1">
+      <li>Očekuje se <strong>sportsko ponašanje</strong> prema protivnicima, sucima i organizatorima.</li>
+      <li>Grubo nesportsko ponašanje = <strong>opomena ili diskvalifikacija</strong> ekipe.</li>
+      <li>Konzumacija pića dopuštena je uz sportsko ponašanje i bez ometanja tijeka igre.</li>
+    </ul>
 
-    <section id="sec-statistika" class="hidden scroll-mt-36">
-      <h2 class="text-2xl md:text-3xl font-bold text-[#10275c] mb-6">Statistika turnira</h2>
-      <div id="statistika" class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3"></div>
-    </section>
-  </main>
-
-  <!-- Panel para (bottom sheet) -->
-  <div id="team-sheet" class="hidden fixed inset-0 z-[60]">
-    <div id="team-sheet-backdrop" class="absolute inset-0 bg-black/50"></div>
-    <div class="absolute inset-x-0 bottom-0 sm:inset-x-auto sm:left-1/2 sm:-translate-x-1/2 sm:top-1/2 sm:-translate-y-1/2 sm:bottom-auto w-full sm:max-w-lg bg-white rounded-t-2xl sm:rounded-2xl shadow-2xl max-h-[85vh] flex flex-col">
-      <div class="shrink-0 border-b border-[#C9D4E8] px-4 pt-3 pb-2 flex items-center justify-between">
-        <div id="team-sheet-title" class="font-bold text-lg text-[#10275c] truncate pr-2"></div>
-        <button id="team-sheet-close" class="shrink-0 text-[#64748B] hover:text-[#10275c] text-3xl leading-none px-1" aria-label="Zatvori">×</button>
-      </div>
-      <div id="team-sheet-body" class="overflow-y-auto p-4"></div>
-    </div>
-  </div>
-
-  <!-- Pravila -->
-  <div id="pravila-modal" class="hidden fixed inset-0 z-[70]">
-    <div id="pravila-backdrop" class="absolute inset-0 bg-black/50"></div>
-    <div class="absolute inset-x-0 bottom-0 sm:inset-x-auto sm:left-1/2 sm:-translate-x-1/2 sm:top-1/2 sm:-translate-y-1/2 sm:bottom-auto w-full sm:max-w-2xl bg-white rounded-t-2xl sm:rounded-2xl shadow-2xl max-h-[90vh] flex flex-col">
-      <div class="shrink-0 border-b border-[#C9D4E8] px-4 py-3 flex items-center justify-between" style="background:#10275c">
-        <div class="font-display font-bold text-lg text-white uppercase tracking-wider">Pravila turnira</div>
-        <button id="pravila-close" class="text-white/80 hover:text-white text-3xl leading-none px-1" aria-label="Zatvori">×</button>
-      </div>
-      <div class="overflow-y-auto px-5 py-4 text-[#0f172a] text-sm leading-relaxed">
-        <p class="text-[#64748B] mb-4">Turnir u boćanju na travi · DŠA Niza · igralište u Nizi</p>
-
-        <h3 class="font-display font-bold text-[#10275c] uppercase tracking-wide mt-4 mb-1">1. Format natjecanja</h3>
-        <ul class="list-disc pl-5 space-y-1">
-          <li>Igra se <strong>u parovima</strong> (2 igrača po ekipi).</li>
-          <li>Ekipe se ždrijebom raspoređuju u <strong>4 grupe</strong>.</li>
-          <li>U grupi se igra <strong>svako sa svakim</strong> (jedan meč).</li>
-          <li>Iz svake grupe prolaze <strong>prve dvije ekipe</strong> → ukupno <strong>8 ekipa</strong> u eliminaciju.</li>
-          <li>Eliminacija: <strong>četvrtfinale → polufinale → finale</strong>, uz meč <strong>za 3. mjesto</strong>.</li>
-          <li>Igra se na <strong>2 terena paralelno</strong>; svaki meč traje <strong>okvirno 20 min</strong>.</li>
-          <li>Kotizacija: <strong>10 € po paru</strong>. Nagrade/trofeji za <strong>prva tri mjesta</strong>.</li>
-        </ul>
-
-        <h3 class="font-display font-bold text-[#10275c] uppercase tracking-wide mt-4 mb-1">2. Bodovanje meča</h3>
-        <ul class="list-disc pl-5 space-y-1">
-          <li>Meč se igra <strong>do 11 boća (bodova)</strong>.</li>
-          <li>Kod izjednačenja <strong>10:10 igra se na dvije razlike</strong> (npr. 12:10, 13:11) — nema neriješenih, samo pobjeda/poraz.</li>
-          <li>Pobjednik je ekipa koja prva dosegne 11 uz razliku od najmanje dvije na kraju.</li>
-        </ul>
-
-        <h3 class="font-display font-bold text-[#10275c] uppercase tracking-wide mt-4 mb-1">3. Kako se osvajaju boće</h3>
-        <ul class="list-disc pl-5 space-y-1">
-          <li>Cilj je <strong>svoje boće dobaciti bliže bulinu</strong> (cilju) nego protivnik.</li>
-          <li>U svakom krugu bodove osvaja <strong>samo jedna ekipa</strong> — ona čija je boća najbliža bulinu.</li>
-          <li>Osvaja <strong>onoliko bodova koliko ima svojih boća bližih</strong> od najbliže protivničke boće.</li>
-          <li>Svaki par igra sa <strong>4 boće</strong> (2 po igraču).</li>
-          <li>Ako ekipa u jednom bacanju ima <strong>sve 4 boće bliže bulinu</strong> od protivnika, osvaja <strong>8 bodova (dvostruko)</strong> umjesto 4.</li>
-        </ul>
-
-        <h3 class="font-display font-bold text-[#10275c] uppercase tracking-wide mt-4 mb-1">4. Tijek igre</h3>
-        <ul class="list-disc pl-5 space-y-1">
-          <li>Bacanjem novčića ili dogovorom određuje se ekipa koja prva baca <strong>bulin</strong>.</li>
-          <li>Ta ekipa baca bulin, zatim svoju prvu boću.</li>
-          <li>Dalje baca <strong>ekipa koja NIJE najbliža</strong> bulinu, dok ne potroši boće; tada baca druga ekipa.</li>
-          <li>Kad su sve boće bačene, mjeri se i pribrajaju bodovi.</li>
-          <li>Sljedeći krug <strong>prva baca ekipa koja je osvojila bodove</strong> u prethodnom.</li>
-          <li><strong>Bulin i protivničke boće smiju se izbijati.</strong></li>
-        </ul>
-
-        <h3 class="font-display font-bold text-[#10275c] uppercase tracking-wide mt-4 mb-1">5. Teren i bacanje</h3>
-        <ul class="list-disc pl-5 space-y-1">
-          <li>Baca se <strong>iza označene linije</strong>; prijelaz/gaženje linije za bacanje = prekršaj (boća se poništava).</li>
-          <li>Igra se <strong>do zadnje crte</strong> terena.</li>
-          <li>Boća koja <strong>izađe iz granica terena više se ne računa</strong> (izbacuje se iz igre).</li>
-          <li>Boća koja <strong>dodiruje liniju i dalje se računa</strong> (ostaje u igri).</li>
-          <li>Bulin se baca na udaljenost <strong>otprilike 6–10 m</strong> i mora ostati unutar granica terena.</li>
-          <li>Ako bulin izađe iz terena — baca se ponovno.</li>
-        </ul>
-
-        <h3 class="font-display font-bold text-[#10275c] uppercase tracking-wide mt-4 mb-1">6. Mjerenje i sporne situacije</h3>
-        <ul class="list-disc pl-5 space-y-1">
-          <li>Kod bliskih boća <strong>mjeri se</strong> (metar/špaga).</li>
-          <li>Ako se ne može odlučiti čija je boća bliža za bod — taj se bod <strong>poništava</strong>.</li>
-          <li>Sve <strong>sporne odluke rješava sudac/organizator</strong> i njegova je odluka konačna.</li>
-        </ul>
-
-        <h3 class="font-display font-bold text-[#10275c] uppercase tracking-wide mt-4 mb-1">7. Poredak u grupi</h3>
-        <p>Kod jednakog broja pobjeda redoslijed određuje: <strong>1) međusobni susret</strong>, <strong>2) razlika boća</strong> (osvojene − primljene), <strong>3) ukupno osvojene boće</strong>.</p>
-
-        <h3 class="font-display font-bold text-[#10275c] uppercase tracking-wide mt-4 mb-1">8. Raspored i satnica</h3>
-        <ul class="list-disc pl-5 space-y-1">
-          <li>Raspored i rezultati uživo: <strong>omladinacniza.hr/turnir</strong>.</li>
-          <li>Vremena su <strong>okvirna</strong> (~20 min po meču) i mogu se pomicati ovisno o tijeku.</li>
-          <li>Ekipa koja se ne pojavi na terenu u roku <strong>5 min</strong> od poziva gubi meč bez borbe (0:11).</li>
-        </ul>
-
-        <h3 class="font-display font-bold text-[#10275c] uppercase tracking-wide mt-4 mb-1">9. Ponašanje i fair play</h3>
-        <ul class="list-disc pl-5 space-y-1">
-          <li>Očekuje se <strong>sportsko ponašanje</strong> prema protivnicima, sucima i organizatorima.</li>
-          <li>Grubo nesportsko ponašanje = <strong>opomena ili diskvalifikacija</strong> ekipe.</li>
-          <li>Konzumacija pića dopuštena je uz sportsko ponašanje i bez ometanja tijeka igre.</li>
-        </ul>
-
-        <h3 class="font-display font-bold text-[#10275c] uppercase tracking-wide mt-4 mb-1">10. Završne odredbe</h3>
-        <ul class="list-disc pl-5 space-y-1">
-          <li><strong>Organizator (DŠA Niza)</strong> zadržava pravo izmjene rasporeda i pravila prije početka turnira.</li>
-          <li>Sudjelovanjem ekipe prihvaćaju ova pravila.</li>
-        </ul>
-      </div>
-    </div>
-  </div>
+    <h3 class="font-display font-bold text-[#10275c] uppercase tracking-wide mt-4 mb-1">10. Završne odredbe</h3>
+    <ul class="list-disc pl-5 space-y-1">
+      <li><strong>Organizator (DŠA Niza)</strong> zadržava pravo izmjene rasporeda i pravila prije početka turnira.</li>
+      <li>Sudjelovanjem ekipe prihvaćaju ova pravila.</li>
+    </ul>
+    </Fragment>
+  </TurnirLive>
 </BaseLayout>
-
-<script define:vars={{ SHEET_ID }}>
-  const REFRESH_MS = 25000;
-  const COURTS = 2; // broj terena (paralelno)
-  let LAST = null, RFILTER = "sve", VMODE = "grupe", FOLLOW = "";
-  try { FOLLOW = localStorage.getItem("bocanje_follow") || ""; } catch (e) {}
-  const START = new Date(2026, 6, 25, 17, 0, 0); // 25.07.2026. 17:00
-  const gvizUrl = (sheet) =>
-    `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&headers=1&sheet=${encodeURIComponent(sheet)}&_=${Date.now()}`;
-
-  const $ = (id) => document.getElementById(id);
-  const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-  const isNum = (v) => v !== "" && v !== null && !isNaN(Number(v));
-
-  const AV_COLORS = ["#10275c","#1e4fa0","#0e7490","#7c3aed","#b45309","#be123c","#15803d","#0f766e","#4d7c0f","#9333ea","#c2410c","#2563a8"];
-  const hashN = (s) => { let h = 0; for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0; return h; };
-  const initials = (name) => { const w = String(name || "").trim().split(/\s+/).filter(Boolean); if (!w.length) return "?"; return (w.length === 1 ? w[0].slice(0, 2) : w[0][0] + w[1][0]).toUpperCase(); };
-  const avatar = (name, size = 22) => { if (!name) return ""; const c = AV_COLORS[hashN(name) % AV_COLORS.length]; return `<span class="inline-flex items-center justify-center rounded-full text-white font-bold shrink-0" style="width:${size}px;height:${size}px;font-size:${Math.round(size * 0.42)}px;background:${c}">${esc(initials(name))}</span>`; };
-  const medal = (r) => (r === 1 ? "🥇" : r === 2 ? "🥈" : r === 3 ? "🥉" : "");
-  const linkTeam = (name) => { if (!name) return "—"; const st = name === FOLLOW ? '<span class="text-[#F6C500]">★</span>' : ""; return `<span class="team-link cursor-pointer hover:underline decoration-dotted underline-offset-2" data-team="${esc(name)}">${st}${esc(name)}</span>`; };
-
-  const timeMin = (v) => { const s = String(v || ""); const m = s.match(/(\d{1,2}):(\d{2})/); if (!m) return null; let h = +m[1]; const min = +m[2]; if (/pm/i.test(s) && h < 12) h += 12; if (/am/i.test(s) && h === 12) h = 0; return h * 60 + min; };
-  const orderKey = (m) => { let t = timeMin(m.vrijeme); if (t === null) return 100000 + (m.redni || 0); if (t < 720) t += 1440; return t; };
-  const fmtTime = (v) => { const t = timeMin(v); if (t === null) return ""; return String(Math.floor(t / 60)).padStart(2, "0") + ":" + String(t % 60).padStart(2, "0"); };
-
-  function parseGviz(text) {
-    const json = JSON.parse(text.slice(text.indexOf("{"), text.lastIndexOf("}") + 1));
-    return (json.table.rows || []).map((r) => (r.c || []).map((cell) => {
-      let v = cell ? (cell.f !== undefined && cell.f !== null ? cell.f : cell.v) : "";
-      if (v === null || v === undefined) v = "";
-      return typeof v === "string" ? v.trim() : v;
-    }));
-  }
-  async function fetchTab(sheet) { const res = await fetch(gvizUrl(sheet), { cache: "no-store" }); if (!res.ok) throw new Error("HTTP " + res.status); return parseGviz(await res.text()); }
-
-  // Poredak grupe: pobjede → međusobni → razlika boća → osvojene boće → ime
-  function cmpTeam(a, b) { if (b.Pob !== a.Pob) return b.Pob - a.Pob; if (b.RAZ !== a.RAZ) return b.RAZ - a.RAZ; if (b.BF !== a.BF) return b.BF - a.BF; return a.name.localeCompare(b.name, "hr"); }
-  function orderGroupH2H(teams, gm) {
-    const byW = [...teams].sort((a, b) => b.Pob - a.Pob);
-    const out = []; let i = 0;
-    while (i < byW.length) {
-      let j = i; while (j < byW.length && byW[j].Pob === byW[i].Pob) j++;
-      const cluster = byW.slice(i, j);
-      if (cluster.length > 1) {
-        const names = new Set(cluster.map((t) => t.name));
-        const mini = {}; cluster.forEach((t) => (mini[t.name] = { w: 0, bf: 0, ba: 0 }));
-        gm.forEach((m) => { if (names.has(m.home) && names.has(m.away)) { const h = mini[m.home], a = mini[m.away]; h.bf += m.bd; h.ba += m.bg; a.bf += m.bg; a.ba += m.bd; if (m.bd > m.bg) h.w++; else if (m.bg > m.bd) a.w++; } });
-        cluster.sort((a, b) => {
-          const A = mini[a.name], B = mini[b.name];
-          if (B.w !== A.w) return B.w - A.w;
-          const Ar = A.bf - A.ba, Br = B.bf - B.ba; if (Br !== Ar) return Br - Ar;
-          if (b.RAZ !== a.RAZ) return b.RAZ - a.RAZ;
-          if (b.BF !== a.BF) return b.BF - a.BF;
-          return a.name.localeCompare(b.name, "hr");
-        });
-      }
-      out.push(...cluster); i = j;
-    }
-    return out;
-  }
-
-  function processData(paroviRows, utakRows) {
-    // Parovi: [Grupa, Par, Igrač1, Igrač2]
-    const groups = { A: [], B: [], C: [], D: [] };
-    const rosters = {};
-    const allTeams = [];
-    paroviRows.forEach((r) => {
-      const g = String(r[0] || "").trim(), name = String(r[1] || "").trim();
-      if (!name) return;
-      rosters[name] = [String(r[2] || "").trim(), String(r[3] || "").trim()].filter(Boolean);
-      allTeams.push({ name, grupa: g });
-      if (groups[g]) groups[g].push(name);
-    });
-
-    // Utakmice: [Redni, Faza, Grupa, Vrijeme, Teren, Domaćin, Gost, BoćeD, BoćeG]
-    const matches = [];
-    utakRows.forEach((r) => {
-      const faza = String(r[1] || "").trim(); if (!faza) return;
-      const home = String(r[5] || "").trim(), away = String(r[6] || "").trim();
-      const played = isNum(r[7]) && isNum(r[8]);
-      matches.push({
-        redni: isNum(r[0]) ? Number(r[0]) : matches.length + 1,
-        faza, grupa: String(r[2] || "").trim(), vrijeme: String(r[3] || "").trim(), teren: String(r[4] || "").trim(),
-        home, away,
-        bd: played ? Number(r[7]) : null, bg: played ? Number(r[8]) : null,
-        played, hasTeams: !!(home && away),
-      });
-    });
-
-    // Tablice
-    const standings = {};
-    for (const g of ["A", "B", "C", "D"]) {
-      const tbl = {};
-      groups[g].forEach((n) => (tbl[n] = { name: n, P: 0, Pob: 0, Por: 0, Ner: 0, BF: 0, BA: 0 }));
-      const gm = matches.filter((m) => m.faza === "Grupa" && m.grupa === g && m.played && m.hasTeams);
-      gm.forEach((m) => {
-        const h = tbl[m.home], a = tbl[m.away]; if (!h || !a) return;
-        h.P++; a.P++; h.BF += m.bd; h.BA += m.bg; a.BF += m.bg; a.BA += m.bd;
-        if (m.bd > m.bg) { h.Pob++; a.Por++; } else if (m.bg > m.bd) { a.Pob++; h.Por++; } else { h.Ner++; a.Ner++; }
-      });
-      const arr = Object.values(tbl).map((t) => ({ ...t, RAZ: t.BF - t.BA }));
-      const ordered = orderGroupH2H(arr, gm);
-      ordered.forEach((t, i) => (t.rank = i + 1));
-      standings[g] = ordered;
-    }
-
-    const groupMs = matches.filter((m) => m.faza === "Grupa" && m.hasTeams);
-    const groupsDone = groupMs.length > 0 && groupMs.every((m) => m.played);
-    const qualifiers = groupsDone ? computeQualifiers(standings) : null;
-    if (qualifiers) resolveKnockout(matches, qualifiers);
-
-    const drawn = matches.some((m) => m.faza === "Grupa" && m.hasTeams);
-    return { groups, rosters, allTeams, matches, standings, groupsDone, qualifiers, drawn };
-  }
-
-  // 8 kvalificiranih: 2 iz svake od 4 grupe; parovi ČF unakrsno (bez iste grupe)
-  function computeQualifiers(s) {
-    for (const g of ["A", "B", "C", "D"]) if (!s[g] || s[g].length < 2) return null;
-    const list = [];
-    ["A", "B", "C", "D"].forEach((g) => { list.push({ lbl: "1. " + g, name: s[g][0].name }); list.push({ lbl: "2. " + g, name: s[g][1].name }); });
-    const qf = [
-      [s.A[0].name, s.B[1].name], // ČF1 (lijevo)
-      [s.C[0].name, s.D[1].name], // ČF2 (lijevo)
-      [s.B[0].name, s.A[1].name], // ČF3 (desno)
-      [s.D[0].name, s.C[1].name], // ČF4 (desno)
-    ];
-    return { list, qf };
-  }
-
-  function resolveKnockout(matches, q) {
-    const qf = matches.filter((m) => m.faza === "Četvrtfinale");
-    const sf = matches.filter((m) => m.faza === "Polufinale");
-    const third = matches.filter((m) => m.faza === "Za 3. mjesto")[0];
-    const fin = matches.filter((m) => m.faza === "Finale")[0];
-    const setT = (m, h, a) => { if (!m) return; if (!m.home) m.home = h || ""; if (!m.away) m.away = a || ""; m.hasTeams = !!(m.home && m.away); };
-    const win = (m) => (m && m.played && m.home && m.away ? (m.bd > m.bg ? m.home : (m.bg > m.bd ? m.away : "")) : "");
-    const lose = (m) => (m && m.played && m.home && m.away ? (m.bd > m.bg ? m.away : (m.bg > m.bd ? m.home : "")) : "");
-    for (let i = 0; i < Math.min(4, qf.length); i++) setT(qf[i], q.qf[i][0], q.qf[i][1]);
-    setT(sf[0], win(qf[0]), win(qf[1]));
-    setT(sf[1], win(qf[2]), win(qf[3]));
-    setT(fin, win(sf[0]), win(sf[1]));
-    setT(third, lose(sf[0]), lose(sf[1]));
-  }
-
-  // ---------- RENDER ----------
-  function renderRegistration(teams) {
-    const wrap = $("prijave");
-    const list = (teams || []).slice().sort((a, b) => a.name.localeCompare(b.name, "hr"));
-    if (!list.length) { $("sec-prijave").classList.add("hidden"); wrap.innerHTML = ""; return; }
-    wrap.innerHTML = list.map((t, i) => `<div class="team-link flex items-center gap-3 bg-white rounded-lg border border-[#C9D4E8] px-3 py-2.5 shadow-sm cursor-pointer hover:border-[#1e4fa0]" data-team="${esc(t.name)}"><span class="text-[#64748B] text-xs font-display w-5 text-center shrink-0">${i + 1}</span>${avatar(t.name, 26)}<span class="font-medium truncate">${esc(t.name)}</span></div>`).join("");
-    const hh = document.querySelector("#sec-prijave h2"); if (hh) hh.textContent = "Prijavljene ekipe (" + list.length + ")";
-    $("sec-prijave").classList.remove("hidden");
-  }
-
-  function renderGroups(standings) {
-    const wrap = $("grupe"); wrap.innerHTML = "";
-    for (const g of ["A", "B", "C", "D"]) {
-      if (!standings[g] || !standings[g].length) continue;
-      const rows = standings[g].map((t) => {
-        const qual = t.name === FOLLOW ? "bg-[#FFF3C4]" : (t.rank <= 2 ? "bg-green-50" : "");
-        const rk = t.rank === 1 ? "🥇" : t.rank;
-        return `<tr class="border-b border-[#C9D4E8] ${qual}">
-          <td class="px-2 py-2 font-display text-center">${rk}</td>
-          <td class="px-2 py-2"><div class="flex items-center gap-2">${avatar(t.name, 22)}<span class="font-medium">${linkTeam(t.name)}</span></div></td>
-          <td class="px-1 py-2 text-center">${t.P}</td>
-          <td class="px-1 py-2 text-center hidden sm:table-cell">${t.Pob}</td>
-          <td class="px-1 py-2 text-center hidden sm:table-cell">${t.Por}</td>
-          <td class="px-1 py-2 text-center text-[#64748B]">${t.BF}:${t.BA}</td>
-          <td class="px-2 py-2 text-center font-bold">${t.RAZ > 0 ? "+" + t.RAZ : t.RAZ}</td>
-        </tr>`;
-      }).join("");
-      wrap.insertAdjacentHTML("beforeend", `<div class="bg-white rounded-lg shadow-md border border-[#C9D4E8] overflow-hidden">
-        <div class="text-white px-4 py-2.5 font-display uppercase tracking-wider text-sm" style="background:#10275c">Grupa ${g}</div>
-        <table class="w-full text-sm">
-          <thead class="text-white" style="background:#1e4fa0"><tr>
-            <th class="px-2 py-2 text-center font-display text-xs">#</th>
-            <th class="px-2 py-2 text-left font-display text-xs">Par</th>
-            <th class="px-1 py-2 text-center font-display text-xs">O</th>
-            <th class="px-1 py-2 text-center font-display text-xs hidden sm:table-cell">P</th>
-            <th class="px-1 py-2 text-center font-display text-xs hidden sm:table-cell">I</th>
-            <th class="px-1 py-2 text-center font-display text-xs">Boće</th>
-            <th class="px-2 py-2 text-center font-display text-xs">+/-</th>
-          </tr></thead><tbody>${rows}</tbody></table>
-      </div>`);
-    }
-  }
-
-  function matchCard(m, highlight, est) {
-    const done = m.played;
-    const score = done
-      ? `<span class="font-bold text-lg tabular-nums">${m.bd} : ${m.bg}</span>`
-      : `<span class="text-[#64748B] text-sm font-display">${(est != null ? est : fmtTime(m.vrijeme)) || (m.teren ? "Teren " + esc(m.teren) : "—")}</span>`;
-    const hw = done && m.bd > m.bg ? "font-bold" : "";
-    const aw = done && m.bg > m.bd ? "font-bold" : "";
-    const ring = highlight ? "ring-2 ring-[#F6C500]" : "";
-    const terenTag = !done && m.teren ? `<div class="text-[10px] text-[#64748B] font-display uppercase leading-tight">Teren ${esc(m.teren)}</div>` : "";
-    const foll = (FOLLOW && (m.home === FOLLOW || m.away === FOLLOW)) ? "bg-[#FFF9E0]" : "bg-white";
-    return `<div class="flex items-center gap-3 ${foll} rounded-lg shadow-sm border border-[#C9D4E8] px-4 py-3 ${ring}">
-      <div class="flex-1 flex items-center justify-end gap-2 text-right ${hw}"><span>${linkTeam(m.home)}</span>${avatar(m.home, 24)}</div>
-      <div class="px-2 text-center min-w-[70px] shrink-0">${score}${terenTag}</div>
-      <div class="flex-1 flex items-center gap-2 ${aw}">${avatar(m.away, 24)}<span>${linkTeam(m.away)}</span></div>
-    </div>`;
-  }
-
-  function renderSchedule(matches, filter, vmode) {
-    filter = filter || "sve"; vmode = vmode || "grupe";
-    const wrap = $("raspored"); wrap.innerHTML = "";
-    const keep = (m) => (filter === "sve" ? true : filter === "odigrano" ? m.played : !m.played);
-    const pend = matches.filter((m) => m.hasTeams && !m.played).sort((a, b) => orderKey(a) - orderKey(b));
-    const nextSet = new Set(pend.slice(0, COURTS).map((m) => m.redni));
-    const grpOk = (m) => (m.faza === "Grupa" ? m.hasTeams : (m.hasTeams || m.played));
-    const pool = matches.filter((m) => grpOk(m) && keep(m));
-    const card = (m) => matchCard(m, nextSet.has(m.redni), fmtTime(m.vrijeme));
-    const byT = (a, b) => orderKey(a) - orderKey(b);
-    let shown = 0;
-    const section = (title, cls, arr) => { if (!arr.length) return; shown += arr.length; wrap.insertAdjacentHTML("beforeend", `<div><h3 class="font-display uppercase tracking-wider text-sm ${cls} mb-2 mt-4">${title}</h3><div class="space-y-2">${arr.map(card).join("")}</div></div>`); };
-    if (vmode === "teren") {
-      ["1", "2"].forEach((tn) => section("Teren " + tn, "text-[#1e4fa0]", pool.filter((m) => String(m.teren) === tn).sort(byT)));
-      section("Ostalo / eliminacija", "text-[#CF2130]", pool.filter((m) => String(m.teren) !== "1" && String(m.teren) !== "2").sort(byT));
-    } else if (vmode === "vrijeme") {
-      section("Kronološki", "text-[#1e4fa0]", pool.slice().sort(byT));
-    } else {
-      ["A", "B", "C", "D"].forEach((g) => section("Grupa " + g, "text-[#1e4fa0]", pool.filter((m) => m.faza === "Grupa" && m.grupa === g).sort(byT)));
-      ["Četvrtfinale", "Polufinale", "Za 3. mjesto", "Finale"].forEach((faza) => section(faza, "text-[#CF2130]", pool.filter((m) => m.faza === faza).sort(byT)));
-    }
-    if (!shown) wrap.innerHTML = `<p class="text-[#64748B] text-sm py-4">${filter === "odigrano" ? "Još nema odigranih utakmica." : "Nema utakmica za prikaz."}</p>`;
-  }
-
-  function generateBracket(matches) {
-    const trunc = (s, n = 16) => { s = String(s || ""); return s.length > n ? s.slice(0, n - 1) + "…" : s; };
-    const pick = (f) => matches.filter((m) => m.faza === f);
-    const qf = pick("Četvrtfinale"), sf = pick("Polufinale"), fin = pick("Finale")[0], third = pick("Za 3. mjesto")[0];
-    const all = [...qf, ...sf, ...(fin ? [fin] : []), ...(third ? [third] : [])];
-    if (!all.some((m) => m && m.hasTeams)) return "";
-    const BW = 176, BH = 54;
-    const COL = { LQF: 12, LSF: 232, FIN: 452, RSF: 672, RQF: 892 };
-    const V = "#cbd5e1", BORD = "#C9D4E8", DEEP = "#10275c", PRIM = "#1e4fa0", MUT = "#64748B", ACC = "#F6C500";
-    const parts = []; const cy = (y) => y + BH / 2;
-    function box(x, y, m) {
-      if (!m) m = { home: "", away: "", played: false };
-      const done = m.played, hw = done && m.bd > m.bg, aw = done && m.bg > m.bd;
-      const hn = trunc(m.home || "—"), an = trunc(m.away || "—");
-      const sd = done ? String(m.bd) : "", sg = done ? String(m.bg) : "";
-      parts.push(`<rect x="${x}" y="${y}" width="${BW}" height="${BH}" rx="6" fill="#ffffff" stroke="${BORD}"/>`);
-      parts.push(`<line x1="${x}" y1="${y + BH / 2}" x2="${x + BW}" y2="${y + BH / 2}" stroke="${BORD}"/>`);
-      parts.push(`<text x="${x + 10}" y="${y + 18}" font-size="13" font-weight="${hw ? 700 : 500}" fill="${hw ? PRIM : DEEP}">${esc(hn)}</text>`);
-      parts.push(`<text x="${x + BW - 10}" y="${y + 18}" font-size="13" text-anchor="end" font-weight="700" fill="${hw ? PRIM : DEEP}">${esc(sd)}</text>`);
-      parts.push(`<text x="${x + 10}" y="${y + 42}" font-size="13" font-weight="${aw ? 700 : 500}" fill="${aw ? PRIM : DEEP}">${esc(an)}</text>`);
-      parts.push(`<text x="${x + BW - 10}" y="${y + 42}" font-size="13" text-anchor="end" font-weight="700" fill="${aw ? PRIM : DEEP}">${esc(sg)}</text>`);
-    }
-    const conn = (pts) => parts.push(`<polyline points="${pts}" fill="none" stroke="${V}" stroke-width="1.5"/>`);
-    const lbl = (x, t) => parts.push(`<text x="${x + BW / 2}" y="30" font-size="12" text-anchor="middle" font-family="Oswald,Arial,sans-serif" letter-spacing="1" fill="${MUT}">${t}</text>`);
-    const qfY = [46, 352], sfTop = (cy(qfY[0]) + cy(qfY[1])) / 2 - BH / 2, finTop = sfTop, sfC = cy(sfTop);
-    lbl(COL.LQF, "ČETVRTFINALE"); lbl(COL.LSF, "POLUFINALE"); lbl(COL.FIN, "FINALE"); lbl(COL.RSF, "POLUFINALE"); lbl(COL.RQF, "ČETVRTFINALE");
-    box(COL.LQF, qfY[0], qf[0]); box(COL.LQF, qfY[1], qf[1]); box(COL.LSF, sfTop, sf[0]);
-    box(COL.RQF, qfY[0], qf[2]); box(COL.RQF, qfY[1], qf[3]); box(COL.RSF, sfTop, sf[1]);
-    box(COL.FIN, finTop, fin);
-    const mL = (COL.LQF + BW + COL.LSF) / 2, mR = (COL.RSF + BW + COL.RQF) / 2;
-    conn(`${COL.LQF + BW},${cy(qfY[0])} ${mL},${cy(qfY[0])} ${mL},${sfC} ${COL.LSF},${sfC}`);
-    conn(`${COL.LQF + BW},${cy(qfY[1])} ${mL},${cy(qfY[1])} ${mL},${sfC} ${COL.LSF},${sfC}`);
-    conn(`${COL.LSF + BW},${sfC} ${COL.FIN},${sfC}`);
-    conn(`${COL.RQF},${cy(qfY[0])} ${mR},${cy(qfY[0])} ${mR},${sfC} ${COL.RSF + BW},${sfC}`);
-    conn(`${COL.RQF},${cy(qfY[1])} ${mR},${cy(qfY[1])} ${mR},${sfC} ${COL.RSF + BW},${sfC}`);
-    conn(`${COL.RSF},${sfC} ${COL.FIN + BW},${sfC}`);
-    let champ = ""; if (fin && fin.played) champ = fin.bd > fin.bg ? fin.home : (fin.bg > fin.bd ? fin.away : "");
-    if (champ) {
-      parts.push(`<text x="${COL.FIN + BW / 2}" y="${finTop + BH + 34}" font-size="12" text-anchor="middle" font-family="Oswald,Arial,sans-serif" letter-spacing="1" fill="${MUT}">PRVAK</text>`);
-      parts.push(`<rect x="${COL.FIN - 10}" y="${finTop + BH + 44}" width="${BW + 20}" height="34" rx="6" fill="${ACC}"/>`);
-      parts.push(`<text x="${COL.FIN + BW / 2}" y="${finTop + BH + 66}" font-size="15" text-anchor="middle" font-weight="700" font-family="Oswald,Arial,sans-serif" fill="${DEEP}">🏆 ${esc(trunc(champ))}</text>`);
-    }
-    if (third && (third.hasTeams || third.played)) {
-      const ty = 430;
-      parts.push(`<text x="${COL.FIN + BW / 2}" y="${ty - 8}" font-size="12" text-anchor="middle" font-family="Oswald,Arial,sans-serif" letter-spacing="1" fill="${MUT}">ZA 3. MJESTO</text>`);
-      box(COL.FIN, ty, third);
-    }
-    const H = third ? 510 : (champ ? finTop + BH + 100 : finTop + BH + 40);
-    return `<svg viewBox="0 0 1080 ${H}" xmlns="http://www.w3.org/2000/svg" style="width:100%;min-width:760px;height:auto;font-family:Inter,Arial,sans-serif">${parts.join("")}</svg>`;
-  }
-
-  function renderQualifiers(q) {
-    const el = $("kvalificirani");
-    if (!q || !q.list) { el.innerHTML = ""; return; }
-    const chips = q.list.map((x) => `<div class="flex items-center gap-2 bg-white rounded-lg border border-[#C9D4E8] px-3 py-2 shadow-sm">${avatar(x.name, 22)}<div class="min-w-0"><div class="font-medium text-sm truncate">${linkTeam(x.name)}</div><div class="text-[11px] text-[#64748B] uppercase font-display">${esc(x.lbl)}</div></div></div>`).join("");
-    el.innerHTML = `<div class="bg-green-50 border border-green-200 rounded-lg p-4">
-      <div class="font-display uppercase tracking-wider text-xs text-green-800 mb-3">Prošli u eliminaciju (8 parova)</div>
-      <div class="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">${chips}</div>
-      <p class="text-[11px] text-[#64748B] mt-3">Parovi ČF automatski, unakrsno (1A–2B, 1C–2D, 1B–2A, 1D–2C) — bez susreta iz iste grupe. Ručni upis u Sheet ima prednost.</p>
-    </div>`;
-  }
-
-  function renderKnockout(matches, qualifiers) {
-    const sec = $("sec-nokaut"); renderQualifiers(qualifiers);
-    const svg = generateBracket(matches);
-    $("nokaut").innerHTML = svg || ""; $("nokaut").classList.toggle("hidden", !svg);
-    const hasQual = !!(qualifiers && qualifiers.list && qualifiers.list.length);
-    sec.classList.toggle("hidden", !(svg || hasQual));
-  }
-
-  function renderProgress(matches) {
-    const withTeams = matches.filter((m) => m.hasTeams);
-    const total = withTeams.length, done = withTeams.filter((m) => m.played).length;
-    const el = $("progress"); if (!total) { el.classList.add("hidden"); return; }
-    const pct = Math.round((done / total) * 100);
-    el.innerHTML = `<div class="rounded-lg bg-white border border-[#C9D4E8] shadow-sm p-3">
-      <div class="flex items-center justify-between mb-1.5"><span class="font-display uppercase tracking-wider text-xs text-[#64748B]">Napredak turnira</span><span class="font-bold text-sm">${done}/${total} odigrano</span></div>
-      <div class="h-2 rounded-full bg-[#EAF0FB] overflow-hidden"><div class="h-full transition-all" style="width:${pct}%;background:#1e4fa0"></div></div>
-    </div>`;
-    el.classList.remove("hidden");
-  }
-
-  function tickCountdown() {
-    const el = $("countdown"); if (!el) return;
-    const diff = START - new Date();
-    const started = LAST && LAST.matches.some((m) => m.played);
-    if (diff <= 0 || started) { el.classList.add("hidden"); return; }
-    const d = Math.floor(diff / 864e5), h = Math.floor((diff % 864e5) / 36e5), m = Math.floor((diff % 36e5) / 6e4), s = Math.floor((diff % 6e4) / 1e3);
-    const p = (n) => String(n).padStart(2, "0");
-    const txt = d > 0 ? `${d}d ${p(h)}:${p(m)}:${p(s)}` : `${p(h)}:${p(m)}:${p(s)}`;
-    el.innerHTML = `<div class="rounded-lg px-4 py-4 text-white text-center shadow-md" style="background:linear-gradient(135deg,#10275c,#1e4fa0)"><div class="font-display uppercase tracking-widest text-xs opacity-80 mb-1">Turnir počinje za</div><div class="font-display font-bold text-3xl md:text-4xl tabular-nums text-[#F6C500]">${txt}</div></div>`;
-    el.classList.remove("hidden");
-  }
-
-  function toggleBtns(sel, val, attr) {
-    document.querySelectorAll(sel).forEach((x) => {
-      const on = x.dataset[attr] === val;
-      x.classList.toggle("bg-[#1e4fa0]", on); x.classList.toggle("text-white", on);
-      x.classList.toggle("bg-[#EAF0FB]", !on); x.classList.toggle("text-[#10275c]", !on);
-    });
-  }
-  function setFilter(f) { RFILTER = f; toggleBtns("#rf .rfbtn", f, "f"); if (LAST) renderSchedule(LAST.matches, RFILTER, VMODE); }
-  function setVMode(v) { VMODE = v; toggleBtns("#vm .vmbtn", v, "v"); if (LAST) renderSchedule(LAST.matches, RFILTER, VMODE); }
-
-  function renderTop(matches) {
-    const sec = $("sec-uzivo");
-    const seq = matches.filter((m) => m.hasTeams).slice().sort((a, b) => orderKey(a) - orderKey(b));
-    const pending = seq.filter((m) => !m.played);
-    const underway = seq.some((m) => m.played);
-    const faze = (m) => (m.faza === "Grupa" ? "Grupa " + m.grupa : m.faza);
-    if (!pending.length) { sec.classList.add("hidden"); $("uzivo-live").innerHTML = ""; $("uzivo-next").innerHTML = ""; return; }
-
-    const curR = new Set();
-    const cur = [];
-    ["1", "2"].forEach((tn) => { const m = pending.find((x) => String(x.teren) === tn && !curR.has(x.redni)); if (m) { cur.push(m); curR.add(m.redni); } });
-    for (const m of pending) { if (cur.length >= COURTS) break; if (!curR.has(m.redni)) { cur.push(m); curR.add(m.redni); } }
-    cur.sort((a, b) => orderKey(a) - orderKey(b));
-    const dot = underway ? '<span class="w-2.5 h-2.5 rounded-full bg-[#CF2130] animate-pulse"></span>' : '<span class="w-2.5 h-2.5 rounded-full bg-[#F6C500]"></span>';
-    const curCards = cur.map((m) => `
-      <div class="flex items-center gap-3 rounded-lg border-2 ${underway ? "border-[#CF2130]" : "border-[#F6C500]"} bg-white px-4 py-3 shadow-sm">
-        <div class="flex-1 flex items-center justify-end gap-2 text-right font-medium"><span>${linkTeam(m.home)}</span>${avatar(m.home, 26)}</div>
-        <div class="px-2 text-center shrink-0"><div class="text-[#64748B] text-xs font-display uppercase">${faze(m)}</div><div class="text-[#1e4fa0] font-display font-bold text-sm">${m.teren ? "Teren " + esc(m.teren) : (fmtTime(m.vrijeme) ? "~" + fmtTime(m.vrijeme) : "vs")}</div></div>
-        <div class="flex-1 flex items-center gap-2 font-medium">${avatar(m.away, 26)}<span>${linkTeam(m.away)}</span></div>
-      </div>`).join("");
-    $("uzivo-live").innerHTML = `<h2 class="text-lg font-bold mb-2 flex items-center gap-2 text-[#10275c]">${dot}${underway ? "Trenutno na terenu" : "Prvo na redu"}</h2><div class="space-y-2">${curCards}</div>`;
-
-    const nextList = pending.filter((m) => !curR.has(m.redni)).slice(0, 4);
-    $("uzivo-next").innerHTML = nextList.length ? `<h3 class="text-sm font-display uppercase tracking-wider text-[#64748B] mb-2 mt-4">Slijedi</h3><div class="space-y-2">${nextList.map((m) => `
-      <div class="flex items-center gap-3 rounded-lg border border-[#C9D4E8] bg-white px-4 py-2.5 shadow-sm">
-        <span class="shrink-0 text-[#64748B] text-[11px] font-display uppercase w-14">${faze(m)}</span>
-        <div class="flex-1 flex items-center gap-2 min-w-0">${avatar(m.home, 20)}<span class="truncate">${linkTeam(m.home)}</span></div>
-        <span class="text-[#64748B] text-xs shrink-0">vs</span>
-        <div class="flex-1 flex items-center justify-end gap-2 min-w-0 text-right"><span class="truncate">${linkTeam(m.away)}</span>${avatar(m.away, 20)}</div>
-        <span class="shrink-0 text-[#64748B] text-xs tabular-nums w-12 text-right">${fmtTime(m.vrijeme) ? "~" + fmtTime(m.vrijeme) : ""}</span>
-      </div>`).join("")}</div><p class="text-xs text-[#64748B] mt-2">Vremena su okvirna.</p>` : "";
-    sec.classList.remove("hidden");
-  }
-
-  function syncQuickNav() {
-    let any = false;
-    document.querySelectorAll("#quicknav .qn").forEach((a) => {
-      const target = document.getElementById(a.dataset.target);
-      const vis = target && !target.classList.contains("hidden");
-      a.classList.toggle("hidden", !vis); if (vis) any = true;
-    });
-    $("quicknav").classList.toggle("hidden", !any);
-  }
-
-  function openTeamSheet(team) {
-    if (!LAST || !team) return;
-    $("team-sheet-title").innerHTML = `<span class="inline-flex items-center gap-2">${avatar(team, 26)}<span class="truncate">${esc(team)}</span></span>`;
-    let st = null, grp = null;
-    for (const g of ["A", "B", "C", "D"]) { const t = (LAST.standings[g] || []).find((x) => x.name === team); if (t) { st = t; grp = g; } }
-    const players = (LAST.rosters && LAST.rosters[team]) ? LAST.rosters[team] : [];
-    let html = "";
-    const isFoll = FOLLOW === team;
-    html += `<button id="follow-btn" class="w-full mb-4 px-3 py-2 rounded-lg font-display uppercase text-sm ${isFoll ? "bg-[#EAF0FB] text-[#10275c] border border-[#C9D4E8]" : "bg-[#F6C500] text-[#10275c]"}">${isFoll ? "★ Pratiš — makni praćenje" : "☆ Prati ovu ekipu"}</button>`;
-    if (st) {
-      html += `<div class="grid grid-cols-4 gap-2 mb-4 text-center">
-        <div class="bg-[#EAF0FB] rounded-lg p-2"><div class="text-[10px] text-[#64748B] font-display uppercase">Grupa</div><div class="font-bold">${grp} · ${st.rank}.</div></div>
-        <div class="bg-[#EAF0FB] rounded-lg p-2"><div class="text-[10px] text-[#64748B] font-display uppercase">Pobjede</div><div class="font-bold">${st.Pob}-${st.Por}</div></div>
-        <div class="bg-[#EAF0FB] rounded-lg p-2"><div class="text-[10px] text-[#64748B] font-display uppercase">Boće</div><div class="font-bold">${st.BF}:${st.BA}</div></div>
-        <div class="bg-[#EAF0FB] rounded-lg p-2"><div class="text-[10px] text-[#64748B] font-display uppercase">Razlika</div><div class="font-bold">${st.RAZ > 0 ? "+" + st.RAZ : st.RAZ}</div></div>
-      </div>`;
-    }
-    html += `<div class="font-display uppercase tracking-wider text-xs text-[#64748B] mb-2">Igrači (par)</div>`;
-    if (players.length) {
-      html += `<div class="rounded-lg border border-[#C9D4E8] overflow-hidden mb-4 divide-y divide-[#C9D4E8]">` + players.map((p) => `<div class="flex items-center gap-3 px-3 py-2">${avatar(p, 22)}<span class="flex-1">${esc(p)}</span></div>`).join("") + `</div>`;
-    } else { html += `<p class="text-sm text-[#64748B] mb-4">Igrači još nisu uneseni u Sheet.</p>`; }
-    const tm = (LAST.matches || []).filter((m) => m.home === team || m.away === team).sort((a, b) => orderKey(a) - orderKey(b));
-    if (tm.length) {
-      html += `<div class="font-display uppercase tracking-wider text-xs text-[#64748B] mb-2">Utakmice</div><div class="space-y-1.5">` + tm.map((m) => {
-        const isHome = m.home === team, opp = isHome ? m.away : m.home; let right;
-        if (m.played) {
-          const bf = isHome ? m.bd : m.bg, ba = isHome ? m.bg : m.bd;
-          const res = bf > ba ? "P" : bf < ba ? "I" : "N";
-          const col = bf > ba ? "bg-green-100 text-green-700" : bf < ba ? "bg-red-100 text-red-700" : "bg-gray-100 text-gray-700";
-          right = `<span class="tabular-nums font-bold">${bf}:${ba}</span><span class="inline-block w-5 text-center rounded ${col} text-xs font-bold">${res}</span>`;
-        } else { right = `<span class="text-[#64748B] text-xs">${fmtTime(m.vrijeme) || (m.teren ? "T" + esc(m.teren) : "—")}</span>`; }
-        return `<div class="flex items-center gap-2 text-sm border border-[#C9D4E8] rounded-lg px-3 py-2"><span class="text-[11px] text-[#64748B] font-display w-14 shrink-0">${m.faza === "Grupa" ? "Gr. " + m.grupa : m.faza}</span><span class="flex-1 truncate">${esc(opp)}</span>${right}</div>`;
-      }).join("") + `</div>`;
-    }
-    $("team-sheet-body").innerHTML = html;
-    const fb = $("follow-btn"); if (fb) fb.addEventListener("click", () => { setFollow(isFoll ? "" : team); closeTeamSheet(); });
-    $("team-sheet").classList.remove("hidden"); document.body.style.overflow = "hidden";
-  }
-  function closeTeamSheet() { $("team-sheet").classList.add("hidden"); document.body.style.overflow = ""; }
-
-  function setFollow(team) {
-    FOLLOW = team || "";
-    try { if (FOLLOW) localStorage.setItem("bocanje_follow", FOLLOW); else localStorage.removeItem("bocanje_follow"); } catch (e) {}
-    if (!LAST) return;
-    renderFollow(LAST);
-    if (LAST.drawn) { renderTop(LAST.matches); renderGroups(LAST.standings); renderSchedule(LAST.matches, RFILTER, VMODE); }
-    else renderRegistration(LAST.allTeams);
-  }
-
-  function renderFollow(data) {
-    const el = $("tvoja-ekipa");
-    if (!FOLLOW || !data.rosters[FOLLOW]) { el.classList.add("hidden"); el.innerHTML = ""; return; }
-    const team = FOLLOW;
-    const tm = data.matches.filter((m) => m.home === team || m.away === team);
-    const next = tm.filter((m) => m.hasTeams && !m.played).sort((a, b) => orderKey(a) - orderKey(b))[0];
-    let body;
-    if (next) {
-      const opp = next.home === team ? next.away : next.home;
-      const when = next.teren ? "Teren " + esc(next.teren) : (fmtTime(next.vrijeme) ? "~" + fmtTime(next.vrijeme) : "uskoro");
-      body = `<div class="text-sm mt-0.5">Slijedi: <strong>${esc(opp)}</strong> <span class="text-white/70">· ${next.faza === "Grupa" ? "Gr. " + next.grupa : next.faza} · ${when}</span></div>`;
-    } else {
-      body = data.drawn ? `<div class="text-sm text-white/80 mt-0.5">Nema više utakmica na rasporedu.</div>` : `<div class="text-sm text-white/80 mt-0.5">Čeka se ždrijeb i raspored.</div>`;
-    }
-    el.innerHTML = `<div class="rounded-lg px-4 py-3 text-white shadow-md flex items-center gap-3" style="background:linear-gradient(135deg,#10275c,#1e4fa0)">
-      <span class="text-[#F6C500] text-2xl leading-none">★</span>
-      <div class="min-w-0 flex-1"><div class="font-display uppercase tracking-wider text-[11px] text-white/70">Tvoja ekipa</div><div class="font-bold truncate">${esc(team)}</div>${body}</div>
-      <button id="unfollow-btn" class="shrink-0 text-xs font-display uppercase px-2 py-1 rounded bg-white/15 hover:bg-white/25">Makni</button>
-    </div>`;
-    el.classList.remove("hidden");
-    const ub = $("unfollow-btn"); if (ub) ub.addEventListener("click", () => setFollow(""));
-  }
-
-  function renderStats(data) {
-    const sec = $("sec-statistika");
-    const played = data.matches.filter((m) => m.played && m.hasTeams);
-    if (!played.length) { sec.classList.add("hidden"); return; }
-    let totalBoce = 0, biggest = null;
-    played.forEach((m) => { totalBoce += m.bd + m.bg; const d = Math.abs(m.bd - m.bg); if (!biggest || d > biggest.d) biggest = { d, m }; });
-    const teams = [];
-    ["A", "B", "C", "D"].forEach((g) => (data.standings[g] || []).forEach((t) => teams.push(t)));
-    const topWins = teams.slice().sort((a, b) => b.Pob - a.Pob || b.RAZ - a.RAZ)[0];
-    const topBoce = teams.slice().sort((a, b) => b.BF - a.BF)[0];
-    const bm = biggest.m, bw = bm.bd > bm.bg ? bm.home : bm.away, bl = bm.bd > bm.bg ? bm.away : bm.home;
-    const bs = Math.max(bm.bd, bm.bg) + ":" + Math.min(bm.bd, bm.bg);
-    const c = (lbl, big, sub) => `<div class="bg-white rounded-lg border border-[#C9D4E8] shadow-sm p-4"><div class="font-display uppercase tracking-wider text-[11px] text-[#64748B] mb-1">${lbl}</div><div class="font-bold text-lg text-[#10275c] truncate">${big}</div>${sub ? `<div class="text-sm text-[#64748B] truncate">${sub}</div>` : ""}</div>`;
-    $("statistika").innerHTML = [
-      c("Odigrano mečeva", String(played.length), "od ukupno " + data.matches.filter((m) => m.hasTeams).length),
-      c("Ukupno boća", String(totalBoce), "svi mečevi zajedno"),
-      c("Najviše pobjeda", topWins ? esc(topWins.name) : "—", topWins ? topWins.Pob + " pobjeda" : ""),
-      c("Najviše osvojenih boća", topBoce ? esc(topBoce.name) : "—", topBoce ? topBoce.BF + " boća" : ""),
-      c("Najveća pobjeda", bs, esc(bw) + " protiv " + esc(bl)),
-    ].join("");
-    sec.classList.remove("hidden");
-  }
-
-  const show = (id) => $(id).classList.remove("hidden");
-
-  async function load() {
-    try {
-      const [parovi, utak] = await Promise.all([fetchTab("Parovi"), fetchTab("Utakmice")]);
-      const data = processData(parovi, utak);
-      LAST = data;
-      renderFollow(data);
-      if (data.drawn) {
-        $("sec-prijave").classList.add("hidden");
-        renderTop(data.matches);
-        renderProgress(data.matches);
-        renderGroups(data.standings);
-        renderKnockout(data.matches, data.qualifiers);
-        renderSchedule(data.matches, RFILTER, VMODE);
-        renderStats(data);
-        show("sec-grupe"); show("sec-raspored");
-      } else {
-        ["sec-uzivo", "sec-grupe", "sec-nokaut", "sec-raspored", "sec-statistika"].forEach((id) => $(id).classList.add("hidden"));
-        $("progress").classList.add("hidden");
-        renderRegistration(data.allTeams);
-      }
-      $("load-msg").classList.add("hidden");
-      syncQuickNav(); tickCountdown();
-      $("status-text").textContent = "Uživo";
-      $("live-dot").className = "w-2.5 h-2.5 rounded-full bg-green-400 animate-pulse";
-      $("last-updated").textContent = "Zadnje osvježeno: " + new Date().toLocaleTimeString("hr-HR");
-    } catch (e) {
-      $("load-msg").innerHTML = `<div class="max-w-lg mx-auto bg-amber-50 border border-amber-200 rounded-lg p-6 text-left"><p class="font-bold text-[#10275c] mb-2">Rezultati trenutno nisu dostupni.</p><p class="text-sm text-[#64748B]">Provjeri da je Google tablica podijeljena kao <em>„Bilo tko s poveznicom → Preglednik“</em> i da postoje tabovi <em>Parovi</em> i <em>Utakmice</em>.</p></div>`;
-      $("status-text").textContent = "Nema veze"; $("live-dot").className = "w-2.5 h-2.5 rounded-full bg-red-500";
-    }
-  }
-
-  document.querySelectorAll("#rf .rfbtn").forEach((b) => b.addEventListener("click", () => setFilter(b.dataset.f)));
-  document.querySelectorAll("#vm .vmbtn").forEach((b) => b.addEventListener("click", () => setVMode(b.dataset.v)));
-  document.addEventListener("click", (e) => { const t = e.target.closest("[data-team]"); if (t) openTeamSheet(t.dataset.team); });
-  $("team-sheet-close").addEventListener("click", closeTeamSheet);
-  $("team-sheet-backdrop").addEventListener("click", closeTeamSheet);
-  const closePravila = () => { $("pravila-modal").classList.add("hidden"); document.body.style.overflow = ""; };
-  $("pravila-btn").addEventListener("click", () => { $("pravila-modal").classList.remove("hidden"); document.body.style.overflow = "hidden"; });
-  $("pravila-close").addEventListener("click", closePravila);
-  $("pravila-backdrop").addEventListener("click", closePravila);
-  document.addEventListener("keydown", (e) => { if (e.key === "Escape") { closeTeamSheet(); closePravila(); } });
-  $("refresh-btn").addEventListener("click", load);
-  load();
-  setInterval(load, REFRESH_MS);
-  setInterval(tickCountdown, 1000);
-</script>
