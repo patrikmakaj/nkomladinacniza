@@ -1,8 +1,22 @@
 {
-  "lastUpdated": "2026-08-21T10:56:51.240Z",
+  "lastUpdated": "2026-08-22T20:47:47.091Z",
   "enabled": true,
   "pageId": "55401829691",
   "posts": [
+    {
+      "id": "55401829691_1670356031763557",
+      "message": "",
+      "createdAt": "2026-08-22T20:25:44+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1670356031763557",
+      "images": [
+        {
+          "src": "/images/facebook/55401829691_1670356031763557.jpg",
+          "thumb": "/images/facebook/55401829691_1670356031763557.webp",
+          "width": 700,
+          "height": 875
+        }
+      ]
+    },
     {
       "id": "55401829691_1668934738572353",
       "message": "Sutra (subota 22.8.) gostujemo u prijateljskoj utakmici kod NK Mladost u Breznici od 19:30 sati. Utakmica je memorijalna u sjećanje na Vladislava Oreškog - Babca poginulog vukovarskog branitelja. Od 19 sati biti će polaganje cvijeća i paljenje lampiona ispred spomen obilježja.",
@@ -508,20 +522,6 @@
           "thumb": "/images/facebook/55401829691_1642545757877918.webp",
           "width": 700,
           "height": 394
-        }
-      ]
-    },
-    {
-      "id": "55401829691_1640878844711276",
-      "message": "",
-      "createdAt": "2026-07-23T20:20:19+0000",
-      "permalink": "https://www.facebook.com/1551452460320582/posts/1640878844711276",
-      "images": [
-        {
-          "src": "/images/facebook/55401829691_1640878844711276.jpg",
-          "thumb": "/images/facebook/55401829691_1640878844711276.webp",
-          "width": 700,
-          "height": 875
         }
       ]
     }
