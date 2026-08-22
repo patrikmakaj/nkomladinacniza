@@ -276,6 +276,11 @@ Dvije stvari koje se ne smiju izgubiti iz vida:
   posjetitelju i svakom refreshu drugačiji raspored. Ždrijeb radi Apps Script u
   samom Sheetu (`scripts/apps-script/zdrijeb.gs`) i zapisuje ga jednom.
   Stranica sama popunjava samo eliminacijske parove, kad grupe završe.
+- **Ni satnica se ne pomiče na stranici.** Prvi pokušaj (commit `c029b585`)
+  računao je kašnjenje iz sata posjetitelja i bio nepouzdan; zamijenjen je
+  ručnim stupcem „Pomak", pa sad time upravlja Apps Script: `onEdit` zapiše
+  stvarno vrijeme završetka u stupac `Završeno`, a `pomakniRaspored` preračuna
+  neodigrane termine po terenima, uz poštovanje redoslijeda faza.
 - **Grupe se izvode iz podataka**, ne hardkodiraju — broj ekipa se zna tek kad
   se zatvore prijave. Automatsko slaganje parova podržano je za:
   1 grupu (tablica je poredak → finale 1-2, meč za 3. mjesto 3-4), 2 grupe

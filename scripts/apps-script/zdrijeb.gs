@@ -27,8 +27,24 @@
 var POCETAK_H = 19;
 var POCETAK_MIN = 0;
 
-/** Trajanje jednog meča u minutama, uključujući izmjenu ekipa. */
-var TRAJANJE_MIN = 8;
+/**
+ * Početna procjena trajanja meča u minutama, uključujući izmjenu ekipa.
+ * Koristi se dok se ne skupi dovoljno stvarnih mjerenja.
+ */
+var TRAJANJE_MIN = 15;
+
+/**
+ * Nakon ovoliko izmjerenih mečeva satnica se računa po stvarnom prosjeku
+ * umjesto po procjeni gore. Ispod toga je uzorak premalen da mu se vjeruje.
+ */
+var MIN_UZORAKA = 3;
+
+/** Sigurnosne granice za izmjereni prosjek — jedna duga pauza ne smije razbiti satnicu. */
+var TRAJANJE_MIN_DONJA = 5;
+var TRAJANJE_MIN_GORNJA = 40;
+
+/** Pomiče li se satnica sama čim se upiše rezultat. */
+var AUTO_POMAK = true;
 
 /** Koliko se mečeva igra istovremeno (broj golova). */
 var TERENA = 2;
@@ -40,7 +56,10 @@ var TAB_EKIPE = "Ekipe";
 var TAB_UTAKMICE = "Utakmice";
 
 var ZAGLAVLJE_EKIPE = ["Grupa", "Ekipa", "Igrač 1", "Igrač 2", "Igrač 3", "Igrač 4", "Vratar", "Kotizacija"];
-var ZAGLAVLJE_UTAKMICE = ["Redni", "Faza", "Grupa", "Vrijeme", "Teren", "Domaćin", "Gost", "Golovi D", "Golovi G"];
+var ZAGLAVLJE_UTAKMICE = ["Redni", "Faza", "Grupa", "Vrijeme", "Teren", "Domaćin", "Gost", "Golovi D", "Golovi G", "Završeno"];
+
+/** Redoslijed faza — kasnija faza ne može početi prije nego ranija završi. */
+var FAZE_REDOM = { "Grupa": 0, "Četvrtfinale": 1, "Polufinale": 2, "Za 3. mjesto": 3, "Finale": 3 };
 
 var PLAVA = "#10275c";
 
@@ -52,6 +71,8 @@ function onOpen() {
     .addItem("Postavi tablicu", "postaviTablicu")
     .addSeparator()
     .addItem("Ždrijeb i raspored", "zdrijebIRaspored")
+    .addItem("Pomakni satnicu", "pomakniRasporedRucno")
+    .addSeparator()
     .addItem("Obriši raspored (zadrži ekipe)", "obrisiRaspored")
     .addToUi();
 }
@@ -77,6 +98,7 @@ function onEdit(e) {
   var red = e.range.getRow();
   if (red < 2) return;
 
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
   var par = sh.getRange(red, 8, 1, 2);
   var v = par.getValues()[0];
   var oba = v[0] !== "" && v[1] !== "";
@@ -84,12 +106,168 @@ function onEdit(e) {
 
   par.setBackground(izjednaceno ? "#fde2e2" : null);
   if (izjednaceno) {
-    SpreadsheetApp.getActiveSpreadsheet().toast(
-      "Nema neriješenih — upiši ishod raspucavanja.",
-      "Redak " + red,
-      5
+    ss.toast("Nema neriješenih — upiši ishod raspucavanja.", "Redak " + red, 5);
+  }
+
+  // Stvarno vrijeme završetka — sidro za satnicu. Piše se samo prvi put, da
+  // ispravak rezultata ne pomakne trenutak koji se već dogodio. Ako se
+  // rezultat obriše, briše se i vrijeme.
+  var celija = sh.getRange(red, 10);
+  if (!oba) {
+    celija.clearContent();
+  } else if (!celija.getValue()) {
+    celija.setValue(
+      Utilities.formatDate(new Date(), ss.getSpreadsheetTimeZone(), "HH:mm")
     );
   }
+
+  if (AUTO_POMAK) pomakniRaspored(true);
+}
+
+// ─────────────────────────────────────────────────────────────────────
+// Pomicanje satnice
+// ─────────────────────────────────────────────────────────────────────
+
+/** "19:05" → 1145 (minute od ponoći). Vrijeme poslije ponoći ide na kraj dana. */
+function uMinute(v) {
+  var m = String(v == null ? "" : v).match(/(\d{1,2}):(\d{2})/);
+  if (!m) return null;
+  var min = Number(m[1]) * 60 + Number(m[2]);
+  return min < 12 * 60 ? min + 24 * 60 : min;
+}
+
+/** 1145 → "19:05" */
+function izMinuta(min) {
+  var h = Math.floor(min / 60) % 24;
+  return ("0" + h).slice(-2) + ":" + ("0" + (min % 60)).slice(-2);
+}
+
+/**
+ * Koliko računati po meču.
+ *
+ * Dok nema dovoljno mjerenja koristi se procjena (TRAJANJE_MIN). Kad se
+ * skupi barem MIN_UZORAKA, računa se stvarni prosjek — razmak između dva
+ * uzastopna završetka na istom terenu, jer to je stvarni ciklus meča
+ * uključujući izmjenu ekipa. Prvi meč na terenu se ne mjeri jer ne znamo
+ * je li turnir uopće krenuo na vrijeme.
+ */
+function izmjerenoTrajanje(redovi) {
+  var poTerenu = {};
+  redovi.forEach(function (r) {
+    if (!r.zavrsenoMin) return;
+    (poTerenu[r.teren] || (poTerenu[r.teren] = [])).push(r);
+  });
+
+  var uzorci = [];
+  for (var t in poTerenu) {
+    var niz = poTerenu[t].sort(function (a, b) { return a.zavrsenoMin - b.zavrsenoMin; });
+    for (var i = 1; i < niz.length; i++) {
+      var d = niz[i].zavrsenoMin - niz[i - 1].zavrsenoMin;
+      if (d >= TRAJANJE_MIN_DONJA && d <= TRAJANJE_MIN_GORNJA) uzorci.push(d);
+    }
+  }
+  if (uzorci.length < MIN_UZORAKA) return { min: TRAJANJE_MIN, uzoraka: uzorci.length, izmjereno: false };
+
+  var zbroj = uzorci.reduce(function (s, x) { return s + x; }, 0);
+  return { min: Math.round(zbroj / uzorci.length), uzoraka: uzorci.length, izmjereno: true };
+}
+
+/**
+ * Preračuna vremena početka SVIH neodigranih utakmica prema stvarnosti.
+ *
+ * Svaki teren ima svoj red — kašnjenje na terenu 1 ne pomiče teren 2. Kasnija
+ * faza ne može početi prije nego ranija završi, inače bi polufinale dobilo
+ * termin usred grupnih mečeva.
+ *
+ * Odigrane utakmice se ne diraju; one su povijest i služe kao sidro.
+ */
+function pomakniRaspored(tiho) {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sh = ss.getSheetByName(TAB_UTAKMICE);
+  if (!sh || sh.getLastRow() < 2) return null;
+
+  var n = sh.getLastRow() - 1;
+  var vals = sh.getRange(2, 1, n, 10).getValues();
+
+  var redovi = vals.map(function (v, i) {
+    return {
+      row: i + 2,
+      redni: Number(v[0]) || i + 1,
+      faza: String(v[1] || "").trim(),
+      vrijemeMin: uMinute(v[3]),
+      teren: String(v[4] || "1").trim(),
+      odigrano: v[7] !== "" && v[8] !== "",
+      zavrsenoMin: uMinute(v[9]),
+    };
+  }).filter(function (r) { return r.faza; });
+
+  if (!redovi.length) return null;
+
+  var trajanje = izmjerenoTrajanje(redovi);
+
+  var rang = function (r) {
+    var x = FAZE_REDOM[r.faza];
+    return x == null ? 99 : x;
+  };
+  var redom = redovi.slice().sort(function (a, b) {
+    if (rang(a) !== rang(b)) return rang(a) - rang(b);
+    if ((a.vrijemeMin || 0) !== (b.vrijemeMin || 0)) return (a.vrijemeMin || 0) - (b.vrijemeMin || 0);
+    return a.redni - b.redni;
+  });
+
+  var terenSlobodan = {}; // teren → kad se oslobodi
+  var fazaGotova = {};    // rang faze → kad zadnji meč te faze završi
+  var promjene = [];
+
+  redom.forEach(function (r) {
+    var rr = rang(r);
+
+    if (r.odigrano) {
+      // Sidro: stvarni završetak ako ga imamo, inače procjena iz planiranog.
+      var kraj = r.zavrsenoMin != null ? r.zavrsenoMin : (r.vrijemeMin || 0) + trajanje.min;
+      terenSlobodan[r.teren] = Math.max(terenSlobodan[r.teren] || 0, kraj);
+      fazaGotova[rr] = Math.max(fazaGotova[rr] || 0, kraj);
+      return;
+    }
+
+    // Ranije faze moraju biti gotove.
+    var najranije = 0;
+    for (var k in fazaGotova) if (Number(k) < rr) najranije = Math.max(najranije, fazaGotova[k]);
+
+    // Ako se na ovom terenu još ništa nije odigralo, nemamo dokaza o kašnjenju
+    // pa se držimo planiranog vremena.
+    var slobodan = terenSlobodan[r.teren];
+    var pocetak = slobodan != null
+      ? Math.max(slobodan, najranije)
+      : Math.max(r.vrijemeMin || 0, najranije);
+
+    if (r.vrijemeMin !== pocetak) promjene.push({ row: r.row, vrijeme: izMinuta(pocetak) });
+
+    terenSlobodan[r.teren] = pocetak + trajanje.min;
+    fazaGotova[rr] = Math.max(fazaGotova[rr] || 0, pocetak + trajanje.min);
+  });
+
+  promjene.forEach(function (p) { sh.getRange(p.row, 4).setValue(p.vrijeme); });
+
+  if (!tiho) {
+    SpreadsheetApp.getUi().alert(
+      "Satnica osvježena",
+      promjene.length + " " + (promjene.length === 1 ? "utakmica pomaknuta" : "utakmica pomaknuto") + ".\n\n" +
+        (trajanje.izmjereno
+          ? "Računato po izmjerenom prosjeku: " + trajanje.min + " min (" + trajanje.uzoraka + " mjerenja)."
+          : "Računato po procjeni: " + trajanje.min + " min (mjerenja: " + trajanje.uzoraka + "/" + MIN_UZORAKA + ")."),
+      SpreadsheetApp.getUi().ButtonSet.OK
+    );
+  } else if (promjene.length) {
+    ss.toast(promjene.length + " utakmica pomaknuto · " + trajanje.min + " min po meču", "Satnica", 4);
+  }
+  return promjene.length;
+}
+
+/** Isti posao iz izbornika, s porukom koliko je pomaknuto. */
+function pomakniRasporedRucno() {
+  var n = pomakniRaspored(false);
+  if (n === null) SpreadsheetApp.getUi().alert("Nema rasporeda — prvo pokreni Ždrijeb i raspored.");
 }
 
 /** Napravi oba taba sa zaglavljima i formatiranjem. Sigurno je pokrenuti više puta. */
@@ -114,7 +292,13 @@ function postaviTablicu() {
   shU.setColumnWidth(7, 190);  // Gost
   shU.setColumnWidth(8, 85);
   shU.setColumnWidth(9, 85);
+  shU.setColumnWidth(10, 90); // Završeno
   shU.getRange("A2:E").setHorizontalAlignment("center");
+  shU.getRange("J2:J").setHorizontalAlignment("center").setFontColor("#64748B");
+  shU.getRange("J1").setNote(
+    "Popunjava se samo — trenutak kad je upisan rezultat.\n" +
+      "Prema tome se pomiču vremena preostalih utakmica. Ne diraj ručno."
+  );
   // Rezultat kao tekst bi razbio stranicu — drži ga brojčanim.
   shU.getRange("H2:I").setNumberFormat("0").setHorizontalAlignment("center");
 
@@ -356,7 +540,7 @@ function zdrijebIRaspored() {
   });
 
   // ── Zapis ────────────────────────────────────────────────────────
-  if (shU.getLastRow() > 1) shU.getRange(2, 1, shU.getLastRow() - 1, 9).clearContent();
+  if (shU.getLastRow() > 1) shU.getRange(2, 1, shU.getLastRow() - 1, 10).clearContent();
   shU.getRange(2, 1, redovi.length, 9).setValues(redovi);
 
   var opis = slova.map(function (g) { return "Grupa " + g + ": " + grupe[g].length; }).join(" · ");
@@ -386,7 +570,7 @@ function obrisiRaspored() {
   if (odg !== ui.Button.YES) return;
 
   var shU = ss.getSheetByName(TAB_UTAKMICE);
-  if (shU && shU.getLastRow() > 1) shU.getRange(2, 1, shU.getLastRow() - 1, 9).clearContent();
+  if (shU && shU.getLastRow() > 1) shU.getRange(2, 1, shU.getLastRow() - 1, 10).clearContent();
 
   var shE = ss.getSheetByName(TAB_EKIPE);
   if (shE && shE.getLastRow() > 1) shE.getRange(2, 1, shE.getLastRow() - 1, 1).clearContent();
