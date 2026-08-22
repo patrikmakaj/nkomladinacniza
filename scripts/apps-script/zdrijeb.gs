@@ -46,6 +46,14 @@ var TRAJANJE_MIN_GORNJA = 40;
 /** Pomiče li se satnica sama čim se upiše rezultat. */
 var AUTO_POMAK = true;
 
+/**
+ * Vremenska zona turnira — namjerno fiksna, ne iz postavki tablice.
+ * Sheet zna ostati na tuđoj zoni (Kijev je ljeti sat ispred Zagreba), a onda
+ * bi svako zabilježeno vrijeme završetka bilo pomaknuto i satnica bi skočila
+ * čim se upiše prvi rezultat.
+ */
+var ZONA = "Europe/Zagreb";
+
 /** Koliko se mečeva igra istovremeno (broj golova). */
 var TERENA = 2;
 
@@ -116,9 +124,7 @@ function onEdit(e) {
   if (!oba) {
     celija.clearContent();
   } else if (!celija.getValue()) {
-    celija.setValue(
-      Utilities.formatDate(new Date(), ss.getSpreadsheetTimeZone(), "HH:mm")
-    );
+    celija.setValue(Utilities.formatDate(new Date(), ZONA, "HH:mm"));
   }
 
   if (AUTO_POMAK) pomakniRaspored(true);
