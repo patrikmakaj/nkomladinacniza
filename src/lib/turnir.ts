@@ -90,7 +90,14 @@ type Data = {
   matches: Match[];
   standings: Record<string, Row[]>;
   groupsDone: boolean;
-  qualifiers: { list: { lbl: string; name: string }[]; pairs: [string, string][] } | null;
+  qualifiers: {
+    list: { lbl: string; name: string }[];
+    pairs: [string, string][];
+    /** U koju fazu ulaze parovi: 4 grupe → ČF, 2 grupe → PF, 1 grupa → odmah finale. */
+    mode: "qf" | "sf" | "final";
+  } | null;
+  /** Koliko ekipa iz grupe ide dalje — kod jedne grupe to su prve četiri. */
+  prolazi: number;
   drawn: boolean;
 };
 
@@ -292,18 +299,40 @@ export function initTurnir(cfg: TurnirConfig): () => void {
     if (qualifiers) resolveKnockout(matches, qualifiers);
 
     const drawn = matches.some((m) => m.faza === "Grupa" && m.hasTeams);
-    return { groups, groupKeys, rosters, allTeams, matches, standings, groupsDone, qualifiers, drawn };
+    return {
+      groups, groupKeys, rosters, allTeams, matches, standings, groupsDone, qualifiers, drawn,
+      prolazi: prolaziZa(groupKeys.length),
+    };
+  }
+
+  /** Koliko ekipa iz grupe ide dalje. Kod jedne grupe idu prve četiri. */
+  function prolaziZa(brojGrupa: number) {
+    return brojGrupa === 1 ? 4 : cfg.qualifiersPerGroup;
   }
 
   /**
-   * Plasirani i eliminacijski parovi, unakrsno — nitko ne igra protiv ekipe iz
-   * svoje grupe. Podržano za 2 grupe (odmah polufinale) i 4 grupe (četvrtfinale).
-   * Kod drugačijeg broja grupa parove se upisuje ručno u Sheet.
+   * Plasirani i eliminacijski parovi.
+   *
+   * Kod više grupa parovi idu unakrsno — nitko ne igra protiv ekipe iz svoje
+   * grupe. Kod jedne grupe (mali turnir, svi sa svima) tablica je već poredak,
+   * pa prve dvije idu u finale, a treća i četvrta na meč za 3. mjesto.
+   *
+   * Za druge brojeve grupa parovi se upisuju ručno u Sheet.
    */
   function computeQualifiers(s: Record<string, Row[]>, keys: string[]) {
-    const n = cfg.qualifiersPerGroup;
-    if (keys.length !== 2 && keys.length !== 4) return null;
+    const n = prolaziZa(keys.length);
+    if (![1, 2, 4].includes(keys.length)) return null;
     for (const g of keys) if (!s[g] || s[g].length < n) return null;
+
+    if (keys.length === 1) {
+      const t = s[keys[0]];
+      const list = t.slice(0, 4).map((x, i) => ({ lbl: `${i + 1}. mjesto`, name: x.name }));
+      const pairs: [string, string][] = [
+        [t[0].name, t[1].name], // finale
+        [t[2].name, t[3].name], // za 3. mjesto
+      ];
+      return { list, pairs, mode: "final" as const };
+    }
 
     const list: { lbl: string; name: string }[] = [];
     keys.forEach((g) => {
@@ -316,10 +345,10 @@ export function initTurnir(cfg: TurnirConfig): () => void {
       const other = keys[(i + 1) % keys.length];
       pairs.push([s[g][0].name, s[other][1].name]);
     });
-    return { list, pairs };
+    return { list, pairs, mode: keys.length === 4 ? ("qf" as const) : ("sf" as const) };
   }
 
-  function resolveKnockout(matches: Match[], q: { pairs: [string, string][] }) {
+  function resolveKnockout(matches: Match[], q: { pairs: [string, string][]; mode: "qf" | "sf" | "final" }) {
     const pick = (f: string) => matches.filter((m) => m.faza === f);
     const qf = pick("Četvrtfinale"), sf = pick("Polufinale");
     const third = pick("Za 3. mjesto")[0], fin = pick("Finale")[0];
@@ -332,12 +361,18 @@ export function initTurnir(cfg: TurnirConfig): () => void {
     const win = (m?: Match) => (m && m.played && m.home && m.away ? (m.bd! > m.bg! ? m.home : m.bg! > m.bd! ? m.away : "") : "");
     const lose = (m?: Match) => (m && m.played && m.home && m.away ? (m.bd! > m.bg! ? m.away : m.bg! > m.bd! ? m.home : "") : "");
 
-    // 4 para → četvrtfinale pa polufinale; 2 para → odmah polufinale.
-    const entry = q.pairs.length === 4 ? qf : sf;
+    if (q.mode === "final") {
+      // Jedna grupa: tablica je poredak, pa parovi idu ravno u zadnje mečeve.
+      setT(fin, q.pairs[0][0], q.pairs[0][1]);
+      setT(third, q.pairs[1][0], q.pairs[1][1]);
+      return;
+    }
+
+    const entry = q.mode === "qf" ? qf : sf;
     for (let i = 0; i < Math.min(q.pairs.length, entry.length); i++) {
       setT(entry[i], q.pairs[i][0], q.pairs[i][1]);
     }
-    if (q.pairs.length === 4) {
+    if (q.mode === "qf") {
       setT(sf[0], win(qf[0]), win(qf[1]));
       setT(sf[1], win(qf[2]), win(qf[3]));
     }
@@ -364,6 +399,13 @@ export function initTurnir(cfg: TurnirConfig): () => void {
   }
 
   function renderGroups(data: Data) {
+    const info = document.getElementById("grupe-info");
+    if (info) {
+      info.textContent =
+        data.groupKeys.length === 1
+          ? "Svi igraju sa svima. Prve dvije idu u finale, treća i četvrta na meč za 3. mjesto."
+          : `Prolaze prve ${data.prolazi === 2 ? "dvije" : data.prolazi} ekipe iz svake grupe.`;
+    }
     const wrap = $("grupe");
     wrap.innerHTML = "";
     for (const g of data.groupKeys) {
@@ -371,7 +413,7 @@ export function initTurnir(cfg: TurnirConfig): () => void {
       if (!table || !table.length) continue;
       const rows = table
         .map((t) => {
-          const qual = t.name === FOLLOW ? "bg-[#FFF3C4]" : t.rank <= cfg.qualifiersPerGroup ? "bg-green-50" : "";
+          const qual = t.name === FOLLOW ? "bg-[#FFF3C4]" : t.rank <= data.prolazi ? "bg-green-50" : "";
           const rk = t.rank === 1 ? "🥇" : t.rank;
           return `<tr class="border-b border-[#C9D4E8] ${qual}">
           <td class="px-2 py-2 font-display text-center">${rk}</td>
@@ -462,11 +504,15 @@ export function initTurnir(cfg: TurnirConfig): () => void {
     if (!all.some((m) => m && m.hasTeams)) return "";
 
     const hasQF = qf.length >= 4;
+    const hasSF = sf.length >= 2;
     const BW = 176, BH = 54;
+    // Tri oblika: ČF→PF→F (4 grupe), PF→F (2 grupe), samo finale (1 grupa).
     const COL = hasQF
       ? { LQF: 12, LSF: 232, FIN: 452, RSF: 672, RQF: 892 }
-      : { LQF: 0, LSF: 12, FIN: 232, RSF: 452, RQF: 0 };
-    const WIDTH = hasQF ? 1080 : 640;
+      : hasSF
+        ? { LQF: 0, LSF: 12, FIN: 232, RSF: 452, RQF: 0 }
+        : { LQF: 0, LSF: 0, FIN: 12, RSF: 0, RQF: 0 };
+    const WIDTH = hasQF ? 1080 : hasSF ? 640 : 200;
     const V = "#cbd5e1", BORD = "#C9D4E8", DEEP = "#10275c", PRIM = "#1e4fa0", MUT = "#64748B", ACC = "#F6C500";
     const parts: string[] = [];
     const cy = (y: number) => y + BH / 2;
@@ -500,10 +546,14 @@ export function initTurnir(cfg: TurnirConfig): () => void {
       conn(`${COL.RQF},${cy(qfY[0])} ${mR},${cy(qfY[0])} ${mR},${sfC} ${COL.RSF + BW},${sfC}`);
       conn(`${COL.RQF},${cy(qfY[1])} ${mR},${cy(qfY[1])} ${mR},${sfC} ${COL.RSF + BW},${sfC}`);
     }
-    lbl(COL.LSF, "POLUFINALE"); lbl(COL.FIN, "FINALE"); lbl(COL.RSF, "POLUFINALE");
-    box(COL.LSF, sfTop, sf[0]); box(COL.RSF, sfTop, sf[1]); box(COL.FIN, finTop, fin);
-    conn(`${COL.LSF + BW},${sfC} ${COL.FIN},${sfC}`);
-    conn(`${COL.RSF},${sfC} ${COL.FIN + BW},${sfC}`);
+    if (hasSF) {
+      lbl(COL.LSF, "POLUFINALE"); lbl(COL.RSF, "POLUFINALE");
+      box(COL.LSF, sfTop, sf[0]); box(COL.RSF, sfTop, sf[1]);
+      conn(`${COL.LSF + BW},${sfC} ${COL.FIN},${sfC}`);
+      conn(`${COL.RSF},${sfC} ${COL.FIN + BW},${sfC}`);
+    }
+    lbl(COL.FIN, "FINALE");
+    box(COL.FIN, finTop, fin);
 
     let champ = "";
     if (fin && fin.played) champ = fin.bd! > fin.bg! ? fin.home : fin.bg! > fin.bd! ? fin.away : "";
@@ -518,7 +568,7 @@ export function initTurnir(cfg: TurnirConfig): () => void {
       box(COL.FIN, ty, third);
     }
     const H = third ? 510 : champ ? finTop + BH + 100 : finTop + BH + 40;
-    const minW = hasQF ? 760 : 520;
+    const minW = hasQF ? 760 : hasSF ? 520 : 200;
     return `<svg viewBox="0 0 ${WIDTH} ${H}" xmlns="http://www.w3.org/2000/svg" style="width:100%;min-width:${minW}px;height:auto;font-family:Inter,Arial,sans-serif">${parts.join("")}</svg>`;
   }
 

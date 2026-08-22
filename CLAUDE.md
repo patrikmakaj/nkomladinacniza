@@ -277,8 +277,10 @@ Dvije stvari koje se ne smiju izgubiti iz vida:
   samom Sheetu (`scripts/apps-script/zdrijeb.gs`) i zapisuje ga jednom.
   Stranica sama popunjava samo eliminacijske parove, kad grupe završe.
 - **Grupe se izvode iz podataka**, ne hardkodiraju — broj ekipa se zna tek kad
-  se zatvore prijave. Automatsko slaganje parova podržano je za 2 grupe
-  (odmah polufinale) i 4 grupe (četvrtfinale); inače se parovi upisuju ručno.
+  se zatvore prijave. Automatsko slaganje parova podržano je za:
+  1 grupu (tablica je poredak → finale 1-2, meč za 3. mjesto 3-4), 2 grupe
+  (odmah polufinale) i 4 grupe (četvrtfinale). Za drugi broj grupa parovi se
+  upisuju ručno u Sheet. Bracket ima tri oblika i sam bira po tome što postoji.
 
 `initTurnir` vraća `dispose` koji gasi pollanje Sheeta; komponenta ga zove na
 `astro:before-swap`, inače interval nastavi raditi nakon odlaska sa stranice.

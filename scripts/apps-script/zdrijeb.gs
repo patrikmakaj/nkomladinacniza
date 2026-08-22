@@ -121,7 +121,9 @@ function pripremiTab(ss, ime, zaglavlje) {
  * polufinale) i 4 grupe (četvrtfinale), pa se držimo toga.
  */
 function brojGrupa(n) {
-  if (n < 4) return 1;
+  // Do 6 ekipa jedna grupa — svi igraju sa svima, pa finale i meč za 3. mjesto.
+  // S tako malo ekipa dijeljenje u grupe daje premalo mečeva po ekipi.
+  if (n < 7) return 1;
   // Ispod 12 ekipa 4 grupe bi dale grupu od dvije ekipe — jedan meč i obje
   // dalje. Radije dvije veće grupe, pa svaka ekipa odigra više mečeva.
   if (n < 12) return 2;
@@ -298,7 +300,8 @@ function zdrijebIRaspored() {
       ? [["Četvrtfinale", 1], ["Četvrtfinale", 2], ["Četvrtfinale", 1], ["Četvrtfinale", 2], ["Polufinale", 1], ["Polufinale", 2], ["Za 3. mjesto", 1], ["Finale", 1]]
       : n === 2
         ? [["Polufinale", 1], ["Polufinale", 2], ["Za 3. mjesto", 1], ["Finale", 1]]
-        : [];
+        // Jedna grupa: tablica je već poredak, pa idu samo zadnja dva meča.
+        : [["Za 3. mjesto", 1], ["Finale", 1]];
 
   // Pauza od jednog termina između grupa i eliminacije.
   var slot = zadnjiSlot + 2;
@@ -320,8 +323,10 @@ function zdrijebIRaspored() {
       opis + "\n\n" +
       poredani.length + " grupnih mečeva na " + TERENA + " gola, prvi u " + vrijemeZa(0) + ".\n" +
       "Ukupno " + redovi.length + " redaka s eliminacijom.\n\n" +
-      "Prolaze prve " + PROLAZI + " iz svake grupe. Eliminacijske parove stranica slaže sama —\n" +
-      "ti upisuješ samo rezultate.",
+      (n === 1
+        ? "Prve dvije iz tablice idu u finale, treća i četvrta na meč za 3. mjesto."
+        : "Prolaze prve " + PROLAZI + " iz svake grupe.") +
+      "\nParove stranica slaže sama — ti upisuješ samo rezultate.",
     ui.ButtonSet.OK
   );
 }

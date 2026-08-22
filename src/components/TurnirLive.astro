@@ -119,9 +119,8 @@ const hasCourts = config.courts > 1;
 
   <section id="sec-grupe" class="hidden scroll-mt-36">
     <h2 class="text-2xl md:text-3xl font-bold mb-1 text-[#10275c]">Grupne tablice</h2>
-    <p class="text-[#64748B] text-sm mb-6">
-      Prolaze prve {config.qualifiersPerGroup === 2 ? "dvije" : config.qualifiersPerGroup} ekipe iz svake grupe.
-    </p>
+    {/* Tekst ovisi o broju grupa, koji se zna tek iz Sheeta — lib ga prepiše. */}
+    <p id="grupe-info" class="text-[#64748B] text-sm mb-6">Prolazak u eliminaciju.</p>
     <div id="grupe" class="grid gap-6 md:grid-cols-2"></div>
     <p class="text-xs text-[#64748B] mt-3">{groupsNote}</p>
   </section>
