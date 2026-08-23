@@ -48,7 +48,7 @@
     "isHome": false,
     "venue": "Breznica",
     "competition": "Memorijalna utakmica Vladislav Oreški - Babac",
-    "score": null,
-    "scorers": []
+    "score": { "home": 1, "away": 1 },
+    "scorers": [{ "name": "Karlo Grubač", "goals": 1 }]
   }
 ]
