@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-08-24T17:57:46.055Z",
+  "lastUpdated": "2026-08-24T19:54:36.632Z",
   "sourceUrl": "https://semafor.hns.family/klubovi/134/nk-omladinac-niza/",
   "club": {
     "id": 134,
@@ -625,7 +625,7 @@
           "number": 17,
           "name": "Petar Barišić",
           "position": "Igrač",
-          "photo": "/static/images/nophoto_player_m.png",
+          "photo": "https://hns.family/files/images_comet/d8/9/_resized/d8931c5584d5b6fddb84eedf1db5103e8f0c3db6_80_100_cut_wg_top.jpg",
           "profileUrl": "https://semafor.hns.family/igraci/389840/petar-barisic/",
           "stats": {
             "appearances": 2,
@@ -737,7 +737,7 @@
           "number": 25,
           "name": "Marin Kuzminski",
           "position": "Igrač",
-          "photo": "/static/images/nophoto_player_m.png",
+          "photo": "https://hns.family/files/images_comet/27/0/_resized/270a45d3b4d085a2e34a7fdce2621f563597fee2_80_100_cut_wg_top.png",
           "profileUrl": "https://semafor.hns.family/igraci/49014/marin-kuzminski/",
           "stats": {
             "appearances": 2,
@@ -890,7 +890,7 @@
             "position": 1,
             "name": "Petar Barišić",
             "profileUrl": "https://semafor.hns.family/igraci/389840/petar-barisic/",
-            "photo": "/static/images/nophoto_player_m.png",
+            "photo": "https://hns.family/files/images_comet/d8/9/_resized/d8931c5584d5b6fddb84eedf1db5103e8f0c3db6_80_100_cut_wg_top.jpg",
             "value": "2 / 0",
             "appearances": 2,
             "minutes": 0
@@ -940,7 +940,7 @@
             "position": 1,
             "name": "Marin Kuzminski",
             "profileUrl": "https://semafor.hns.family/igraci/49014/marin-kuzminski/",
-            "photo": "/static/images/nophoto_player_m.png",
+            "photo": "https://hns.family/files/images_comet/27/0/_resized/270a45d3b4d085a2e34a7fdce2621f563597fee2_80_100_cut_wg_top.png",
             "value": "2 / 0",
             "appearances": 2,
             "minutes": 0
@@ -2370,7 +2370,7 @@
       "number": 17,
       "name": "Petar Barišić",
       "position": "Igrač",
-      "photo": "/static/images/nophoto_player_m.png",
+      "photo": "https://hns.family/files/images_comet/d8/9/_resized/d8931c5584d5b6fddb84eedf1db5103e8f0c3db6_80_100_cut_wg_top.jpg",
       "profileUrl": "https://semafor.hns.family/igraci/389840/petar-barisic/",
       "stats": {
         "appearances": 2,
@@ -2586,7 +2586,7 @@
       "number": 25,
       "name": "Marin Kuzminski",
       "position": "Igrač",
-      "photo": "/static/images/nophoto_player_m.png",
+      "photo": "https://hns.family/files/images_comet/27/0/_resized/270a45d3b4d085a2e34a7fdce2621f563597fee2_80_100_cut_wg_top.png",
       "profileUrl": "https://semafor.hns.family/igraci/49014/marin-kuzminski/",
       "stats": {
         "appearances": 2,
@@ -2668,7 +2668,7 @@
         "position": 2,
         "name": "Petar Barišić",
         "profileUrl": "https://semafor.hns.family/igraci/389840/petar-barisic/",
-        "photo": "/static/images/nophoto_player_m.png",
+        "photo": "https://hns.family/files/images_comet/d8/9/_resized/d8931c5584d5b6fddb84eedf1db5103e8f0c3db6_80_100_cut_wg_top.jpg",
         "value": "2 / 0",
         "appearances": 2,
         "minutes": 0
@@ -2718,7 +2718,7 @@
         "position": 7,
         "name": "Marin Kuzminski",
         "profileUrl": "https://semafor.hns.family/igraci/49014/marin-kuzminski/",
-        "photo": "/static/images/nophoto_player_m.png",
+        "photo": "https://hns.family/files/images_comet/27/0/_resized/270a45d3b4d085a2e34a7fdce2621f563597fee2_80_100_cut_wg_top.png",
         "value": "2 / 0",
         "appearances": 2,
         "minutes": 0
