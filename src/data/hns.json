@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-08-25T03:44:22.434Z",
+  "lastUpdated": "2026-08-25T08:37:00.842Z",
   "sourceUrl": "https://semafor.hns.family/klubovi/134/nk-omladinac-niza/",
   "club": {
     "id": 134,
@@ -625,7 +625,7 @@
           "number": 17,
           "name": "Petar Barišić",
           "position": "Igrač",
-          "photo": "/static/images/nophoto_player_m.png",
+          "photo": "https://hns.family/files/images_comet/d8/9/_resized/d8931c5584d5b6fddb84eedf1db5103e8f0c3db6_80_100_cut_wg_top.jpg",
           "profileUrl": "https://semafor.hns.family/igraci/389840/petar-barisic/",
           "stats": {
             "appearances": 2,
@@ -695,7 +695,7 @@
           "number": 20,
           "name": "Karlo Grubač",
           "position": "Igrač",
-          "photo": "https://hns.family/files/images_comet/0c/5/_resized/0c5b7fdbff352e6983a9b126458e9e5fe19de758_80_100_cut_wg_top.png",
+          "photo": "/static/images/nophoto_player_m.png",
           "profileUrl": "https://semafor.hns.family/igraci/375906/karlo-grubac/",
           "stats": {
             "appearances": 2,
@@ -709,7 +709,7 @@
           "number": 5,
           "name": "Hrvoje Kasapović",
           "position": "Igrač",
-          "photo": "https://hns.family/files/images_comet/Person/_resized/58712_669f1d8e-2459-4cae-b94a-91e1dab5cd23_80_100_cut_wg_top.jpg",
+          "photo": "/static/images/nophoto_player_m.png",
           "profileUrl": "https://semafor.hns.family/igraci/58712/hrvoje-kasapovic/",
           "stats": {
             "appearances": 2,
@@ -751,7 +751,7 @@
           "number": 22,
           "name": "Josip Matić",
           "position": "Igrač",
-          "photo": "/static/images/nophoto_player_m.png",
+          "photo": "https://hns.family/files/images_comet/Person/_resized/125673_2f9825dc-889e-490b-8c18-4d7a41ed47c4_80_100_cut_wg_top.jpg",
           "profileUrl": "https://semafor.hns.family/igraci/125673/josip-matic/",
           "stats": {
             "appearances": 2,
@@ -821,7 +821,7 @@
           "number": 4,
           "name": "Daniel Vrbanić",
           "position": "Igrač",
-          "photo": "https://hns.family/files/images_comet/97/b/_resized/97b5f153b275bc9340577267d4afd6c6b9a16ef5_80_100_cut_wg_top.png",
+          "photo": "/static/images/nophoto_player_m.png",
           "profileUrl": "https://semafor.hns.family/igraci/365480/daniel-vrbanic/",
           "stats": {
             "appearances": 1,
@@ -838,7 +838,7 @@
             "position": 1,
             "name": "Josip Matić",
             "profileUrl": "https://semafor.hns.family/igraci/125673/josip-matic/",
-            "photo": "/static/images/nophoto_player_m.png",
+            "photo": "https://hns.family/files/images_comet/Person/_resized/125673_2f9825dc-889e-490b-8c18-4d7a41ed47c4_80_100_cut_wg_top.jpg",
             "value": "2",
             "goals": 2
           },
@@ -847,7 +847,7 @@
             "position": 2,
             "name": "Karlo Grubač",
             "profileUrl": "https://semafor.hns.family/igraci/375906/karlo-grubac/",
-            "photo": "https://hns.family/files/images_comet/0c/5/_resized/0c5b7fdbff352e6983a9b126458e9e5fe19de758_80_100_cut_wg_top.png",
+            "photo": "/static/images/nophoto_player_m.png",
             "value": "1",
             "goals": 1
           }
@@ -890,7 +890,7 @@
             "position": 1,
             "name": "Petar Barišić",
             "profileUrl": "https://semafor.hns.family/igraci/389840/petar-barisic/",
-            "photo": "/static/images/nophoto_player_m.png",
+            "photo": "https://hns.family/files/images_comet/d8/9/_resized/d8931c5584d5b6fddb84eedf1db5103e8f0c3db6_80_100_cut_wg_top.jpg",
             "value": "2 / 0",
             "appearances": 2,
             "minutes": 0
@@ -920,7 +920,7 @@
             "position": 1,
             "name": "Karlo Grubač",
             "profileUrl": "https://semafor.hns.family/igraci/375906/karlo-grubac/",
-            "photo": "https://hns.family/files/images_comet/0c/5/_resized/0c5b7fdbff352e6983a9b126458e9e5fe19de758_80_100_cut_wg_top.png",
+            "photo": "/static/images/nophoto_player_m.png",
             "value": "2 / 0",
             "appearances": 2,
             "minutes": 0
@@ -930,7 +930,7 @@
             "position": 1,
             "name": "Hrvoje Kasapović",
             "profileUrl": "https://semafor.hns.family/igraci/58712/hrvoje-kasapovic/",
-            "photo": "https://hns.family/files/images_comet/Person/_resized/58712_669f1d8e-2459-4cae-b94a-91e1dab5cd23_80_100_cut_wg_top.jpg",
+            "photo": "/static/images/nophoto_player_m.png",
             "value": "2 / 0",
             "appearances": 2,
             "minutes": 0
@@ -950,7 +950,7 @@
             "position": 1,
             "name": "Josip Matić",
             "profileUrl": "https://semafor.hns.family/igraci/125673/josip-matic/",
-            "photo": "/static/images/nophoto_player_m.png",
+            "photo": "https://hns.family/files/images_comet/Person/_resized/125673_2f9825dc-889e-490b-8c18-4d7a41ed47c4_80_100_cut_wg_top.jpg",
             "value": "2 / 0",
             "appearances": 2,
             "minutes": 0
@@ -1030,7 +1030,7 @@
             "position": 12,
             "name": "Daniel Vrbanić",
             "profileUrl": "https://semafor.hns.family/igraci/365480/daniel-vrbanic/",
-            "photo": "https://hns.family/files/images_comet/97/b/_resized/97b5f153b275bc9340577267d4afd6c6b9a16ef5_80_100_cut_wg_top.png",
+            "photo": "/static/images/nophoto_player_m.png",
             "value": "1 / 0",
             "appearances": 1,
             "minutes": 0
@@ -2154,7 +2154,7 @@
       "number": 4,
       "name": "Daniel Vrbanić",
       "position": "Igrač",
-      "photo": "https://hns.family/files/images_comet/97/b/_resized/97b5f153b275bc9340577267d4afd6c6b9a16ef5_80_100_cut_wg_top.png",
+      "photo": "/static/images/nophoto_player_m.png",
       "profileUrl": "https://semafor.hns.family/igraci/365480/daniel-vrbanic/",
       "stats": {
         "appearances": 1,
@@ -2181,7 +2181,7 @@
       "number": 5,
       "name": "Hrvoje Kasapović",
       "position": "Igrač",
-      "photo": "https://hns.family/files/images_comet/Person/_resized/58712_669f1d8e-2459-4cae-b94a-91e1dab5cd23_80_100_cut_wg_top.jpg",
+      "photo": "/static/images/nophoto_player_m.png",
       "profileUrl": "https://semafor.hns.family/igraci/58712/hrvoje-kasapovic/",
       "stats": {
         "appearances": 2,
@@ -2370,7 +2370,7 @@
       "number": 17,
       "name": "Petar Barišić",
       "position": "Igrač",
-      "photo": "/static/images/nophoto_player_m.png",
+      "photo": "https://hns.family/files/images_comet/d8/9/_resized/d8931c5584d5b6fddb84eedf1db5103e8f0c3db6_80_100_cut_wg_top.jpg",
       "profileUrl": "https://semafor.hns.family/igraci/389840/petar-barisic/",
       "stats": {
         "appearances": 2,
@@ -2478,7 +2478,7 @@
       "number": 20,
       "name": "Karlo Grubač",
       "position": "Igrač",
-      "photo": "https://hns.family/files/images_comet/0c/5/_resized/0c5b7fdbff352e6983a9b126458e9e5fe19de758_80_100_cut_wg_top.png",
+      "photo": "/static/images/nophoto_player_m.png",
       "profileUrl": "https://semafor.hns.family/igraci/375906/karlo-grubac/",
       "stats": {
         "appearances": 2,
@@ -2505,7 +2505,7 @@
       "number": 22,
       "name": "Josip Matić",
       "position": "Igrač",
-      "photo": "/static/images/nophoto_player_m.png",
+      "photo": "https://hns.family/files/images_comet/Person/_resized/125673_2f9825dc-889e-490b-8c18-4d7a41ed47c4_80_100_cut_wg_top.jpg",
       "profileUrl": "https://semafor.hns.family/igraci/125673/josip-matic/",
       "stats": {
         "appearances": 2,
@@ -2616,7 +2616,7 @@
         "position": 1,
         "name": "Josip Matić",
         "profileUrl": "https://semafor.hns.family/igraci/125673/josip-matic/",
-        "photo": "/static/images/nophoto_player_m.png",
+        "photo": "https://hns.family/files/images_comet/Person/_resized/125673_2f9825dc-889e-490b-8c18-4d7a41ed47c4_80_100_cut_wg_top.jpg",
         "value": "2",
         "goals": 2
       },
@@ -2625,7 +2625,7 @@
         "position": 2,
         "name": "Karlo Grubač",
         "profileUrl": "https://semafor.hns.family/igraci/375906/karlo-grubac/",
-        "photo": "https://hns.family/files/images_comet/0c/5/_resized/0c5b7fdbff352e6983a9b126458e9e5fe19de758_80_100_cut_wg_top.png",
+        "photo": "/static/images/nophoto_player_m.png",
         "value": "1",
         "goals": 1
       }
@@ -2668,7 +2668,7 @@
         "position": 2,
         "name": "Petar Barišić",
         "profileUrl": "https://semafor.hns.family/igraci/389840/petar-barisic/",
-        "photo": "/static/images/nophoto_player_m.png",
+        "photo": "https://hns.family/files/images_comet/d8/9/_resized/d8931c5584d5b6fddb84eedf1db5103e8f0c3db6_80_100_cut_wg_top.jpg",
         "value": "2 / 0",
         "appearances": 2,
         "minutes": 0
@@ -2698,7 +2698,7 @@
         "position": 5,
         "name": "Karlo Grubač",
         "profileUrl": "https://semafor.hns.family/igraci/375906/karlo-grubac/",
-        "photo": "https://hns.family/files/images_comet/0c/5/_resized/0c5b7fdbff352e6983a9b126458e9e5fe19de758_80_100_cut_wg_top.png",
+        "photo": "/static/images/nophoto_player_m.png",
         "value": "2 / 0",
         "appearances": 2,
         "minutes": 0
@@ -2708,7 +2708,7 @@
         "position": 6,
         "name": "Hrvoje Kasapović",
         "profileUrl": "https://semafor.hns.family/igraci/58712/hrvoje-kasapovic/",
-        "photo": "https://hns.family/files/images_comet/Person/_resized/58712_669f1d8e-2459-4cae-b94a-91e1dab5cd23_80_100_cut_wg_top.jpg",
+        "photo": "/static/images/nophoto_player_m.png",
         "value": "2 / 0",
         "appearances": 2,
         "minutes": 0
@@ -2728,7 +2728,7 @@
         "position": 8,
         "name": "Josip Matić",
         "profileUrl": "https://semafor.hns.family/igraci/125673/josip-matic/",
-        "photo": "/static/images/nophoto_player_m.png",
+        "photo": "https://hns.family/files/images_comet/Person/_resized/125673_2f9825dc-889e-490b-8c18-4d7a41ed47c4_80_100_cut_wg_top.jpg",
         "value": "2 / 0",
         "appearances": 2,
         "minutes": 0
@@ -2808,7 +2808,7 @@
         "position": 16,
         "name": "Daniel Vrbanić",
         "profileUrl": "https://semafor.hns.family/igraci/365480/daniel-vrbanic/",
-        "photo": "https://hns.family/files/images_comet/97/b/_resized/97b5f153b275bc9340577267d4afd6c6b9a16ef5_80_100_cut_wg_top.png",
+        "photo": "/static/images/nophoto_player_m.png",
         "value": "1 / 0",
         "appearances": 1,
         "minutes": 0
