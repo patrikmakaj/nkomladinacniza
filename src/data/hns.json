@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-08-25T20:55:00.640Z",
+  "lastUpdated": "2026-08-26T03:50:14.614Z",
   "sourceUrl": "https://semafor.hns.family/klubovi/134/nk-omladinac-niza/",
   "club": {
     "id": 134,
@@ -695,7 +695,7 @@
           "number": 20,
           "name": "Karlo Grubač",
           "position": "Igrač",
-          "photo": "/static/images/nophoto_player_m.png",
+          "photo": "https://hns.family/files/images_comet/0c/5/_resized/0c5b7fdbff352e6983a9b126458e9e5fe19de758_80_100_cut_wg_top.png",
           "profileUrl": "https://semafor.hns.family/igraci/375906/karlo-grubac/",
           "stats": {
             "appearances": 2,
@@ -765,7 +765,7 @@
           "number": 10,
           "name": "Tin Mauhar",
           "position": "Igrač",
-          "photo": "/static/images/nophoto_player_m.png",
+          "photo": "https://hns.family/files/images_comet/6a/4/_resized/6a4e068e61fb0acefa66e426b53bdbb0b3c3fc52_80_100_cut_wg_top.jpg",
           "profileUrl": "https://semafor.hns.family/igraci/389829/tin-mauhar/",
           "stats": {
             "appearances": 2,
@@ -793,7 +793,7 @@
           "number": 19,
           "name": "Ivan Prišć",
           "position": "Igrač",
-          "photo": "/static/images/nophoto_player_m.png",
+          "photo": "https://hns.family/files/images_comet/8e/2/_resized/8e29eabcdf2a1da8abfd32911c180c985f0cae5c_80_100_cut_wg_top.png",
           "profileUrl": "https://semafor.hns.family/igraci/118545/ivan-prisc/",
           "stats": {
             "appearances": 2,
@@ -807,7 +807,7 @@
           "number": 19,
           "name": "Filip Tomac",
           "position": "Igrač",
-          "photo": "/static/images/nophoto_player_m.png",
+          "photo": "https://hns.family/files/images_comet/19/6/_resized/196e90ca1bdae4b92c4b44ad4993f050af7379f2_80_100_cut_wg_top.jpg",
           "profileUrl": "https://semafor.hns.family/igraci/400435/filip-tomac/",
           "stats": {
             "appearances": 1,
@@ -847,7 +847,7 @@
             "position": 2,
             "name": "Karlo Grubač",
             "profileUrl": "https://semafor.hns.family/igraci/375906/karlo-grubac/",
-            "photo": "/static/images/nophoto_player_m.png",
+            "photo": "https://hns.family/files/images_comet/0c/5/_resized/0c5b7fdbff352e6983a9b126458e9e5fe19de758_80_100_cut_wg_top.png",
             "value": "1",
             "goals": 1
           }
@@ -920,7 +920,7 @@
             "position": 1,
             "name": "Karlo Grubač",
             "profileUrl": "https://semafor.hns.family/igraci/375906/karlo-grubac/",
-            "photo": "/static/images/nophoto_player_m.png",
+            "photo": "https://hns.family/files/images_comet/0c/5/_resized/0c5b7fdbff352e6983a9b126458e9e5fe19de758_80_100_cut_wg_top.png",
             "value": "2 / 0",
             "appearances": 2,
             "minutes": 0
@@ -960,7 +960,7 @@
             "position": 1,
             "name": "Tin Mauhar",
             "profileUrl": "https://semafor.hns.family/igraci/389829/tin-mauhar/",
-            "photo": "/static/images/nophoto_player_m.png",
+            "photo": "https://hns.family/files/images_comet/6a/4/_resized/6a4e068e61fb0acefa66e426b53bdbb0b3c3fc52_80_100_cut_wg_top.jpg",
             "value": "2 / 0",
             "appearances": 2,
             "minutes": 0
@@ -970,7 +970,7 @@
             "position": 1,
             "name": "Ivan Prišć",
             "profileUrl": "https://semafor.hns.family/igraci/118545/ivan-prisc/",
-            "photo": "/static/images/nophoto_player_m.png",
+            "photo": "https://hns.family/files/images_comet/8e/2/_resized/8e29eabcdf2a1da8abfd32911c180c985f0cae5c_80_100_cut_wg_top.png",
             "value": "2 / 0",
             "appearances": 2,
             "minutes": 0
@@ -1020,7 +1020,7 @@
             "position": 12,
             "name": "Filip Tomac",
             "profileUrl": "https://semafor.hns.family/igraci/400435/filip-tomac/",
-            "photo": "/static/images/nophoto_player_m.png",
+            "photo": "https://hns.family/files/images_comet/19/6/_resized/196e90ca1bdae4b92c4b44ad4993f050af7379f2_80_100_cut_wg_top.jpg",
             "value": "1 / 0",
             "appearances": 1,
             "minutes": 0
@@ -2289,7 +2289,7 @@
       "number": 10,
       "name": "Tin Mauhar",
       "position": "Igrač",
-      "photo": "/static/images/nophoto_player_m.png",
+      "photo": "https://hns.family/files/images_comet/6a/4/_resized/6a4e068e61fb0acefa66e426b53bdbb0b3c3fc52_80_100_cut_wg_top.jpg",
       "profileUrl": "https://semafor.hns.family/igraci/389829/tin-mauhar/",
       "stats": {
         "appearances": 2,
@@ -2424,7 +2424,7 @@
       "number": 19,
       "name": "Filip Tomac",
       "position": "Igrač",
-      "photo": "/static/images/nophoto_player_m.png",
+      "photo": "https://hns.family/files/images_comet/19/6/_resized/196e90ca1bdae4b92c4b44ad4993f050af7379f2_80_100_cut_wg_top.jpg",
       "profileUrl": "https://semafor.hns.family/igraci/400435/filip-tomac/",
       "stats": {
         "appearances": 1,
@@ -2451,7 +2451,7 @@
       "number": 19,
       "name": "Ivan Prišć",
       "position": "Igrač",
-      "photo": "/static/images/nophoto_player_m.png",
+      "photo": "https://hns.family/files/images_comet/8e/2/_resized/8e29eabcdf2a1da8abfd32911c180c985f0cae5c_80_100_cut_wg_top.png",
       "profileUrl": "https://semafor.hns.family/igraci/118545/ivan-prisc/",
       "stats": {
         "appearances": 2,
@@ -2478,7 +2478,7 @@
       "number": 20,
       "name": "Karlo Grubač",
       "position": "Igrač",
-      "photo": "/static/images/nophoto_player_m.png",
+      "photo": "https://hns.family/files/images_comet/0c/5/_resized/0c5b7fdbff352e6983a9b126458e9e5fe19de758_80_100_cut_wg_top.png",
       "profileUrl": "https://semafor.hns.family/igraci/375906/karlo-grubac/",
       "stats": {
         "appearances": 2,
@@ -2625,7 +2625,7 @@
         "position": 2,
         "name": "Karlo Grubač",
         "profileUrl": "https://semafor.hns.family/igraci/375906/karlo-grubac/",
-        "photo": "/static/images/nophoto_player_m.png",
+        "photo": "https://hns.family/files/images_comet/0c/5/_resized/0c5b7fdbff352e6983a9b126458e9e5fe19de758_80_100_cut_wg_top.png",
         "value": "1",
         "goals": 1
       }
@@ -2698,7 +2698,7 @@
         "position": 5,
         "name": "Karlo Grubač",
         "profileUrl": "https://semafor.hns.family/igraci/375906/karlo-grubac/",
-        "photo": "/static/images/nophoto_player_m.png",
+        "photo": "https://hns.family/files/images_comet/0c/5/_resized/0c5b7fdbff352e6983a9b126458e9e5fe19de758_80_100_cut_wg_top.png",
         "value": "2 / 0",
         "appearances": 2,
         "minutes": 0
@@ -2738,7 +2738,7 @@
         "position": 9,
         "name": "Tin Mauhar",
         "profileUrl": "https://semafor.hns.family/igraci/389829/tin-mauhar/",
-        "photo": "/static/images/nophoto_player_m.png",
+        "photo": "https://hns.family/files/images_comet/6a/4/_resized/6a4e068e61fb0acefa66e426b53bdbb0b3c3fc52_80_100_cut_wg_top.jpg",
         "value": "2 / 0",
         "appearances": 2,
         "minutes": 0
@@ -2748,7 +2748,7 @@
         "position": 10,
         "name": "Ivan Prišć",
         "profileUrl": "https://semafor.hns.family/igraci/118545/ivan-prisc/",
-        "photo": "/static/images/nophoto_player_m.png",
+        "photo": "https://hns.family/files/images_comet/8e/2/_resized/8e29eabcdf2a1da8abfd32911c180c985f0cae5c_80_100_cut_wg_top.png",
         "value": "2 / 0",
         "appearances": 2,
         "minutes": 0
@@ -2798,7 +2798,7 @@
         "position": 15,
         "name": "Filip Tomac",
         "profileUrl": "https://semafor.hns.family/igraci/400435/filip-tomac/",
-        "photo": "/static/images/nophoto_player_m.png",
+        "photo": "https://hns.family/files/images_comet/19/6/_resized/196e90ca1bdae4b92c4b44ad4993f050af7379f2_80_100_cut_wg_top.jpg",
         "value": "1 / 0",
         "appearances": 1,
         "minutes": 0
