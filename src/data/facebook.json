@@ -1,8 +1,22 @@
 {
-  "lastUpdated": "2026-08-22T20:47:47.091Z",
+  "lastUpdated": "2026-08-27T10:06:05.340Z",
   "enabled": true,
   "pageId": "55401829691",
   "posts": [
+    {
+      "id": "55401829691_1674819821317178",
+      "message": "",
+      "createdAt": "2026-08-27T08:14:55+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1674819821317178",
+      "images": [
+        {
+          "src": "/images/facebook/55401829691_1674819821317178.jpg",
+          "thumb": "/images/facebook/55401829691_1674819821317178.webp",
+          "width": 700,
+          "height": 875
+        }
+      ]
+    },
     {
       "id": "55401829691_1670356031763557",
       "message": "",
@@ -508,20 +522,6 @@
           "thumb": "/images/facebook/55401829691_1643266967805797_11.webp",
           "width": 700,
           "height": 525
-        }
-      ]
-    },
-    {
-      "id": "55401829691_1642545757877918",
-      "message": "Turnir u boćanju na travi u tijeku. Sudjeluje 21 ekipa...",
-      "createdAt": "2026-07-25T16:30:42+0000",
-      "permalink": "https://www.facebook.com/reel/1615939946835852/",
-      "images": [
-        {
-          "src": "/images/facebook/55401829691_1642545757877918.jpg",
-          "thumb": "/images/facebook/55401829691_1642545757877918.webp",
-          "width": 700,
-          "height": 394
         }
       ]
     }
