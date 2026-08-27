@@ -57,9 +57,6 @@ var ZONA = "Europe/Zagreb";
 /** Koliko se mečeva igra istovremeno (broj golova). */
 var TERENA = 2;
 
-/** Koliko ekipa iz svake grupe prolazi dalje. */
-var PROLAZI = 2;
-
 var TAB_EKIPE = "Ekipe";
 var TAB_UTAKMICE = "Utakmice";
 
@@ -353,14 +350,33 @@ function pripremiTab(ss, ime, zaglavlje) {
  * Stranica zna sama složiti eliminacijske parove samo za 2 grupe (odmah
  * polufinale) i 4 grupe (četvrtfinale), pa se držimo toga.
  */
-function brojGrupa(n) {
-  // Do 6 ekipa jedna grupa — svi igraju sa svima, pa finale i meč za 3. mjesto.
-  // S tako malo ekipa dijeljenje u grupe daje premalo mečeva po ekipi.
-  if (n < 7) return 1;
-  // Ispod 12 ekipa 4 grupe bi dale grupu od dvije ekipe — jedan meč i obje
-  // dalje. Radije dvije veće grupe, pa svaka ekipa odigra više mečeva.
-  if (n < 12) return 2;
-  return 4;
+/**
+ * Format prema broju prijavljenih ekipa.
+ *
+ * Cilj je 30-40 utakmica ukupno na dva terena — ispod toga je večer prekratka
+ * za 20 € kotizacije, iznad toga se igra iza 22:30. Brojke po varijanti:
+ *
+ *    8 ekipa  1 grupa                30 utakmica   kraj ~21:30
+ *    9 ekipa  1 grupa                38            ~22:10
+ *   10 ekipa  2 grupe, prolaze 4     28            ~21:20
+ *   11 ekipa  2 grupe, prolaze 4     33            ~21:50
+ *   12 ekipa  2 grupe, prolaze 2     34            ~21:50
+ *   13 ekipa  2 grupe, prolaze 2     40            ~22:20
+ *   14+       4 grupe, prolaze 2     26 i naviše   ~21:10
+ *
+ * Vraća { grupa: broj grupa, prolazi: koliko ih iz svake ide dalje }.
+ */
+function format(n) {
+  // Do 9 ekipa jedna skupina — svi sa svima. Dijeljenje u grupe ovdje daje
+  // premalo mečeva po ekipi (8 ekipa u dvije grupe = samo 16 utakmica).
+  if (n < 10) return { grupa: 1, prolazi: 4 };
+  // 10 i 11: dvije grupe bi s prolaskom dvije dale samo 24 odnosno 29 utakmica,
+  // pa prolaze prve četiri i ide se na četvrtfinale.
+  if (n < 12) return { grupa: 2, prolazi: 4 };
+  // 12 i 13: grupe su već dovoljno velike, prolaze prve dvije.
+  if (n < 14) return { grupa: 2, prolazi: 2 };
+  // 14+: dvije grupe bi značile 46 utakmica i kraj iza 23:00.
+  return { grupa: 4, prolazi: 2 };
 }
 
 /** Fisher-Yates — nepristran ždrijeb. */
@@ -491,7 +507,9 @@ function zdrijebIRaspored() {
   }
 
   // ── Grupe ────────────────────────────────────────────────────────
-  var n = brojGrupa(imena.length);
+  var f = format(imena.length);
+  var n = f.grupa;
+  var prolazi = f.prolazi;
   var slova = ["A", "B", "C", "D"].slice(0, n);
   var grupe = {};
   slova.forEach(function (g) { grupe[g] = []; });
@@ -528,13 +546,16 @@ function zdrijebIRaspored() {
   // ── Eliminacija ──────────────────────────────────────────────────
   // Ekipe ostaju prazne; stranica ih popunjava kad grupe završe.
   var zadnjiSlot = poredani.length ? poredani[poredani.length - 1].slot : 0;
+  // Broj kvalificiranih (grupa × prolazi) određuje ide li se na četvrtfinale
+  // ili odmah na polufinale. Stranica taj format iščita upravo iz ovih redaka.
+  var kvalificiranih = n * prolazi;
   var koFaze =
-    n === 4
-      ? [["Četvrtfinale", 1], ["Četvrtfinale", 2], ["Četvrtfinale", 1], ["Četvrtfinale", 2], ["Polufinale", 1], ["Polufinale", 2], ["Za 3. mjesto", 1], ["Finale", 1]]
-      : n === 2
-        ? [["Polufinale", 1], ["Polufinale", 2], ["Za 3. mjesto", 1], ["Finale", 1]]
-        // Jedna grupa: tablica je već poredak, pa idu samo zadnja dva meča.
-        : [["Za 3. mjesto", 1], ["Finale", 1]];
+    n === 1
+      // Jedna skupina: tablica je već poredak, pa idu samo zadnja dva meča.
+      ? [["Za 3. mjesto", 1], ["Finale", 1]]
+      : kvalificiranih === 8
+        ? [["Četvrtfinale", 1], ["Četvrtfinale", 2], ["Četvrtfinale", 1], ["Četvrtfinale", 2], ["Polufinale", 1], ["Polufinale", 2], ["Za 3. mjesto", 1], ["Finale", 1]]
+        : [["Polufinale", 1], ["Polufinale", 2], ["Za 3. mjesto", 1], ["Finale", 1]];
 
   // Pauza od jednog termina između grupa i eliminacije.
   var slot = zadnjiSlot + 2;
@@ -558,7 +579,8 @@ function zdrijebIRaspored() {
       "Ukupno " + redovi.length + " redaka s eliminacijom.\n\n" +
       (n === 1
         ? "Prve dvije iz tablice idu u finale, treća i četvrta na meč za 3. mjesto."
-        : "Prolaze prve " + PROLAZI + " iz svake grupe.") +
+        : "Prolaze prve " + prolazi + " iz svake grupe → " + kvalificiranih +
+          (kvalificiranih === 8 ? " u četvrtfinalu." : " u polufinalu.")) +
       "\nParove stranica slaže sama — ti upisuješ samo rezultate.",
     ui.ButtonSet.OK
   );

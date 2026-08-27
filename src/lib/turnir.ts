@@ -314,13 +314,13 @@ export function initTurnir(cfg: TurnirConfig): () => void {
 
     const groupMs = matches.filter((m) => m.faza === "Grupa" && m.hasTeams);
     const groupsDone = groupMs.length > 0 && groupMs.every((m) => m.played);
-    const qualifiers = groupsDone ? computeQualifiers(standings, groupKeys) : null;
+    const qualifiers = groupsDone ? computeQualifiers(standings, groupKeys, matches) : null;
     if (qualifiers) resolveKnockout(matches, qualifiers);
 
     const drawn = matches.some((m) => m.faza === "Grupa" && m.hasTeams);
     return {
       groups, groupKeys, rosters, allTeams, matches, standings, groupsDone, qualifiers, drawn,
-      prolazi: prolaziZa(groupKeys.length),
+      prolazi: prolaziZa(groupKeys.length, matches),
       fond,
       poredak: konacniPoredak(matches, fond),
     };
@@ -365,9 +365,20 @@ export function initTurnir(cfg: TurnirConfig): () => void {
     return imena.map((name, i) => ({ mjesto: i + 1, name, iznos: iznosi[i] ?? 0 }));
   }
 
-  /** Koliko ekipa iz grupe ide dalje. Kod jedne grupe idu prve četiri. */
-  function prolaziZa(brojGrupa: number) {
-    return brojGrupa === 1 ? 4 : cfg.qualifiersPerGroup;
+  /**
+   * Koliko ekipa iz svake grupe ide dalje.
+   *
+   * Ne čita se iz konfiguracije nego iz eliminacijskih redaka koje je upisala
+   * skripta u Sheetu — format ovisi o broju prijavljenih, a to se zna tek na
+   * dan turnira. Četiri četvrtfinala znače osam kvalificiranih, dva polufinala
+   * bez četvrtfinala znače četiri.
+   */
+  function prolaziZa(brojGrupa: number, matches: Match[]) {
+    if (brojGrupa === 1) return 4; // tablica je poredak → finale i meč za 3.
+    const qf = matches.filter((m) => m.faza === "Četvrtfinale").length;
+    const sf = matches.filter((m) => m.faza === "Polufinale").length;
+    const ukupno = qf >= 4 ? 8 : sf >= 2 ? 4 : brojGrupa * cfg.qualifiersPerGroup;
+    return Math.max(1, Math.round(ukupno / brojGrupa));
   }
 
   /**
@@ -379,8 +390,8 @@ export function initTurnir(cfg: TurnirConfig): () => void {
    *
    * Za druge brojeve grupa parovi se upisuju ručno u Sheet.
    */
-  function computeQualifiers(s: Record<string, Row[]>, keys: string[]) {
-    const n = prolaziZa(keys.length);
+  function computeQualifiers(s: Record<string, Row[]>, keys: string[], matches: Match[]) {
+    const n = prolaziZa(keys.length, matches);
     if (![1, 2, 4].includes(keys.length)) return null;
     for (const g of keys) if (!s[g] || s[g].length < n) return null;
 
@@ -398,6 +409,20 @@ export function initTurnir(cfg: TurnirConfig): () => void {
     keys.forEach((g) => {
       for (let i = 0; i < n; i++) list.push({ lbl: `${i + 1}. ${g}`, name: s[g][i].name });
     });
+
+    // Dvije grupe iz kojih prolaze po četiri → osam u četvrtfinalu.
+    // Pobjednici grupa idu u suprotne polovice ždrijeba da se mogu sresti
+    // tek u finalu, i nitko ne igra protiv ekipe iz svoje grupe.
+    if (keys.length === 2 && n === 4) {
+      const [A, B] = keys.map((g) => s[g]);
+      const pairs: [string, string][] = [
+        [A[0].name, B[3].name], // lijeva polovica
+        [B[1].name, A[2].name],
+        [B[0].name, A[3].name], // desna polovica
+        [A[1].name, B[2].name],
+      ];
+      return { list, pairs, mode: "qf" as const };
+    }
 
     // Prvi iz jedne grupe protiv drugoga iz sljedeće, u krug.
     const pairs: [string, string][] = [];

@@ -129,19 +129,60 @@ const config: TurnirConfig = {
 
       <h3 class="font-display font-bold text-[#10275c] uppercase tracking-wide mt-4 mb-1">2. Format natjecanja</h3>
       <ul class="list-disc pl-5 space-y-1">
-        <li>Format ovisi o broju prijavljenih ekipa — ždrijeb je odmah nakon zatvaranja prijava.</li>
         <li>
-          <strong>Do 6 ekipa:</strong> jedna skupina, <strong>svi igraju sa svima</strong>.
-          Prve dvije iz tablice idu u <strong>finale</strong>, treća i četvrta na
-          <strong>meč za 3. mjesto</strong>.
+          Format se određuje <strong>prema broju prijavljenih</strong>, odmah nakon
+          zatvaranja prijava. Cilj je da svaka ekipa odigra dovoljno mečeva, a da
+          turnir stane u večer.
         </li>
-        <li>
-          <strong>7 i više ekipa:</strong> ždrijeb u grupe (dvije, a od 12 ekipa četiri),
-          u grupi <strong>svako sa svakim</strong>, pa <strong>prve dvije iz svake grupe</strong>
-          u eliminaciju do finala i meča za 3. mjesto.
-        </li>
+        <li>U svakoj skupini igra se <strong>svako sa svakim</strong>, po jedan meč.</li>
         <li>Puca se na <strong>dva gola paralelno</strong> — dva meča idu istovremeno.</li>
-        <li>Parovi eliminacije slažu se <strong>unakrsno</strong> — nitko ne igra protiv ekipe iz svoje grupe.</li>
+      </ul>
+
+      <div class="overflow-x-auto my-3">
+        <table class="w-full text-sm border border-[#C9D4E8] rounded-lg overflow-hidden">
+          <thead class="bg-[#EAF0FB] text-[#10275c]">
+            <tr>
+              <th class="px-3 py-2 text-left font-display uppercase text-xs">Prijavljenih</th>
+              <th class="px-3 py-2 text-left font-display uppercase text-xs">Skupine</th>
+              <th class="px-3 py-2 text-left font-display uppercase text-xs">Dalje ide</th>
+              <th class="px-3 py-2 text-center font-display uppercase text-xs">Mečeva</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-t border-[#C9D4E8]">
+              <td class="px-3 py-2">do 9</td>
+              <td class="px-3 py-2">jedna skupina</td>
+              <td class="px-3 py-2">prve 4 → finale i meč za 3. mjesto</td>
+              <td class="px-3 py-2 text-center tabular-nums">30–38</td>
+            </tr>
+            <tr class="border-t border-[#C9D4E8]">
+              <td class="px-3 py-2">10–11</td>
+              <td class="px-3 py-2">dvije</td>
+              <td class="px-3 py-2">prve 4 iz svake → četvrtfinale</td>
+              <td class="px-3 py-2 text-center tabular-nums">28–33</td>
+            </tr>
+            <tr class="border-t border-[#C9D4E8]">
+              <td class="px-3 py-2">12–13</td>
+              <td class="px-3 py-2">dvije</td>
+              <td class="px-3 py-2">prve 2 iz svake → polufinale</td>
+              <td class="px-3 py-2 text-center tabular-nums">34–40</td>
+            </tr>
+            <tr class="border-t border-[#C9D4E8]">
+              <td class="px-3 py-2">14 i više</td>
+              <td class="px-3 py-2">četiri</td>
+              <td class="px-3 py-2">prve 2 iz svake → četvrtfinale</td>
+              <td class="px-3 py-2 text-center tabular-nums">26+</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <ul class="list-disc pl-5 space-y-1">
+        <li>Eliminacija uvijek ide do <strong>finala</strong>, uz meč <strong>za 3. mjesto</strong>.</li>
+        <li>
+          Parovi eliminacije slažu se <strong>unakrsno</strong> — nitko ne igra protiv
+          ekipe iz svoje skupine, a pobjednici skupina mogu se sresti tek u finalu.
+        </li>
       </ul>
 
       <h3 class="font-display font-bold text-[#10275c] uppercase tracking-wide mt-4 mb-1">3. Tijek meča</h3>
