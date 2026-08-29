@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-08-29T19:57:25.856Z",
+  "lastUpdated": "2026-08-29T22:27:21.410Z",
   "sourceUrl": "https://semafor.hns.family/klubovi/134/nk-omladinac-niza/",
   "club": {
     "id": 134,
@@ -521,11 +521,140 @@
           "isUs": false
         }
       ],
-      "players": [],
+      "players": [
+        {
+          "id": 70771,
+          "number": 11,
+          "name": "Danijel Ćosić",
+          "position": "Igrač",
+          "photo": "https://hns.family/files/images_comet/97/0/_resized/970975f4675a93f7427b52a819b1a2a8370cbc3b_80_100_cut_wg_top.jpg",
+          "profileUrl": "https://semafor.hns.family/igraci/70771/danijel-cosic/",
+          "stats": {
+            "appearances": 1,
+            "minutes": 0,
+            "goals": 0,
+            "cards": "1 / 0"
+          }
+        },
+        {
+          "id": 375906,
+          "number": 7,
+          "name": "Karlo Grubač",
+          "position": "Igrač",
+          "photo": "https://hns.family/files/images_comet/0c/5/_resized/0c5b7fdbff352e6983a9b126458e9e5fe19de758_80_100_cut_wg_top.png",
+          "profileUrl": "https://semafor.hns.family/igraci/375906/karlo-grubac/",
+          "stats": {
+            "appearances": 1,
+            "minutes": 0,
+            "goals": 0,
+            "cards": "1 / 0"
+          }
+        },
+        {
+          "id": 211559,
+          "number": 20,
+          "name": "Dominik Hvizdak",
+          "position": "Igrač",
+          "photo": "https://hns.family/files/images_comet/27/2/_resized/272b27612410f91f332ea3761ddc64d74333d12d_80_100_cut_wg_top.png",
+          "profileUrl": "https://semafor.hns.family/igraci/211559/dominik-hvizdak/",
+          "stats": {
+            "appearances": 1,
+            "minutes": 0,
+            "goals": 1,
+            "cards": "0 / 0"
+          }
+        },
+        {
+          "id": 49014,
+          "number": 13,
+          "name": "Marin Kuzminski",
+          "position": "Igrač",
+          "photo": "https://hns.family/files/images_comet/27/0/_resized/270a45d3b4d085a2e34a7fdce2621f563597fee2_80_100_cut_wg_top.png",
+          "profileUrl": "https://semafor.hns.family/igraci/49014/marin-kuzminski/",
+          "stats": {
+            "appearances": 0,
+            "minutes": 0,
+            "goals": 0,
+            "cards": "1 / 0"
+          }
+        }
+      ],
       "stats": {
-        "topScorers": [],
-        "topCards": [],
-        "topApps": []
+        "topScorers": [
+          {
+            "personId": 211559,
+            "position": 1,
+            "name": "Dominik Hvizdak",
+            "profileUrl": "https://semafor.hns.family/igraci/211559/dominik-hvizdak/",
+            "photo": "https://hns.family/files/images_comet/27/2/_resized/272b27612410f91f332ea3761ddc64d74333d12d_80_100_cut_wg_top.png",
+            "value": "1",
+            "goals": 1
+          }
+        ],
+        "topCards": [
+          {
+            "personId": 70771,
+            "position": 1,
+            "name": "Danijel Ćosić",
+            "profileUrl": "https://semafor.hns.family/igraci/70771/danijel-cosic/",
+            "photo": "https://hns.family/files/images_comet/97/0/_resized/970975f4675a93f7427b52a819b1a2a8370cbc3b_80_100_cut_wg_top.jpg",
+            "value": "1 / 0",
+            "yellow": 1,
+            "red": 0
+          },
+          {
+            "personId": 375906,
+            "position": 1,
+            "name": "Karlo Grubač",
+            "profileUrl": "https://semafor.hns.family/igraci/375906/karlo-grubac/",
+            "photo": "https://hns.family/files/images_comet/0c/5/_resized/0c5b7fdbff352e6983a9b126458e9e5fe19de758_80_100_cut_wg_top.png",
+            "value": "1 / 0",
+            "yellow": 1,
+            "red": 0
+          },
+          {
+            "personId": 49014,
+            "position": 1,
+            "name": "Marin Kuzminski",
+            "profileUrl": "https://semafor.hns.family/igraci/49014/marin-kuzminski/",
+            "photo": "https://hns.family/files/images_comet/27/0/_resized/270a45d3b4d085a2e34a7fdce2621f563597fee2_80_100_cut_wg_top.png",
+            "value": "1 / 0",
+            "yellow": 1,
+            "red": 0
+          }
+        ],
+        "topApps": [
+          {
+            "personId": 70771,
+            "position": 1,
+            "name": "Danijel Ćosić",
+            "profileUrl": "https://semafor.hns.family/igraci/70771/danijel-cosic/",
+            "photo": "https://hns.family/files/images_comet/97/0/_resized/970975f4675a93f7427b52a819b1a2a8370cbc3b_80_100_cut_wg_top.jpg",
+            "value": "1 / 0",
+            "appearances": 1,
+            "minutes": 0
+          },
+          {
+            "personId": 375906,
+            "position": 1,
+            "name": "Karlo Grubač",
+            "profileUrl": "https://semafor.hns.family/igraci/375906/karlo-grubac/",
+            "photo": "https://hns.family/files/images_comet/0c/5/_resized/0c5b7fdbff352e6983a9b126458e9e5fe19de758_80_100_cut_wg_top.png",
+            "value": "1 / 0",
+            "appearances": 1,
+            "minutes": 0
+          },
+          {
+            "personId": 211559,
+            "position": 1,
+            "name": "Dominik Hvizdak",
+            "profileUrl": "https://semafor.hns.family/igraci/211559/dominik-hvizdak/",
+            "photo": "https://hns.family/files/images_comet/27/2/_resized/272b27612410f91f332ea3761ddc64d74333d12d_80_100_cut_wg_top.png",
+            "value": "1 / 0",
+            "appearances": 1,
+            "minutes": 0
+          }
+        ]
       }
     },
     {
@@ -2300,19 +2429,30 @@
       ]
     },
     {
-      "id": 70771,
+      "id": 375906,
       "number": 7,
-      "name": "Danijel Ćosić",
+      "name": "Karlo Grubač",
       "position": "Igrač",
-      "photo": "https://hns.family/files/images_comet/97/0/_resized/970975f4675a93f7427b52a819b1a2a8370cbc3b_80_100_cut_wg_top.jpg",
-      "profileUrl": "https://semafor.hns.family/igraci/70771/danijel-cosic/",
+      "photo": "https://hns.family/files/images_comet/0c/5/_resized/0c5b7fdbff352e6983a9b126458e9e5fe19de758_80_100_cut_wg_top.png",
+      "profileUrl": "https://semafor.hns.family/igraci/375906/karlo-grubac/",
       "stats": {
-        "appearances": 2,
+        "appearances": 3,
         "minutes": 0,
-        "goals": 0,
+        "goals": 1,
         "cards": "1 / 0"
       },
       "perCompetition": [
+        {
+          "competitionId": 115182406,
+          "competition": "2. ŽNL Našice - Seniori 26/27",
+          "type": "league",
+          "stats": {
+            "appearances": 1,
+            "minutes": 0,
+            "goals": 0,
+            "cards": "1 / 0"
+          }
+        },
         {
           "competitionId": 114378327,
           "competition": "Kup NS Našice 26/27",
@@ -2320,8 +2460,8 @@
           "stats": {
             "appearances": 2,
             "minutes": 0,
-            "goals": 0,
-            "cards": "1 / 0"
+            "goals": 1,
+            "cards": "0 / 0"
           }
         }
       ]
@@ -2381,6 +2521,44 @@
       ]
     },
     {
+      "id": 70771,
+      "number": 11,
+      "name": "Danijel Ćosić",
+      "position": "Igrač",
+      "photo": "https://hns.family/files/images_comet/97/0/_resized/970975f4675a93f7427b52a819b1a2a8370cbc3b_80_100_cut_wg_top.jpg",
+      "profileUrl": "https://semafor.hns.family/igraci/70771/danijel-cosic/",
+      "stats": {
+        "appearances": 3,
+        "minutes": 0,
+        "goals": 0,
+        "cards": "2 / 0"
+      },
+      "perCompetition": [
+        {
+          "competitionId": 115182406,
+          "competition": "2. ŽNL Našice - Seniori 26/27",
+          "type": "league",
+          "stats": {
+            "appearances": 1,
+            "minutes": 0,
+            "goals": 0,
+            "cards": "1 / 0"
+          }
+        },
+        {
+          "competitionId": 114378327,
+          "competition": "Kup NS Našice 26/27",
+          "type": "cup",
+          "stats": {
+            "appearances": 2,
+            "minutes": 0,
+            "goals": 0,
+            "cards": "1 / 0"
+          }
+        }
+      ]
+    },
+    {
       "id": 365472,
       "number": 12,
       "name": "Jan Rajs",
@@ -2394,6 +2572,44 @@
         "cards": "0 / 0"
       },
       "perCompetition": [
+        {
+          "competitionId": 114378327,
+          "competition": "Kup NS Našice 26/27",
+          "type": "cup",
+          "stats": {
+            "appearances": 2,
+            "minutes": 0,
+            "goals": 0,
+            "cards": "0 / 0"
+          }
+        }
+      ]
+    },
+    {
+      "id": 49014,
+      "number": 13,
+      "name": "Marin Kuzminski",
+      "position": "Igrač",
+      "photo": "https://hns.family/files/images_comet/27/0/_resized/270a45d3b4d085a2e34a7fdce2621f563597fee2_80_100_cut_wg_top.png",
+      "profileUrl": "https://semafor.hns.family/igraci/49014/marin-kuzminski/",
+      "stats": {
+        "appearances": 2,
+        "minutes": 0,
+        "goals": 0,
+        "cards": "1 / 0"
+      },
+      "perCompetition": [
+        {
+          "competitionId": 115182406,
+          "competition": "2. ŽNL Našice - Seniori 26/27",
+          "type": "league",
+          "stats": {
+            "appearances": 0,
+            "minutes": 0,
+            "goals": 0,
+            "cards": "1 / 0"
+          }
+        },
         {
           "competitionId": 114378327,
           "competition": "Kup NS Našice 26/27",
@@ -2543,25 +2759,25 @@
       ]
     },
     {
-      "id": 375906,
+      "id": 211559,
       "number": 20,
-      "name": "Karlo Grubač",
+      "name": "Dominik Hvizdak",
       "position": "Igrač",
-      "photo": "https://hns.family/files/images_comet/0c/5/_resized/0c5b7fdbff352e6983a9b126458e9e5fe19de758_80_100_cut_wg_top.png",
-      "profileUrl": "https://semafor.hns.family/igraci/375906/karlo-grubac/",
+      "photo": "https://hns.family/files/images_comet/27/2/_resized/272b27612410f91f332ea3761ddc64d74333d12d_80_100_cut_wg_top.png",
+      "profileUrl": "https://semafor.hns.family/igraci/211559/dominik-hvizdak/",
       "stats": {
-        "appearances": 2,
+        "appearances": 1,
         "minutes": 0,
         "goals": 1,
         "cards": "0 / 0"
       },
       "perCompetition": [
         {
-          "competitionId": 114378327,
-          "competition": "Kup NS Našice 26/27",
-          "type": "cup",
+          "competitionId": 115182406,
+          "competition": "2. ŽNL Našice - Seniori 26/27",
+          "type": "league",
           "stats": {
-            "appearances": 2,
+            "appearances": 1,
             "minutes": 0,
             "goals": 1,
             "cards": "0 / 0"
@@ -2649,33 +2865,6 @@
           }
         }
       ]
-    },
-    {
-      "id": 49014,
-      "number": 25,
-      "name": "Marin Kuzminski",
-      "position": "Igrač",
-      "photo": "https://hns.family/files/images_comet/27/0/_resized/270a45d3b4d085a2e34a7fdce2621f563597fee2_80_100_cut_wg_top.png",
-      "profileUrl": "https://semafor.hns.family/igraci/49014/marin-kuzminski/",
-      "stats": {
-        "appearances": 2,
-        "minutes": 0,
-        "goals": 0,
-        "cards": "0 / 0"
-      },
-      "perCompetition": [
-        {
-          "competitionId": 114378327,
-          "competition": "Kup NS Našice 26/27",
-          "type": "cup",
-          "stats": {
-            "appearances": 2,
-            "minutes": 0,
-            "goals": 0,
-            "cards": "0 / 0"
-          }
-        }
-      ]
     }
   ],
   "stats": {
@@ -2690,8 +2879,17 @@
         "goals": 2
       },
       {
-        "personId": 375906,
+        "personId": 211559,
         "position": 2,
+        "name": "Dominik Hvizdak",
+        "profileUrl": "https://semafor.hns.family/igraci/211559/dominik-hvizdak/",
+        "photo": "https://hns.family/files/images_comet/27/2/_resized/272b27612410f91f332ea3761ddc64d74333d12d_80_100_cut_wg_top.png",
+        "value": "1",
+        "goals": 1
+      },
+      {
+        "personId": 375906,
+        "position": 3,
         "name": "Karlo Grubač",
         "profileUrl": "https://semafor.hns.family/igraci/375906/karlo-grubac/",
         "photo": "https://hns.family/files/images_comet/0c/5/_resized/0c5b7fdbff352e6983a9b126458e9e5fe19de758_80_100_cut_wg_top.png",
@@ -2706,13 +2904,33 @@
         "name": "Danijel Ćosić",
         "profileUrl": "https://semafor.hns.family/igraci/70771/danijel-cosic/",
         "photo": "https://hns.family/files/images_comet/97/0/_resized/970975f4675a93f7427b52a819b1a2a8370cbc3b_80_100_cut_wg_top.jpg",
+        "value": "2 / 0",
+        "yellow": 2,
+        "red": 0
+      },
+      {
+        "personId": 375906,
+        "position": 2,
+        "name": "Karlo Grubač",
+        "profileUrl": "https://semafor.hns.family/igraci/375906/karlo-grubac/",
+        "photo": "https://hns.family/files/images_comet/0c/5/_resized/0c5b7fdbff352e6983a9b126458e9e5fe19de758_80_100_cut_wg_top.png",
+        "value": "1 / 0",
+        "yellow": 1,
+        "red": 0
+      },
+      {
+        "personId": 49014,
+        "position": 3,
+        "name": "Marin Kuzminski",
+        "profileUrl": "https://semafor.hns.family/igraci/49014/marin-kuzminski/",
+        "photo": "https://hns.family/files/images_comet/27/0/_resized/270a45d3b4d085a2e34a7fdce2621f563597fee2_80_100_cut_wg_top.png",
         "value": "1 / 0",
         "yellow": 1,
         "red": 0
       },
       {
         "personId": 182403,
-        "position": 2,
+        "position": 4,
         "name": "Ante Knežević",
         "profileUrl": "https://semafor.hns.family/igraci/182403/ante-knezevic/",
         "photo": "https://hns.family/files/images_comet/Person/_resized/182403_b500dbbf-2be1-4c02-9dc2-5c459899bea2_80_100_cut_wg_top.jpg",
@@ -2723,8 +2941,28 @@
     ],
     "topApps": [
       {
-        "personId": 48000,
+        "personId": 70771,
         "position": 1,
+        "name": "Danijel Ćosić",
+        "profileUrl": "https://semafor.hns.family/igraci/70771/danijel-cosic/",
+        "photo": "https://hns.family/files/images_comet/97/0/_resized/970975f4675a93f7427b52a819b1a2a8370cbc3b_80_100_cut_wg_top.jpg",
+        "value": "3 / 0",
+        "appearances": 3,
+        "minutes": 0
+      },
+      {
+        "personId": 375906,
+        "position": 2,
+        "name": "Karlo Grubač",
+        "profileUrl": "https://semafor.hns.family/igraci/375906/karlo-grubac/",
+        "photo": "https://hns.family/files/images_comet/0c/5/_resized/0c5b7fdbff352e6983a9b126458e9e5fe19de758_80_100_cut_wg_top.png",
+        "value": "3 / 0",
+        "appearances": 3,
+        "minutes": 0
+      },
+      {
+        "personId": 48000,
+        "position": 3,
         "name": "Tomislav Banaj",
         "profileUrl": "https://semafor.hns.family/igraci/48000/tomislav-banaj/",
         "photo": "https://hns.family/files/images_comet/Person/_resized/48000_ed1f0b84-5ee7-4ce6-83a0-a1701a613b3d_80_100_cut_wg_top.png",
@@ -2734,7 +2972,7 @@
       },
       {
         "personId": 389840,
-        "position": 2,
+        "position": 4,
         "name": "Petar Barišić",
         "profileUrl": "https://semafor.hns.family/igraci/389840/petar-barisic/",
         "photo": "https://hns.family/files/images_comet/d8/9/_resized/d8931c5584d5b6fddb84eedf1db5103e8f0c3db6_80_100_cut_wg_top.jpg",
@@ -2743,31 +2981,11 @@
         "minutes": 0
       },
       {
-        "personId": 70771,
-        "position": 3,
-        "name": "Danijel Ćosić",
-        "profileUrl": "https://semafor.hns.family/igraci/70771/danijel-cosic/",
-        "photo": "https://hns.family/files/images_comet/97/0/_resized/970975f4675a93f7427b52a819b1a2a8370cbc3b_80_100_cut_wg_top.jpg",
-        "value": "2 / 0",
-        "appearances": 2,
-        "minutes": 0
-      },
-      {
         "personId": 110997,
-        "position": 4,
+        "position": 5,
         "name": "Denis Ćosić",
         "profileUrl": "https://semafor.hns.family/igraci/110997/denis-cosic/",
         "photo": "https://hns.family/files/images_comet/Person/_resized/110997_36372826-945d-4a22-a9de-360809b0653b_80_100_cut_wg_top.jpg",
-        "value": "2 / 0",
-        "appearances": 2,
-        "minutes": 0
-      },
-      {
-        "personId": 375906,
-        "position": 5,
-        "name": "Karlo Grubač",
-        "profileUrl": "https://semafor.hns.family/igraci/375906/karlo-grubac/",
-        "photo": "https://hns.family/files/images_comet/0c/5/_resized/0c5b7fdbff352e6983a9b126458e9e5fe19de758_80_100_cut_wg_top.png",
         "value": "2 / 0",
         "appearances": 2,
         "minutes": 0
@@ -2833,8 +3051,18 @@
         "minutes": 0
       },
       {
-        "personId": 49179,
+        "personId": 211559,
         "position": 12,
+        "name": "Dominik Hvizdak",
+        "profileUrl": "https://semafor.hns.family/igraci/211559/dominik-hvizdak/",
+        "photo": "https://hns.family/files/images_comet/27/2/_resized/272b27612410f91f332ea3761ddc64d74333d12d_80_100_cut_wg_top.png",
+        "value": "1 / 0",
+        "appearances": 1,
+        "minutes": 0
+      },
+      {
+        "personId": 49179,
+        "position": 13,
         "name": "Ivan Galinec",
         "profileUrl": "https://semafor.hns.family/igraci/49179/ivan-galinec/",
         "photo": "https://hns.family/files/images_comet/Person/_resized/49179_4d4f0298-c249-4c7d-83d0-97242c22cf1d_80_100_cut_wg_top.jpg",
@@ -2844,7 +3072,7 @@
       },
       {
         "personId": 182403,
-        "position": 13,
+        "position": 14,
         "name": "Ante Knežević",
         "profileUrl": "https://semafor.hns.family/igraci/182403/ante-knezevic/",
         "photo": "https://hns.family/files/images_comet/Person/_resized/182403_b500dbbf-2be1-4c02-9dc2-5c459899bea2_80_100_cut_wg_top.jpg",
@@ -2854,7 +3082,7 @@
       },
       {
         "personId": 437293,
-        "position": 14,
+        "position": 15,
         "name": "Marin-Petar Meščić",
         "profileUrl": "https://semafor.hns.family/igraci/437293/marin-petar-mescic/",
         "photo": "https://hns.family/files/images_comet/d4/a/_resized/d4a2b099b5a81468062f14832687dbb11601f5aa_80_100_cut_wg_top.jpg",
@@ -2864,7 +3092,7 @@
       },
       {
         "personId": 400435,
-        "position": 15,
+        "position": 16,
         "name": "Filip Tomac",
         "profileUrl": "https://semafor.hns.family/igraci/400435/filip-tomac/",
         "photo": "https://hns.family/files/images_comet/19/6/_resized/196e90ca1bdae4b92c4b44ad4993f050af7379f2_80_100_cut_wg_top.jpg",
@@ -2874,7 +3102,7 @@
       },
       {
         "personId": 365480,
-        "position": 16,
+        "position": 17,
         "name": "Daniel Vrbanić",
         "profileUrl": "https://semafor.hns.family/igraci/365480/daniel-vrbanic/",
         "photo": "https://hns.family/files/images_comet/97/b/_resized/97b5f153b275bc9340577267d4afd6c6b9a16ef5_80_100_cut_wg_top.png",
