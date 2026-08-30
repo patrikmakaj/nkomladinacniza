@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-08-30T06:11:33.460Z",
+  "lastUpdated": "2026-08-30T12:06:17.107Z",
   "sourceUrl": "https://semafor.hns.family/klubovi/134/nk-omladinac-niza/",
   "club": {
     "id": 134,
@@ -1470,11 +1470,14 @@
             "name": "NK Omladinac Niza",
             "logo": "https://hns.family/files/images_comet/49/b/_resized/49b362069bd38a3154422c8f1c4b7cd4f5aee1b7_100_100_wg_t.png"
           },
-          "score": null,
-          "played": false,
+          "score": {
+            "home": 15,
+            "away": 0
+          },
+          "played": true,
           "isHome": false,
-          "result": null,
-          "url": null
+          "result": "L",
+          "url": "https://semafor.hns.family/utakmice/114377457/nk-bratstvo-r-nk-omladinac-niza-15-0/"
         },
         {
           "id": "114377464",
@@ -1673,6 +1676,26 @@
         {
           "position": 1,
           "club": {
+            "id": 765,
+            "name": "NK Bratstvo (R)",
+            "logo": "https://hns.family/files/images_comet/21/2/_resized/21230a8a52c3a5d6ce147f21dc8a133fbee77b9f_100_100_wg_t.png"
+          },
+          "played": 1,
+          "wins": 1,
+          "draws": 0,
+          "losses": 0,
+          "gf": 15,
+          "ga": 0,
+          "gd": "+15",
+          "points": 3,
+          "form": [
+            "W"
+          ],
+          "isUs": false
+        },
+        {
+          "position": 2,
+          "club": {
             "id": 123,
             "name": "NK NAŠK",
             "logo": "https://hns.family/files/images_comet/a8/4/_resized/a842a50d2abef4f64bb4e9ac207c96501f54383e_100_100_wg_t.png"
@@ -1691,7 +1714,7 @@
           "isUs": false
         },
         {
-          "position": 2,
+          "position": 3,
           "club": {
             "id": 128,
             "name": "NK FEŠK",
@@ -1711,25 +1734,27 @@
           "isUs": false
         },
         {
-          "position": 3,
+          "position": 4,
           "club": {
-            "id": 765,
-            "name": "NK Bratstvo (R)",
-            "logo": "https://hns.family/files/images_comet/21/2/_resized/21230a8a52c3a5d6ce147f21dc8a133fbee77b9f_100_100_wg_t.png"
+            "id": 139,
+            "name": "NK Željezničar (MN)",
+            "logo": "https://hns.family/files/images_comet/ba/1/_resized/ba1480acacd707e235b17832f3d7983b5e81d4a1_100_100_wg_t.png"
           },
-          "played": 0,
-          "wins": 0,
+          "played": 1,
+          "wins": 1,
           "draws": 0,
           "losses": 0,
-          "gf": 0,
-          "ga": 0,
-          "gd": "0",
-          "points": 0,
-          "form": [],
+          "gf": 4,
+          "ga": 2,
+          "gd": "+2",
+          "points": 3,
+          "form": [
+            "W"
+          ],
           "isUs": false
         },
         {
-          "position": 4,
+          "position": 5,
           "club": {
             "id": 4174,
             "name": "NK Martin",
@@ -1747,43 +1772,7 @@
           "isUs": false
         },
         {
-          "position": 5,
-          "club": {
-            "id": 134,
-            "name": "NK Omladinac Niza",
-            "logo": "https://hns.family/files/images_comet/49/b/_resized/49b362069bd38a3154422c8f1c4b7cd4f5aee1b7_100_100_wg_t.png"
-          },
-          "played": 0,
-          "wins": 0,
-          "draws": 0,
-          "losses": 0,
-          "gf": 0,
-          "ga": 0,
-          "gd": "0",
-          "points": 0,
-          "form": [],
-          "isUs": true
-        },
-        {
           "position": 6,
-          "club": {
-            "id": 140,
-            "name": "NK Vihor (J)",
-            "logo": "https://hns.family/files/images_comet/07/3/_resized/073548045a9ffd623cfb00b39796fde20ba35dd0_100_100_wg_t.png"
-          },
-          "played": 0,
-          "wins": 0,
-          "draws": 0,
-          "losses": 0,
-          "gf": 0,
-          "ga": 0,
-          "gd": "0",
-          "points": 0,
-          "form": [],
-          "isUs": false
-        },
-        {
-          "position": 7,
           "club": {
             "id": 117,
             "name": "NK Šipovac",
@@ -1801,25 +1790,27 @@
           "isUs": false
         },
         {
-          "position": 8,
+          "position": 7,
           "club": {
-            "id": 139,
-            "name": "NK Željezničar (MN)",
-            "logo": "https://hns.family/files/images_comet/ba/1/_resized/ba1480acacd707e235b17832f3d7983b5e81d4a1_100_100_wg_t.png"
+            "id": 140,
+            "name": "NK Vihor (J)",
+            "logo": "https://hns.family/files/images_comet/07/3/_resized/073548045a9ffd623cfb00b39796fde20ba35dd0_100_100_wg_t.png"
           },
-          "played": 0,
+          "played": 1,
           "wins": 0,
           "draws": 0,
-          "losses": 0,
-          "gf": 0,
-          "ga": 0,
-          "gd": "0",
+          "losses": 1,
+          "gf": 2,
+          "ga": 4,
+          "gd": "-2",
           "points": 0,
-          "form": [],
+          "form": [
+            "L"
+          ],
           "isUs": false
         },
         {
-          "position": 9,
+          "position": 8,
           "club": {
             "id": 127,
             "name": "NK Đurđenovac",
@@ -1839,7 +1830,7 @@
           "isUs": false
         },
         {
-          "position": 10,
+          "position": 9,
           "club": {
             "id": 129,
             "name": "NK Iskrica",
@@ -1857,6 +1848,26 @@
             "L"
           ],
           "isUs": false
+        },
+        {
+          "position": 10,
+          "club": {
+            "id": 134,
+            "name": "NK Omladinac Niza",
+            "logo": "https://hns.family/files/images_comet/49/b/_resized/49b362069bd38a3154422c8f1c4b7cd4f5aee1b7_100_100_wg_t.png"
+          },
+          "played": 1,
+          "wins": 0,
+          "draws": 0,
+          "losses": 1,
+          "gf": 0,
+          "ga": 15,
+          "gd": "-15",
+          "points": 0,
+          "form": [
+            "L"
+          ],
+          "isUs": true
         }
       ],
       "players": [],

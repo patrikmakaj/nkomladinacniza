@@ -1,8 +1,70 @@
 {
-  "lastUpdated": "2026-08-29T19:57:33.268Z",
+  "lastUpdated": "2026-08-30T12:06:24.261Z",
   "enabled": true,
   "pageId": "55401829691",
   "posts": [
+    {
+      "id": "55401829691_1677896304342863",
+      "message": "",
+      "createdAt": "2026-08-30T10:55:20+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1677896304342863",
+      "images": [
+        {
+          "src": "/images/facebook/55401829691_1677896304342863_0.jpg",
+          "thumb": "/images/facebook/55401829691_1677896304342863_0.webp",
+          "width": 700,
+          "height": 525
+        },
+        {
+          "src": "/images/facebook/55401829691_1677896304342863_1.jpg",
+          "thumb": "/images/facebook/55401829691_1677896304342863_1.webp",
+          "width": 700,
+          "height": 933
+        },
+        {
+          "src": "/images/facebook/55401829691_1677896304342863_2.jpg",
+          "thumb": "/images/facebook/55401829691_1677896304342863_2.webp",
+          "width": 700,
+          "height": 933
+        },
+        {
+          "src": "/images/facebook/55401829691_1677896304342863_3.jpg",
+          "thumb": "/images/facebook/55401829691_1677896304342863_3.webp",
+          "width": 700,
+          "height": 933
+        },
+        {
+          "src": "/images/facebook/55401829691_1677896304342863_4.jpg",
+          "thumb": "/images/facebook/55401829691_1677896304342863_4.webp",
+          "width": 700,
+          "height": 933
+        },
+        {
+          "src": "/images/facebook/55401829691_1677896304342863_5.jpg",
+          "thumb": "/images/facebook/55401829691_1677896304342863_5.webp",
+          "width": 700,
+          "height": 933
+        },
+        {
+          "src": "/images/facebook/55401829691_1677896304342863_6.jpg",
+          "thumb": "/images/facebook/55401829691_1677896304342863_6.webp",
+          "width": 700,
+          "height": 933
+        },
+        {
+          "src": "/images/facebook/55401829691_1677896304342863_7.jpg",
+          "thumb": "/images/facebook/55401829691_1677896304342863_7.webp",
+          "width": 700,
+          "height": 933
+        },
+        {
+          "src": "/images/facebook/55401829691_1677896304342863_8.jpg",
+          "thumb": "/images/facebook/55401829691_1677896304342863_8.webp",
+          "width": 700,
+          "height": 525
+        }
+      ]
+    },
     {
       "id": "55401829691_1677284204404073",
       "message": "Unatoč našem vodstvu, domaćini dolaze do preokreta. Čestitke Lili na pobjedi, a mi iduće subote dočekujemo Lađansku od 19:00h...",
@@ -400,62 +462,6 @@
           "thumb": "/images/facebook/55401829691_1651431450322682.webp",
           "width": 700,
           "height": 875
-        }
-      ]
-    },
-    {
-      "id": "55401829691_1649392423859918",
-      "message": "Nakon prozivke prošlu nedjelju i prva tri treninga ovaj tjedan, danas smo odigrali i prvu pripremnu utakmicu. Gostovali u Orahovici kod NK Papuk i odigrali neriješeno 2:2. Oba gola za nas postigao Denis Ćosić. Čestitke dečkima na igri, unatoč vrućini i teškim nogama. Na kraju hvala domaćinu na gostoprimstvu i večeri ifo",
-      "createdAt": "2026-08-01T17:45:27+0000",
-      "permalink": "https://www.facebook.com/1551452460320582/posts/1649392423859918",
-      "images": [
-        {
-          "src": "/images/facebook/55401829691_1649392423859918_0.jpg",
-          "thumb": "/images/facebook/55401829691_1649392423859918_0.webp",
-          "width": 700,
-          "height": 933
-        },
-        {
-          "src": "/images/facebook/55401829691_1649392423859918_1.jpg",
-          "thumb": "/images/facebook/55401829691_1649392423859918_1.webp",
-          "width": 700,
-          "height": 525
-        },
-        {
-          "src": "/images/facebook/55401829691_1649392423859918_2.jpg",
-          "thumb": "/images/facebook/55401829691_1649392423859918_2.webp",
-          "width": 700,
-          "height": 525
-        },
-        {
-          "src": "/images/facebook/55401829691_1649392423859918_3.jpg",
-          "thumb": "/images/facebook/55401829691_1649392423859918_3.webp",
-          "width": 700,
-          "height": 525
-        },
-        {
-          "src": "/images/facebook/55401829691_1649392423859918_4.jpg",
-          "thumb": "/images/facebook/55401829691_1649392423859918_4.webp",
-          "width": 700,
-          "height": 525
-        },
-        {
-          "src": "/images/facebook/55401829691_1649392423859918_5.jpg",
-          "thumb": "/images/facebook/55401829691_1649392423859918_5.webp",
-          "width": 700,
-          "height": 933
-        },
-        {
-          "src": "/images/facebook/55401829691_1649392423859918_6.jpg",
-          "thumb": "/images/facebook/55401829691_1649392423859918_6.webp",
-          "width": 700,
-          "height": 525
-        },
-        {
-          "src": "/images/facebook/55401829691_1649392423859918_7.jpg",
-          "thumb": "/images/facebook/55401829691_1649392423859918_7.webp",
-          "width": 700,
-          "height": 525
         }
       ]
     }
