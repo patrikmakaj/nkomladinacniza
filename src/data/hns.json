@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-08-31T06:36:58.139Z",
+  "lastUpdated": "2026-09-01T18:42:21.389Z",
   "sourceUrl": "https://semafor.hns.family/klubovi/134/nk-omladinac-niza/",
   "club": {
     "id": 134,
@@ -1748,6 +1748,26 @@
         {
           "position": 4,
           "club": {
+            "id": 4174,
+            "name": "NK Martin",
+            "logo": "https://hns.family/files/images_comet/b3/6/_resized/b366da4f8698b43fa0d8e9cc67f9847d52d44770_100_100_wg_t.png"
+          },
+          "played": 1,
+          "wins": 1,
+          "draws": 0,
+          "losses": 0,
+          "gf": 5,
+          "ga": 0,
+          "gd": "+5",
+          "points": 3,
+          "form": [
+            "W"
+          ],
+          "isUs": false
+        },
+        {
+          "position": 5,
+          "club": {
             "id": 139,
             "name": "NK Željezničar (MN)",
             "logo": "https://hns.family/files/images_comet/ba/1/_resized/ba1480acacd707e235b17832f3d7983b5e81d4a1_100_100_wg_t.png"
@@ -1766,43 +1786,7 @@
           "isUs": false
         },
         {
-          "position": 5,
-          "club": {
-            "id": 4174,
-            "name": "NK Martin",
-            "logo": "https://hns.family/files/images_comet/b3/6/_resized/b366da4f8698b43fa0d8e9cc67f9847d52d44770_100_100_wg_t.png"
-          },
-          "played": 0,
-          "wins": 0,
-          "draws": 0,
-          "losses": 0,
-          "gf": 0,
-          "ga": 0,
-          "gd": "0",
-          "points": 0,
-          "form": [],
-          "isUs": false
-        },
-        {
           "position": 6,
-          "club": {
-            "id": 117,
-            "name": "NK Šipovac",
-            "logo": "https://hns.family/files/images_comet/f7/d/_resized/f7d87ca932c2a22b6cdd7a430be55b9fcad3038b_100_100_wg_t.png"
-          },
-          "played": 0,
-          "wins": 0,
-          "draws": 0,
-          "losses": 0,
-          "gf": 0,
-          "ga": 0,
-          "gd": "0",
-          "points": 0,
-          "form": [],
-          "isUs": false
-        },
-        {
-          "position": 7,
           "club": {
             "id": 140,
             "name": "NK Vihor (J)",
@@ -1815,6 +1799,26 @@
           "gf": 2,
           "ga": 4,
           "gd": "-2",
+          "points": 0,
+          "form": [
+            "L"
+          ],
+          "isUs": false
+        },
+        {
+          "position": 7,
+          "club": {
+            "id": 117,
+            "name": "NK Šipovac",
+            "logo": "https://hns.family/files/images_comet/f7/d/_resized/f7d87ca932c2a22b6cdd7a430be55b9fcad3038b_100_100_wg_t.png"
+          },
+          "played": 1,
+          "wins": 0,
+          "draws": 0,
+          "losses": 1,
+          "gf": 0,
+          "ga": 5,
+          "gd": "-5",
           "points": 0,
           "form": [
             "L"
