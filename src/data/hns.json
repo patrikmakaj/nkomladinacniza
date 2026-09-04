@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-09-01T18:42:21.389Z",
+  "lastUpdated": "2026-09-04T17:27:31.842Z",
   "sourceUrl": "https://semafor.hns.family/klubovi/134/nk-omladinac-niza/",
   "club": {
     "id": 134,
@@ -1688,6 +1688,27 @@
         {
           "position": 1,
           "club": {
+            "id": 128,
+            "name": "NK FEŠK",
+            "logo": "https://hns.family/files/images_comet/8c/8/_resized/8c89c6fc498b2f608ce3ce312b166a901e8a6821_100_100_wg_t.png"
+          },
+          "played": 2,
+          "wins": 2,
+          "draws": 0,
+          "losses": 0,
+          "gf": 27,
+          "ga": 0,
+          "gd": "+27",
+          "points": 6,
+          "form": [
+            "W",
+            "W"
+          ],
+          "isUs": false
+        },
+        {
+          "position": 2,
+          "club": {
             "id": 765,
             "name": "NK Bratstvo (R)",
             "logo": "https://hns.family/files/images_comet/21/2/_resized/21230a8a52c3a5d6ce147f21dc8a133fbee77b9f_100_100_wg_t.png"
@@ -1706,7 +1727,7 @@
           "isUs": false
         },
         {
-          "position": 2,
+          "position": 3,
           "club": {
             "id": 123,
             "name": "NK NAŠK",
@@ -1719,26 +1740,6 @@
           "gf": 12,
           "ga": 0,
           "gd": "+12",
-          "points": 3,
-          "form": [
-            "W"
-          ],
-          "isUs": false
-        },
-        {
-          "position": 3,
-          "club": {
-            "id": 128,
-            "name": "NK FEŠK",
-            "logo": "https://hns.family/files/images_comet/8c/8/_resized/8c89c6fc498b2f608ce3ce312b166a901e8a6821_100_100_wg_t.png"
-          },
-          "played": 1,
-          "wins": 1,
-          "draws": 0,
-          "losses": 0,
-          "gf": 7,
-          "ga": 0,
-          "gd": "+7",
           "points": 3,
           "form": [
             "W"
@@ -1848,26 +1849,6 @@
         {
           "position": 9,
           "club": {
-            "id": 129,
-            "name": "NK Iskrica",
-            "logo": "https://hns.family/files/images_comet/53/8/_resized/53808e6ce48919c1cf17ea580f20dae3362014e7_100_100_wg_t.png"
-          },
-          "played": 1,
-          "wins": 0,
-          "draws": 0,
-          "losses": 1,
-          "gf": 0,
-          "ga": 12,
-          "gd": "-12",
-          "points": 0,
-          "form": [
-            "L"
-          ],
-          "isUs": false
-        },
-        {
-          "position": 10,
-          "club": {
             "id": 134,
             "name": "NK Omladinac Niza",
             "logo": "https://hns.family/files/images_comet/49/b/_resized/49b362069bd38a3154422c8f1c4b7cd4f5aee1b7_100_100_wg_t.png"
@@ -1884,6 +1865,27 @@
             "L"
           ],
           "isUs": true
+        },
+        {
+          "position": 10,
+          "club": {
+            "id": 129,
+            "name": "NK Iskrica",
+            "logo": "https://hns.family/files/images_comet/53/8/_resized/53808e6ce48919c1cf17ea580f20dae3362014e7_100_100_wg_t.png"
+          },
+          "played": 2,
+          "wins": 0,
+          "draws": 0,
+          "losses": 2,
+          "gf": 0,
+          "ga": 32,
+          "gd": "-32",
+          "points": 0,
+          "form": [
+            "L",
+            "L"
+          ],
+          "isUs": false
         }
       ],
       "players": [
