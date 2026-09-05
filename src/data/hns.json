@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-09-04T17:27:31.842Z",
+  "lastUpdated": "2026-09-05T12:19:43.746Z",
   "sourceUrl": "https://semafor.hns.family/klubovi/134/nk-omladinac-niza/",
   "club": {
     "id": 134,
@@ -1509,11 +1509,14 @@
             "name": "NK Vihor (J)",
             "logo": "https://hns.family/files/images_comet/07/3/_resized/073548045a9ffd623cfb00b39796fde20ba35dd0_100_100_wg_t.png"
           },
-          "score": null,
-          "played": false,
+          "score": {
+            "home": 1,
+            "away": 8
+          },
+          "played": true,
           "isHome": true,
-          "result": null,
-          "url": null
+          "result": "L",
+          "url": "https://semafor.hns.family/utakmice/114377464/nk-omladinac-niza-nk-vihor-j-1-8/"
         },
         {
           "id": "114377468",
@@ -1713,16 +1716,17 @@
             "name": "NK Bratstvo (R)",
             "logo": "https://hns.family/files/images_comet/21/2/_resized/21230a8a52c3a5d6ce147f21dc8a133fbee77b9f_100_100_wg_t.png"
           },
-          "played": 1,
+          "played": 2,
           "wins": 1,
           "draws": 0,
-          "losses": 0,
-          "gf": 15,
-          "ga": 0,
-          "gd": "+15",
+          "losses": 1,
+          "gf": 19,
+          "ga": 7,
+          "gd": "+12",
           "points": 3,
           "form": [
-            "W"
+            "W",
+            "L"
           ],
           "isUs": false
         },
@@ -1749,6 +1753,27 @@
         {
           "position": 4,
           "club": {
+            "id": 140,
+            "name": "NK Vihor (J)",
+            "logo": "https://hns.family/files/images_comet/07/3/_resized/073548045a9ffd623cfb00b39796fde20ba35dd0_100_100_wg_t.png"
+          },
+          "played": 2,
+          "wins": 1,
+          "draws": 0,
+          "losses": 1,
+          "gf": 10,
+          "ga": 5,
+          "gd": "+5",
+          "points": 3,
+          "form": [
+            "L",
+            "W"
+          ],
+          "isUs": false
+        },
+        {
+          "position": 5,
+          "club": {
             "id": 4174,
             "name": "NK Martin",
             "logo": "https://hns.family/files/images_comet/b3/6/_resized/b366da4f8698b43fa0d8e9cc67f9847d52d44770_100_100_wg_t.png"
@@ -1767,7 +1792,7 @@
           "isUs": false
         },
         {
-          "position": 5,
+          "position": 6,
           "club": {
             "id": 139,
             "name": "NK Željezničar (MN)",
@@ -1787,27 +1812,28 @@
           "isUs": false
         },
         {
-          "position": 6,
+          "position": 7,
           "club": {
-            "id": 140,
-            "name": "NK Vihor (J)",
-            "logo": "https://hns.family/files/images_comet/07/3/_resized/073548045a9ffd623cfb00b39796fde20ba35dd0_100_100_wg_t.png"
+            "id": 127,
+            "name": "NK Đurđenovac",
+            "logo": "https://hns.family/files/images_comet/a5/0/_resized/a5019da3fed2f68e88845d5dd31abaa0f550b0ec_100_100_wg_t.png"
           },
-          "played": 1,
-          "wins": 0,
+          "played": 2,
+          "wins": 1,
           "draws": 0,
           "losses": 1,
-          "gf": 2,
-          "ga": 4,
-          "gd": "-2",
-          "points": 0,
+          "gf": 7,
+          "ga": 11,
+          "gd": "-4",
+          "points": 3,
           "form": [
-            "L"
+            "L",
+            "W"
           ],
           "isUs": false
         },
         {
-          "position": 7,
+          "position": 8,
           "club": {
             "id": 117,
             "name": "NK Šipovac",
@@ -1827,41 +1853,22 @@
           "isUs": false
         },
         {
-          "position": 8,
-          "club": {
-            "id": 127,
-            "name": "NK Đurđenovac",
-            "logo": "https://hns.family/files/images_comet/a5/0/_resized/a5019da3fed2f68e88845d5dd31abaa0f550b0ec_100_100_wg_t.png"
-          },
-          "played": 1,
-          "wins": 0,
-          "draws": 0,
-          "losses": 1,
-          "gf": 0,
-          "ga": 7,
-          "gd": "-7",
-          "points": 0,
-          "form": [
-            "L"
-          ],
-          "isUs": false
-        },
-        {
           "position": 9,
           "club": {
             "id": 134,
             "name": "NK Omladinac Niza",
             "logo": "https://hns.family/files/images_comet/49/b/_resized/49b362069bd38a3154422c8f1c4b7cd4f5aee1b7_100_100_wg_t.png"
           },
-          "played": 1,
+          "played": 2,
           "wins": 0,
           "draws": 0,
-          "losses": 1,
-          "gf": 0,
-          "ga": 15,
-          "gd": "-15",
+          "losses": 2,
+          "gf": 1,
+          "ga": 23,
+          "gd": "-22",
           "points": 0,
           "form": [
+            "L",
             "L"
           ],
           "isUs": true
@@ -1897,7 +1904,21 @@
           "photo": "https://hns.family/files/images_comet/e5/a/_resized/e5a4ece3eca4b700c8529c52d358d65beca8ecf9_80_100_cut_wg_top.png",
           "profileUrl": "https://semafor.hns.family/igraci/1237578/marko-music/",
           "stats": {
-            "appearances": 1,
+            "appearances": 2,
+            "minutes": 0,
+            "goals": 0,
+            "cards": "0 / 0"
+          }
+        },
+        {
+          "id": 1237593,
+          "number": 12,
+          "name": "Luka Pleša",
+          "position": "Vratar",
+          "photo": "https://hns.family/files/images_comet/d8/8/_resized/d88e106ce8c285e8fc336ac15520ea63fcd00318_80_100_cut_wg_top.png",
+          "profileUrl": "https://semafor.hns.family/igraci/1237593/luka-plesa/",
+          "stats": {
+            "appearances": 2,
             "minutes": 0,
             "goals": 0,
             "cards": "0 / 0"
@@ -1905,13 +1926,13 @@
         },
         {
           "id": 1236965,
-          "number": 4,
+          "number": 19,
           "name": "Bruna Banaj",
           "position": "Igrač",
           "photo": "https://hns.family/files/images_comet/e4/5/_resized/e459e3257cb2427b4922eb1e8e097a232843f60a_80_100_cut_wg_top.png",
           "profileUrl": "https://semafor.hns.family/igraci/1236965/bruna-banaj/",
           "stats": {
-            "appearances": 1,
+            "appearances": 2,
             "minutes": 0,
             "goals": 0,
             "cards": "0 / 0"
@@ -1925,7 +1946,7 @@
           "photo": "https://hns.family/files/images_comet/a5/c/_resized/a5c3d654f20257d5b74bc4f6ea79e97d68600d7e_80_100_cut_wg_top.png",
           "profileUrl": "https://semafor.hns.family/igraci/1236966/nikolina-bardy/",
           "stats": {
-            "appearances": 1,
+            "appearances": 2,
             "minutes": 0,
             "goals": 0,
             "cards": "0 / 0"
@@ -1933,13 +1954,13 @@
         },
         {
           "id": 1237577,
-          "number": 8,
+          "number": 4,
           "name": "Noa Bencak",
           "position": "Igrač",
           "photo": "https://hns.family/files/images_comet/90/1/_resized/9016a54fc91e626168151bbefcb5f182449be473_80_100_cut_wg_top.png",
           "profileUrl": "https://semafor.hns.family/igraci/1237577/noa-bencak/",
           "stats": {
-            "appearances": 1,
+            "appearances": 2,
             "minutes": 0,
             "goals": 0,
             "cards": "0 / 0"
@@ -1947,13 +1968,13 @@
         },
         {
           "id": 1237575,
-          "number": 15,
+          "number": 16,
           "name": "Petar Bodakoš",
           "position": "Igrač",
           "photo": "https://hns.family/files/images_comet/03/0/_resized/03089560995936d5f0d3233e5e75dac1521f1881_80_100_cut_wg_top.png",
           "profileUrl": "https://semafor.hns.family/igraci/1237575/petar-bodakos/",
           "stats": {
-            "appearances": 1,
+            "appearances": 2,
             "minutes": 0,
             "goals": 0,
             "cards": "0 / 0"
@@ -1961,13 +1982,13 @@
         },
         {
           "id": 1237580,
-          "number": 3,
+          "number": 9,
           "name": "Jona Ćosić",
           "position": "Igrač",
           "photo": "https://hns.family/files/images_comet/53/8/_resized/538eda87f9c641be1aa9e8362960b3ca1934f535_80_100_cut_wg_top.jpg",
           "profileUrl": "https://semafor.hns.family/igraci/1237580/jona-cosic/",
           "stats": {
-            "appearances": 1,
+            "appearances": 2,
             "minutes": 0,
             "goals": 0,
             "cards": "0 / 0"
@@ -1981,7 +2002,7 @@
           "photo": "https://hns.family/files/images_comet/83/d/_resized/83d8402b1f40054f601b6c5368e2c161e82865bb_80_100_cut_wg_top.jpg",
           "profileUrl": "https://semafor.hns.family/igraci/1237958/leon-francuz/",
           "stats": {
-            "appearances": 1,
+            "appearances": 2,
             "minutes": 0,
             "goals": 0,
             "cards": "0 / 0"
@@ -1989,13 +2010,13 @@
         },
         {
           "id": 1237573,
-          "number": 2,
+          "number": 18,
           "name": "Tea Furjan",
           "position": "Igrač",
           "photo": "https://hns.family/files/images_comet/52/c/_resized/52cb9b5748e9093afca204a6637ffe44824380a3_80_100_cut_wg_top.png",
           "profileUrl": "https://semafor.hns.family/igraci/1237573/tea-furjan/",
           "stats": {
-            "appearances": 1,
+            "appearances": 2,
             "minutes": 0,
             "goals": 0,
             "cards": "0 / 0"
@@ -2003,13 +2024,13 @@
         },
         {
           "id": 1237574,
-          "number": 7,
+          "number": 2,
           "name": "Jakov Galinec",
           "position": "Igrač",
           "photo": "https://hns.family/files/images_comet/dd/8/_resized/dd84d51c3c17b43e51f14c8043c6a7ebd1281bc7_80_100_cut_wg_top.png",
           "profileUrl": "https://semafor.hns.family/igraci/1237574/jakov-galinec/",
           "stats": {
-            "appearances": 1,
+            "appearances": 2,
             "minutes": 0,
             "goals": 0,
             "cards": "0 / 0"
@@ -2017,13 +2038,13 @@
         },
         {
           "id": 1238895,
-          "number": 9,
+          "number": 8,
           "name": "Lara Gudlin",
           "position": "Igrač",
           "photo": "https://hns.family/files/images_comet/d6/0/_resized/d60c484424c6eca044af3f816a54d951d2a4cb36_80_100_cut_wg_top.jpg",
           "profileUrl": "https://semafor.hns.family/igraci/1238895/lara-gudlin/",
           "stats": {
-            "appearances": 1,
+            "appearances": 2,
             "minutes": 0,
             "goals": 0,
             "cards": "0 / 0"
@@ -2031,35 +2052,31 @@
         },
         {
           "id": 1237576,
-          "number": 16,
+          "number": 6,
           "name": "Una Hohoš",
           "position": "Igrač",
           "photo": "https://hns.family/files/images_comet/5f/2/_resized/5f28343e23fba71ec7aef3b25e89e8666bb01ac9_80_100_cut_wg_top.png",
           "profileUrl": "https://semafor.hns.family/igraci/1237576/una-hohos/",
           "stats": {
-            "appearances": 1,
+            "appearances": 2,
             "minutes": 0,
-            "goals": 0,
-            "cards": "0 / 0"
-          }
-        },
-        {
-          "id": 1237593,
-          "number": 21,
-          "name": "Luka Pleša",
-          "position": "Igrač",
-          "photo": "https://hns.family/files/images_comet/d8/8/_resized/d88e106ce8c285e8fc336ac15520ea63fcd00318_80_100_cut_wg_top.png",
-          "profileUrl": "https://semafor.hns.family/igraci/1237593/luka-plesa/",
-          "stats": {
-            "appearances": 1,
-            "minutes": 0,
-            "goals": 0,
+            "goals": 1,
             "cards": "0 / 0"
           }
         }
       ],
       "stats": {
-        "topScorers": [],
+        "topScorers": [
+          {
+            "personId": 1237576,
+            "position": 1,
+            "name": "Una Hohoš",
+            "profileUrl": "https://semafor.hns.family/igraci/1237576/una-hohos/",
+            "photo": "https://hns.family/files/images_comet/5f/2/_resized/5f28343e23fba71ec7aef3b25e89e8666bb01ac9_80_100_cut_wg_top.png",
+            "value": "1",
+            "goals": 1
+          }
+        ],
         "topCards": [],
         "topApps": [
           {
@@ -2068,8 +2085,8 @@
             "name": "Bruna Banaj",
             "profileUrl": "https://semafor.hns.family/igraci/1236965/bruna-banaj/",
             "photo": "https://hns.family/files/images_comet/e4/5/_resized/e459e3257cb2427b4922eb1e8e097a232843f60a_80_100_cut_wg_top.png",
-            "value": "1 / 0",
-            "appearances": 1,
+            "value": "2 / 0",
+            "appearances": 2,
             "minutes": 0
           },
           {
@@ -2078,8 +2095,8 @@
             "name": "Nikolina Bardy",
             "profileUrl": "https://semafor.hns.family/igraci/1236966/nikolina-bardy/",
             "photo": "https://hns.family/files/images_comet/a5/c/_resized/a5c3d654f20257d5b74bc4f6ea79e97d68600d7e_80_100_cut_wg_top.png",
-            "value": "1 / 0",
-            "appearances": 1,
+            "value": "2 / 0",
+            "appearances": 2,
             "minutes": 0
           },
           {
@@ -2088,8 +2105,8 @@
             "name": "Noa Bencak",
             "profileUrl": "https://semafor.hns.family/igraci/1237577/noa-bencak/",
             "photo": "https://hns.family/files/images_comet/90/1/_resized/9016a54fc91e626168151bbefcb5f182449be473_80_100_cut_wg_top.png",
-            "value": "1 / 0",
-            "appearances": 1,
+            "value": "2 / 0",
+            "appearances": 2,
             "minutes": 0
           },
           {
@@ -2098,8 +2115,8 @@
             "name": "Petar Bodakoš",
             "profileUrl": "https://semafor.hns.family/igraci/1237575/petar-bodakos/",
             "photo": "https://hns.family/files/images_comet/03/0/_resized/03089560995936d5f0d3233e5e75dac1521f1881_80_100_cut_wg_top.png",
-            "value": "1 / 0",
-            "appearances": 1,
+            "value": "2 / 0",
+            "appearances": 2,
             "minutes": 0
           },
           {
@@ -2108,8 +2125,8 @@
             "name": "Jona Ćosić",
             "profileUrl": "https://semafor.hns.family/igraci/1237580/jona-cosic/",
             "photo": "https://hns.family/files/images_comet/53/8/_resized/538eda87f9c641be1aa9e8362960b3ca1934f535_80_100_cut_wg_top.jpg",
-            "value": "1 / 0",
-            "appearances": 1,
+            "value": "2 / 0",
+            "appearances": 2,
             "minutes": 0
           },
           {
@@ -2118,8 +2135,8 @@
             "name": "Leon Francuz",
             "profileUrl": "https://semafor.hns.family/igraci/1237958/leon-francuz/",
             "photo": "https://hns.family/files/images_comet/83/d/_resized/83d8402b1f40054f601b6c5368e2c161e82865bb_80_100_cut_wg_top.jpg",
-            "value": "1 / 0",
-            "appearances": 1,
+            "value": "2 / 0",
+            "appearances": 2,
             "minutes": 0
           },
           {
@@ -2128,8 +2145,8 @@
             "name": "Tea Furjan",
             "profileUrl": "https://semafor.hns.family/igraci/1237573/tea-furjan/",
             "photo": "https://hns.family/files/images_comet/52/c/_resized/52cb9b5748e9093afca204a6637ffe44824380a3_80_100_cut_wg_top.png",
-            "value": "1 / 0",
-            "appearances": 1,
+            "value": "2 / 0",
+            "appearances": 2,
             "minutes": 0
           },
           {
@@ -2138,8 +2155,8 @@
             "name": "Jakov Galinec",
             "profileUrl": "https://semafor.hns.family/igraci/1237574/jakov-galinec/",
             "photo": "https://hns.family/files/images_comet/dd/8/_resized/dd84d51c3c17b43e51f14c8043c6a7ebd1281bc7_80_100_cut_wg_top.png",
-            "value": "1 / 0",
-            "appearances": 1,
+            "value": "2 / 0",
+            "appearances": 2,
             "minutes": 0
           },
           {
@@ -2148,8 +2165,8 @@
             "name": "Lara Gudlin",
             "profileUrl": "https://semafor.hns.family/igraci/1238895/lara-gudlin/",
             "photo": "https://hns.family/files/images_comet/d6/0/_resized/d60c484424c6eca044af3f816a54d951d2a4cb36_80_100_cut_wg_top.jpg",
-            "value": "1 / 0",
-            "appearances": 1,
+            "value": "2 / 0",
+            "appearances": 2,
             "minutes": 0
           },
           {
@@ -2158,8 +2175,8 @@
             "name": "Una Hohoš",
             "profileUrl": "https://semafor.hns.family/igraci/1237576/una-hohos/",
             "photo": "https://hns.family/files/images_comet/5f/2/_resized/5f28343e23fba71ec7aef3b25e89e8666bb01ac9_80_100_cut_wg_top.png",
-            "value": "1 / 0",
-            "appearances": 1,
+            "value": "2 / 0",
+            "appearances": 2,
             "minutes": 0
           },
           {
@@ -2168,8 +2185,8 @@
             "name": "Marko Musić",
             "profileUrl": "https://semafor.hns.family/igraci/1237578/marko-music/",
             "photo": "https://hns.family/files/images_comet/e5/a/_resized/e5a4ece3eca4b700c8529c52d358d65beca8ecf9_80_100_cut_wg_top.png",
-            "value": "1 / 0",
-            "appearances": 1,
+            "value": "2 / 0",
+            "appearances": 2,
             "minutes": 0
           },
           {
@@ -2178,8 +2195,8 @@
             "name": "Luka Pleša",
             "profileUrl": "https://semafor.hns.family/igraci/1237593/luka-plesa/",
             "photo": "https://hns.family/files/images_comet/d8/8/_resized/d88e106ce8c285e8fc336ac15520ea63fcd00318_80_100_cut_wg_top.png",
-            "value": "1 / 0",
-            "appearances": 1,
+            "value": "2 / 0",
+            "appearances": 2,
             "minutes": 0
           }
         ]
