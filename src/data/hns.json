@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-09-05T21:28:17.591Z",
+  "lastUpdated": "2026-09-06T14:18:33.962Z",
   "sourceUrl": "https://semafor.hns.family/klubovi/134/nk-omladinac-niza/",
   "club": {
     "id": 134,
@@ -1863,6 +1863,27 @@
         {
           "position": 2,
           "club": {
+            "id": 4174,
+            "name": "NK Martin",
+            "logo": "https://hns.family/files/images_comet/b3/6/_resized/b366da4f8698b43fa0d8e9cc67f9847d52d44770_100_100_wg_t.png"
+          },
+          "played": 2,
+          "wins": 2,
+          "draws": 0,
+          "losses": 0,
+          "gf": 14,
+          "ga": 0,
+          "gd": "+14",
+          "points": 6,
+          "form": [
+            "W",
+            "W"
+          ],
+          "isUs": false
+        },
+        {
+          "position": 3,
+          "club": {
             "id": 765,
             "name": "NK Bratstvo (R)",
             "logo": "https://hns.family/files/images_comet/21/2/_resized/21230a8a52c3a5d6ce147f21dc8a133fbee77b9f_100_100_wg_t.png"
@@ -1882,7 +1903,7 @@
           "isUs": false
         },
         {
-          "position": 3,
+          "position": 4,
           "club": {
             "id": 123,
             "name": "NK NAŠK",
@@ -1902,7 +1923,7 @@
           "isUs": false
         },
         {
-          "position": 4,
+          "position": 5,
           "club": {
             "id": 140,
             "name": "NK Vihor (J)",
@@ -1923,47 +1944,7 @@
           "isUs": false
         },
         {
-          "position": 5,
-          "club": {
-            "id": 4174,
-            "name": "NK Martin",
-            "logo": "https://hns.family/files/images_comet/b3/6/_resized/b366da4f8698b43fa0d8e9cc67f9847d52d44770_100_100_wg_t.png"
-          },
-          "played": 1,
-          "wins": 1,
-          "draws": 0,
-          "losses": 0,
-          "gf": 5,
-          "ga": 0,
-          "gd": "+5",
-          "points": 3,
-          "form": [
-            "W"
-          ],
-          "isUs": false
-        },
-        {
           "position": 6,
-          "club": {
-            "id": 139,
-            "name": "NK Željezničar (MN)",
-            "logo": "https://hns.family/files/images_comet/ba/1/_resized/ba1480acacd707e235b17832f3d7983b5e81d4a1_100_100_wg_t.png"
-          },
-          "played": 1,
-          "wins": 1,
-          "draws": 0,
-          "losses": 0,
-          "gf": 4,
-          "ga": 2,
-          "gd": "+2",
-          "points": 3,
-          "form": [
-            "W"
-          ],
-          "isUs": false
-        },
-        {
-          "position": 7,
           "club": {
             "id": 127,
             "name": "NK Đurđenovac",
@@ -1980,6 +1961,27 @@
           "form": [
             "L",
             "W"
+          ],
+          "isUs": false
+        },
+        {
+          "position": 7,
+          "club": {
+            "id": 139,
+            "name": "NK Željezničar (MN)",
+            "logo": "https://hns.family/files/images_comet/ba/1/_resized/ba1480acacd707e235b17832f3d7983b5e81d4a1_100_100_wg_t.png"
+          },
+          "played": 2,
+          "wins": 1,
+          "draws": 0,
+          "losses": 1,
+          "gf": 4,
+          "ga": 11,
+          "gd": "-7",
+          "points": 3,
+          "form": [
+            "W",
+            "L"
           ],
           "isUs": false
         },
