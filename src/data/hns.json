@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-09-09T15:50:45.556Z",
+  "lastUpdated": "2026-09-09T19:02:06.046Z",
   "sourceUrl": "https://semafor.hns.family/klubovi/134/nk-omladinac-niza/",
   "club": {
     "id": 134,
@@ -582,7 +582,7 @@
           "number": 17,
           "name": "Petar Barišić",
           "position": "Igrač",
-          "photo": "/static/images/nophoto_player_m.png",
+          "photo": "https://hns.family/files/images_comet/d8/9/_resized/d8931c5584d5b6fddb84eedf1db5103e8f0c3db6_80_100_cut_wg_top.jpg",
           "profileUrl": "https://semafor.hns.family/igraci/389840/petar-barisic/",
           "stats": {
             "appearances": 0,
@@ -820,7 +820,7 @@
           "number": 21,
           "name": "Filip Tomac",
           "position": "Igrač",
-          "photo": "/static/images/nophoto_player_m.png",
+          "photo": "https://hns.family/files/images_comet/19/6/_resized/196e90ca1bdae4b92c4b44ad4993f050af7379f2_80_100_cut_wg_top.jpg",
           "profileUrl": "https://semafor.hns.family/igraci/400435/filip-tomac/",
           "stats": {
             "appearances": 0,
@@ -2076,7 +2076,7 @@
           "number": 12,
           "name": "Luka Pleša",
           "position": "Vratar",
-          "photo": "/static/images/nophoto_player_m.png",
+          "photo": "https://hns.family/files/images_comet/d8/8/_resized/d88e106ce8c285e8fc336ac15520ea63fcd00318_80_100_cut_wg_top.png",
           "profileUrl": "https://semafor.hns.family/igraci/1237593/luka-plesa/",
           "stats": {
             "appearances": 2,
@@ -2090,7 +2090,7 @@
           "number": 19,
           "name": "Bruna Banaj",
           "position": "Igrač",
-          "photo": "/static/images/nophoto_player_m.png",
+          "photo": "https://hns.family/files/images_comet/e4/5/_resized/e459e3257cb2427b4922eb1e8e097a232843f60a_80_100_cut_wg_top.png",
           "profileUrl": "https://semafor.hns.family/igraci/1236965/bruna-banaj/",
           "stats": {
             "appearances": 2,
@@ -2118,7 +2118,7 @@
           "number": 4,
           "name": "Noa Bencak",
           "position": "Igrač",
-          "photo": "/static/images/nophoto_player_m.png",
+          "photo": "https://hns.family/files/images_comet/90/1/_resized/9016a54fc91e626168151bbefcb5f182449be473_80_100_cut_wg_top.png",
           "profileUrl": "https://semafor.hns.family/igraci/1237577/noa-bencak/",
           "stats": {
             "appearances": 2,
@@ -2146,7 +2146,7 @@
           "number": 9,
           "name": "Jona Ćosić",
           "position": "Igrač",
-          "photo": "/static/images/nophoto_player_m.png",
+          "photo": "https://hns.family/files/images_comet/53/8/_resized/538eda87f9c641be1aa9e8362960b3ca1934f535_80_100_cut_wg_top.jpg",
           "profileUrl": "https://semafor.hns.family/igraci/1237580/jona-cosic/",
           "stats": {
             "appearances": 2,
@@ -2160,7 +2160,7 @@
           "number": 11,
           "name": "Leon Francuz",
           "position": "Igrač",
-          "photo": "/static/images/nophoto_player_m.png",
+          "photo": "https://hns.family/files/images_comet/83/d/_resized/83d8402b1f40054f601b6c5368e2c161e82865bb_80_100_cut_wg_top.jpg",
           "profileUrl": "https://semafor.hns.family/igraci/1237958/leon-francuz/",
           "stats": {
             "appearances": 2,
@@ -2245,7 +2245,7 @@
             "position": 1,
             "name": "Bruna Banaj",
             "profileUrl": "https://semafor.hns.family/igraci/1236965/bruna-banaj/",
-            "photo": "/static/images/nophoto_player_m.png",
+            "photo": "https://hns.family/files/images_comet/e4/5/_resized/e459e3257cb2427b4922eb1e8e097a232843f60a_80_100_cut_wg_top.png",
             "value": "2 / 0",
             "appearances": 2,
             "minutes": 0
@@ -2265,7 +2265,7 @@
             "position": 1,
             "name": "Noa Bencak",
             "profileUrl": "https://semafor.hns.family/igraci/1237577/noa-bencak/",
-            "photo": "/static/images/nophoto_player_m.png",
+            "photo": "https://hns.family/files/images_comet/90/1/_resized/9016a54fc91e626168151bbefcb5f182449be473_80_100_cut_wg_top.png",
             "value": "2 / 0",
             "appearances": 2,
             "minutes": 0
@@ -2285,7 +2285,7 @@
             "position": 1,
             "name": "Jona Ćosić",
             "profileUrl": "https://semafor.hns.family/igraci/1237580/jona-cosic/",
-            "photo": "/static/images/nophoto_player_m.png",
+            "photo": "https://hns.family/files/images_comet/53/8/_resized/538eda87f9c641be1aa9e8362960b3ca1934f535_80_100_cut_wg_top.jpg",
             "value": "2 / 0",
             "appearances": 2,
             "minutes": 0
@@ -2295,7 +2295,7 @@
             "position": 1,
             "name": "Leon Francuz",
             "profileUrl": "https://semafor.hns.family/igraci/1237958/leon-francuz/",
-            "photo": "/static/images/nophoto_player_m.png",
+            "photo": "https://hns.family/files/images_comet/83/d/_resized/83d8402b1f40054f601b6c5368e2c161e82865bb_80_100_cut_wg_top.jpg",
             "value": "2 / 0",
             "appearances": 2,
             "minutes": 0
@@ -2355,7 +2355,7 @@
             "position": 1,
             "name": "Luka Pleša",
             "profileUrl": "https://semafor.hns.family/igraci/1237593/luka-plesa/",
-            "photo": "/static/images/nophoto_player_m.png",
+            "photo": "https://hns.family/files/images_comet/d8/8/_resized/d88e106ce8c285e8fc336ac15520ea63fcd00318_80_100_cut_wg_top.png",
             "value": "2 / 0",
             "appearances": 2,
             "minutes": 0
@@ -3591,7 +3591,7 @@
       "number": 17,
       "name": "Petar Barišić",
       "position": "Igrač",
-      "photo": "/static/images/nophoto_player_m.png",
+      "photo": "https://hns.family/files/images_comet/d8/9/_resized/d8931c5584d5b6fddb84eedf1db5103e8f0c3db6_80_100_cut_wg_top.jpg",
       "profileUrl": "https://semafor.hns.family/igraci/389840/petar-barisic/",
       "stats": {
         "appearances": 2,
@@ -3759,7 +3759,7 @@
       "number": 21,
       "name": "Filip Tomac",
       "position": "Igrač",
-      "photo": "/static/images/nophoto_player_m.png",
+      "photo": "https://hns.family/files/images_comet/19/6/_resized/196e90ca1bdae4b92c4b44ad4993f050af7379f2_80_100_cut_wg_top.jpg",
       "profileUrl": "https://semafor.hns.family/igraci/400435/filip-tomac/",
       "stats": {
         "appearances": 1,
