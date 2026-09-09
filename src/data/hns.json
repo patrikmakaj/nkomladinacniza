@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-09-09T11:40:32.176Z",
+  "lastUpdated": "2026-09-09T15:50:45.556Z",
   "sourceUrl": "https://semafor.hns.family/klubovi/134/nk-omladinac-niza/",
   "club": {
     "id": 134,
@@ -1160,7 +1160,7 @@
           "number": 1,
           "name": "Tomica Barišić",
           "position": "Vratar",
-          "photo": "/static/images/nophoto_player_m.png",
+          "photo": "https://hns.family/files/images_comet/Person/_resized/48016_c0889198-b00f-4b63-980a-b975afabe36b_80_100_cut_wg_top.jpg",
           "profileUrl": "https://semafor.hns.family/igraci/48016/tomica-barisic/",
           "stats": {
             "appearances": 0,
@@ -1202,7 +1202,7 @@
           "number": 17,
           "name": "Petar Barišić",
           "position": "Igrač",
-          "photo": "/static/images/nophoto_player_m.png",
+          "photo": "https://hns.family/files/images_comet/d8/9/_resized/d8931c5584d5b6fddb84eedf1db5103e8f0c3db6_80_100_cut_wg_top.jpg",
           "profileUrl": "https://semafor.hns.family/igraci/389840/petar-barisic/",
           "stats": {
             "appearances": 2,
@@ -1384,7 +1384,7 @@
           "number": 19,
           "name": "Filip Tomac",
           "position": "Igrač",
-          "photo": "/static/images/nophoto_player_m.png",
+          "photo": "https://hns.family/files/images_comet/19/6/_resized/196e90ca1bdae4b92c4b44ad4993f050af7379f2_80_100_cut_wg_top.jpg",
           "profileUrl": "https://semafor.hns.family/igraci/400435/filip-tomac/",
           "stats": {
             "appearances": 1,
@@ -1467,7 +1467,7 @@
             "position": 1,
             "name": "Petar Barišić",
             "profileUrl": "https://semafor.hns.family/igraci/389840/petar-barisic/",
-            "photo": "/static/images/nophoto_player_m.png",
+            "photo": "https://hns.family/files/images_comet/d8/9/_resized/d8931c5584d5b6fddb84eedf1db5103e8f0c3db6_80_100_cut_wg_top.jpg",
             "value": "2 / 0",
             "appearances": 2,
             "minutes": 0
@@ -1597,7 +1597,7 @@
             "position": 12,
             "name": "Filip Tomac",
             "profileUrl": "https://semafor.hns.family/igraci/400435/filip-tomac/",
-            "photo": "/static/images/nophoto_player_m.png",
+            "photo": "https://hns.family/files/images_comet/19/6/_resized/196e90ca1bdae4b92c4b44ad4993f050af7379f2_80_100_cut_wg_top.jpg",
             "value": "1 / 0",
             "appearances": 1,
             "minutes": 0
@@ -3141,7 +3141,7 @@
       "number": 1,
       "name": "Tomica Barišić",
       "position": "Vratar",
-      "photo": "/static/images/nophoto_player_m.png",
+      "photo": "https://hns.family/files/images_comet/Person/_resized/48016_c0889198-b00f-4b63-980a-b975afabe36b_80_100_cut_wg_top.jpg",
       "profileUrl": "https://semafor.hns.family/igraci/48016/tomica-barisic/",
       "stats": {
         "appearances": 0,
@@ -4170,7 +4170,7 @@
         "position": 14,
         "name": "Petar Barišić",
         "profileUrl": "https://semafor.hns.family/igraci/389840/petar-barisic/",
-        "photo": "/static/images/nophoto_player_m.png",
+        "photo": "https://hns.family/files/images_comet/d8/9/_resized/d8931c5584d5b6fddb84eedf1db5103e8f0c3db6_80_100_cut_wg_top.jpg",
         "value": "2 / 0",
         "appearances": 2,
         "minutes": 0
@@ -4240,7 +4240,7 @@
         "position": 21,
         "name": "Filip Tomac",
         "profileUrl": "https://semafor.hns.family/igraci/400435/filip-tomac/",
-        "photo": "/static/images/nophoto_player_m.png",
+        "photo": "https://hns.family/files/images_comet/19/6/_resized/196e90ca1bdae4b92c4b44ad4993f050af7379f2_80_100_cut_wg_top.jpg",
         "value": "1 / 0",
         "appearances": 1,
         "minutes": 0
