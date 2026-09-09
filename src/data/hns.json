@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-09-06T23:26:51.333Z",
+  "lastUpdated": "2026-09-09T06:19:02.849Z",
   "sourceUrl": "https://semafor.hns.family/klubovi/134/nk-omladinac-niza/",
   "club": {
     "id": 134,
@@ -2062,7 +2062,7 @@
           "number": 1,
           "name": "Marko Musić",
           "position": "Vratar",
-          "photo": "https://hns.family/files/images_comet/e5/a/_resized/e5a4ece3eca4b700c8529c52d358d65beca8ecf9_80_100_cut_wg_top.png",
+          "photo": "/static/images/nophoto_player_m.png",
           "profileUrl": "https://semafor.hns.family/igraci/1237578/marko-music/",
           "stats": {
             "appearances": 2,
@@ -2132,7 +2132,7 @@
           "number": 16,
           "name": "Petar Bodakoš",
           "position": "Igrač",
-          "photo": "https://hns.family/files/images_comet/03/0/_resized/03089560995936d5f0d3233e5e75dac1521f1881_80_100_cut_wg_top.png",
+          "photo": "/static/images/nophoto_player_m.png",
           "profileUrl": "https://semafor.hns.family/igraci/1237575/petar-bodakos/",
           "stats": {
             "appearances": 2,
@@ -2174,7 +2174,7 @@
           "number": 18,
           "name": "Tea Furjan",
           "position": "Igrač",
-          "photo": "https://hns.family/files/images_comet/52/c/_resized/52cb9b5748e9093afca204a6637ffe44824380a3_80_100_cut_wg_top.png",
+          "photo": "/static/images/nophoto_player_m.png",
           "profileUrl": "https://semafor.hns.family/igraci/1237573/tea-furjan/",
           "stats": {
             "appearances": 2,
@@ -2275,7 +2275,7 @@
             "position": 1,
             "name": "Petar Bodakoš",
             "profileUrl": "https://semafor.hns.family/igraci/1237575/petar-bodakos/",
-            "photo": "https://hns.family/files/images_comet/03/0/_resized/03089560995936d5f0d3233e5e75dac1521f1881_80_100_cut_wg_top.png",
+            "photo": "/static/images/nophoto_player_m.png",
             "value": "2 / 0",
             "appearances": 2,
             "minutes": 0
@@ -2305,7 +2305,7 @@
             "position": 1,
             "name": "Tea Furjan",
             "profileUrl": "https://semafor.hns.family/igraci/1237573/tea-furjan/",
-            "photo": "https://hns.family/files/images_comet/52/c/_resized/52cb9b5748e9093afca204a6637ffe44824380a3_80_100_cut_wg_top.png",
+            "photo": "/static/images/nophoto_player_m.png",
             "value": "2 / 0",
             "appearances": 2,
             "minutes": 0
@@ -2345,7 +2345,7 @@
             "position": 1,
             "name": "Marko Musić",
             "profileUrl": "https://semafor.hns.family/igraci/1237578/marko-music/",
-            "photo": "https://hns.family/files/images_comet/e5/a/_resized/e5a4ece3eca4b700c8529c52d358d65beca8ecf9_80_100_cut_wg_top.png",
+            "photo": "/static/images/nophoto_player_m.png",
             "value": "2 / 0",
             "appearances": 2,
             "minutes": 0
