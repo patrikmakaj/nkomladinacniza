@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-09-10T19:29:28.030Z",
+  "lastUpdated": "2026-09-10T21:45:49.618Z",
   "enabled": true,
   "pageId": "55401829691",
   "photosPerYear": 200,
@@ -39169,5 +39169,6 @@
         }
       ]
     }
-  ]
+  ],
+  "lastError": "Graph API vratio 3329 fotki, a prošli put 7570 — izgleda kao djelomičan odgovor"
 }
