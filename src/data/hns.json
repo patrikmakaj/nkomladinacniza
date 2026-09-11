@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-09-11T16:52:39.951Z",
+  "lastUpdated": "2026-09-11T21:49:48.645Z",
   "sourceUrl": "https://semafor.hns.family/klubovi/134/nk-omladinac-niza/",
   "club": {
     "id": 134,
@@ -2000,21 +2000,44 @@
             "name": "NK Šipovac",
             "logo": "https://hns.family/files/images_comet/f7/d/_resized/f7d87ca932c2a22b6cdd7a430be55b9fcad3038b_100_100_wg_t.png"
           },
-          "played": 1,
+          "played": 2,
           "wins": 0,
-          "draws": 0,
+          "draws": 1,
           "losses": 1,
-          "gf": 0,
-          "ga": 5,
+          "gf": 2,
+          "ga": 7,
           "gd": "-5",
-          "points": 0,
+          "points": 1,
           "form": [
-            "L"
+            "L",
+            "D"
           ],
           "isUs": false
         },
         {
           "position": 9,
+          "club": {
+            "id": 129,
+            "name": "NK Iskrica",
+            "logo": "https://hns.family/files/images_comet/53/8/_resized/53808e6ce48919c1cf17ea580f20dae3362014e7_100_100_wg_t.png"
+          },
+          "played": 3,
+          "wins": 0,
+          "draws": 1,
+          "losses": 2,
+          "gf": 2,
+          "ga": 34,
+          "gd": "-32",
+          "points": 1,
+          "form": [
+            "L",
+            "L",
+            "D"
+          ],
+          "isUs": false
+        },
+        {
+          "position": 10,
           "club": {
             "id": 134,
             "name": "NK Omladinac Niza",
@@ -2033,27 +2056,6 @@
             "L"
           ],
           "isUs": true
-        },
-        {
-          "position": 10,
-          "club": {
-            "id": 129,
-            "name": "NK Iskrica",
-            "logo": "https://hns.family/files/images_comet/53/8/_resized/53808e6ce48919c1cf17ea580f20dae3362014e7_100_100_wg_t.png"
-          },
-          "played": 2,
-          "wins": 0,
-          "draws": 0,
-          "losses": 2,
-          "gf": 0,
-          "ga": 32,
-          "gd": "-32",
-          "points": 0,
-          "form": [
-            "L",
-            "L"
-          ],
-          "isUs": false
         }
       ],
       "players": [
