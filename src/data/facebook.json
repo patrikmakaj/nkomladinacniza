@@ -1,8 +1,22 @@
 {
-  "lastUpdated": "2026-09-05T21:28:25.957Z",
+  "lastUpdated": "2026-09-11T12:33:29.408Z",
   "enabled": true,
   "pageId": "55401829691",
   "posts": [
+    {
+      "id": "55401829691_1689676099831550",
+      "message": "Nedjelju startamo utakmicom početnika u Martinu od 10:00, a zatim seniori igraju u Motičini od 17:00h.",
+      "createdAt": "2026-09-11T09:38:36+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1689676099831550",
+      "images": [
+        {
+          "src": "/images/facebook/55401829691_1689676099831550.jpg",
+          "thumb": "/images/facebook/55401829691_1689676099831550.webp",
+          "width": 700,
+          "height": 875
+        }
+      ]
+    },
     {
       "id": "55401829691_1684283487037478",
       "message": "Gol Danijel Ćosić sa 11 metara.",
@@ -394,20 +408,6 @@
           "thumb": "/images/facebook/55401829691_1657932439672583.webp",
           "width": 700,
           "height": 875
-        }
-      ]
-    },
-    {
-      "id": "55401829691_1657531309712696",
-      "message": "",
-      "createdAt": "2026-08-09T21:55:05+0000",
-      "permalink": "https://www.facebook.com/1551452460320582/posts/1657531309712696",
-      "images": [
-        {
-          "src": "/images/facebook/55401829691_1657531309712696.jpg",
-          "thumb": "/images/facebook/55401829691_1657531309712696.webp",
-          "width": 700,
-          "height": 394
         }
       ]
     }

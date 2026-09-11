@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-09-09T19:02:06.046Z",
+  "lastUpdated": "2026-09-11T12:33:21.893Z",
   "sourceUrl": "https://semafor.hns.family/klubovi/134/nk-omladinac-niza/",
   "club": {
     "id": 134,
@@ -806,7 +806,7 @@
           "number": 19,
           "name": "Ivan Prišć",
           "position": "Igrač",
-          "photo": "https://hns.family/files/images_comet/8e/2/_resized/8e29eabcdf2a1da8abfd32911c180c985f0cae5c_80_100_cut_wg_top.png",
+          "photo": "/static/images/nophoto_player_m.png",
           "profileUrl": "https://semafor.hns.family/igraci/118545/ivan-prisc/",
           "stats": {
             "appearances": 2,
@@ -834,7 +834,7 @@
           "number": 4,
           "name": "Daniel Vrbanić",
           "position": "Igrač",
-          "photo": "https://hns.family/files/images_comet/97/b/_resized/97b5f153b275bc9340577267d4afd6c6b9a16ef5_80_100_cut_wg_top.png",
+          "photo": "/static/images/nophoto_player_m.png",
           "profileUrl": "https://semafor.hns.family/igraci/365480/daniel-vrbanic/",
           "stats": {
             "appearances": 2,
@@ -962,7 +962,7 @@
             "position": 1,
             "name": "Ivan Prišć",
             "profileUrl": "https://semafor.hns.family/igraci/118545/ivan-prisc/",
-            "photo": "https://hns.family/files/images_comet/8e/2/_resized/8e29eabcdf2a1da8abfd32911c180c985f0cae5c_80_100_cut_wg_top.png",
+            "photo": "/static/images/nophoto_player_m.png",
             "value": "2 / 0",
             "appearances": 2,
             "minutes": 0
@@ -982,7 +982,7 @@
             "position": 1,
             "name": "Daniel Vrbanić",
             "profileUrl": "https://semafor.hns.family/igraci/365480/daniel-vrbanic/",
-            "photo": "https://hns.family/files/images_comet/97/b/_resized/97b5f153b275bc9340577267d4afd6c6b9a16ef5_80_100_cut_wg_top.png",
+            "photo": "/static/images/nophoto_player_m.png",
             "value": "2 / 0",
             "appearances": 2,
             "minutes": 0
@@ -1160,7 +1160,7 @@
           "number": 1,
           "name": "Tomica Barišić",
           "position": "Vratar",
-          "photo": "https://hns.family/files/images_comet/Person/_resized/48016_c0889198-b00f-4b63-980a-b975afabe36b_80_100_cut_wg_top.jpg",
+          "photo": "/static/images/nophoto_player_m.png",
           "profileUrl": "https://semafor.hns.family/igraci/48016/tomica-barisic/",
           "stats": {
             "appearances": 0,
@@ -1370,7 +1370,7 @@
           "number": 19,
           "name": "Ivan Prišć",
           "position": "Igrač",
-          "photo": "https://hns.family/files/images_comet/8e/2/_resized/8e29eabcdf2a1da8abfd32911c180c985f0cae5c_80_100_cut_wg_top.png",
+          "photo": "/static/images/nophoto_player_m.png",
           "profileUrl": "https://semafor.hns.family/igraci/118545/ivan-prisc/",
           "stats": {
             "appearances": 2,
@@ -1398,7 +1398,7 @@
           "number": 4,
           "name": "Daniel Vrbanić",
           "position": "Igrač",
-          "photo": "https://hns.family/files/images_comet/97/b/_resized/97b5f153b275bc9340577267d4afd6c6b9a16ef5_80_100_cut_wg_top.png",
+          "photo": "/static/images/nophoto_player_m.png",
           "profileUrl": "https://semafor.hns.family/igraci/365480/daniel-vrbanic/",
           "stats": {
             "appearances": 1,
@@ -1547,7 +1547,7 @@
             "position": 1,
             "name": "Ivan Prišć",
             "profileUrl": "https://semafor.hns.family/igraci/118545/ivan-prisc/",
-            "photo": "https://hns.family/files/images_comet/8e/2/_resized/8e29eabcdf2a1da8abfd32911c180c985f0cae5c_80_100_cut_wg_top.png",
+            "photo": "/static/images/nophoto_player_m.png",
             "value": "2 / 0",
             "appearances": 2,
             "minutes": 0
@@ -1607,7 +1607,7 @@
             "position": 12,
             "name": "Daniel Vrbanić",
             "profileUrl": "https://semafor.hns.family/igraci/365480/daniel-vrbanic/",
-            "photo": "https://hns.family/files/images_comet/97/b/_resized/97b5f153b275bc9340577267d4afd6c6b9a16ef5_80_100_cut_wg_top.png",
+            "photo": "/static/images/nophoto_player_m.png",
             "value": "1 / 0",
             "appearances": 1,
             "minutes": 0
@@ -2118,7 +2118,7 @@
           "number": 4,
           "name": "Noa Bencak",
           "position": "Igrač",
-          "photo": "https://hns.family/files/images_comet/90/1/_resized/9016a54fc91e626168151bbefcb5f182449be473_80_100_cut_wg_top.png",
+          "photo": "/static/images/nophoto_player_m.png",
           "profileUrl": "https://semafor.hns.family/igraci/1237577/noa-bencak/",
           "stats": {
             "appearances": 2,
@@ -2132,7 +2132,7 @@
           "number": 16,
           "name": "Petar Bodakoš",
           "position": "Igrač",
-          "photo": "https://hns.family/files/images_comet/03/0/_resized/03089560995936d5f0d3233e5e75dac1521f1881_80_100_cut_wg_top.png",
+          "photo": "/static/images/nophoto_player_m.png",
           "profileUrl": "https://semafor.hns.family/igraci/1237575/petar-bodakos/",
           "stats": {
             "appearances": 2,
@@ -2265,7 +2265,7 @@
             "position": 1,
             "name": "Noa Bencak",
             "profileUrl": "https://semafor.hns.family/igraci/1237577/noa-bencak/",
-            "photo": "https://hns.family/files/images_comet/90/1/_resized/9016a54fc91e626168151bbefcb5f182449be473_80_100_cut_wg_top.png",
+            "photo": "/static/images/nophoto_player_m.png",
             "value": "2 / 0",
             "appearances": 2,
             "minutes": 0
@@ -2275,7 +2275,7 @@
             "position": 1,
             "name": "Petar Bodakoš",
             "profileUrl": "https://semafor.hns.family/igraci/1237575/petar-bodakos/",
-            "photo": "https://hns.family/files/images_comet/03/0/_resized/03089560995936d5f0d3233e5e75dac1521f1881_80_100_cut_wg_top.png",
+            "photo": "/static/images/nophoto_player_m.png",
             "value": "2 / 0",
             "appearances": 2,
             "minutes": 0
@@ -3141,7 +3141,7 @@
       "number": 1,
       "name": "Tomica Barišić",
       "position": "Vratar",
-      "photo": "https://hns.family/files/images_comet/Person/_resized/48016_c0889198-b00f-4b63-980a-b975afabe36b_80_100_cut_wg_top.jpg",
+      "photo": "/static/images/nophoto_player_m.png",
       "profileUrl": "https://semafor.hns.family/igraci/48016/tomica-barisic/",
       "stats": {
         "appearances": 0,
@@ -3168,7 +3168,7 @@
       "number": 4,
       "name": "Daniel Vrbanić",
       "position": "Igrač",
-      "photo": "https://hns.family/files/images_comet/97/b/_resized/97b5f153b275bc9340577267d4afd6c6b9a16ef5_80_100_cut_wg_top.png",
+      "photo": "/static/images/nophoto_player_m.png",
       "profileUrl": "https://semafor.hns.family/igraci/365480/daniel-vrbanic/",
       "stats": {
         "appearances": 3,
@@ -3667,7 +3667,7 @@
       "number": 19,
       "name": "Ivan Prišć",
       "position": "Igrač",
-      "photo": "https://hns.family/files/images_comet/8e/2/_resized/8e29eabcdf2a1da8abfd32911c180c985f0cae5c_80_100_cut_wg_top.png",
+      "photo": "/static/images/nophoto_player_m.png",
       "profileUrl": "https://semafor.hns.family/igraci/118545/ivan-prisc/",
       "stats": {
         "appearances": 4,
@@ -4070,7 +4070,7 @@
         "position": 4,
         "name": "Ivan Prišć",
         "profileUrl": "https://semafor.hns.family/igraci/118545/ivan-prisc/",
-        "photo": "https://hns.family/files/images_comet/8e/2/_resized/8e29eabcdf2a1da8abfd32911c180c985f0cae5c_80_100_cut_wg_top.png",
+        "photo": "/static/images/nophoto_player_m.png",
         "value": "4 / 0",
         "appearances": 4,
         "minutes": 0
@@ -4090,7 +4090,7 @@
         "position": 6,
         "name": "Daniel Vrbanić",
         "profileUrl": "https://semafor.hns.family/igraci/365480/daniel-vrbanic/",
-        "photo": "https://hns.family/files/images_comet/97/b/_resized/97b5f153b275bc9340577267d4afd6c6b9a16ef5_80_100_cut_wg_top.png",
+        "photo": "/static/images/nophoto_player_m.png",
         "value": "3 / 0",
         "appearances": 3,
         "minutes": 0
