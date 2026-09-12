@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-09-11T21:49:48.645Z",
+  "lastUpdated": "2026-09-12T07:41:09.781Z",
   "sourceUrl": "https://semafor.hns.family/klubovi/134/nk-omladinac-niza/",
   "club": {
     "id": 134,
@@ -1174,7 +1174,7 @@
           "number": 12,
           "name": "Jan Rajs",
           "position": "Vratar",
-          "photo": "https://hns.family/files/images_comet/12/f/_resized/12fca5adb4d1c93e67868a3e218418be760a0478_80_100_cut_wg_top.jpg",
+          "photo": "/static/images/nophoto_player_m.png",
           "profileUrl": "https://semafor.hns.family/igraci/365472/jan-rajs/",
           "stats": {
             "appearances": 2,
@@ -1202,7 +1202,7 @@
           "number": 17,
           "name": "Petar Barišić",
           "position": "Igrač",
-          "photo": "https://hns.family/files/images_comet/d8/9/_resized/d8931c5584d5b6fddb84eedf1db5103e8f0c3db6_80_100_cut_wg_top.jpg",
+          "photo": "/static/images/nophoto_player_m.png",
           "profileUrl": "https://semafor.hns.family/igraci/389840/petar-barisic/",
           "stats": {
             "appearances": 2,
@@ -1314,7 +1314,7 @@
           "number": 25,
           "name": "Marin Kuzminski",
           "position": "Igrač",
-          "photo": "https://hns.family/files/images_comet/27/0/_resized/270a45d3b4d085a2e34a7fdce2621f563597fee2_80_100_cut_wg_top.png",
+          "photo": "/static/images/nophoto_player_m.png",
           "profileUrl": "https://semafor.hns.family/igraci/49014/marin-kuzminski/",
           "stats": {
             "appearances": 2,
@@ -1342,7 +1342,7 @@
           "number": 10,
           "name": "Tin Mauhar",
           "position": "Igrač",
-          "photo": "https://hns.family/files/images_comet/6a/4/_resized/6a4e068e61fb0acefa66e426b53bdbb0b3c3fc52_80_100_cut_wg_top.jpg",
+          "photo": "/static/images/nophoto_player_m.png",
           "profileUrl": "https://semafor.hns.family/igraci/389829/tin-mauhar/",
           "stats": {
             "appearances": 2,
@@ -1467,7 +1467,7 @@
             "position": 1,
             "name": "Petar Barišić",
             "profileUrl": "https://semafor.hns.family/igraci/389840/petar-barisic/",
-            "photo": "https://hns.family/files/images_comet/d8/9/_resized/d8931c5584d5b6fddb84eedf1db5103e8f0c3db6_80_100_cut_wg_top.jpg",
+            "photo": "/static/images/nophoto_player_m.png",
             "value": "2 / 0",
             "appearances": 2,
             "minutes": 0
@@ -1517,7 +1517,7 @@
             "position": 1,
             "name": "Marin Kuzminski",
             "profileUrl": "https://semafor.hns.family/igraci/49014/marin-kuzminski/",
-            "photo": "https://hns.family/files/images_comet/27/0/_resized/270a45d3b4d085a2e34a7fdce2621f563597fee2_80_100_cut_wg_top.png",
+            "photo": "/static/images/nophoto_player_m.png",
             "value": "2 / 0",
             "appearances": 2,
             "minutes": 0
@@ -1537,7 +1537,7 @@
             "position": 1,
             "name": "Tin Mauhar",
             "profileUrl": "https://semafor.hns.family/igraci/389829/tin-mauhar/",
-            "photo": "https://hns.family/files/images_comet/6a/4/_resized/6a4e068e61fb0acefa66e426b53bdbb0b3c3fc52_80_100_cut_wg_top.jpg",
+            "photo": "/static/images/nophoto_player_m.png",
             "value": "2 / 0",
             "appearances": 2,
             "minutes": 0
@@ -1557,7 +1557,7 @@
             "position": 1,
             "name": "Jan Rajs",
             "profileUrl": "https://semafor.hns.family/igraci/365472/jan-rajs/",
-            "photo": "https://hns.family/files/images_comet/12/f/_resized/12fca5adb4d1c93e67868a3e218418be760a0478_80_100_cut_wg_top.jpg",
+            "photo": "/static/images/nophoto_player_m.png",
             "value": "2 / 0",
             "appearances": 2,
             "minutes": 0
@@ -4172,7 +4172,7 @@
         "position": 14,
         "name": "Petar Barišić",
         "profileUrl": "https://semafor.hns.family/igraci/389840/petar-barisic/",
-        "photo": "https://hns.family/files/images_comet/d8/9/_resized/d8931c5584d5b6fddb84eedf1db5103e8f0c3db6_80_100_cut_wg_top.jpg",
+        "photo": "/static/images/nophoto_player_m.png",
         "value": "2 / 0",
         "appearances": 2,
         "minutes": 0
