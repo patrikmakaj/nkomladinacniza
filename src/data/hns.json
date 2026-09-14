@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-09-14T17:34:44.720Z",
+  "lastUpdated": "2026-09-14T21:23:53.306Z",
   "sourceUrl": "https://semafor.hns.family/klubovi/134/nk-omladinac-niza/",
   "club": {
     "id": 134,
@@ -569,7 +569,7 @@
           "number": 12,
           "name": "Jan Rajs",
           "position": "Vratar",
-          "photo": "https://hns.family/files/images_comet/12/f/_resized/12fca5adb4d1c93e67868a3e218418be760a0478_80_100_cut_wg_top.jpg",
+          "photo": "/static/images/nophoto_player_m.png",
           "profileUrl": "https://semafor.hns.family/igraci/365472/jan-rajs/",
           "stats": {
             "appearances": 3,
@@ -737,7 +737,7 @@
           "number": 13,
           "name": "Marin Kuzminski",
           "position": "Igrač",
-          "photo": "https://hns.family/files/images_comet/27/0/_resized/270a45d3b4d085a2e34a7fdce2621f563597fee2_80_100_cut_wg_top.png",
+          "photo": "/static/images/nophoto_player_m.png",
           "profileUrl": "https://semafor.hns.family/igraci/49014/marin-kuzminski/",
           "stats": {
             "appearances": 1,
@@ -923,7 +923,7 @@
             "position": 1,
             "name": "Marin Kuzminski",
             "profileUrl": "https://semafor.hns.family/igraci/49014/marin-kuzminski/",
-            "photo": "https://hns.family/files/images_comet/27/0/_resized/270a45d3b4d085a2e34a7fdce2621f563597fee2_80_100_cut_wg_top.png",
+            "photo": "/static/images/nophoto_player_m.png",
             "value": "2 / 0",
             "yellow": 2,
             "red": 0
@@ -985,7 +985,7 @@
             "position": 1,
             "name": "Jan Rajs",
             "profileUrl": "https://semafor.hns.family/igraci/365472/jan-rajs/",
-            "photo": "https://hns.family/files/images_comet/12/f/_resized/12fca5adb4d1c93e67868a3e218418be760a0478_80_100_cut_wg_top.jpg",
+            "photo": "/static/images/nophoto_player_m.png",
             "value": "3 / 0",
             "appearances": 3,
             "minutes": 0
@@ -1125,7 +1125,7 @@
             "position": 13,
             "name": "Marin Kuzminski",
             "profileUrl": "https://semafor.hns.family/igraci/49014/marin-kuzminski/",
-            "photo": "https://hns.family/files/images_comet/27/0/_resized/270a45d3b4d085a2e34a7fdce2621f563597fee2_80_100_cut_wg_top.png",
+            "photo": "/static/images/nophoto_player_m.png",
             "value": "1 / 0",
             "appearances": 1,
             "minutes": 0
@@ -1237,7 +1237,7 @@
           "number": 12,
           "name": "Jan Rajs",
           "position": "Vratar",
-          "photo": "https://hns.family/files/images_comet/12/f/_resized/12fca5adb4d1c93e67868a3e218418be760a0478_80_100_cut_wg_top.jpg",
+          "photo": "/static/images/nophoto_player_m.png",
           "profileUrl": "https://semafor.hns.family/igraci/365472/jan-rajs/",
           "stats": {
             "appearances": 2,
@@ -1377,7 +1377,7 @@
           "number": 25,
           "name": "Marin Kuzminski",
           "position": "Igrač",
-          "photo": "https://hns.family/files/images_comet/27/0/_resized/270a45d3b4d085a2e34a7fdce2621f563597fee2_80_100_cut_wg_top.png",
+          "photo": "/static/images/nophoto_player_m.png",
           "profileUrl": "https://semafor.hns.family/igraci/49014/marin-kuzminski/",
           "stats": {
             "appearances": 2,
@@ -1580,7 +1580,7 @@
             "position": 1,
             "name": "Marin Kuzminski",
             "profileUrl": "https://semafor.hns.family/igraci/49014/marin-kuzminski/",
-            "photo": "https://hns.family/files/images_comet/27/0/_resized/270a45d3b4d085a2e34a7fdce2621f563597fee2_80_100_cut_wg_top.png",
+            "photo": "/static/images/nophoto_player_m.png",
             "value": "2 / 0",
             "appearances": 2,
             "minutes": 0
@@ -1620,7 +1620,7 @@
             "position": 1,
             "name": "Jan Rajs",
             "profileUrl": "https://semafor.hns.family/igraci/365472/jan-rajs/",
-            "photo": "https://hns.family/files/images_comet/12/f/_resized/12fca5adb4d1c93e67868a3e218418be760a0478_80_100_cut_wg_top.jpg",
+            "photo": "/static/images/nophoto_player_m.png",
             "value": "2 / 0",
             "appearances": 2,
             "minutes": 0
@@ -2166,7 +2166,7 @@
           "number": 16,
           "name": "Bruna Banaj",
           "position": "Igrač",
-          "photo": "https://hns.family/files/images_comet/94/5/_resized/9458b2ba5999022a1a19779039a039b36ee12eac_80_100_cut_wg_top.png",
+          "photo": "/static/images/nophoto_player_m.png",
           "profileUrl": "https://semafor.hns.family/igraci/1236965/bruna-banaj/",
           "stats": {
             "appearances": 2,
@@ -2208,7 +2208,7 @@
           "number": 20,
           "name": "Iva Bodakoš",
           "position": "Igrač",
-          "photo": "https://hns.family/files/images_comet/8f/8/_resized/8f817586c1be56fae50117f1ad8106fb9c3e06bf_80_100_cut_wg_top.png",
+          "photo": "/static/images/nophoto_player_m.png",
           "profileUrl": "https://semafor.hns.family/igraci/1240384/iva-bodakos/",
           "stats": {
             "appearances": 0,
@@ -2250,7 +2250,7 @@
           "number": 9,
           "name": "Jona Ćosić",
           "position": "Igrač",
-          "photo": "https://hns.family/files/images_comet/53/8/_resized/538eda87f9c641be1aa9e8362960b3ca1934f535_80_100_cut_wg_top.jpg",
+          "photo": "/static/images/nophoto_player_m.png",
           "profileUrl": "https://semafor.hns.family/igraci/1237580/jona-cosic/",
           "stats": {
             "appearances": 2,
@@ -2292,7 +2292,7 @@
           "number": 4,
           "name": "Jakov Galinec",
           "position": "Igrač",
-          "photo": "https://hns.family/files/images_comet/dd/8/_resized/dd84d51c3c17b43e51f14c8043c6a7ebd1281bc7_80_100_cut_wg_top.png",
+          "photo": "/static/images/nophoto_player_m.png",
           "profileUrl": "https://semafor.hns.family/igraci/1237574/jakov-galinec/",
           "stats": {
             "appearances": 3,
@@ -2413,7 +2413,7 @@
             "position": 1,
             "name": "Jakov Galinec",
             "profileUrl": "https://semafor.hns.family/igraci/1237574/jakov-galinec/",
-            "photo": "https://hns.family/files/images_comet/dd/8/_resized/dd84d51c3c17b43e51f14c8043c6a7ebd1281bc7_80_100_cut_wg_top.png",
+            "photo": "/static/images/nophoto_player_m.png",
             "value": "3 / 0",
             "appearances": 3,
             "minutes": 0
@@ -2443,7 +2443,7 @@
             "position": 9,
             "name": "Bruna Banaj",
             "profileUrl": "https://semafor.hns.family/igraci/1236965/bruna-banaj/",
-            "photo": "https://hns.family/files/images_comet/94/5/_resized/9458b2ba5999022a1a19779039a039b36ee12eac_80_100_cut_wg_top.png",
+            "photo": "/static/images/nophoto_player_m.png",
             "value": "2 / 0",
             "appearances": 2,
             "minutes": 0
@@ -2453,7 +2453,7 @@
             "position": 9,
             "name": "Jona Ćosić",
             "profileUrl": "https://semafor.hns.family/igraci/1237580/jona-cosic/",
-            "photo": "https://hns.family/files/images_comet/53/8/_resized/538eda87f9c641be1aa9e8362960b3ca1934f535_80_100_cut_wg_top.jpg",
+            "photo": "/static/images/nophoto_player_m.png",
             "value": "2 / 0",
             "appearances": 2,
             "minutes": 0
@@ -3645,7 +3645,7 @@
       "number": 12,
       "name": "Jan Rajs",
       "position": "Vratar",
-      "photo": "https://hns.family/files/images_comet/12/f/_resized/12fca5adb4d1c93e67868a3e218418be760a0478_80_100_cut_wg_top.jpg",
+      "photo": "/static/images/nophoto_player_m.png",
       "profileUrl": "https://semafor.hns.family/igraci/365472/jan-rajs/",
       "stats": {
         "appearances": 5,
@@ -3683,7 +3683,7 @@
       "number": 13,
       "name": "Marin Kuzminski",
       "position": "Igrač",
-      "photo": "https://hns.family/files/images_comet/27/0/_resized/270a45d3b4d085a2e34a7fdce2621f563597fee2_80_100_cut_wg_top.png",
+      "photo": "/static/images/nophoto_player_m.png",
       "profileUrl": "https://semafor.hns.family/igraci/49014/marin-kuzminski/",
       "stats": {
         "appearances": 3,
@@ -4180,7 +4180,7 @@
         "position": 2,
         "name": "Marin Kuzminski",
         "profileUrl": "https://semafor.hns.family/igraci/49014/marin-kuzminski/",
-        "photo": "https://hns.family/files/images_comet/27/0/_resized/270a45d3b4d085a2e34a7fdce2621f563597fee2_80_100_cut_wg_top.png",
+        "photo": "/static/images/nophoto_player_m.png",
         "value": "2 / 0",
         "yellow": 2,
         "red": 0
@@ -4242,7 +4242,7 @@
         "position": 3,
         "name": "Jan Rajs",
         "profileUrl": "https://semafor.hns.family/igraci/365472/jan-rajs/",
-        "photo": "https://hns.family/files/images_comet/12/f/_resized/12fca5adb4d1c93e67868a3e218418be760a0478_80_100_cut_wg_top.jpg",
+        "photo": "/static/images/nophoto_player_m.png",
         "value": "5 / 0",
         "appearances": 5,
         "minutes": 0
@@ -4342,7 +4342,7 @@
         "position": 13,
         "name": "Marin Kuzminski",
         "profileUrl": "https://semafor.hns.family/igraci/49014/marin-kuzminski/",
-        "photo": "https://hns.family/files/images_comet/27/0/_resized/270a45d3b4d085a2e34a7fdce2621f563597fee2_80_100_cut_wg_top.png",
+        "photo": "/static/images/nophoto_player_m.png",
         "value": "3 / 0",
         "appearances": 3,
         "minutes": 0
