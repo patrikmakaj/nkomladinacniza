@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-09-14T05:43:38.647Z",
+  "lastUpdated": "2026-09-14T17:34:44.720Z",
   "sourceUrl": "https://semafor.hns.family/klubovi/134/nk-omladinac-niza/",
   "club": {
     "id": 134,
@@ -1981,20 +1981,21 @@
         {
           "position": 4,
           "club": {
-            "id": 140,
-            "name": "NK Vihor (J)",
-            "logo": "https://hns.family/files/images_comet/07/3/_resized/073548045a9ffd623cfb00b39796fde20ba35dd0_100_100_wg_t.png"
+            "id": 127,
+            "name": "NK Đurđenovac",
+            "logo": "https://hns.family/files/images_comet/a5/0/_resized/a5019da3fed2f68e88845d5dd31abaa0f550b0ec_100_100_wg_t.png"
           },
-          "played": 2,
-          "wins": 1,
+          "played": 3,
+          "wins": 2,
           "draws": 0,
           "losses": 1,
-          "gf": 10,
-          "ga": 5,
-          "gd": "+5",
-          "points": 3,
+          "gf": 16,
+          "ga": 13,
+          "gd": "+3",
+          "points": 6,
           "form": [
             "L",
+            "W",
             "W"
           ],
           "isUs": false
@@ -2024,21 +2025,22 @@
         {
           "position": 6,
           "club": {
-            "id": 127,
-            "name": "NK Đurđenovac",
-            "logo": "https://hns.family/files/images_comet/a5/0/_resized/a5019da3fed2f68e88845d5dd31abaa0f550b0ec_100_100_wg_t.png"
+            "id": 140,
+            "name": "NK Vihor (J)",
+            "logo": "https://hns.family/files/images_comet/07/3/_resized/073548045a9ffd623cfb00b39796fde20ba35dd0_100_100_wg_t.png"
           },
-          "played": 2,
+          "played": 3,
           "wins": 1,
           "draws": 0,
-          "losses": 1,
-          "gf": 7,
-          "ga": 11,
-          "gd": "-4",
+          "losses": 2,
+          "gf": 12,
+          "ga": 14,
+          "gd": "-2",
           "points": 3,
           "form": [
             "L",
-            "W"
+            "W",
+            "L"
           ],
           "isUs": false
         },
