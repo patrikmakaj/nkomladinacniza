@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-09-21T16:48:14.474Z",
+  "lastUpdated": "2026-09-21T20:45:46.626Z",
   "sourceUrl": "https://semafor.hns.family/klubovi/134/nk-omladinac-niza/",
   "club": {
     "id": 134,
@@ -724,7 +724,7 @@
           "number": 15,
           "name": "Dominik Hvizdak",
           "position": "Igrač",
-          "photo": "https://hns.family/files/images_comet/27/2/_resized/272b27612410f91f332ea3761ddc64d74333d12d_80_100_cut_wg_top.png",
+          "photo": "/static/images/nophoto_player_m.png",
           "profileUrl": "https://semafor.hns.family/igraci/211559/dominik-hvizdak/",
           "stats": {
             "appearances": 3,
@@ -794,7 +794,7 @@
           "number": 21,
           "name": "Josip Matić",
           "position": "Igrač",
-          "photo": "https://hns.family/files/images_comet/Person/_resized/125673_2f9825dc-889e-490b-8c18-4d7a41ed47c4_80_100_cut_wg_top.jpg",
+          "photo": "/static/images/nophoto_player_m.png",
           "profileUrl": "https://semafor.hns.family/igraci/125673/josip-matic/",
           "stats": {
             "appearances": 3,
@@ -850,7 +850,7 @@
           "number": 3,
           "name": "Ivan Prišć",
           "position": "Igrač",
-          "photo": "https://hns.family/files/images_comet/8e/2/_resized/8e29eabcdf2a1da8abfd32911c180c985f0cae5c_80_100_cut_wg_top.png",
+          "photo": "/static/images/nophoto_player_m.png",
           "profileUrl": "https://semafor.hns.family/igraci/118545/ivan-prisc/",
           "stats": {
             "appearances": 3,
@@ -895,7 +895,7 @@
             "position": 1,
             "name": "Dominik Hvizdak",
             "profileUrl": "https://semafor.hns.family/igraci/211559/dominik-hvizdak/",
-            "photo": "https://hns.family/files/images_comet/27/2/_resized/272b27612410f91f332ea3761ddc64d74333d12d_80_100_cut_wg_top.png",
+            "photo": "/static/images/nophoto_player_m.png",
             "value": "2",
             "goals": 2
           },
@@ -904,7 +904,7 @@
             "position": 1,
             "name": "Josip Matić",
             "profileUrl": "https://semafor.hns.family/igraci/125673/josip-matic/",
-            "photo": "https://hns.family/files/images_comet/Person/_resized/125673_2f9825dc-889e-490b-8c18-4d7a41ed47c4_80_100_cut_wg_top.jpg",
+            "photo": "/static/images/nophoto_player_m.png",
             "value": "2",
             "goals": 2
           },
@@ -1054,7 +1054,7 @@
             "position": 4,
             "name": "Dominik Hvizdak",
             "profileUrl": "https://semafor.hns.family/igraci/211559/dominik-hvizdak/",
-            "photo": "https://hns.family/files/images_comet/27/2/_resized/272b27612410f91f332ea3761ddc64d74333d12d_80_100_cut_wg_top.png",
+            "photo": "/static/images/nophoto_player_m.png",
             "value": "3 / 0",
             "appearances": 3,
             "minutes": 0
@@ -1074,7 +1074,7 @@
             "position": 4,
             "name": "Josip Matić",
             "profileUrl": "https://semafor.hns.family/igraci/125673/josip-matic/",
-            "photo": "https://hns.family/files/images_comet/Person/_resized/125673_2f9825dc-889e-490b-8c18-4d7a41ed47c4_80_100_cut_wg_top.jpg",
+            "photo": "/static/images/nophoto_player_m.png",
             "value": "3 / 0",
             "appearances": 3,
             "minutes": 0
@@ -1094,7 +1094,7 @@
             "position": 4,
             "name": "Ivan Prišć",
             "profileUrl": "https://semafor.hns.family/igraci/118545/ivan-prisc/",
-            "photo": "https://hns.family/files/images_comet/8e/2/_resized/8e29eabcdf2a1da8abfd32911c180c985f0cae5c_80_100_cut_wg_top.png",
+            "photo": "/static/images/nophoto_player_m.png",
             "value": "3 / 0",
             "appearances": 3,
             "minutes": 0
@@ -3445,7 +3445,7 @@
       "number": 3,
       "name": "Ivan Prišć",
       "position": "Igrač",
-      "photo": "https://hns.family/files/images_comet/8e/2/_resized/8e29eabcdf2a1da8abfd32911c180c985f0cae5c_80_100_cut_wg_top.png",
+      "photo": "/static/images/nophoto_player_m.png",
       "profileUrl": "https://semafor.hns.family/igraci/118545/ivan-prisc/",
       "stats": {
         "appearances": 5,
@@ -3917,7 +3917,7 @@
       "number": 15,
       "name": "Dominik Hvizdak",
       "position": "Igrač",
-      "photo": "https://hns.family/files/images_comet/27/2/_resized/272b27612410f91f332ea3761ddc64d74333d12d_80_100_cut_wg_top.png",
+      "photo": "/static/images/nophoto_player_m.png",
       "profileUrl": "https://semafor.hns.family/igraci/211559/dominik-hvizdak/",
       "stats": {
         "appearances": 3,
@@ -4112,7 +4112,7 @@
       "number": 21,
       "name": "Josip Matić",
       "position": "Igrač",
-      "photo": "https://hns.family/files/images_comet/Person/_resized/125673_2f9825dc-889e-490b-8c18-4d7a41ed47c4_80_100_cut_wg_top.jpg",
+      "photo": "/static/images/nophoto_player_m.png",
       "profileUrl": "https://semafor.hns.family/igraci/125673/josip-matic/",
       "stats": {
         "appearances": 5,
@@ -4256,7 +4256,7 @@
         "position": 1,
         "name": "Josip Matić",
         "profileUrl": "https://semafor.hns.family/igraci/125673/josip-matic/",
-        "photo": "https://hns.family/files/images_comet/Person/_resized/125673_2f9825dc-889e-490b-8c18-4d7a41ed47c4_80_100_cut_wg_top.jpg",
+        "photo": "/static/images/nophoto_player_m.png",
         "value": "4",
         "goals": 4
       },
@@ -4265,7 +4265,7 @@
         "position": 2,
         "name": "Dominik Hvizdak",
         "profileUrl": "https://semafor.hns.family/igraci/211559/dominik-hvizdak/",
-        "photo": "https://hns.family/files/images_comet/27/2/_resized/272b27612410f91f332ea3761ddc64d74333d12d_80_100_cut_wg_top.png",
+        "photo": "/static/images/nophoto_player_m.png",
         "value": "2",
         "goals": 2
       },
@@ -4444,7 +4444,7 @@
         "position": 8,
         "name": "Josip Matić",
         "profileUrl": "https://semafor.hns.family/igraci/125673/josip-matic/",
-        "photo": "https://hns.family/files/images_comet/Person/_resized/125673_2f9825dc-889e-490b-8c18-4d7a41ed47c4_80_100_cut_wg_top.jpg",
+        "photo": "/static/images/nophoto_player_m.png",
         "value": "5 / 0",
         "appearances": 5,
         "minutes": 0
@@ -4454,7 +4454,7 @@
         "position": 9,
         "name": "Ivan Prišć",
         "profileUrl": "https://semafor.hns.family/igraci/118545/ivan-prisc/",
-        "photo": "https://hns.family/files/images_comet/8e/2/_resized/8e29eabcdf2a1da8abfd32911c180c985f0cae5c_80_100_cut_wg_top.png",
+        "photo": "/static/images/nophoto_player_m.png",
         "value": "5 / 0",
         "appearances": 5,
         "minutes": 0
@@ -4484,7 +4484,7 @@
         "position": 12,
         "name": "Dominik Hvizdak",
         "profileUrl": "https://semafor.hns.family/igraci/211559/dominik-hvizdak/",
-        "photo": "https://hns.family/files/images_comet/27/2/_resized/272b27612410f91f332ea3761ddc64d74333d12d_80_100_cut_wg_top.png",
+        "photo": "/static/images/nophoto_player_m.png",
         "value": "3 / 0",
         "appearances": 3,
         "minutes": 0
