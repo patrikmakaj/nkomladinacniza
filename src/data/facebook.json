@@ -1,8 +1,22 @@
 {
-  "lastUpdated": "2026-09-21T10:56:55.840Z",
+  "lastUpdated": "2026-09-24T13:41:09.027Z",
   "enabled": true,
   "pageId": "55401829691",
   "posts": [
+    {
+      "id": "55401829691_1702574698541690",
+      "message": "",
+      "createdAt": "2026-09-24T09:04:41+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1702574698541690",
+      "images": [
+        {
+          "src": "/images/facebook/55401829691_1702574698541690.jpg",
+          "thumb": "/images/facebook/55401829691_1702574698541690.webp",
+          "width": 700,
+          "height": 875
+        }
+      ]
+    },
     {
       "id": "55401829691_1699385355527291",
       "message": "Poraz u Stipanovcima... Iduće kolo u subotu doma protiv Martina. 💙",
@@ -392,20 +406,6 @@
         {
           "src": "/images/facebook/55401829691_1660000472799113.jpg",
           "thumb": "/images/facebook/55401829691_1660000472799113.webp",
-          "width": 700,
-          "height": 875
-        }
-      ]
-    },
-    {
-      "id": "55401829691_1659904396142054",
-      "message": "",
-      "createdAt": "2026-08-12T08:43:51+0000",
-      "permalink": "https://www.facebook.com/1551452460320582/posts/1659904396142054",
-      "images": [
-        {
-          "src": "/images/facebook/55401829691_1659904396142054.jpg",
-          "thumb": "/images/facebook/55401829691_1659904396142054.webp",
           "width": 700,
           "height": 875
         }
