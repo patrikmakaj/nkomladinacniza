@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-09-26T11:38:54.425Z",
+  "lastUpdated": "2026-09-26T15:40:31.575Z",
   "sourceUrl": "https://semafor.hns.family/klubovi/134/nk-omladinac-niza/",
   "club": {
     "id": 134,
@@ -331,19 +331,20 @@
             "name": "NK Lila",
             "logo": "https://hns.family/files/images_comet/ef/0/_resized/ef0f2eb9faa8e182f6ec0ea528cdec636b5591b5_100_100_wg_t.png"
           },
-          "played": 4,
+          "played": 5,
           "wins": 3,
-          "draws": 0,
+          "draws": 1,
           "losses": 1,
-          "gf": 11,
-          "ga": 8,
+          "gf": 13,
+          "ga": 10,
           "gd": "+3",
-          "points": 9,
+          "points": 10,
           "form": [
             "W",
             "L",
             "W",
-            "W"
+            "W",
+            "D"
           ],
           "isUs": false
         },
@@ -377,19 +378,20 @@
             "name": "NK Željezničar (MN)",
             "logo": "https://hns.family/files/images_comet/ba/1/_resized/ba1480acacd707e235b17832f3d7983b5e81d4a1_100_100_wg_t.png"
           },
-          "played": 4,
+          "played": 5,
           "wins": 2,
-          "draws": 1,
+          "draws": 2,
           "losses": 1,
-          "gf": 9,
-          "ga": 5,
+          "gf": 11,
+          "ga": 7,
           "gd": "+4",
-          "points": 7,
+          "points": 8,
           "form": [
             "W",
             "W",
             "D",
-            "L"
+            "L",
+            "D"
           ],
           "isUs": false
         },
@@ -2826,19 +2828,20 @@
         "name": "NK Lila",
         "logo": "https://hns.family/files/images_comet/ef/0/_resized/ef0f2eb9faa8e182f6ec0ea528cdec636b5591b5_100_100_wg_t.png"
       },
-      "played": 4,
+      "played": 5,
       "wins": 3,
-      "draws": 0,
+      "draws": 1,
       "losses": 1,
-      "gf": 11,
-      "ga": 8,
+      "gf": 13,
+      "ga": 10,
       "gd": "+3",
-      "points": 9,
+      "points": 10,
       "form": [
         "W",
         "L",
         "W",
-        "W"
+        "W",
+        "D"
       ],
       "isUs": false
     },
@@ -2872,19 +2875,20 @@
         "name": "NK Željezničar (MN)",
         "logo": "https://hns.family/files/images_comet/ba/1/_resized/ba1480acacd707e235b17832f3d7983b5e81d4a1_100_100_wg_t.png"
       },
-      "played": 4,
+      "played": 5,
       "wins": 2,
-      "draws": 1,
+      "draws": 2,
       "losses": 1,
-      "gf": 9,
-      "ga": 5,
+      "gf": 11,
+      "ga": 7,
       "gd": "+4",
-      "points": 7,
+      "points": 8,
       "form": [
         "W",
         "W",
         "D",
-        "L"
+        "L",
+        "D"
       ],
       "isUs": false
     },
