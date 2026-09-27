@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-09-27T15:44:30.387Z",
+  "lastUpdated": "2026-09-27T19:29:43.533Z",
   "sourceUrl": "https://semafor.hns.family/klubovi/134/nk-omladinac-niza/",
   "club": {
     "id": 134,
@@ -331,6 +331,30 @@
         {
           "position": 2,
           "club": {
+            "id": 140,
+            "name": "NK Vihor (J)",
+            "logo": "https://hns.family/files/images_comet/07/3/_resized/073548045a9ffd623cfb00b39796fde20ba35dd0_100_100_wg_t.png"
+          },
+          "played": 5,
+          "wins": 3,
+          "draws": 2,
+          "losses": 0,
+          "gf": 15,
+          "ga": 3,
+          "gd": "+12",
+          "points": 11,
+          "form": [
+            "D",
+            "W",
+            "D",
+            "W",
+            "W"
+          ],
+          "isUs": false
+        },
+        {
+          "position": 3,
+          "club": {
             "id": 131,
             "name": "NK Lila",
             "logo": "https://hns.family/files/images_comet/ef/0/_resized/ef0f2eb9faa8e182f6ec0ea528cdec636b5591b5_100_100_wg_t.png"
@@ -353,7 +377,31 @@
           "isUs": false
         },
         {
-          "position": 3,
+          "position": 4,
+          "club": {
+            "id": 124,
+            "name": "NK Motičina",
+            "logo": "https://hns.family/files/images_comet/1a/1/_resized/1a1bed16175357903eb41863550b59046f315ece_100_100_wg_t.png"
+          },
+          "played": 5,
+          "wins": 3,
+          "draws": 1,
+          "losses": 1,
+          "gf": 11,
+          "ga": 9,
+          "gd": "+2",
+          "points": 10,
+          "form": [
+            "D",
+            "W",
+            "W",
+            "L",
+            "W"
+          ],
+          "isUs": false
+        },
+        {
+          "position": 5,
           "club": {
             "id": 4174,
             "name": "NK Martin",
@@ -377,30 +425,7 @@
           "isUs": false
         },
         {
-          "position": 4,
-          "club": {
-            "id": 140,
-            "name": "NK Vihor (J)",
-            "logo": "https://hns.family/files/images_comet/07/3/_resized/073548045a9ffd623cfb00b39796fde20ba35dd0_100_100_wg_t.png"
-          },
-          "played": 4,
-          "wins": 2,
-          "draws": 2,
-          "losses": 0,
-          "gf": 13,
-          "ga": 2,
-          "gd": "+11",
-          "points": 8,
-          "form": [
-            "D",
-            "W",
-            "D",
-            "W"
-          ],
-          "isUs": false
-        },
-        {
-          "position": 5,
+          "position": 6,
           "club": {
             "id": 139,
             "name": "NK Željezničar (MN)",
@@ -424,48 +449,26 @@
           "isUs": false
         },
         {
-          "position": 6,
-          "club": {
-            "id": 124,
-            "name": "NK Motičina",
-            "logo": "https://hns.family/files/images_comet/1a/1/_resized/1a1bed16175357903eb41863550b59046f315ece_100_100_wg_t.png"
-          },
-          "played": 4,
-          "wins": 2,
-          "draws": 1,
-          "losses": 1,
-          "gf": 9,
-          "ga": 8,
-          "gd": "+1",
-          "points": 7,
-          "form": [
-            "D",
-            "W",
-            "W",
-            "L"
-          ],
-          "isUs": false
-        },
-        {
           "position": 7,
           "club": {
             "id": 129,
             "name": "NK Iskrica",
             "logo": "https://hns.family/files/images_comet/53/8/_resized/53808e6ce48919c1cf17ea580f20dae3362014e7_100_100_wg_t.png"
           },
-          "played": 4,
+          "played": 5,
           "wins": 1,
           "draws": 1,
-          "losses": 2,
-          "gf": 9,
-          "ga": 9,
-          "gd": "0",
+          "losses": 3,
+          "gf": 10,
+          "ga": 11,
+          "gd": "-1",
           "points": 4,
           "form": [
             "D",
             "L",
             "L",
-            "W"
+            "W",
+            "L"
           ],
           "isUs": false
         },
@@ -476,19 +479,20 @@
             "name": "NK Mladost Stipanovci",
             "logo": "https://hns.family/files/images_comet/2b/2/_resized/2b29ebd8980577c3191bac933b14de4e196a2405_100_100_wg_t.png"
           },
-          "played": 4,
+          "played": 5,
           "wins": 1,
           "draws": 1,
-          "losses": 2,
-          "gf": 6,
-          "ga": 9,
-          "gd": "-3",
+          "losses": 3,
+          "gf": 7,
+          "ga": 11,
+          "gd": "-4",
           "points": 4,
           "form": [
             "L",
             "L",
             "D",
-            "W"
+            "W",
+            "L"
           ],
           "isUs": false
         },
@@ -543,44 +547,46 @@
         {
           "position": 11,
           "club": {
-            "id": 130,
-            "name": "NK Lađanska",
-            "logo": "https://hns.family/files/images_comet/cf/3/_resized/cf30a9ba4a0d66a0643df4033141d1c77e2183e9_100_100_wg_t.png"
+            "id": 141,
+            "name": "NK Zoljan",
+            "logo": "https://hns.family/files/images_comet/c4/8/_resized/c48aa5a81cba18f656c49eb1b316dc10e207ca08_100_100_wg_t.png"
           },
-          "played": 4,
-          "wins": 0,
-          "draws": 2,
-          "losses": 2,
-          "gf": 10,
-          "ga": 16,
+          "played": 5,
+          "wins": 1,
+          "draws": 0,
+          "losses": 4,
+          "gf": 7,
+          "ga": 13,
           "gd": "-6",
-          "points": 2,
+          "points": 3,
           "form": [
-            "D",
             "L",
-            "D",
-            "L"
+            "L",
+            "L",
+            "L",
+            "W"
           ],
           "isUs": false
         },
         {
           "position": 12,
           "club": {
-            "id": 141,
-            "name": "NK Zoljan",
-            "logo": "https://hns.family/files/images_comet/c4/8/_resized/c48aa5a81cba18f656c49eb1b316dc10e207ca08_100_100_wg_t.png"
+            "id": 130,
+            "name": "NK Lađanska",
+            "logo": "https://hns.family/files/images_comet/cf/3/_resized/cf30a9ba4a0d66a0643df4033141d1c77e2183e9_100_100_wg_t.png"
           },
-          "played": 4,
+          "played": 5,
           "wins": 0,
-          "draws": 0,
-          "losses": 4,
-          "gf": 4,
-          "ga": 12,
+          "draws": 2,
+          "losses": 3,
+          "gf": 11,
+          "ga": 19,
           "gd": "-8",
-          "points": 0,
+          "points": 2,
           "form": [
+            "D",
             "L",
-            "L",
+            "D",
             "L",
             "L"
           ],
@@ -2900,6 +2906,30 @@
     {
       "position": 2,
       "club": {
+        "id": 140,
+        "name": "NK Vihor (J)",
+        "logo": "https://hns.family/files/images_comet/07/3/_resized/073548045a9ffd623cfb00b39796fde20ba35dd0_100_100_wg_t.png"
+      },
+      "played": 5,
+      "wins": 3,
+      "draws": 2,
+      "losses": 0,
+      "gf": 15,
+      "ga": 3,
+      "gd": "+12",
+      "points": 11,
+      "form": [
+        "D",
+        "W",
+        "D",
+        "W",
+        "W"
+      ],
+      "isUs": false
+    },
+    {
+      "position": 3,
+      "club": {
         "id": 131,
         "name": "NK Lila",
         "logo": "https://hns.family/files/images_comet/ef/0/_resized/ef0f2eb9faa8e182f6ec0ea528cdec636b5591b5_100_100_wg_t.png"
@@ -2922,7 +2952,31 @@
       "isUs": false
     },
     {
-      "position": 3,
+      "position": 4,
+      "club": {
+        "id": 124,
+        "name": "NK Motičina",
+        "logo": "https://hns.family/files/images_comet/1a/1/_resized/1a1bed16175357903eb41863550b59046f315ece_100_100_wg_t.png"
+      },
+      "played": 5,
+      "wins": 3,
+      "draws": 1,
+      "losses": 1,
+      "gf": 11,
+      "ga": 9,
+      "gd": "+2",
+      "points": 10,
+      "form": [
+        "D",
+        "W",
+        "W",
+        "L",
+        "W"
+      ],
+      "isUs": false
+    },
+    {
+      "position": 5,
       "club": {
         "id": 4174,
         "name": "NK Martin",
@@ -2946,30 +3000,7 @@
       "isUs": false
     },
     {
-      "position": 4,
-      "club": {
-        "id": 140,
-        "name": "NK Vihor (J)",
-        "logo": "https://hns.family/files/images_comet/07/3/_resized/073548045a9ffd623cfb00b39796fde20ba35dd0_100_100_wg_t.png"
-      },
-      "played": 4,
-      "wins": 2,
-      "draws": 2,
-      "losses": 0,
-      "gf": 13,
-      "ga": 2,
-      "gd": "+11",
-      "points": 8,
-      "form": [
-        "D",
-        "W",
-        "D",
-        "W"
-      ],
-      "isUs": false
-    },
-    {
-      "position": 5,
+      "position": 6,
       "club": {
         "id": 139,
         "name": "NK Željezničar (MN)",
@@ -2993,48 +3024,26 @@
       "isUs": false
     },
     {
-      "position": 6,
-      "club": {
-        "id": 124,
-        "name": "NK Motičina",
-        "logo": "https://hns.family/files/images_comet/1a/1/_resized/1a1bed16175357903eb41863550b59046f315ece_100_100_wg_t.png"
-      },
-      "played": 4,
-      "wins": 2,
-      "draws": 1,
-      "losses": 1,
-      "gf": 9,
-      "ga": 8,
-      "gd": "+1",
-      "points": 7,
-      "form": [
-        "D",
-        "W",
-        "W",
-        "L"
-      ],
-      "isUs": false
-    },
-    {
       "position": 7,
       "club": {
         "id": 129,
         "name": "NK Iskrica",
         "logo": "https://hns.family/files/images_comet/53/8/_resized/53808e6ce48919c1cf17ea580f20dae3362014e7_100_100_wg_t.png"
       },
-      "played": 4,
+      "played": 5,
       "wins": 1,
       "draws": 1,
-      "losses": 2,
-      "gf": 9,
-      "ga": 9,
-      "gd": "0",
+      "losses": 3,
+      "gf": 10,
+      "ga": 11,
+      "gd": "-1",
       "points": 4,
       "form": [
         "D",
         "L",
         "L",
-        "W"
+        "W",
+        "L"
       ],
       "isUs": false
     },
@@ -3045,19 +3054,20 @@
         "name": "NK Mladost Stipanovci",
         "logo": "https://hns.family/files/images_comet/2b/2/_resized/2b29ebd8980577c3191bac933b14de4e196a2405_100_100_wg_t.png"
       },
-      "played": 4,
+      "played": 5,
       "wins": 1,
       "draws": 1,
-      "losses": 2,
-      "gf": 6,
-      "ga": 9,
-      "gd": "-3",
+      "losses": 3,
+      "gf": 7,
+      "ga": 11,
+      "gd": "-4",
       "points": 4,
       "form": [
         "L",
         "L",
         "D",
-        "W"
+        "W",
+        "L"
       ],
       "isUs": false
     },
@@ -3112,44 +3122,46 @@
     {
       "position": 11,
       "club": {
-        "id": 130,
-        "name": "NK Lađanska",
-        "logo": "https://hns.family/files/images_comet/cf/3/_resized/cf30a9ba4a0d66a0643df4033141d1c77e2183e9_100_100_wg_t.png"
+        "id": 141,
+        "name": "NK Zoljan",
+        "logo": "https://hns.family/files/images_comet/c4/8/_resized/c48aa5a81cba18f656c49eb1b316dc10e207ca08_100_100_wg_t.png"
       },
-      "played": 4,
-      "wins": 0,
-      "draws": 2,
-      "losses": 2,
-      "gf": 10,
-      "ga": 16,
+      "played": 5,
+      "wins": 1,
+      "draws": 0,
+      "losses": 4,
+      "gf": 7,
+      "ga": 13,
       "gd": "-6",
-      "points": 2,
+      "points": 3,
       "form": [
-        "D",
         "L",
-        "D",
-        "L"
+        "L",
+        "L",
+        "L",
+        "W"
       ],
       "isUs": false
     },
     {
       "position": 12,
       "club": {
-        "id": 141,
-        "name": "NK Zoljan",
-        "logo": "https://hns.family/files/images_comet/c4/8/_resized/c48aa5a81cba18f656c49eb1b316dc10e207ca08_100_100_wg_t.png"
+        "id": 130,
+        "name": "NK Lađanska",
+        "logo": "https://hns.family/files/images_comet/cf/3/_resized/cf30a9ba4a0d66a0643df4033141d1c77e2183e9_100_100_wg_t.png"
       },
-      "played": 4,
+      "played": 5,
       "wins": 0,
-      "draws": 0,
-      "losses": 4,
-      "gf": 4,
-      "ga": 12,
+      "draws": 2,
+      "losses": 3,
+      "gf": 11,
+      "ga": 19,
       "gd": "-8",
-      "points": 0,
+      "points": 2,
       "form": [
+        "D",
         "L",
-        "L",
+        "D",
         "L",
         "L"
       ],
