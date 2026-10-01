@@ -1,5 +1,6 @@
 ---
 import { golLabel, nastupLabel } from "../lib/croatian";
+import { photoSrc } from "../lib/images";
 import { url } from "../lib/url";
 
 interface Props {
@@ -54,7 +55,7 @@ const initials = name
   <div class="aspect-[3/4] bg-gradient-to-br from-club-primary-deep to-club-primary/40 flex items-center justify-center relative overflow-hidden">
     {photo ? (
       <img
-        src={photo}
+        src={photoSrc(photo)}
         alt={name}
         class="w-full h-full object-cover object-top"
         loading="lazy"

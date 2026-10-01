@@ -1,6 +1,6 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { crestSrc } from "../../lib/crests";
+import { crestSrc, photoSrc } from "../../lib/images";
 import Logo from "../../components/Logo.astro";
 import { golLabel, nastupLabel } from "../../lib/croatian";
 import { url } from "../../lib/url";
@@ -251,7 +251,7 @@ const pageDescription = `Profil igrača ${player.name} u sezoni ${hns.competitio
         <div class="flex-shrink-0 w-28 h-28 md:w-40 md:h-40 rounded-lg bg-white/10 border-2 border-white/30 overflow-hidden flex items-center justify-center">
           {player.photo ? (
             <img
-              src={player.photo}
+              src={photoSrc(player.photo)}
               alt={player.name}
               class="w-full h-full object-cover object-top"
             />

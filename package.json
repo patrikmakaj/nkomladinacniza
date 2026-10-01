@@ -13,8 +13,8 @@
     "scrape:hns": "node scripts/scrape.mjs",
     "scrape:facebook": "node scripts/scrape-facebook.mjs",
     "scrape:fb-albums": "node scripts/scrape-facebook-albums.mjs",
-    "scrape:crests": "node scripts/fetch-crests.mjs",
-    "scrape": "npm run scrape:hns && npm run scrape:crests && npm run scrape:facebook && npm run scrape:fb-albums",
+    "scrape:images": "node scripts/fetch-images.mjs",
+    "scrape": "npm run scrape:hns && npm run scrape:images && npm run scrape:facebook && npm run scrape:fb-albums",
     "prebuild": "npm run scrape",
     "thumbs": "node scripts/backfill-thumbs.mjs",
     "check": "astro check"

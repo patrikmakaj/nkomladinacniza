@@ -32,7 +32,7 @@ Scraperi (rijetko se pokreću ručno):
 npm run scrape:hns         # HNS Semafor → src/data/hns.json
 npm run scrape:facebook    # FB postovi → src/data/facebook.json (treba FB_* env)
 npm run scrape:fb-albums   # FB albumi → src/data/facebook-albums.json (treba FB_* env)
-npm run scrape:crests      # grbovi klubova → public/images/clubs/ + src/data/crests.json
+npm run scrape:images      # grbovi + fotke seniora s HNS-a → public/images/{clubs,players}/
 ```
 
 Nema testova ni formattera, ali postoji typecheck:
@@ -63,7 +63,7 @@ Scrape job commita svježe podatke, build job gradi točno ono što je commitano
 | `hns.json` | **NE** — generira `scripts/scrape.mjs`, CI ga osvježava svakih 30 min |
 | `facebook.json` | **NE** — generira `scripts/scrape-facebook.mjs` |
 | `facebook-albums.json` | **NE** — generira `scripts/scrape-facebook-albums.mjs` |
-| `crests.json` | **NE** — generira `scripts/fetch-crests.mjs` (HNS URL grba → lokalna kopija) |
+| `crests.json`, `photos.json` | **NE** — generira `scripts/fetch-images.mjs` (HNS URL slike → lokalna kopija) |
 | `friendlies.json` | **DA** — jedini ručni izvor. Format: `friendlies.README.md` |
 
 Prijateljske, memorijali i turniri nisu na HNS Semaforu → unose se u `friendlies.json`.
@@ -198,15 +198,19 @@ odabere. Prije toga je stranica težila 5,5 MB. Kartice za dohvaćene godine
 gradi klon `<template id="card-template">` iz iste datoteke, da markup kartice
 ostane na jednom mjestu.
 
-### 4a. Grbovi klubova idu kroz `crestSrc()`
+### 4a. Grbovi i fotke igrača idu kroz `crestSrc()` / `photoSrc()`
 
-`scripts/fetch-crests.mjs` (dio `npm run scrape`, odmah iza HNS scrapera)
-svaki grb iz `hns.json` i `friendlies.json` skine jednom u
-`public/images/clubs/<hash URL-a>.<ext>` i zapiše manifest `crests.json`.
-Svaki `<img>` s grbom piše `src={crestSrc(team.logo)}` iz `lib/crests.ts` —
-vraća lokalnu kopiju kroz `url()`, a grb koji se nije skinuo ostaje na HNS
+`scripts/fetch-images.mjs` (dio `npm run scrape`, odmah iza HNS scrapera)
+svaku sliku skine jednom u `public/images/{clubs,players}/<hash URL-a>.<ext>`
+i zapiše manifest `crests.json` / `photos.json`. Svaki `<img>` piše
+`src={crestSrc(team.logo)}` ili `src={photoSrc(p.photo)}` iz `lib/images.ts` —
+vraća lokalnu kopiju kroz `url()`, a slika koja se nije skinula ostaje na HNS
 URL-u. Nikad `src={team.logo}` direktno. Za naš klub (`id === 134`) i dalje
 `<Logo />`; `TeamCrest.astro` sve to radi sam.
+
+Fotke se skidaju **samo za naše seniore** (`collectSeniorPhotoUrls`). Djeca
+(U-11) i igrači protivnika namjerno ostaju na HNS URL-u — kopija u javnom repou
+ostala bi u git povijesti i kad je HNS makne. Ne širi to bez dogovora.
 
 ### 5a. FB slike imaju dvije veličine i zapisane dimenzije
 
@@ -285,13 +289,13 @@ src/
 │                              # RecentResults, PlayerCard, StaffCard,
 │                              # MatchLineup, MatchEventsList, StatRanking, FacebookPost,
 │                              # LatestPostBlock, InstallPrompt, Logo, SchemaSportsTeam
-├── lib/                       # url.ts · matches.ts · croatian.ts · facebook.ts · crests.ts
+├── lib/                       # url.ts · matches.ts · croatian.ts · facebook.ts · images.ts
 │                              # venue.ts (igralište, Google Maps) · ics.ts · schema.ts · og.ts
 ├── data/                      # vidi tablicu gore
 ├── assets/                    # fontovi (za OG slike) + logotipi sponzora (Astro <Image>)
 └── styles/global.css
 
-scripts/    scrape.mjs · fetch-crests.mjs · scrape-facebook.mjs · scrape-facebook-albums.mjs
+scripts/    scrape.mjs · fetch-images.mjs · scrape-facebook.mjs · scrape-facebook-albums.mjs
 public/     CNAME, favicons/ikone, images/ (logo.svg, og-image.png, facebook/, facebook-albums/)
 ```
 

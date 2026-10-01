@@ -2,7 +2,7 @@
  * schema.org SportsEvent za utakmicu — JSON-LD u <head>, da tražilice znaju
  * kad se i gdje igra (najava, naslovnica) ili kako je završilo.
  */
-import { crestSrc } from "./crests";
+import { crestSrc } from "./images";
 import { competitionShort, kickoffIso, type UnifiedMatch } from "./matches";
 import { HOME_GROUND, venueFor } from "./venue";
 

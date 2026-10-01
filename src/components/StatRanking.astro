@@ -6,6 +6,8 @@
  * Item.value se renderira kao HTML stringa - omogućuje kombinacije ikona
  * (npr. žuti + crveni karton).
  */
+import { photoSrc } from "../lib/images";
+
 interface RankingItem {
   position: number | null;
   name: string;
@@ -65,7 +67,7 @@ function initials(name: string) {
             <div class="w-10 h-10 rounded-full overflow-hidden bg-club-light flex-shrink-0 flex items-center justify-center">
               {item.photo ? (
                 <img
-                  src={item.photo}
+                  src={photoSrc(item.photo)}
                   alt={item.name}
                   width="40"
                   height="40"

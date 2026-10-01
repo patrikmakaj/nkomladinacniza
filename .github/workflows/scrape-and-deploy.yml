@@ -63,7 +63,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           # Brza provjera ima li uopće što za commitati
-          CHANGED=$(git status --porcelain src/data/ public/images/facebook/ public/images/facebook-albums/ public/images/clubs/ 2>/dev/null)
+          CHANGED=$(git status --porcelain src/data/ public/images/facebook/ public/images/facebook-albums/ public/images/clubs/ public/images/players/ 2>/dev/null)
           if [[ -z "$CHANGED" ]]; then
             echo "data_changed=false" >> "$GITHUB_OUTPUT"
             echo "✓ Data unchanged, skipping commit"
@@ -81,6 +81,9 @@ jobs:
           fi
           if [[ -d public/images/clubs ]]; then
             cp -r public/images/clubs "$TMPDIR/clubs"
+          fi
+          if [[ -d public/images/players ]]; then
+            cp -r public/images/players "$TMPDIR/players"
           fi
 
           # Strategija: scrape je idempotentan (zadnji rezultat uvijek pobjeđuje).
@@ -108,15 +111,20 @@ jobs:
               rm -rf public/images/clubs
               cp -r "$TMPDIR/clubs" public/images/clubs
             fi
+            if [[ -d "$TMPDIR/players" ]]; then
+              mkdir -p public/images
+              rm -rf public/images/players
+              cp -r "$TMPDIR/players" public/images/players
+            fi
 
             # Ako je remote već stigao do istog stanja, nemamo što pushati
-            if [[ -z "$(git status --porcelain src/data/ public/images/facebook/ public/images/facebook-albums/ public/images/clubs/ 2>/dev/null)" ]]; then
+            if [[ -z "$(git status --porcelain src/data/ public/images/facebook/ public/images/facebook-albums/ public/images/clubs/ public/images/players/ 2>/dev/null)" ]]; then
               echo "✓ Remote već ima iste podatke, ništa za pushati"
               echo "data_changed=false" >> "$GITHUB_OUTPUT"
               exit 0
             fi
 
-            git add src/data/ public/images/facebook/ public/images/facebook-albums/ public/images/clubs/
+            git add src/data/ public/images/facebook/ public/images/facebook-albums/ public/images/clubs/ public/images/players/
             git commit -m "chore(data): update scrape $(date -u +%Y-%m-%dT%H:%MZ)"
 
             if git push; then
