@@ -10,6 +10,7 @@
 import TeamCrest from "./TeamCrest.astro";
 import FormStrip from "./FormStrip.astro";
 import MatchActions from "./MatchActions.astro";
+import MatchWeather from "./MatchWeather.astro";
 import { venueFor } from "../lib/venue";
 import { competitionShort, type LeagueRow, type UnifiedMatch } from "../lib/matches";
 
@@ -208,6 +209,7 @@ function valueClass(row: { better: Side }, side: "home" | "away"): string {
           </svg>
           <span>{venue}</span>
         </div>
+        <MatchWeather match={match} class="mt-2 text-center text-sm text-club-secondary" />
         <div class="mt-4">
           <MatchActions match={match} sharePath={sharePath} />
         </div>

@@ -56,6 +56,19 @@ export function venueFor(m: UnifiedMatch): Venue {
   return { label: m.home.name, query: `${m.home.name} nogometno igralište`, exact: false };
 }
 
+/**
+ * Naselje za vremensku prognozu (geokodira se u pregledniku, Open-Meteo):
+ * Niza za domaće, mjesto iz poznatog igrališta ("NK Lila, Lila" → "Lila")
+ * ili ručno upisano mjesto prijateljske. Kad mjesto ne znamo, null — bolje
+ * bez prognoze nego prognoza za krivo mjesto.
+ */
+export function weatherPlace(m: UnifiedMatch): string | null {
+  if (m.isHome) return "Niza";
+  const v = venueFor(m);
+  if (v.exact) return v.label.split(",").at(-1)?.trim() || null;
+  return m.venue ?? null;
+}
+
 /** Google Maps: upute do točnog igrališta, inače pretraga koju posjetitelj sam potvrdi. */
 export function mapsUrl(v: Venue): string {
   const q = encodeURIComponent(v.query);

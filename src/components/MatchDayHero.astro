@@ -18,17 +18,11 @@
  */
 import Logo from "./Logo.astro";
 import { crestSrc } from "../lib/images";
-import { kickoffIso } from "../lib/matches";
+import { kickoffIso, type UnifiedMatch } from "../lib/matches";
+import MatchWeather from "./MatchWeather.astro";
 
 interface Props {
-  match: {
-    date: string;
-    iso: string;
-    time: string | null;
-    isHome: boolean;
-    home: { id: number | null; name: string; logo: string | null };
-    away: { id: number | null; name: string; logo: string | null };
-  };
+  match: UnifiedMatch;
   /** Ekipa i natjecanje, npr. "Seniori · 2. ŽNL · 6. kolo". */
   label: string;
   /** Je li ovo banner za dan builda — samo za početno stanje. */
@@ -184,6 +178,7 @@ function shortName(name: string): string {
       </svg>
       <span>{venue}</span>
     </p>
+    <MatchWeather match={match} class="text-center text-sm text-white/85 mt-2" />
 
     {
       alsoToday && (

@@ -1,0 +1,147 @@
+---
+/**
+ * Vremenska prognoza za vrijeme utakmice, npr. "⛅ 14 °C · djelomično
+ * oblačno · 20 % oborina".
+ *
+ * Dohvaća se u pregledniku (Open-Meteo, besplatno, bez ključa), pa je uvijek
+ * svježa bez novog builda. Prikazuje se samo za utakmice u idućih 7 dana —
+ * dalje prognoza više šteti nego koristi — i samo kad znamo mjesto
+ * (`weatherPlace`). Ako bilo što ne uspije, element ostaje skriven.
+ */
+import { weatherPlace } from "../lib/venue";
+import type { UnifiedMatch } from "../lib/matches";
+
+interface Props {
+  match: UnifiedMatch;
+  class?: string;
+}
+
+const { match, class: className = "" } = Astro.props;
+const place = weatherPlace(match);
+// Bez objavljenog vremena uzmi sredinu poslijepodneva.
+const hour = (match.time ?? "15:00").slice(0, 2);
+---
+
+{
+  place && !match.played && (
+    <p
+      data-weather
+      data-place={place}
+      data-date={match.date}
+      data-hour={hour}
+      class={className}
+      style="display: none"
+    />
+  )
+}
+
+<script>
+  const MAX_DAYS_AHEAD = 7;
+
+  // WMO kodovi → opis i ikona
+  function describe(code: number): [string, string] {
+    if (code === 0) return ["☀️", "vedro"];
+    if (code === 1) return ["🌤️", "pretežno vedro"];
+    if (code === 2) return ["⛅", "djelomično oblačno"];
+    if (code === 3) return ["☁️", "oblačno"];
+    if (code === 45 || code === 48) return ["🌫️", "magla"];
+    if (code >= 51 && code <= 57) return ["🌦️", "rosulja"];
+    if (code >= 61 && code <= 67) return ["🌧️", "kiša"];
+    if (code >= 71 && code <= 77) return ["❄️", "snijeg"];
+    if (code >= 80 && code <= 82) return ["🌦️", "pljuskovi"];
+    if (code === 85 || code === 86) return ["🌨️", "snježni pljuskovi"];
+    if (code >= 95) return ["⛈️", "grmljavina"];
+    return ["🌡️", ""];
+  }
+
+  function todayInZagreb(): string {
+    const parts = new Intl.DateTimeFormat("en-US", {
+      timeZone: "Europe/Zagreb",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).formatToParts(new Date());
+    const get = (t: string) => parts.find((p) => p.type === t)?.value ?? "";
+    return `${get("year")}-${get("month")}-${get("day")}`;
+  }
+
+  const daysBetween = (a: string, b: string) =>
+    Math.round((Date.parse(`${b}T00:00:00Z`) - Date.parse(`${a}T00:00:00Z`)) / 86_400_000);
+
+  type Coords = { lat: number; lon: number };
+  const inflight = new Map<string, Promise<any>>();
+
+  /** Isti zahtjev samo jednom po stranici (naslovnica ima i banner i karticu). */
+  function once<T>(key: string, fn: () => Promise<T>): Promise<T> {
+    if (!inflight.has(key)) inflight.set(key, fn());
+    return inflight.get(key)!;
+  }
+
+  async function geocode(place: string): Promise<Coords | null> {
+    const cacheKey = `geo:${place}`;
+    try {
+      const cached = localStorage.getItem(cacheKey);
+      if (cached) return JSON.parse(cached);
+    } catch {
+      // localStorage nedostupan (privatni prozor) — samo bez cachea
+    }
+    const res = await fetch(
+      `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(place)}&count=10&language=hr&countryCode=HR`,
+    );
+    if (!res.ok) return null;
+    const results: any[] = (await res.json()).results ?? [];
+    // Sva mjesta iz naše lige su u Osječko-baranjskoj; ime zna postojati i drugdje.
+    const hit = results.find((r) => /osje|osij/i.test(r.admin1 ?? "")) ?? results[0];
+    if (!hit) return null;
+    const coords = { lat: hit.latitude, lon: hit.longitude };
+    try {
+      localStorage.setItem(cacheKey, JSON.stringify(coords));
+    } catch {
+      // isto kao gore
+    }
+    return coords;
+  }
+
+  async function forecast(c: Coords, date: string) {
+    const res = await fetch(
+      `https://api.open-meteo.com/v1/forecast?latitude=${c.lat}&longitude=${c.lon}` +
+        `&hourly=temperature_2m,precipitation_probability,weather_code` +
+        `&timezone=Europe%2FZagreb&start_date=${date}&end_date=${date}`,
+    );
+    if (!res.ok) return null;
+    return (await res.json()).hourly ?? null;
+  }
+
+  async function fill(el: HTMLElement) {
+    const { place, date, hour } = el.dataset;
+    if (!place || !date || !hour) return;
+    const ahead = daysBetween(todayInZagreb(), date);
+    if (ahead < 0 || ahead > MAX_DAYS_AHEAD) return;
+
+    try {
+      const coords = await once(`geo:${place}`, () => geocode(place));
+      if (!coords) return;
+      const hourly = await once(`fc:${coords.lat},${coords.lon}:${date}`, () => forecast(coords, date));
+      const i = hourly?.time?.indexOf(`${date}T${hour}:00`) ?? -1;
+      if (i < 0) return;
+      const temp = hourly.temperature_2m?.[i];
+      const rain = hourly.precipitation_probability?.[i];
+      const [icon, label] = describe(hourly.weather_code?.[i]);
+      if (typeof temp !== "number") return;
+      const parts = [`${icon} ${Math.round(temp)} °C`, label];
+      if (typeof rain === "number" && rain >= 10) parts.push(`${rain} % oborina`);
+      el.textContent = parts.filter(Boolean).join(" · ");
+      el.title = `Prognoza za ${place}, ${hour}:00 (Open-Meteo)`;
+      el.style.display = "";
+    } catch {
+      // mreža, API ili neočekivan odgovor — prognoza jednostavno izostane
+    }
+  }
+
+  function setup() {
+    inflight.clear();
+    document.querySelectorAll<HTMLElement>("[data-weather]").forEach((el) => void fill(el));
+  }
+
+  document.addEventListener("astro:page-load", setup);
+</script>
