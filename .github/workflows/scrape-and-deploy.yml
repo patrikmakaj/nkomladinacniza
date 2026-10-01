@@ -34,6 +34,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       data_changed: ${{ steps.commit.outputs.data_changed }}
+      hns_anomaly: ${{ steps.scrape.outputs.hns_anomaly }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -48,6 +49,7 @@ jobs:
         run: npm ci
 
       - name: Scrape HNS Semafor + Facebook
+        id: scrape
         env:
           FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
           FB_ACCESS_TOKEN: ${{ secrets.FB_ACCESS_TOKEN }}
@@ -190,3 +192,19 @@ jobs:
 
       - id: deployment
         uses: actions/deploy-pages@v4
+
+  # HNS scraper je odbio zapisati sumnjivo prazne podatke (scripts/lib/hns-sanity.mjs).
+  # Stranica i dalje radi sa starim podacima, a ovaj job pukne da GitHub
+  # pošalje obavijest o neuspjelom runu — inače bi se kvar parsera vidio tek
+  # kad netko primijeti da se raspored ne osvježava.
+  upozorenje:
+    needs: [scrape, build-and-deploy]
+    if: always() && needs.scrape.outputs.hns_anomaly != ''
+    runs-on: ubuntu-latest
+    steps:
+      - name: HNS podaci nisu zapisani
+        env:
+          MSG: ${{ needs.scrape.outputs.hns_anomaly }}
+        run: |
+          echo "::error title=HNS scraper::$MSG"
+          exit 1

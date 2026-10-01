@@ -10,10 +10,12 @@
  */
 
 import { writeFile, mkdir, readFile } from "node:fs/promises";
+import { appendFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import * as cheerio from "cheerio";
 import { writeJsonIfChanged } from "./lib/write-json.mjs";
+import { findDataLoss } from "./lib/hns-sanity.mjs";
 
 const CLUB_ID = 134;
 const CLUB_URL = `https://semafor.hns.family/klubovi/${CLUB_ID}/nk-omladinac-niza/`;
@@ -686,6 +688,15 @@ async function fetchHtml(url, { attempts = 4, headers = {} } = {}) {
 }
 
 /** Učitaj prethodno spremljene matchDetails (radi cache-a — odigrane utakmice se ne mijenjaju). */
+/** Postojeći hns.json ili null (prvi run, neispravan JSON). */
+async function loadExistingHns() {
+  try {
+    return JSON.parse(await readFile(OUT_PATH, "utf8"));
+  } catch {
+    return null;
+  }
+}
+
 async function loadExistingMatchDetails() {
   try {
     const raw = await readFile(OUT_PATH, "utf8");
@@ -867,6 +878,19 @@ async function main() {
     stats,
     matchDetails,
   };
+
+  // Sumnjivo prazni podaci (HNS promijenio HTML?) — ne prepisuj dobre.
+  // Izlaz je i dalje 0, da FB scraperi i deploy nastave; CI job `upozorenje`
+  // pukne na `hns_anomaly` i GitHub pošalje obavijest.
+  const problems = findDataLoss(await loadExistingHns(), data);
+  if (problems.length > 0) {
+    const msg = `HNS podaci odbijeni, zadržavam postojeće: ${problems.join("; ")}`;
+    console.error(`[scrape] ✗ ${msg}`);
+    if (process.env.GITHUB_OUTPUT) {
+      appendFileSync(process.env.GITHUB_OUTPUT, `hns_anomaly=${msg.replace(/\r?\n/g, " ")}\n`);
+    }
+    return;
+  }
 
   await writeJsonIfChanged(OUT_PATH, data, { label: "[scrape]" });
 
