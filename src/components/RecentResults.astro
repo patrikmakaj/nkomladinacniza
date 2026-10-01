@@ -5,15 +5,17 @@ import { lastResults } from "../lib/matches";
 
 interface Props {
   limit?: number;
+  /** Koliko najnovijih preskočiti — npr. 1 kad je zadnja utakmica već u kartici iznad. */
+  skip?: number;
   grid?: boolean;
 }
 
-const { limit, grid = false } = Astro.props;
+const { limit, skip = 0, grid = false } = Astro.props;
 const wrapperClass = grid
   ? "grid grid-cols-1 md:grid-cols-2 gap-3"
   : "space-y-3";
 
-const results = lastResults(limit ?? 10);
+const results = lastResults((limit ?? 10) + skip).slice(skip);
 const matchDetails = (hns.matchDetails ?? {}) as Record<string, unknown>;
 
 const outcomeColor = {
