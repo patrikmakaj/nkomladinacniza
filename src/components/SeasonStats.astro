@@ -1,0 +1,96 @@
+---
+/**
+ * Sezona u brojkama — plasman, bodovi, gol-razlika i najbolji strijelac
+ * seniora. Plasman i bodovi iz ljestvice lige; strijelci su zbroj svih
+ * seniorskih natjecanja (`hns.stats`, vidi mergeStats u scraperu).
+ *
+ * Prije prvog kola nema se što pokazati, pa se blok ne renderira.
+ */
+import hns from "../data/hns.json";
+import { url } from "../lib/url";
+import { golLabel } from "../lib/croatian";
+import { competitionsFor, type LeagueRow } from "../lib/matches";
+
+const table = (hns.table ?? []) as LeagueRow[];
+const us = table.find((r) => r.isUs);
+
+const season = hns.competition?.name?.match(/\d{2}\/\d{2}/)?.[0] ?? null;
+
+// Strijelci: svi s najviše golova (zna biti izjednačeno).
+const scorers = ((hns.stats?.topScorers ?? []) as { personId: number | null; name: string; goals?: number }[])
+  .filter((s) => (s.goals ?? 0) > 0);
+const topGoals = scorers[0]?.goals ?? 0;
+const leaders = scorers.filter((s) => s.goals === topGoals);
+const rosterIds = new Set(((hns.players ?? []) as { id: number | null }[]).map((p) => p.id));
+const leader = leaders[0];
+const leaderHref =
+  leader?.personId != null && rosterIds.has(leader.personId) ? url(`/igrac/${leader.personId}`) : null;
+
+const gd = us && us.gf != null && us.ga != null ? us.gf - us.ga : null;
+// Pravi minus (−), ne crtica; plus za pozitivnu razliku.
+const gdLabel = gd == null ? "—" : gd > 0 ? `+${gd}` : gd < 0 ? `−${Math.abs(gd)}` : "0";
+
+const show = !!us?.played || topGoals > 0;
+
+// Strijelci su zbroj seniorskih natjecanja — napiši kojih.
+const types = new Set(competitionsFor("Seniors").map((c) => c.type));
+const scope =
+  types.has("league") && types.has("cup") ? "liga i kup" : types.has("cup") ? "kup" : "liga";
+---
+
+{
+  show && (
+    <section class="container-narrow mt-16">
+      <h2 class="text-2xl mb-4">Sezona{season ? ` ${season}` : ""} u brojkama</h2>
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
+        {us && (
+          <>
+            <div class="bg-white border border-club-border rounded-lg p-4 md:p-5">
+              <p class="text-[11px] font-display uppercase tracking-widest text-club-muted">Plasman</p>
+              <p class="font-display font-bold text-4xl text-club-primary-deep mt-1 leading-none">
+                {us.position ?? "—"}.
+                <span class="text-base text-club-muted font-medium"> / {table.length}</span>
+              </p>
+              <p class="text-xs text-club-muted mt-2">u ligi</p>
+            </div>
+            <div class="bg-white border border-club-border rounded-lg p-4 md:p-5">
+              <p class="text-[11px] font-display uppercase tracking-widest text-club-muted">Bodovi</p>
+              <p class="font-display font-bold text-4xl text-club-primary-deep mt-1 leading-none">
+                {us.points ?? "—"}
+              </p>
+              <p class="text-xs text-club-muted mt-2" title="pobjede · neriješeno · izgubljeno">
+                {us.wins ?? 0} P · {us.draws ?? 0} N · {us.losses ?? 0} I
+              </p>
+            </div>
+            <div class="bg-white border border-club-border rounded-lg p-4 md:p-5">
+              <p class="text-[11px] font-display uppercase tracking-widest text-club-muted">Gol-razlika</p>
+              <p class="font-display font-bold text-4xl text-club-primary-deep mt-1 leading-none tabular-nums">
+                {gdLabel}
+              </p>
+              <p class="text-xs text-club-muted mt-2">{us.gf ?? 0} : {us.ga ?? 0}</p>
+            </div>
+          </>
+        )}
+        {leader && (
+          <div class="bg-white border border-club-border rounded-lg p-4 md:p-5">
+            <p class="text-[11px] font-display uppercase tracking-widest text-club-muted">
+              {leaders.length > 1 ? "Najbolji strijelci" : "Najbolji strijelac"}
+            </p>
+            <p class="font-display font-bold text-lg text-club-primary-deep mt-1 leading-tight">
+              {leaders.length > 2 ? (
+                `${leaders.length} igrača`
+              ) : leaderHref && leaders.length === 1 ? (
+                <a href={leaderHref} class="hover:text-club-primary hover:underline">{leader.name}</a>
+              ) : (
+                leaders.map((l) => l.name).join(", ")
+              )}
+            </p>
+            <p class="text-xs text-club-muted mt-2">
+              {topGoals} {golLabel(topGoals)} · {scope}
+            </p>
+          </div>
+        )}
+      </div>
+    </section>
+  )
+}

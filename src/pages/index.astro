@@ -6,6 +6,7 @@ import YouthMatchCard from "../components/YouthMatchCard.astro";
 import LastMatchCard from "../components/LastMatchCard.astro";
 import MatchDayHero from "../components/MatchDayHero.astro";
 import LeagueTable from "../components/LeagueTable.astro";
+import SeasonStats from "../components/SeasonStats.astro";
 import RecentResults from "../components/RecentResults.astro";
 import LatestPostBlock from "../components/LatestPostBlock.astro";
 import SchemaSportsTeam from "../components/SchemaSportsTeam.astro";
@@ -159,6 +160,8 @@ function alsoToday(item: HeroItem): string | null {
 
   {/* Prvo sportski sadržaj (tablica, rezultati), a tek onda Facebook — zadnja
       objava zna biti obavijest koja s nogometom nema veze. */}
+
+  <SeasonStats />
 
   <!-- Tablica (cijela) -->
   <section class="container-narrow mt-16">

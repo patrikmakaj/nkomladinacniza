@@ -32,6 +32,7 @@ Scraperi (rijetko se pokreću ručno):
 npm run scrape:hns         # HNS Semafor → src/data/hns.json
 npm run scrape:facebook    # FB postovi → src/data/facebook.json (treba FB_* env)
 npm run scrape:fb-albums   # FB albumi → src/data/facebook-albums.json (treba FB_* env)
+npm run scrape:crests      # grbovi klubova → public/images/clubs/ + src/data/crests.json
 ```
 
 Nema testova ni formattera, ali postoji typecheck:
@@ -62,6 +63,7 @@ Scrape job commita svježe podatke, build job gradi točno ono što je commitano
 | `hns.json` | **NE** — generira `scripts/scrape.mjs`, CI ga osvježava svakih 30 min |
 | `facebook.json` | **NE** — generira `scripts/scrape-facebook.mjs` |
 | `facebook-albums.json` | **NE** — generira `scripts/scrape-facebook-albums.mjs` |
+| `crests.json` | **NE** — generira `scripts/fetch-crests.mjs` (HNS URL grba → lokalna kopija) |
 | `friendlies.json` | **DA** — jedini ručni izvor. Format: `friendlies.README.md` |
 
 Prijateljske, memorijali i turniri nisu na HNS Semaforu → unose se u `friendlies.json`.
@@ -196,6 +198,16 @@ odabere. Prije toga je stranica težila 5,5 MB. Kartice za dohvaćene godine
 gradi klon `<template id="card-template">` iz iste datoteke, da markup kartice
 ostane na jednom mjestu.
 
+### 4a. Grbovi klubova idu kroz `crestSrc()`
+
+`scripts/fetch-crests.mjs` (dio `npm run scrape`, odmah iza HNS scrapera)
+svaki grb iz `hns.json` i `friendlies.json` skine jednom u
+`public/images/clubs/<hash URL-a>.<ext>` i zapiše manifest `crests.json`.
+Svaki `<img>` s grbom piše `src={crestSrc(team.logo)}` iz `lib/crests.ts` —
+vraća lokalnu kopiju kroz `url()`, a grb koji se nije skinuo ostaje na HNS
+URL-u. Nikad `src={team.logo}` direktno. Za naš klub (`id === 134`) i dalje
+`<Logo />`; `TeamCrest.astro` sve to radi sam.
+
 ### 5a. FB slike imaju dvije veličine i zapisane dimenzije
 
 Svaka Facebook slika — i album fotka i slika uz objavu — ima `src` (original),
@@ -259,22 +271,27 @@ src/
 │   ├── index klub povijest momcad mladje-kategorije sponzori novosti galerija raspored turnir 404
 │   ├── igrac/[id].astro       # profil igrača (getStaticPaths iz hns.players)
 │   ├── utakmica/[id].astro    # detalj utakmice (postave, događaji, suci)
-│   ├── utakmica/[id].png.ts   # dinamička OG slika (satori + resvg), cache u .cache/og
+│   ├── utakmica/[id].png.ts   # OG slika rezultata (lib/og.ts: satori + resvg, cache u .cache/og)
+│   ├── utakmica/[id].ics.ts   # jedna nadolazeća utakmica (seniori + U-11) za "U kalendar"
+│   ├── najava/[id].astro      # najava utakmice za dijeljenje; odigrane preusmjeravaju na detalje
+│   ├── najava/[id].png.ts     # OG slika najave ("NAJAVA · 18:00 · subota, 3. listopada")
 │   ├── rss.xml.ts             # RSS iz FB postova
 │   ├── raspored.ics.ts        # cijeli raspored kao kalendar za pretplatu (webcal://)
 │   └── manifest.webmanifest.ts# PWA manifest (endpoint, da poštuje base path)
 ├── components/                # Header, Footer, Hero, MatchDayHero, LeagueTable,
 │                              # NextMatchCard (+ usporedba iz ljestvice), YouthMatchCard,
-│                              # LastMatchCard, TeamCrest, FormStrip,
+│                              # LastMatchCard, TeamCrest, FormStrip, MatchActions
+│                              # (kalendar · upute · podijeli), SeasonStats,
 │                              # RecentResults, PlayerCard, StaffCard,
 │                              # MatchLineup, MatchEventsList, StatRanking, FacebookPost,
 │                              # LatestPostBlock, InstallPrompt, Logo, SchemaSportsTeam
-├── lib/                       # url.ts · matches.ts · croatian.ts · facebook.ts
+├── lib/                       # url.ts · matches.ts · croatian.ts · facebook.ts · crests.ts
+│                              # venue.ts (igralište, Google Maps) · ics.ts · schema.ts · og.ts
 ├── data/                      # vidi tablicu gore
 ├── assets/                    # fontovi (za OG slike) + logotipi sponzora (Astro <Image>)
 └── styles/global.css
 
-scripts/    scrape.mjs · scrape-facebook.mjs · scrape-facebook-albums.mjs
+scripts/    scrape.mjs · fetch-crests.mjs · scrape-facebook.mjs · scrape-facebook-albums.mjs
 public/     CNAME, favicons/ikone, images/ (logo.svg, og-image.png, facebook/, facebook-albums/)
 ```
 
@@ -374,3 +391,5 @@ ići kroz `preserveExisting`, nikad kroz `writeEmpty`.)
 - `npm run build` umjesto `npx astro build` → nepotreban scrape i prljav git status.
 - Skripta bez `astro:page-load` → radi na reload, puca na navigaciju.
 - Ručna izmjena `hns.json` / `facebook*.json` → CI je prepiše za max 30 minuta.
+- `<img src={team.logo}>` bez `crestSrc()` → grb se opet vuče s hns.family.
+- Nova OG slika bez `renderOgPng` iz `lib/og.ts` → generira se na svakom buildu.
