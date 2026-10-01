@@ -147,6 +147,28 @@ function firstUpcoming(list: UnifiedMatch[]): UnifiedMatch | null {
 /** Sljedeća seniorska utakmica (liga, kup ili prijateljska). */
 export const nextMatch: UnifiedMatch | null = firstUpcoming(allMatches);
 
+/** Offset Europe/Zagreb za zadani dan "YYYY-MM-DD", npr. "+02:00". */
+export function zagrebOffset(day: string): string {
+  // Podne izbjegava sat prelaska na ljetno/zimsko vrijeme (u 2-3 ujutro).
+  const name = new Intl.DateTimeFormat("en-US", {
+    timeZone: "Europe/Zagreb",
+    timeZoneName: "longOffset",
+  })
+    .formatToParts(new Date(`${day}T12:00:00Z`))
+    .find((p) => p.type === "timeZoneName")?.value; // "GMT+02:00"
+  const offset = name?.replace("GMT", "");
+  return offset && /^[+-]\d{2}:\d{2}$/.test(offset) ? offset : "+01:00";
+}
+
+/**
+ * Početak utakmice kao ISO sa zagrebačkim offsetom
+ * ("2026-10-03T18:00:00+02:00"), da ga preglednik i Google ne čitaju u
+ * svojoj zoni. Bez objavljenog vremena samo datum.
+ */
+export function kickoffIso(m: Pick<UnifiedMatch, "date" | "iso" | "time">): string {
+  return m.time ? `${m.iso.slice(0, 19)}${zagrebOffset(m.date)}` : m.date;
+}
+
 /** Koliko dana od danas (Europe/Zagreb) do datuma "YYYY-MM-DD"; 0 = danas. */
 export function daysFromToday(date: string): number {
   const day = (d: string) => Date.parse(`${d}T00:00:00Z`);

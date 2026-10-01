@@ -12,6 +12,7 @@ import SchemaSportsTeam from "../components/SchemaSportsTeam.astro";
 import hns from "../data/hns.json";
 import { url } from "../lib/url";
 import { pluralCroatian } from "../lib/croatian";
+import { sportsEventLd } from "../lib/schema";
 import {
   nextMatch,
   nextYouthMatch,
@@ -40,6 +41,12 @@ const youthMatch =
   nextYouthMatch && daysFromToday(nextYouthMatch.date) <= 7 ? nextYouthMatch : null;
 const lastMatch = played[0] ?? null;
 const hasSide = !!youthMatch || !!lastMatch;
+
+// schema.org SportsEvent za sljedeću utakmicu; URL vodi na njezinu najavu.
+const site = Astro.site ?? new URL("https://omladinacniza.hr");
+const nextMatchLd = nextMatch
+  ? sportsEventLd(nextMatch, new URL(url(`/najava/${nextMatch.id}`), site).href, site)
+  : null;
 
 // Sljedeći protivnik u ligi — ističe se u tablici.
 const nextOpponentId =
@@ -91,6 +98,11 @@ function alsoToday(item: HeroItem): string | null {
   description="Službena web stranica nogometnog kluba NK Omladinac Niza - rezultati, tablica, momčad i sve novosti iz kluba."
 >
   <SchemaSportsTeam slot="head" />
+  {
+    nextMatchLd && (
+      <script slot="head" type="application/ld+json" is:inline set:html={JSON.stringify(nextMatchLd)} />
+    )
+  }
 
   {/* Najava turnira ide ovdje dok traje, npr.
       <TurnirBanner href={url("/turnir/penali")} kicker="…" title="…" meta="…" until="…" />
@@ -124,7 +136,11 @@ function alsoToday(item: HeroItem): string | null {
   <section class="container-narrow -mt-20 relative z-10">
     <div class={`grid gap-4 md:gap-6 items-start ${hasSide ? "lg:grid-cols-3" : ""}`}>
       <div class={hasSide ? "lg:col-span-2" : ""}>
-        <NextMatchCard match={nextMatch} table={table} />
+        <NextMatchCard
+          match={nextMatch}
+          table={table}
+          sharePath={nextMatch ? `/najava/${nextMatch.id}` : undefined}
+        />
       </div>
       {
         hasSide && (

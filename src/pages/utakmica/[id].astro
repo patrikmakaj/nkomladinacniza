@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { crestSrc } from "../../lib/crests";
+import { kickoffIso } from "../../lib/matches";
 import Logo from "../../components/Logo.astro";
 import MatchEventsList from "../../components/MatchEventsList.astro";
 import MatchLineup from "../../components/MatchLineup.astro";
@@ -83,7 +84,7 @@ const sportsEventSchema: Record<string, unknown> = {
   description: match.played && match.score
     ? `${match.competition}. Konačni rezultat ${match.home.name} ${match.score.home} : ${match.score.away} ${match.away.name}.`
     : `${match.competition}. ${formatDate(match.iso)}.`,
-  startDate: match.iso,
+  startDate: kickoffIso(match),
   url: matchUrl,
   sport: "Soccer",
   eventStatus: match.played

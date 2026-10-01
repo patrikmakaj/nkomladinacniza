@@ -1,32 +1,9 @@
 import type { APIRoute } from "astro";
-import satori from "satori";
-import { Resvg } from "@resvg/resvg-js";
-import fs from "node:fs";
-import path from "node:path";
-import crypto from "node:crypto";
 import hns from "../../data/hns.json";
-
-// Cache PNG-ova po sadržaju utakmice — preskoči generiranje ako je
-// (id + score + imena + competition) hash isti. CI cache (GitHub Actions)
-// može cache-ati .cache/og kroz buildove.
-const CACHE_DIR = path.resolve(".cache/og");
-fs.mkdirSync(CACHE_DIR, { recursive: true });
+import { renderOgPng } from "../../lib/og";
 
 const OUR_CLUB_ID = 134;
 const OUR_NAME = "NK OMLADINAC NIZA";
-
-const oswaldBold = fs.readFileSync(
-  path.resolve("./src/assets/fonts/Oswald-Bold.woff")
-);
-const oswaldMedium = fs.readFileSync(
-  path.resolve("./src/assets/fonts/Oswald-Medium.woff")
-);
-const interMedium = fs.readFileSync(
-  path.resolve("./src/assets/fonts/Inter-Medium.woff")
-);
-const interBold = fs.readFileSync(
-  path.resolve("./src/assets/fonts/Inter-Bold.woff")
-);
 
 type Match = {
   id: string;
@@ -80,19 +57,6 @@ export const GET: APIRoute = async ({ params }) => {
     iso: match.iso,
     competition: match.competition,
   });
-  const hash = crypto
-    .createHash("sha256")
-    .update(cacheKey)
-    .digest("hex")
-    .slice(0, 16);
-  const cachePath = path.join(CACHE_DIR, `${match.id}-${hash}.png`);
-
-  if (fs.existsSync(cachePath)) {
-    return new Response(new Uint8Array(fs.readFileSync(cachePath)), {
-      headers: { "Content-Type": "image/png", "X-Cache": "HIT" },
-    });
-  }
-
   const isHome = match.home.id === OUR_CLUB_ID;
   const ourScore = isHome ? match.score.home : match.score.away;
   const oppScore = isHome ? match.score.away : match.score.home;
@@ -110,8 +74,7 @@ export const GET: APIRoute = async ({ params }) => {
   const awayName = isHome ? match.away.name.toUpperCase() : OUR_NAME;
   const homeIsUs = isHome;
 
-  const svg = await satori(
-    {
+  const tree = {
       type: "div",
       props: {
         style: {
@@ -270,34 +233,7 @@ export const GET: APIRoute = async ({ params }) => {
           },
         ],
       },
-    },
-    {
-      width: 1200,
-      height: 630,
-      fonts: [
-        { name: "Oswald", data: oswaldBold, style: "normal", weight: 700 },
-        { name: "Oswald", data: oswaldMedium, style: "normal", weight: 500 },
-        { name: "Oswald", data: oswaldBold, style: "normal", weight: 600 },
-        { name: "Inter", data: interMedium, style: "normal", weight: 500 },
-        { name: "Inter", data: interBold, style: "normal", weight: 700 },
-      ],
-    }
-  );
+    };
 
-  const png = new Resvg(svg, {
-    fitTo: { mode: "width", value: 1200 },
-  })
-    .render()
-    .asPng();
-
-  // Cache na disk za sljedeći build
-  try {
-    fs.writeFileSync(cachePath, png);
-  } catch {
-    // Ako nije moguće pisati u cache (npr. read-only FS), tiho ignoriraj
-  }
-
-  return new Response(new Uint8Array(png), {
-    headers: { "Content-Type": "image/png", "X-Cache": "MISS" },
-  });
+  return renderOgPng(tree, { name: match.id, cacheKey });
 };

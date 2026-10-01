@@ -42,6 +42,27 @@ const HOMEPAGE_URL = new URL(BASE, SITE).href;
 // svaki idući turnir, pa se ovdje ne treba ništa dopisivati.
 const EXCLUDED_PREFIXES = ["/turnir"];
 
+/**
+ * Najave (/najava/[id]) odigranih utakmica samo preusmjeravaju na detalje,
+ * pa ne idu u sitemap. Prijateljske imaju id "pr-<datum>" (lib/matches.ts).
+ * @returns {Set<string>}
+ */
+function playedMatchIds() {
+  try {
+    const hns = JSON.parse(readFileSync(new URL("./src/data/hns.json", import.meta.url), "utf8"));
+    const friendlies = JSON.parse(
+      readFileSync(new URL("./src/data/friendlies.json", import.meta.url), "utf8"),
+    );
+    return new Set([
+      ...(hns.matches ?? []).filter((/** @type {any} */ m) => m.played).map((/** @type {any} */ m) => String(m.id)),
+      ...friendlies.filter((/** @type {any} */ f) => f.score).map((/** @type {any} */ f) => `pr-${f.date}`),
+    ]);
+  } catch {
+    return new Set();
+  }
+}
+const PLAYED_IDS = playedMatchIds();
+
 // https://astro.build/config
 export default defineConfig({
   site: SITE,
@@ -51,6 +72,8 @@ export default defineConfig({
     sitemap({
       filter: (page) => {
         const path = new URL(page).pathname.replace(/\/$/, "");
+        const najava = path.match(/\/najava\/([^/]+)$/);
+        if (najava && PLAYED_IDS.has(najava[1])) return false;
         return !EXCLUDED_PREFIXES.some((p) => path === p || path.startsWith(p + "/"));
       },
       // SEO config: sve stranice imaju sličnu važnost,
@@ -64,7 +87,7 @@ export default defineConfig({
         } else if (item.url.includes("/novosti")) {
           item.priority = 0.9;
           item.changefreq = EnumChangefreq.HOURLY;
-        } else if (item.url.includes("/raspored")) {
+        } else if (item.url.includes("/raspored") || item.url.includes("/najava/")) {
           // Raspored se mijenja kako se odigravaju utakmice
           item.priority = 0.9;
           item.changefreq = EnumChangefreq.DAILY;

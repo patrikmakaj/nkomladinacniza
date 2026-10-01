@@ -1,0 +1,139 @@
+---
+/**
+ * Najava utakmice — stranica koja se dijeli prije utakmice.
+ *
+ * Ima vlastitu OG sliku (/najava/[id].png: "Subota 18:00 · Iskrica –
+ * Omladinac"), pa link u WhatsApp grupi ili na Facebooku pokaže utakmicu
+ * umjesto općeg grba. Naslovnica se za to ne može koristiti: Facebook i
+ * WhatsApp dugo pamte njezin pregled, a URL po utakmici je svaki put nov.
+ *
+ * Gradi se za sve seniorske utakmice sezone. Kad je utakmica odigrana,
+ * stranica preusmjerava na detalje (/utakmica/[id]) ili raspored — da stari
+ * linkovi iz grupa i dalje nekamo vode. Takve se izbacuju iz sitemapa.
+ */
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import NextMatchCard from "../../components/NextMatchCard.astro";
+import hns from "../../data/hns.json";
+import { url } from "../../lib/url";
+import { sportsEventLd } from "../../lib/schema";
+import {
+  allMatches,
+  upcoming,
+  competitionShort,
+  todayInZagreb,
+  type LeagueRow,
+  type UnifiedMatch,
+} from "../../lib/matches";
+
+export function getStaticPaths() {
+  return allMatches.map((m) => ({ params: { id: m.id }, props: { match: m } }));
+}
+
+const { match } = Astro.props as { match: UnifiedMatch };
+
+const hasDetail = match.id in ((hns.matchDetails ?? {}) as Record<string, unknown>);
+const redirectTo = match.played ? url(hasDetail ? `/utakmica/${match.id}` : "/raspored") : null;
+if (redirectTo) return Astro.redirect(redirectTo);
+
+const isPast = match.date < todayInZagreb;
+const dateObj = new Date(match.iso);
+const dateLabel = dateObj.toLocaleDateString("hr-HR", {
+  weekday: "long",
+  day: "numeric",
+  month: "long",
+});
+const when = match.time ? `${dateLabel} u ${match.time}` : `${dateLabel}, vrijeme naknadno`;
+const where = match.isHome ? "doma, Grbavica" : `u gostima, ${match.home.name}`;
+
+const title = `Najava: ${match.home.name} – ${match.away.name}`;
+const description = `${competitionShort(match)} · ${when}, ${where}. Forma obje ekipe, upute i dodavanje u kalendar.`;
+
+const site = Astro.site ?? new URL("https://omladinacniza.hr");
+const pageUrl = new URL(url(`/najava/${match.id}`), site).href;
+const ld = sportsEventLd(match, pageUrl, site);
+
+const others = upcoming
+  .filter((m) => m.id !== match.id && m.date >= todayInZagreb)
+  .slice(0, 3);
+---
+
+<BaseLayout title={title} description={description} image={`/najava/${match.id}.png`}>
+  <script slot="head" type="application/ld+json" is:inline set:html={JSON.stringify(ld)} />
+
+  <section class="relative bg-club-primary text-white overflow-hidden">
+    <div class="absolute inset-0 opacity-10 pointer-events-none">
+      <img
+        src={url("/images/logo.svg")}
+        alt=""
+        width="500"
+        height="500"
+        class="absolute -right-16 top-1/2 -translate-y-1/2 w-[400px] h-auto"
+      />
+    </div>
+    <div class="relative container-narrow pt-8 pb-24 md:pt-12 md:pb-28">
+      <a
+        href={url("/raspored")}
+        class="inline-flex items-center gap-1.5 text-xs font-display uppercase tracking-wider text-white/70 hover:text-white mb-4 transition-colors"
+      >
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        Raspored
+      </a>
+      <p class="text-xs md:text-sm font-display uppercase tracking-wider text-club-accent mb-2">
+        {isPast ? "Utakmica" : "Najava utakmice"} · {competitionShort(match)}
+      </p>
+      <h1 class="text-3xl md:text-5xl text-white leading-tight">
+        {match.home.name} – {match.away.name}
+      </h1>
+      <p class="mt-3 text-white/85 first-letter:uppercase">{when}</p>
+    </div>
+  </section>
+
+  <section class="container-narrow -mt-16 relative z-10">
+    {
+      isPast && (
+        <p class="mb-4 bg-white border border-club-border rounded-lg px-4 py-3 text-sm text-club-muted text-center shadow">
+          Rezultat još nije objavljen na HNS Semaforu.
+        </p>
+      )
+    }
+    <NextMatchCard
+      match={match}
+      table={hns.table as LeagueRow[]}
+      sharePath={`/najava/${match.id}`}
+      heading={isPast ? "Utakmica" : "Najava"}
+    />
+  </section>
+
+  {
+    others.length > 0 && (
+      <section class="container-narrow mt-12">
+        <h2 class="text-2xl mb-4">Iduće utakmice</h2>
+        <div class="grid gap-3 md:grid-cols-3">
+          {others.map((m) => (
+            <a
+              href={url(`/najava/${m.id}`)}
+              class="block bg-white border border-club-border rounded-lg p-4 hover:border-club-primary hover:shadow-md transition-all"
+            >
+              <p class="text-xs font-display uppercase tracking-wider text-club-muted">
+                {competitionShort(m)}
+              </p>
+              <p class="font-display font-bold uppercase text-sm mt-1 leading-tight">
+                {m.home.name} – {m.away.name}
+              </p>
+              <p class="text-sm text-club-muted mt-1">
+                {new Date(m.iso).toLocaleDateString("hr-HR", {
+                  weekday: "short",
+                  day: "numeric",
+                  month: "long",
+                })}
+                {m.time ? ` · ${m.time}` : ""}
+              </p>
+            </a>
+          ))}
+        </div>
+      </section>
+    )
+  }
+</BaseLayout>

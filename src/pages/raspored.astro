@@ -297,8 +297,14 @@ const icsPayload = upcoming.map((m) => ({
                 </div>
               </div>
 
-              {/* Footer: dodaj u kalendar */}
-              <div class="px-4 py-2 border-t border-club-border bg-club-light/50 flex justify-end">
+              {/* Footer: najava + dodaj u kalendar */}
+              <div class="px-4 py-2 border-t border-club-border bg-club-light/50 flex items-center justify-between gap-3">
+                <a
+                  href={url(`/najava/${m.id}`)}
+                  class="text-xs font-display uppercase tracking-wider text-club-primary hover:text-club-primary-deep"
+                >
+                  Najava i forma →
+                </a>
                 <button
                   type="button"
                   data-ics-id={m.id}
