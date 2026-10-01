@@ -16,6 +16,7 @@ import { fileURLToPath } from "node:url";
 import * as cheerio from "cheerio";
 import { writeJsonIfChanged } from "./lib/write-json.mjs";
 import { findDataLoss } from "./lib/hns-sanity.mjs";
+import { archiveSeason } from "./lib/season-archive.mjs";
 
 const CLUB_ID = 134;
 const CLUB_URL = `https://semafor.hns.family/klubovi/${CLUB_ID}/nk-omladinac-niza/`;
@@ -882,7 +883,23 @@ async function main() {
   // Sumnjivo prazni podaci (HNS promijenio HTML?) — ne prepisuj dobre.
   // Izlaz je i dalje 0, da FB scraperi i deploy nastave; CI job `upozorenje`
   // pukne na `hns_anomaly` i GitHub pošalje obavijest.
-  const problems = findDataLoss(await loadExistingHns(), data);
+  const existing = await loadExistingHns();
+
+  // Nova sezona na HNS-u: sažmi staru u src/data/sezone/ prije nego je
+  // prepišemo, inače njezina ljestvica i rezultati nestanu sa stranice.
+  const prevSeason = existing?.competition?.season;
+  if (prevSeason && data.competition?.season && prevSeason !== data.competition.season) {
+    try {
+      const friendlies = JSON.parse(
+        await readFile(resolve(__dirname, "../src/data/friendlies.json"), "utf8"),
+      );
+      await archiveSeason(existing, friendlies, { label: "[scrape]" });
+    } catch (err) {
+      console.warn(`[scrape] ⚠ arhiva sezone ${prevSeason} nije zapisana: ${err.message}`);
+    }
+  }
+
+  const problems = findDataLoss(existing, data);
   if (problems.length > 0) {
     const msg = `HNS podaci odbijeni, zadržavam postojeće: ${problems.join("; ")}`;
     console.error(`[scrape] ✗ ${msg}`);

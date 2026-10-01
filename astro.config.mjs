@@ -32,7 +32,8 @@ const facebookUpdated = lastUpdatedOf("./src/data/facebook.json");
 // `lastmod` namjerno ne postavljamo — lažni datum na svakom buildu (a build
 // ide svakih 30 min) nauči tražilice da polje ignoriraju.
 // (mladje-kategorije NIJE ovdje — prikazuje raspored i ljestvicu U-11.)
-const STATIC_PAGES = /\/(klub|povijest|sponzori)\/?$/;
+// Arhiva sezone (/sezona/2025-26) se nakon zapisa više ne mijenja.
+const STATIC_PAGES = /\/(klub|povijest|sponzori|sezona\/[^/]+)\/?$/;
 
 /** Apsolutni URL naslovnice, bez dvostrukih kosih crta. */
 const HOMEPAGE_URL = new URL(BASE, SITE).href;

@@ -33,6 +33,7 @@ npm run scrape:hns         # HNS Semafor → src/data/hns.json
 npm run scrape:facebook    # FB postovi → src/data/facebook.json (treba FB_* env)
 npm run scrape:fb-albums   # FB albumi → src/data/facebook-albums.json (treba FB_* env)
 npm run scrape:images      # grbovi + fotke seniora s HNS-a → public/images/{clubs,players}/
+node scripts/archive-season.mjs <stari-hns.json>   # ručna arhiva sezone (npr. iz git povijesti)
 ```
 
 Nema testova ni formattera, ali postoji typecheck:
@@ -64,6 +65,7 @@ Scrape job commita svježe podatke, build job gradi točno ono što je commitano
 | `facebook.json` | **NE** — generira `scripts/scrape-facebook.mjs` |
 | `facebook-albums.json` | **NE** — generira `scripts/scrape-facebook-albums.mjs` |
 | `crests.json`, `photos.json` | **NE** — generira `scripts/fetch-images.mjs` (HNS URL slike → lokalna kopija) |
+| `sezone/*.json` | **NE** — arhiva sezone; zapiše je scraper pri promjeni sezone (vidi 3b) |
 | `friendlies.json` | **DA** — jedini ručni izvor. Format: `friendlies.README.md` |
 
 Prijateljske, memorijali i turniri nisu na HNS Semaforu → unose se u `friendlies.json`.
@@ -76,6 +78,13 @@ koji uspoređuje sadržaj bez `lastUpdated`. Novi scraper mora koristiti isti he
 
 Posljedica: `lastUpdated` znači **zadnja promjena podataka**, ne zadnja provjera.
 Zato na stranicama piše „podaci od", a ne „zadnje ažurirano".
+
+**HNS scraper ne prepisuje dobre podatke praznima.** Ako HNS promijeni HTML,
+parser ne pukne nego vrati prazne nizove. `findDataLoss`
+(`scripts/lib/hns-sanity.mjs`) unutar iste sezone odbije pad utakmica ili
+ljestvice na nulu i nečitljivu sezonu: `hns.json` ostaje star, FB scraperi i
+deploy nastave, a CI job `upozorenje` pukne pa GitHub pošalje obavijest.
+Kad stigne takav mail, problem je u parseru, ne u podacima.
 
 **Deploy na cron ide samo kad su se podaci promijenili** — plus jedan dnevni
 build iza ponoći po Zagrebu (`7 23 * * *` UTC), koji uvijek deploya. Sve što
@@ -134,6 +143,11 @@ Na naslovnici U-11 namjerno ima **samo raspored** (`YouthMatchCard`, i to kad
 igraju u idućih 7 dana) — bez rezultata, forme i ljestvice. To ostaje na
 `/mladje-kategorije`; niz poraza desetogodišnjaka ne ističemo na naslovnici.
 
+Upis u školu nogometa (`YouthSignup.astro`, pun blok na
+`/mladje-kategorije#upis`, traka na naslovnici) drži kontakt, termine i uvjete
+na jednom mjestu. Kontakt je WhatsApp/poziv predsjednika DŠA Niza, ne
+Facebook — tako je klub htio. Mijenja se samo u toj komponenti.
+
 `players` i `stats` HNS objavi **tek nakon prvih odigranih utakmica** — zato
 seniorska liga ima prazne, a kup pune. Sve što ih prikazuje mora se znati
 sakriti; koristi `hasStats(comp.stats)`. Igrači mlađih kategorija nemaju
@@ -162,6 +176,30 @@ Ako klubovi odustanu, HNS otvori **novi cid za istu ligu** i stari ostavi u
 dropdownu. Ako se puste oba, svaki protivnik se pojavi dvaput u rasporedu
 (dogodilo se u kolovozu 2026.). `pickActiveCompetitions()` zato od ligaških
 natjecanja jednog uzrasta zadrži samo označeno (`selected`), a kupove sve.
+
+### 3b. Arhiva sezona
+
+Kad HNS prijeđe na novu sezonu, `hns.json` se prepiše i stara sezona nestane
+sa stranice. Scraper zato pri promjeni `competition.season` prvo sažme stari
+`hns.json` u `src/data/sezone/<2025-26>.json` (`scripts/lib/season-archive.mjs`:
+ljestvica, rezultati sa strijelcima, rang-liste, roster; bez fotki i postava;
+samo seniori). Postojeća arhiva se ne prepisuje. `/sezona/[slug]` je prikazuje,
+a `/povijest#sezone` ih nabraja (`lib/seasons.ts`).
+
+Sezona 2025/26 (prvaci LIGE NS Našice) spašena je ručno iz git povijesti —
+zadnji commit sa starom sezonom bio je `6f7e5b23`. Isto se može za starije:
+`git show <commit>:src/data/hns.json > /tmp/x.json && node scripts/archive-season.mjs /tmp/x.json`
+(skripta podržava i stari oblik `hns.json` bez `competitions`).
+
+### 3c. Objave s Facebooka uz utakmice
+
+`lib/match-posts.ts` uparuje FB objave s utakmicama bez ručnog označavanja:
+izvještaj je prva objava s tekstom u 48 h nakon početka koja spominje
+protivnika (s padežnim nastavkom), najava zadnja takva u 7 dana prije, ako
+već nije izvještaj druge utakmice. Objava bez imena protivnika se namjerno
+ne uparuje. Prikaz: `ClubPost` na `/utakmica/[id]` i `/najava/[id]`, izvadak
+u `LastMatchCard`. Ako ikad krivo upari, popravlja se u uzorcima imena
+(`opponentPatterns`), ne ručnim iznimkama u stranicama.
 
 ### 4. Client skripte moraju preživjeti View Transitions
 
@@ -279,23 +317,27 @@ src/
 │   ├── utakmica/[id].ics.ts   # jedna nadolazeća utakmica (seniori + U-11) za "U kalendar"
 │   ├── najava/[id].astro      # najava utakmice za dijeljenje; odigrane preusmjeravaju na detalje
 │   ├── najava/[id].png.ts     # OG slika najave ("NAJAVA · 18:00 · subota, 3. listopada")
+│   ├── sezona/[slug].astro    # arhivirana sezona (src/data/sezone/)
 │   ├── rss.xml.ts             # RSS iz FB postova
 │   ├── raspored.ics.ts        # cijeli raspored kao kalendar za pretplatu (webcal://)
 │   └── manifest.webmanifest.ts# PWA manifest (endpoint, da poštuje base path)
 ├── components/                # Header, Footer, Hero, MatchDayHero, LeagueTable,
 │                              # NextMatchCard (+ usporedba iz ljestvice), YouthMatchCard,
 │                              # LastMatchCard, TeamCrest, FormStrip, MatchActions
-│                              # (kalendar · upute · podijeli), SeasonStats,
+│                              # (kalendar · upute · podijeli), SeasonStats, MatchWeather,
+│                              # ClubPost (FB izvještaj/najava), YouthSignup (upis),
 │                              # RecentResults, PlayerCard, StaffCard,
 │                              # MatchLineup, MatchEventsList, StatRanking, FacebookPost,
 │                              # LatestPostBlock, InstallPrompt, Logo, SchemaSportsTeam
 ├── lib/                       # url.ts · matches.ts · croatian.ts · facebook.ts · images.ts
-│                              # venue.ts (igralište, Google Maps) · ics.ts · schema.ts · og.ts
+│                              # venue.ts (igralište, Google Maps, mjesto za prognozu) · ics.ts
+│                              # schema.ts · og.ts · match-posts.ts · seasons.ts
 ├── data/                      # vidi tablicu gore
 ├── assets/                    # fontovi (za OG slike) + logotipi sponzora (Astro <Image>)
 └── styles/global.css
 
 scripts/    scrape.mjs · fetch-images.mjs · scrape-facebook.mjs · scrape-facebook-albums.mjs
+            archive-season.mjs · lib/ (write-json · hns-sanity · season-archive)
 public/     CNAME, favicons/ikone, images/ (logo.svg, og-image.png, facebook/, facebook-albums/)
 ```
 
@@ -377,7 +419,8 @@ Inter i Oswald su self-hostani (`src/assets/fonts/*.woff2`, `@font-face` u
 | HNS Semafor | `scripts/scrape.mjs` | Bez autentikacije. Zna vraćati Cloudflare 52x → scraper ima retry i graceful skip |
 | Facebook Graph API | oba FB scrapera | Treba `FB_PAGE_ID` + `FB_ACCESS_TOKEN` (GitHub Secrets). Bez njih scraper ne ruši build |
 | Google Sheets | `pages/turnir.astro` | gviz endpoint, fetch iz browsera, sheet mora biti javno čitljiv |
-| Umami analytics | `BaseLayout.astro` | `cloud.umami.is`, website id hardkodiran |
+| Umami analytics | `BaseLayout.astro` | `cloud.umami.is`, website id hardkodiran. Klikovi na gumbe se broje atributom `data-umami-event` (+ `data-umami-event-*` za detalje) — bez našeg JS-a |
+| Open-Meteo | `MatchWeather.astro` | Prognoza i geokodiranje iz preglednika, bez ključa. Samo utakmice u idućih 7 dana i poznato mjesto; svaka greška = bez prognoze |
 | Google Fonts | `BaseLayout.astro` | Inter + Oswald |
 
 Lokalni scrape FB-a bez tokena je bezopasan — skripte zadrže postojeće podatke.

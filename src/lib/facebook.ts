@@ -76,14 +76,17 @@ export function linkify(text: string): string {
 export function formatPostDate(iso: string): string {
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return iso;
+  // FB šalje UTC; bez zone bi build server (UTC u CI-ju) pisao 2 h ranije.
   const date = d.toLocaleDateString("hr-HR", {
     day: "numeric",
     month: "long",
     year: "numeric",
+    timeZone: "Europe/Zagreb",
   });
   const time = d.toLocaleTimeString("hr-HR", {
     hour: "2-digit",
     minute: "2-digit",
+    timeZone: "Europe/Zagreb",
   });
   return `${date} u ${time}`;
 }

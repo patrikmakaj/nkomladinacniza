@@ -1,6 +1,8 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Hero from "../components/Hero.astro";
+import { url } from "../lib/url";
+import { seasons, leagueOf } from "../lib/seasons";
 
 const milestones = [
   {
@@ -222,6 +224,41 @@ const successes = {
         }
       </div>
     </div>
+
+    <!-- Arhiva sezona (src/data/sezone, lib/seasons.ts) -->
+    {
+      seasons.length > 0 && (
+        <div id="sezone" class="mt-20 max-w-4xl mx-auto scroll-mt-24">
+          <h2 class="text-3xl mb-2 text-center">Arhiva sezona</h2>
+          <p class="text-center text-sm text-club-muted mb-6">
+            Završne ljestvice, rezultati i strijelci sezona otkako ih pratimo s HNS Semafora.
+          </p>
+          <div class="grid sm:grid-cols-2 gap-4">
+            {seasons.map((s) => {
+              const league = leagueOf(s);
+              const us = league?.table.find((r) => r.isUs);
+              return (
+                <a
+                  href={url(`/sezona/${s.slug}`)}
+                  class="block bg-white border border-club-border rounded-lg p-5 hover:border-club-primary hover:shadow-md transition-all"
+                >
+                  <p class="font-display font-bold text-2xl text-club-primary-deep">
+                    {s.season}
+                    {us?.position === 1 && <span class="ml-1" title="Prvaci">🏆</span>}
+                  </p>
+                  <p class="text-sm text-club-muted">{league?.name.split(" - ")[0] ?? "Seniori"}</p>
+                  {us && (
+                    <p class="text-sm mt-2">
+                      <strong>{us.position}. mjesto</strong> · {us.points} bod. · {us.wins} P · {us.draws} N · {us.losses} I
+                    </p>
+                  )}
+                </a>
+              );
+            })}
+          </div>
+        </div>
+      )
+    }
 
 <p class="text-center text-sm text-club-muted mt-12 max-w-2xl mx-auto">
       Izvor: Wikipedia. Ako uočiš nepreciznost ili imaš dodatnu informaciju, javi nam

@@ -1,0 +1,213 @@
+---
+/**
+ * Arhivirana sezona: završna ljestvica, svi rezultati sa strijelcima,
+ * brojke sezone i igrači. Podaci iz src/data/sezone/ (lib/seasons.ts).
+ */
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Hero from "../../components/Hero.astro";
+import LeagueTable from "../../components/LeagueTable.astro";
+import SeasonStats from "../../components/SeasonStats.astro";
+import TeamCrest from "../../components/TeamCrest.astro";
+import { url } from "../../lib/url";
+import { golLabel, nastupLabel, pluralCroatian } from "../../lib/croatian";
+import { matchBadge, type MatchType } from "../../lib/matches";
+import {
+  seasons,
+  leagueOf,
+  tableRows,
+  toUnified,
+  type ArchiveMatch,
+  type SeasonArchive,
+} from "../../lib/seasons";
+
+export function getStaticPaths() {
+  return seasons.map((s) => ({ params: { slug: s.slug }, props: { season: s } }));
+}
+
+const { season } = Astro.props as { season: SeasonArchive };
+
+const league = leagueOf(season);
+const us = league?.table.find((r) => r.isUs) ?? null;
+// "LIGA NS Našice - Seniori 25/26" → "LIGA NS Našice"
+const leagueLabel = league?.name.split(" - ")[0] ?? "";
+
+const subtitle = us
+  ? `${leagueLabel} · ${us.position}. mjesto${us.position === 1 ? " — prvaci 🏆" : ""}`
+  : leagueLabel;
+
+const types = new Set(season.competitions.map((c) => c.type));
+const scope = types.has("league") && types.has("cup") ? "liga i kup" : types.has("cup") ? "kup" : "liga";
+
+const outcome = {
+  W: { letter: "P", title: "Pobjeda", cls: "bg-green-600" },
+  D: { letter: "N", title: "Neriješeno", cls: "bg-yellow-500" },
+  L: { letter: "I", title: "Izgubljeno", cls: "bg-red-600" },
+};
+
+/** Naši strijelci u utakmici: "Ćosić 79', Kasapović 6'". */
+function ourScorers(m: ArchiveMatch): string {
+  const goals = m.goals ? (m.isHome ? m.goals.home : m.goals.away) : [];
+  return goals
+    .map((g) => {
+      const name = g.name.replace(/\s*,\s*/g, " ").trim();
+      const note = g.type === "own_goal" ? " (autogol)" : g.type === "penalty" ? " (11 m)" : "";
+      return `${name}${g.minute != null ? ` ${g.minute}'` : ""}${note}`;
+    })
+    .join(", ");
+}
+
+const formatDate = (d: string) =>
+  new Date(`${d}T12:00:00`).toLocaleDateString("hr-HR", { day: "numeric", month: "short", year: "numeric" });
+
+const squad = season.squad
+  .filter((p) => (p.stats?.appearances ?? 0) > 0)
+  .sort(
+    (a, b) =>
+      (b.stats?.goals ?? 0) - (a.stats?.goals ?? 0) ||
+      (b.stats?.appearances ?? 0) - (a.stats?.appearances ?? 0),
+  );
+
+const description = us
+  ? `Sezona ${season.season} NK Omladinac Niza: ${leagueLabel}, ${us.position}. mjesto, ${us.points} ${pluralCroatian(us.points ?? 0, "bod", "boda", "bodova")} (${us.wins}-${us.draws}-${us.losses}). Ljestvica, rezultati i strijelci.`
+  : `Sezona ${season.season} NK Omladinac Niza — ljestvica, rezultati i strijelci.`;
+---
+
+<BaseLayout title={`Sezona ${season.season}`} description={description}>
+  <Hero title={`Sezona ${season.season}`} subtitle={subtitle} height="md" />
+
+  <section class="container-narrow mt-12">
+    <a
+      href={url("/povijest#sezone")}
+      class="inline-flex items-center gap-1.5 text-xs font-display uppercase tracking-wider text-club-primary hover:underline mb-6"
+    >
+      ← Sve sezone
+    </a>
+
+    <SeasonStats
+      table={league ? tableRows(league) : []}
+      scorers={season.stats.topScorers}
+      heading="Sezona u brojkama"
+      scope={scope}
+      embedded
+    />
+  </section>
+
+  {
+    league && (
+      <section class="container-narrow mt-12">
+        <h2 class="text-2xl mb-4">Završna ljestvica</h2>
+        <LeagueTable rows={tableRows(league)} title={league.name} />
+      </section>
+    )
+  }
+
+  {
+    season.competitions.map((c) => (
+      <section class="container-narrow mt-12">
+        <h2 class="text-2xl mb-1">Rezultati</h2>
+        <p class="text-sm text-club-muted mb-4">{c.name}</p>
+        <ul class="space-y-2">
+          {c.matches
+            .filter((m) => m.played && m.score)
+            .map((m) => {
+              const o = outcome[(m.result ?? "D") as "W" | "D" | "L"];
+              const scorers = ourScorers(m);
+              return (
+                <li class="bg-white border border-club-border rounded-lg px-3 py-3 md:px-4">
+                  <div class="grid grid-cols-[auto_1fr_auto] items-center gap-3">
+                    <span
+                      class={`${o.cls} w-8 h-8 rounded text-white font-display font-bold text-sm flex items-center justify-center`}
+                      title={o.title}
+                    >
+                      {o.letter}
+                    </span>
+                    <div class="min-w-0">
+                      <p class="text-[11px] font-display uppercase tracking-wider text-club-muted">
+                        {matchBadge(toUnified(m, c.type as MatchType))} · {formatDate(m.date)}
+                      </p>
+                      <p class="text-sm leading-tight mt-0.5 flex items-center gap-1.5 flex-wrap">
+                        <span class="w-5 h-5 inline-flex flex-shrink-0">
+                          <TeamCrest team={m.home} size={20} class="w-full h-full" />
+                        </span>
+                        <span class={m.isHome ? "font-bold" : ""}>{m.home.name}</span>
+                        <span class="text-club-muted">–</span>
+                        <span class="w-5 h-5 inline-flex flex-shrink-0">
+                          <TeamCrest team={m.away} size={20} class="w-full h-full" />
+                        </span>
+                        <span class={!m.isHome ? "font-bold" : ""}>{m.away.name}</span>
+                      </p>
+                      {scorers && <p class="text-xs text-club-muted mt-1">⚽ {scorers}</p>}
+                    </div>
+                    <span class="font-display font-bold text-lg whitespace-nowrap">
+                      {m.score!.home} : {m.score!.away}
+                    </span>
+                  </div>
+                </li>
+              );
+            })}
+        </ul>
+      </section>
+    ))
+  }
+
+  {
+    season.friendlies.length > 0 && (
+      <section class="container-narrow mt-12">
+        <h2 class="text-2xl mb-4">Prijateljske i memorijali</h2>
+        <ul class="space-y-2">
+          {season.friendlies.map((f: any) => (
+            <li class="bg-white border border-club-border rounded-lg px-4 py-3 flex items-center justify-between gap-3 text-sm">
+              <span>
+                <span class="text-club-muted">{formatDate(f.date)} · </span>
+                {f.isHome ? `NK Omladinac Niza – ${f.opponent}` : `${f.opponent} – NK Omladinac Niza`}
+              </span>
+              {f.score && (
+                <span class="font-display font-bold">
+                  {f.score.home} : {f.score.away}
+                </span>
+              )}
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+
+  {
+    squad.length > 0 && (
+      <section class="container-narrow mt-12">
+        <h2 class="text-2xl mb-4">Igrači</h2>
+        <div class="bg-white rounded-lg border border-club-border overflow-hidden">
+          <table class="w-full text-sm">
+            <thead class="bg-club-secondary text-white">
+              <tr>
+                <th class="px-3 py-3 text-left font-display uppercase tracking-wider text-xs">Igrač</th>
+                <th class="px-3 py-3 text-center font-display uppercase tracking-wider text-xs">Nastupi</th>
+                <th class="px-3 py-3 text-center font-display uppercase tracking-wider text-xs">Golovi</th>
+              </tr>
+            </thead>
+            <tbody>
+              {squad.map((p, i) => (
+                <tr class={`border-b border-club-border ${i % 2 ? "bg-gray-50" : "bg-white"}`}>
+                  <td class="px-3 py-2.5">
+                    {p.name}
+                    {p.position?.toLowerCase().includes("vratar") && (
+                      <span class="text-xs text-club-muted"> · vratar</span>
+                    )}
+                  </td>
+                  <td class="px-3 py-2.5 text-center" title={`${p.stats?.appearances ?? 0} ${nastupLabel(p.stats?.appearances ?? 0)}`}>
+                    {p.stats?.appearances ?? 0}
+                  </td>
+                  <td class="px-3 py-2.5 text-center font-bold" title={`${p.stats?.goals ?? 0} ${golLabel(p.stats?.goals ?? 0)}`}>
+                    {p.stats?.goals ?? 0}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p class="text-xs text-club-muted mt-3">Izvor: HNS Semafor, stanje na kraju sezone.</p>
+      </section>
+    )
+  }
+</BaseLayout>

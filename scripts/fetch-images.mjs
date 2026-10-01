@@ -6,6 +6,7 @@
  * skine jednom i zapiše manifest (HNS URL → lokalna putanja):
  *
  *   grbovi  → public/images/clubs/    + src/data/crests.json  (crestSrc)
+ *             (iz hns.json, friendlies.json i arhiva sezona u src/data/sezone/)
  *   seniori → public/images/players/  + src/data/photos.json  (photoSrc)
  *
  * Frontend ih čita kroz `src/lib/images.ts`.
@@ -23,7 +24,7 @@
 
 import { createHash } from "node:crypto";
 import { existsSync } from "node:fs";
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { writeJsonIfChanged } from "./lib/write-json.mjs";
@@ -161,6 +162,11 @@ async function main() {
   const logos = new Set();
   collectLogoUrls(hns, logos);
   collectLogoUrls(friendlies, logos);
+  // Arhivirane sezone imaju i klubove kojih više nema u ligi.
+  const archiveDir = path.join(ROOT, "src/data/sezone");
+  for (const file of existsSync(archiveDir) ? await readdir(archiveDir) : []) {
+    if (file.endsWith(".json")) collectLogoUrls(await readJson(path.join(archiveDir, file)), logos);
+  }
   await syncSet({
     label: "[crests]",
     urls: logos,

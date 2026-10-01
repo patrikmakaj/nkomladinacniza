@@ -1,0 +1,1829 @@
+{
+  "season": "2025/26",
+  "slug": "2025-26",
+  "competitions": [
+    {
+      "name": "LIGA NS Našice - Seniori 25/26",
+      "type": "league",
+      "table": [
+        {
+          "position": 1,
+          "club": {
+            "id": 134,
+            "name": "NK Omladinac Niza",
+            "logo": "https://hns.family/files/images_comet/49/b/_resized/49b362069bd38a3154422c8f1c4b7cd4f5aee1b7_100_100_wg_t.png"
+          },
+          "played": 20,
+          "wins": 17,
+          "draws": 2,
+          "losses": 1,
+          "gf": 55,
+          "ga": 14,
+          "gd": "+41",
+          "points": 53,
+          "isUs": true
+        },
+        {
+          "position": 2,
+          "club": {
+            "id": 116,
+            "name": "NK Poganovci",
+            "logo": "https://hns.family/files/images_comet/8b/e/_resized/8be8390f3c2d16ae7c1d214573a27031aa33f988_100_100_wg_t.png"
+          },
+          "played": 20,
+          "wins": 12,
+          "draws": 6,
+          "losses": 2,
+          "gf": 79,
+          "ga": 29,
+          "gd": "+50",
+          "points": 42,
+          "isUs": false
+        },
+        {
+          "position": 3,
+          "club": {
+            "id": 126,
+            "name": "NK Brezik",
+            "logo": "https://hns.family/files/images_comet/03/a/_resized/03ab0f906448fd102ff730818a0931b71e3d4ba6_100_100_wg_t.png"
+          },
+          "played": 20,
+          "wins": 13,
+          "draws": 2,
+          "losses": 5,
+          "gf": 62,
+          "ga": 30,
+          "gd": "+32",
+          "points": 41,
+          "isUs": false
+        },
+        {
+          "position": 4,
+          "club": {
+            "id": 96296,
+            "name": "NK Seljak",
+            "logo": "https://hns.family/files/images_comet/36/9/_resized/36972d1f76ba9ef18cd52f28155fd5a08c4c465a_100_100_wg_t.png"
+          },
+          "played": 20,
+          "wins": 12,
+          "draws": 1,
+          "losses": 7,
+          "gf": 57,
+          "ga": 35,
+          "gd": "+22",
+          "points": 37,
+          "isUs": false
+        },
+        {
+          "position": 5,
+          "club": {
+            "id": 132,
+            "name": "NK Mladost (BN)",
+            "logo": "https://hns.family/files/images_comet/5d/2/_resized/5d2a5b77042c3f19be79820867f9fef17f8d375b_100_100_wg_t.png"
+          },
+          "played": 20,
+          "wins": 11,
+          "draws": 2,
+          "losses": 7,
+          "gf": 59,
+          "ga": 34,
+          "gd": "+25",
+          "points": 35,
+          "isUs": false
+        },
+        {
+          "position": 6,
+          "club": {
+            "id": 136,
+            "name": "NK Polet (Bo)",
+            "logo": "https://hns.family/files/images_comet/d1/b/_resized/d1b20e824a1235b9a50d5def437f34c8821e5a2d_100_100_wg_t.jpg"
+          },
+          "played": 20,
+          "wins": 9,
+          "draws": 2,
+          "losses": 9,
+          "gf": 38,
+          "ga": 45,
+          "gd": "-7",
+          "points": 29,
+          "isUs": false
+        },
+        {
+          "position": 7,
+          "club": {
+            "id": 118,
+            "name": "NK Seona (-1)",
+            "logo": "https://hns.family/files/images_comet/63/3/_resized/633b62f9d0e508299c1e71b0e19b2038c588a20d_100_100_wg_t.png"
+          },
+          "played": 20,
+          "wins": 9,
+          "draws": 1,
+          "losses": 10,
+          "gf": 38,
+          "ga": 42,
+          "gd": "-4",
+          "points": 27,
+          "isUs": false
+        },
+        {
+          "position": 8,
+          "club": {
+            "id": 175046,
+            "name": "NK Slavonija NLT",
+            "logo": "https://hns.family/files/images_comet/b9/5/_resized/b95249da8ff3382edea063a14dbc9ab838aaf1d0_100_100_wg_t.png"
+          },
+          "played": 20,
+          "wins": 8,
+          "draws": 2,
+          "losses": 10,
+          "gf": 49,
+          "ga": 48,
+          "gd": "+1",
+          "points": 26,
+          "isUs": false
+        },
+        {
+          "position": 9,
+          "club": {
+            "id": 143,
+            "name": "NK Dinamo Budimci (-1)",
+            "logo": "https://hns.family/files/images_comet/77/0/_resized/7702bcc3158b0e194b7a2220308c428a525e9284_100_100_wg_t.png"
+          },
+          "played": 20,
+          "wins": 5,
+          "draws": 4,
+          "losses": 11,
+          "gf": 32,
+          "ga": 51,
+          "gd": "-19",
+          "points": 18,
+          "isUs": false
+        },
+        {
+          "position": 10,
+          "club": {
+            "id": 117,
+            "name": "NK Šipovac",
+            "logo": "https://hns.family/files/images_comet/f7/d/_resized/f7d87ca932c2a22b6cdd7a430be55b9fcad3038b_100_100_wg_t.png"
+          },
+          "played": 20,
+          "wins": 2,
+          "draws": 0,
+          "losses": 18,
+          "gf": 21,
+          "ga": 91,
+          "gd": "-70",
+          "points": 6,
+          "isUs": false
+        },
+        {
+          "position": 11,
+          "club": {
+            "id": 120,
+            "name": "NK Vuka",
+            "logo": "https://hns.family/files/images_comet/Club/_resized/120_1363856199284_100_100_wg_t.jpg_100_100_wg_t.jpg"
+          },
+          "played": 20,
+          "wins": 1,
+          "draws": 0,
+          "losses": 19,
+          "gf": 16,
+          "ga": 87,
+          "gd": "-71",
+          "points": 3,
+          "isUs": false
+        }
+      ],
+      "matches": [
+        {
+          "id": "100463967",
+          "round": 1,
+          "date": "2025-08-31",
+          "time": "17:30",
+          "competition": "LIGA NS Našice - Seniori 25/26, 1. kolo",
+          "home": {
+            "id": 116,
+            "name": "NK Poganovci",
+            "logo": "https://hns.family/files/images_comet/8b/e/_resized/8be8390f3c2d16ae7c1d214573a27031aa33f988_100_100_wg_t.png"
+          },
+          "away": {
+            "id": 134,
+            "name": "NK Omladinac Niza",
+            "logo": "https://hns.family/files/images_comet/49/b/_resized/49b362069bd38a3154422c8f1c4b7cd4f5aee1b7_100_100_wg_t.png"
+          },
+          "score": {
+            "home": 2,
+            "away": 2
+          },
+          "played": true,
+          "isHome": false,
+          "result": "D",
+          "goals": {
+            "home": [
+              {
+                "minute": 33,
+                "name": "Igor Vukadinović",
+                "type": "goal"
+              },
+              {
+                "minute": 69,
+                "name": "Zdenko Gudelj",
+                "type": "goal"
+              }
+            ],
+            "away": [
+              {
+                "minute": 6,
+                "name": "Hrvoje Kasapović",
+                "type": "goal"
+              },
+              {
+                "minute": 79,
+                "name": "Denis Ćosić",
+                "type": "goal"
+              }
+            ]
+          }
+        },
+        {
+          "id": "100463975",
+          "round": 2,
+          "date": "2025-09-06",
+          "time": "17:00",
+          "competition": "LIGA NS Našice - Seniori 25/26, 2. kolo",
+          "home": {
+            "id": 134,
+            "name": "NK Omladinac Niza",
+            "logo": "https://hns.family/files/images_comet/49/b/_resized/49b362069bd38a3154422c8f1c4b7cd4f5aee1b7_100_100_wg_t.png"
+          },
+          "away": {
+            "id": 117,
+            "name": "NK Šipovac",
+            "logo": "https://hns.family/files/images_comet/f7/d/_resized/f7d87ca932c2a22b6cdd7a430be55b9fcad3038b_100_100_wg_t.png"
+          },
+          "score": {
+            "home": 4,
+            "away": 1
+          },
+          "played": true,
+          "isHome": true,
+          "result": "W",
+          "goals": {
+            "home": [
+              {
+                "minute": 30,
+                "name": "Tin Mauhar",
+                "type": "goal"
+              },
+              {
+                "minute": 33,
+                "name": "Petar Barišić",
+                "type": "goal"
+              },
+              {
+                "minute": 47,
+                "name": "Mario Pranješ",
+                "type": "goal"
+              },
+              {
+                "minute": 71,
+                "name": "Mario Pranješ",
+                "type": "goal"
+              }
+            ],
+            "away": [
+              {
+                "minute": 81,
+                "name": "Dino Gašparić",
+                "type": "goal"
+              }
+            ]
+          }
+        },
+        {
+          "id": "100463978",
+          "round": 3,
+          "date": "2025-09-14",
+          "time": "17:00",
+          "competition": "LIGA NS Našice - Seniori 25/26, 3. kolo",
+          "home": {
+            "id": 132,
+            "name": "NK Mladost (BN)",
+            "logo": "https://hns.family/files/images_comet/5d/2/_resized/5d2a5b77042c3f19be79820867f9fef17f8d375b_100_100_wg_t.png"
+          },
+          "away": {
+            "id": 134,
+            "name": "NK Omladinac Niza",
+            "logo": "https://hns.family/files/images_comet/49/b/_resized/49b362069bd38a3154422c8f1c4b7cd4f5aee1b7_100_100_wg_t.png"
+          },
+          "score": {
+            "home": 0,
+            "away": 4
+          },
+          "played": true,
+          "isHome": false,
+          "result": "W",
+          "goals": {
+            "home": [],
+            "away": [
+              {
+                "minute": 45,
+                "name": "Mario Pranješ",
+                "type": "goal"
+              },
+              {
+                "minute": 61,
+                "name": "Mario Pranješ",
+                "type": "goal"
+              },
+              {
+                "minute": 77,
+                "name": "Danijel Ćosić",
+                "type": "penalty"
+              },
+              {
+                "minute": 80,
+                "name": "Lukas Đurinski",
+                "type": "goal"
+              }
+            ]
+          }
+        },
+        {
+          "id": "100463984",
+          "round": 4,
+          "date": "2025-09-21",
+          "time": "16:30",
+          "competition": "LIGA NS Našice - Seniori 25/26, 4. kolo",
+          "home": {
+            "id": 134,
+            "name": "NK Omladinac Niza",
+            "logo": "https://hns.family/files/images_comet/49/b/_resized/49b362069bd38a3154422c8f1c4b7cd4f5aee1b7_100_100_wg_t.png"
+          },
+          "away": {
+            "id": 96296,
+            "name": "NK Seljak",
+            "logo": "https://hns.family/files/images_comet/36/9/_resized/36972d1f76ba9ef18cd52f28155fd5a08c4c465a_100_100_wg_t.png"
+          },
+          "score": {
+            "home": 4,
+            "away": 1
+          },
+          "played": true,
+          "isHome": true,
+          "result": "W",
+          "goals": {
+            "home": [
+              {
+                "minute": 6,
+                "name": "Danijel Ćosić",
+                "type": "goal"
+              },
+              {
+                "minute": 79,
+                "name": "Mario Pranješ",
+                "type": "goal"
+              },
+              {
+                "minute": 82,
+                "name": "Danijel Ćosić",
+                "type": "goal"
+              },
+              {
+                "minute": 89,
+                "name": "Petar Barišić",
+                "type": "goal"
+              }
+            ],
+            "away": [
+              {
+                "minute": 87,
+                "name": "Antonio Brčić",
+                "type": "goal"
+              }
+            ]
+          }
+        },
+        {
+          "id": "100463989",
+          "round": 5,
+          "date": "2025-09-28",
+          "time": "16:00",
+          "competition": "LIGA NS Našice - Seniori 25/26, 5. kolo",
+          "home": {
+            "id": 120,
+            "name": "NK Vuka",
+            "logo": "https://hns.family/files/images_comet/Club/_resized/120_1363856199284_100_100_wg_t.jpg_100_100_wg_t.jpg"
+          },
+          "away": {
+            "id": 134,
+            "name": "NK Omladinac Niza",
+            "logo": "https://hns.family/files/images_comet/49/b/_resized/49b362069bd38a3154422c8f1c4b7cd4f5aee1b7_100_100_wg_t.png"
+          },
+          "score": {
+            "home": 0,
+            "away": 2
+          },
+          "played": true,
+          "isHome": false,
+          "result": "W",
+          "goals": {
+            "home": [],
+            "away": [
+              {
+                "minute": 9,
+                "name": "Danijel Ćosić",
+                "type": "penalty"
+              },
+              {
+                "minute": 38,
+                "name": "Mihael Abramović",
+                "type": "goal"
+              }
+            ]
+          }
+        },
+        {
+          "id": "100463993",
+          "round": 6,
+          "date": "2025-10-04",
+          "time": "16:00",
+          "competition": "LIGA NS Našice - Seniori 25/26, 6. kolo",
+          "home": {
+            "id": 134,
+            "name": "NK Omladinac Niza",
+            "logo": "https://hns.family/files/images_comet/49/b/_resized/49b362069bd38a3154422c8f1c4b7cd4f5aee1b7_100_100_wg_t.png"
+          },
+          "away": {
+            "id": 143,
+            "name": "NK Dinamo Budimci",
+            "logo": "https://hns.family/files/images_comet/77/0/_resized/7702bcc3158b0e194b7a2220308c428a525e9284_100_100_wg_t.png"
+          },
+          "score": {
+            "home": 2,
+            "away": 0
+          },
+          "played": true,
+          "isHome": true,
+          "result": "W",
+          "goals": {
+            "home": [
+              {
+                "minute": 34,
+                "name": "Tin Mauhar",
+                "type": "goal"
+              },
+              {
+                "minute": 67,
+                "name": "Danijel Ćosić",
+                "type": "penalty"
+              }
+            ],
+            "away": []
+          }
+        },
+        {
+          "id": "100464000",
+          "round": 7,
+          "date": "2025-10-12",
+          "time": "15:30",
+          "competition": "LIGA NS Našice - Seniori 25/26, 7. kolo",
+          "home": {
+            "id": 136,
+            "name": "NK Polet (Bo)",
+            "logo": "https://hns.family/files/images_comet/d1/b/_resized/d1b20e824a1235b9a50d5def437f34c8821e5a2d_100_100_wg_t.jpg"
+          },
+          "away": {
+            "id": 134,
+            "name": "NK Omladinac Niza",
+            "logo": "https://hns.family/files/images_comet/49/b/_resized/49b362069bd38a3154422c8f1c4b7cd4f5aee1b7_100_100_wg_t.png"
+          },
+          "score": {
+            "home": 0,
+            "away": 1
+          },
+          "played": true,
+          "isHome": false,
+          "result": "W",
+          "goals": {
+            "home": [],
+            "away": [
+              {
+                "minute": 22,
+                "name": "Danijel Ćosić",
+                "type": "penalty"
+              }
+            ]
+          }
+        },
+        {
+          "id": "100464002",
+          "round": 8,
+          "date": "2025-10-18",
+          "time": "15:00",
+          "competition": "LIGA NS Našice - Seniori 25/26, 8. kolo",
+          "home": {
+            "id": 134,
+            "name": "NK Omladinac Niza",
+            "logo": "https://hns.family/files/images_comet/49/b/_resized/49b362069bd38a3154422c8f1c4b7cd4f5aee1b7_100_100_wg_t.png"
+          },
+          "away": {
+            "id": 126,
+            "name": "NK Brezik",
+            "logo": "https://hns.family/files/images_comet/03/a/_resized/03ab0f906448fd102ff730818a0931b71e3d4ba6_100_100_wg_t.png"
+          },
+          "score": {
+            "home": 3,
+            "away": 1
+          },
+          "played": true,
+          "isHome": true,
+          "result": "W",
+          "goals": {
+            "home": [
+              {
+                "minute": 47,
+                "name": "Danijel Ćosić",
+                "type": "penalty"
+              },
+              {
+                "minute": 50,
+                "name": "Mihael Abramović",
+                "type": "goal"
+              },
+              {
+                "minute": 88,
+                "name": "Mario Pranješ",
+                "type": "goal"
+              }
+            ],
+            "away": [
+              {
+                "minute": 45,
+                "name": "Elvis Mihaljević",
+                "type": "goal"
+              }
+            ]
+          }
+        },
+        {
+          "id": "100464011",
+          "round": 9,
+          "date": "2025-10-26",
+          "time": "14:00",
+          "competition": "LIGA NS Našice - Seniori 25/26, 9. kolo",
+          "home": {
+            "id": 175046,
+            "name": "NK Slavonija NLT",
+            "logo": "https://hns.family/files/images_comet/b9/5/_resized/b95249da8ff3382edea063a14dbc9ab838aaf1d0_100_100_wg_t.png"
+          },
+          "away": {
+            "id": 134,
+            "name": "NK Omladinac Niza",
+            "logo": "https://hns.family/files/images_comet/49/b/_resized/49b362069bd38a3154422c8f1c4b7cd4f5aee1b7_100_100_wg_t.png"
+          },
+          "score": {
+            "home": 0,
+            "away": 2
+          },
+          "played": true,
+          "isHome": false,
+          "result": "W",
+          "goals": {
+            "home": [],
+            "away": [
+              {
+                "minute": 15,
+                "name": "Hrvoje Kasapović",
+                "type": "goal"
+              },
+              {
+                "minute": 65,
+                "name": "Danijel Ćosić",
+                "type": "goal"
+              }
+            ]
+          }
+        },
+        {
+          "id": "100464021",
+          "round": 11,
+          "date": "2025-11-08",
+          "time": "13:30",
+          "competition": "LIGA NS Našice - Seniori 25/26, 11. kolo",
+          "home": {
+            "id": 134,
+            "name": "NK Omladinac Niza",
+            "logo": "https://hns.family/files/images_comet/49/b/_resized/49b362069bd38a3154422c8f1c4b7cd4f5aee1b7_100_100_wg_t.png"
+          },
+          "away": {
+            "id": 118,
+            "name": "NK Seona",
+            "logo": "https://hns.family/files/images_comet/63/3/_resized/633b62f9d0e508299c1e71b0e19b2038c588a20d_100_100_wg_t.png"
+          },
+          "score": {
+            "home": 1,
+            "away": 0
+          },
+          "played": true,
+          "isHome": true,
+          "result": "W",
+          "goals": {
+            "home": [
+              {
+                "minute": 77,
+                "name": "Hrvoje Kasapović",
+                "type": "goal"
+              }
+            ],
+            "away": []
+          }
+        },
+        {
+          "id": "100464022",
+          "round": 12,
+          "date": "2026-03-14",
+          "time": "14:30",
+          "competition": "LIGA NS Našice - Seniori 25/26, 12. kolo",
+          "home": {
+            "id": 134,
+            "name": "NK Omladinac Niza",
+            "logo": "https://hns.family/files/images_comet/49/b/_resized/49b362069bd38a3154422c8f1c4b7cd4f5aee1b7_100_100_wg_t.png"
+          },
+          "away": {
+            "id": 116,
+            "name": "NK Poganovci",
+            "logo": "https://hns.family/files/images_comet/8b/e/_resized/8be8390f3c2d16ae7c1d214573a27031aa33f988_100_100_wg_t.png"
+          },
+          "score": {
+            "home": 1,
+            "away": 0
+          },
+          "played": true,
+          "isHome": true,
+          "result": "W",
+          "goals": {
+            "home": [
+              {
+                "minute": 4,
+                "name": "Leon Budić",
+                "type": "goal"
+              }
+            ],
+            "away": []
+          }
+        },
+        {
+          "id": "100464030",
+          "round": 13,
+          "date": "2026-03-21",
+          "time": "15:00",
+          "competition": "LIGA NS Našice - Seniori 25/26, 13. kolo",
+          "home": {
+            "id": 117,
+            "name": "NK Šipovac",
+            "logo": "https://hns.family/files/images_comet/f7/d/_resized/f7d87ca932c2a22b6cdd7a430be55b9fcad3038b_100_100_wg_t.png"
+          },
+          "away": {
+            "id": 134,
+            "name": "NK Omladinac Niza",
+            "logo": "https://hns.family/files/images_comet/49/b/_resized/49b362069bd38a3154422c8f1c4b7cd4f5aee1b7_100_100_wg_t.png"
+          },
+          "score": {
+            "home": 0,
+            "away": 4
+          },
+          "played": true,
+          "isHome": false,
+          "result": "W",
+          "goals": {
+            "home": [],
+            "away": [
+              {
+                "minute": 47,
+                "name": "Josip Matić",
+                "type": "goal"
+              },
+              {
+                "minute": 52,
+                "name": "Tin Mauhar",
+                "type": "goal"
+              },
+              {
+                "minute": 54,
+                "name": "Tin Mauhar",
+                "type": "goal"
+              },
+              {
+                "minute": 83,
+                "name": "Josip Matić",
+                "type": "goal"
+              }
+            ]
+          }
+        },
+        {
+          "id": "100464033",
+          "round": 14,
+          "date": "2026-03-28",
+          "time": "15:00",
+          "competition": "LIGA NS Našice - Seniori 25/26, 14. kolo",
+          "home": {
+            "id": 134,
+            "name": "NK Omladinac Niza",
+            "logo": "https://hns.family/files/images_comet/49/b/_resized/49b362069bd38a3154422c8f1c4b7cd4f5aee1b7_100_100_wg_t.png"
+          },
+          "away": {
+            "id": 132,
+            "name": "NK Mladost (BN)",
+            "logo": "https://hns.family/files/images_comet/5d/2/_resized/5d2a5b77042c3f19be79820867f9fef17f8d375b_100_100_wg_t.png"
+          },
+          "score": {
+            "home": 4,
+            "away": 0
+          },
+          "played": true,
+          "isHome": true,
+          "result": "W",
+          "goals": {
+            "home": [
+              {
+                "minute": 46,
+                "name": "Mario Pranješ",
+                "type": "goal"
+              },
+              {
+                "minute": 49,
+                "name": "Ivan Galinec",
+                "type": "goal"
+              },
+              {
+                "minute": 78,
+                "name": "Josip Matić",
+                "type": "goal"
+              },
+              {
+                "minute": 88,
+                "name": "Josip Matić",
+                "type": "goal"
+              }
+            ],
+            "away": []
+          }
+        },
+        {
+          "id": "100464039",
+          "round": 15,
+          "date": "2026-04-04",
+          "time": "19:00",
+          "competition": "LIGA NS Našice - Seniori 25/26, 15. kolo",
+          "home": {
+            "id": 96296,
+            "name": "NK Seljak",
+            "logo": "https://hns.family/files/images_comet/36/9/_resized/36972d1f76ba9ef18cd52f28155fd5a08c4c465a_100_100_wg_t.png"
+          },
+          "away": {
+            "id": 134,
+            "name": "NK Omladinac Niza",
+            "logo": "https://hns.family/files/images_comet/49/b/_resized/49b362069bd38a3154422c8f1c4b7cd4f5aee1b7_100_100_wg_t.png"
+          },
+          "score": {
+            "home": 0,
+            "away": 2
+          },
+          "played": true,
+          "isHome": false,
+          "result": "W",
+          "goals": {
+            "home": [],
+            "away": [
+              {
+                "minute": 5,
+                "name": "Josip Matić",
+                "type": "goal"
+              },
+              {
+                "minute": 36,
+                "name": "Josip Matić",
+                "type": "goal"
+              }
+            ]
+          }
+        },
+        {
+          "id": "100464044",
+          "round": 16,
+          "date": "2026-04-11",
+          "time": "16:30",
+          "competition": "LIGA NS Našice - Seniori 25/26, 16. kolo",
+          "home": {
+            "id": 134,
+            "name": "NK Omladinac Niza",
+            "logo": "https://hns.family/files/images_comet/49/b/_resized/49b362069bd38a3154422c8f1c4b7cd4f5aee1b7_100_100_wg_t.png"
+          },
+          "away": {
+            "id": 120,
+            "name": "NK Vuka",
+            "logo": "https://hns.family/files/images_comet/Club/_resized/120_1363856199284_100_100_wg_t.jpg_100_100_wg_t.jpg"
+          },
+          "score": {
+            "home": 4,
+            "away": 0
+          },
+          "played": true,
+          "isHome": true,
+          "result": "W",
+          "goals": {
+            "home": [
+              {
+                "minute": 5,
+                "name": "Tin Brblić",
+                "type": "own_goal"
+              },
+              {
+                "minute": 15,
+                "name": "Danijel Ćosić",
+                "type": "penalty"
+              },
+              {
+                "minute": 52,
+                "name": "Danijel Ćosić",
+                "type": "penalty"
+              },
+              {
+                "minute": 80,
+                "name": "Davor Borovička",
+                "type": "own_goal"
+              }
+            ],
+            "away": []
+          }
+        },
+        {
+          "id": "100464048",
+          "round": 17,
+          "date": "2026-04-19",
+          "time": "17:00",
+          "competition": "LIGA NS Našice - Seniori 25/26, 17. kolo",
+          "home": {
+            "id": 143,
+            "name": "NK Dinamo Budimci",
+            "logo": "https://hns.family/files/images_comet/77/0/_resized/7702bcc3158b0e194b7a2220308c428a525e9284_100_100_wg_t.png"
+          },
+          "away": {
+            "id": 134,
+            "name": "NK Omladinac Niza",
+            "logo": "https://hns.family/files/images_comet/49/b/_resized/49b362069bd38a3154422c8f1c4b7cd4f5aee1b7_100_100_wg_t.png"
+          },
+          "score": {
+            "home": 1,
+            "away": 1
+          },
+          "played": true,
+          "isHome": false,
+          "result": "D",
+          "goals": {
+            "home": [
+              {
+                "minute": 53,
+                "name": "Filip Fišer",
+                "type": "goal"
+              }
+            ],
+            "away": [
+              {
+                "minute": 81,
+                "name": "Hrvoje Kasapović",
+                "type": "goal"
+              }
+            ]
+          }
+        },
+        {
+          "id": "100464055",
+          "round": 18,
+          "date": "2026-04-25",
+          "time": "17:00",
+          "competition": "LIGA NS Našice - Seniori 25/26, 18. kolo",
+          "home": {
+            "id": 134,
+            "name": "NK Omladinac Niza",
+            "logo": "https://hns.family/files/images_comet/49/b/_resized/49b362069bd38a3154422c8f1c4b7cd4f5aee1b7_100_100_wg_t.png"
+          },
+          "away": {
+            "id": 136,
+            "name": "NK Polet (Bo)",
+            "logo": "https://hns.family/files/images_comet/d1/b/_resized/d1b20e824a1235b9a50d5def437f34c8821e5a2d_100_100_wg_t.jpg"
+          },
+          "score": {
+            "home": 6,
+            "away": 2
+          },
+          "played": true,
+          "isHome": true,
+          "result": "W",
+          "goals": {
+            "home": [
+              {
+                "minute": 6,
+                "name": "Silvester Misbrener",
+                "type": "goal"
+              },
+              {
+                "minute": 15,
+                "name": "Josip Matić",
+                "type": "goal"
+              },
+              {
+                "minute": 26,
+                "name": "Josip Matić",
+                "type": "goal"
+              },
+              {
+                "minute": 32,
+                "name": "Filip Tomac",
+                "type": "goal"
+              },
+              {
+                "minute": 38,
+                "name": "Josip Matić",
+                "type": "goal"
+              },
+              {
+                "minute": 52,
+                "name": "Josip Matić",
+                "type": "goal"
+              }
+            ],
+            "away": [
+              {
+                "minute": 73,
+                "name": "Mirko Pritišanac",
+                "type": "penalty"
+              },
+              {
+                "minute": 75,
+                "name": "Slavko Amidžić",
+                "type": "goal"
+              }
+            ]
+          }
+        },
+        {
+          "id": "100464057",
+          "round": 19,
+          "date": "2026-05-02",
+          "time": "17:00",
+          "competition": "LIGA NS Našice - Seniori 25/26, 19. kolo",
+          "home": {
+            "id": 126,
+            "name": "NK Brezik",
+            "logo": "https://hns.family/files/images_comet/03/a/_resized/03ab0f906448fd102ff730818a0931b71e3d4ba6_100_100_wg_t.png"
+          },
+          "away": {
+            "id": 134,
+            "name": "NK Omladinac Niza",
+            "logo": "https://hns.family/files/images_comet/49/b/_resized/49b362069bd38a3154422c8f1c4b7cd4f5aee1b7_100_100_wg_t.png"
+          },
+          "score": {
+            "home": 3,
+            "away": 2
+          },
+          "played": true,
+          "isHome": false,
+          "result": "L",
+          "goals": {
+            "home": [
+              {
+                "minute": 62,
+                "name": "Dominik Vida",
+                "type": "goal"
+              },
+              {
+                "minute": 88,
+                "name": "Ivan Kramarić",
+                "type": "goal"
+              },
+              {
+                "minute": 94,
+                "name": "Dominik Vida",
+                "type": "goal"
+              }
+            ],
+            "away": [
+              {
+                "minute": 41,
+                "name": "Marin Kuzminski",
+                "type": "goal"
+              },
+              {
+                "minute": 59,
+                "name": "Josip Matić",
+                "type": "goal"
+              }
+            ]
+          }
+        },
+        {
+          "id": "100464066",
+          "round": 20,
+          "date": "2026-05-09",
+          "time": "17:00",
+          "competition": "LIGA NS Našice - Seniori 25/26, 20. kolo",
+          "home": {
+            "id": 134,
+            "name": "NK Omladinac Niza",
+            "logo": "https://hns.family/files/images_comet/49/b/_resized/49b362069bd38a3154422c8f1c4b7cd4f5aee1b7_100_100_wg_t.png"
+          },
+          "away": {
+            "id": 175046,
+            "name": "NK Slavonija NLT",
+            "logo": "https://hns.family/files/images_comet/b9/5/_resized/b95249da8ff3382edea063a14dbc9ab838aaf1d0_100_100_wg_t.png"
+          },
+          "score": {
+            "home": 4,
+            "away": 2
+          },
+          "played": true,
+          "isHome": true,
+          "result": "W",
+          "goals": {
+            "home": [
+              {
+                "minute": 12,
+                "name": "Josip Matić",
+                "type": "goal"
+              },
+              {
+                "minute": 23,
+                "name": "Josip Matić",
+                "type": "goal"
+              },
+              {
+                "minute": 49,
+                "name": "Josip Matić",
+                "type": "goal"
+              },
+              {
+                "minute": 72,
+                "name": "Josip Matić",
+                "type": "goal"
+              }
+            ],
+            "away": [
+              {
+                "minute": 7,
+                "name": "Davor Anđić",
+                "type": "goal"
+              },
+              {
+                "minute": 53,
+                "name": "Luka Rogulić",
+                "type": "goal"
+              }
+            ]
+          }
+        },
+        {
+          "id": "100464076",
+          "round": 22,
+          "date": "2026-05-24",
+          "time": "17:30",
+          "competition": "LIGA NS Našice - Seniori 25/26, 22. kolo",
+          "home": {
+            "id": 118,
+            "name": "NK Seona",
+            "logo": "https://hns.family/files/images_comet/63/3/_resized/633b62f9d0e508299c1e71b0e19b2038c588a20d_100_100_wg_t.png"
+          },
+          "away": {
+            "id": 134,
+            "name": "NK Omladinac Niza",
+            "logo": "https://hns.family/files/images_comet/49/b/_resized/49b362069bd38a3154422c8f1c4b7cd4f5aee1b7_100_100_wg_t.png"
+          },
+          "score": {
+            "home": 1,
+            "away": 2
+          },
+          "played": true,
+          "isHome": false,
+          "result": "W",
+          "goals": {
+            "home": [
+              {
+                "minute": 31,
+                "name": "Željko Bošnjaković",
+                "type": "goal"
+              }
+            ],
+            "away": [
+              {
+                "minute": 23,
+                "name": "Ante Knežević",
+                "type": "goal"
+              },
+              {
+                "minute": 33,
+                "name": "Denis Ćosić",
+                "type": "goal"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "friendlies": [],
+  "stats": {
+    "topScorers": [
+      {
+        "personId": 125673,
+        "name": "Josip Matić",
+        "goals": 15
+      },
+      {
+        "personId": 70771,
+        "name": "Danijel Ćosić",
+        "goals": 10
+      },
+      {
+        "personId": 190205,
+        "name": "Mario Pranješ",
+        "goals": 7
+      },
+      {
+        "personId": 58712,
+        "name": "Hrvoje Kasapović",
+        "goals": 4
+      },
+      {
+        "personId": 389829,
+        "name": "Tin Mauhar",
+        "goals": 4
+      },
+      {
+        "personId": 109072,
+        "name": "Mihael Abramović",
+        "goals": 2
+      },
+      {
+        "personId": 389840,
+        "name": "Petar Barišić",
+        "goals": 2
+      },
+      {
+        "personId": 110997,
+        "name": "Denis Ćosić",
+        "goals": 2
+      },
+      {
+        "personId": 365457,
+        "name": "Leon Budić",
+        "goals": 1
+      },
+      {
+        "personId": 213135,
+        "name": "Lukas Đurinski",
+        "goals": 1
+      },
+      {
+        "personId": 49179,
+        "name": "Ivan Galinec",
+        "goals": 1
+      },
+      {
+        "personId": 182403,
+        "name": "Ante Knežević",
+        "goals": 1
+      },
+      {
+        "personId": 49014,
+        "name": "Marin Kuzminski",
+        "goals": 1
+      },
+      {
+        "personId": 48591,
+        "name": "Silvester Misbrener",
+        "goals": 1
+      },
+      {
+        "personId": 400435,
+        "name": "Filip Tomac",
+        "goals": 1
+      }
+    ],
+    "topApps": [
+      {
+        "personId": 70771,
+        "name": "Danijel Ćosić",
+        "appearances": 20
+      },
+      {
+        "personId": 437293,
+        "name": "Marin-Petar Meščić",
+        "appearances": 20
+      },
+      {
+        "personId": 365480,
+        "name": "Daniel Vrbanić",
+        "appearances": 20
+      },
+      {
+        "personId": 58712,
+        "name": "Hrvoje Kasapović",
+        "appearances": 18
+      },
+      {
+        "personId": 182403,
+        "name": "Ante Knežević",
+        "appearances": 18
+      },
+      {
+        "personId": 389829,
+        "name": "Tin Mauhar",
+        "appearances": 18
+      },
+      {
+        "personId": 365472,
+        "name": "Jan Rajs",
+        "appearances": 18
+      },
+      {
+        "personId": 110997,
+        "name": "Denis Ćosić",
+        "appearances": 17
+      },
+      {
+        "personId": 216254,
+        "name": "Patrik Makaj",
+        "appearances": 13
+      },
+      {
+        "personId": 400434,
+        "name": "Petar Tomac",
+        "appearances": 13
+      },
+      {
+        "personId": 389840,
+        "name": "Petar Barišić",
+        "appearances": 12
+      },
+      {
+        "personId": 190205,
+        "name": "Mario Pranješ",
+        "appearances": 12
+      },
+      {
+        "personId": 109072,
+        "name": "Mihael Abramović",
+        "appearances": 11
+      },
+      {
+        "personId": 400435,
+        "name": "Filip Tomac",
+        "appearances": 10
+      },
+      {
+        "personId": 49179,
+        "name": "Ivan Galinec",
+        "appearances": 9
+      },
+      {
+        "personId": 49013,
+        "name": "Florijan Kuzminski",
+        "appearances": 9
+      },
+      {
+        "personId": 125673,
+        "name": "Josip Matić",
+        "appearances": 9
+      },
+      {
+        "personId": 365457,
+        "name": "Leon Budić",
+        "appearances": 7
+      },
+      {
+        "personId": 213135,
+        "name": "Lukas Đurinski",
+        "appearances": 7
+      },
+      {
+        "personId": 390748,
+        "name": "Ivan Makaj",
+        "appearances": 6
+      },
+      {
+        "personId": 48591,
+        "name": "Silvester Misbrener",
+        "appearances": 6
+      },
+      {
+        "personId": 110994,
+        "name": "David Rajs",
+        "appearances": 6
+      },
+      {
+        "personId": 49014,
+        "name": "Marin Kuzminski",
+        "appearances": 4
+      },
+      {
+        "personId": 466352,
+        "name": "Željko Martić",
+        "appearances": 4
+      },
+      {
+        "personId": 438362,
+        "name": "Ivano Zušćak",
+        "appearances": 4
+      },
+      {
+        "personId": 40531,
+        "name": "Matko Cvetanić",
+        "appearances": 2
+      },
+      {
+        "personId": 48000,
+        "name": "Tomislav Banaj",
+        "appearances": 1
+      },
+      {
+        "personId": 48399,
+        "name": "Josip Vladika",
+        "appearances": 1
+      }
+    ],
+    "topCards": [
+      {
+        "personId": 365472,
+        "name": "Jan Rajs",
+        "yellow": 0,
+        "red": 1
+      },
+      {
+        "personId": 182403,
+        "name": "Ante Knežević",
+        "yellow": 6,
+        "red": 0
+      },
+      {
+        "personId": 190205,
+        "name": "Mario Pranješ",
+        "yellow": 5,
+        "red": 0
+      },
+      {
+        "personId": 58712,
+        "name": "Hrvoje Kasapović",
+        "yellow": 4,
+        "red": 0
+      },
+      {
+        "personId": 70771,
+        "name": "Danijel Ćosić",
+        "yellow": 3,
+        "red": 0
+      },
+      {
+        "personId": 125673,
+        "name": "Josip Matić",
+        "yellow": 3,
+        "red": 0
+      },
+      {
+        "personId": 437293,
+        "name": "Marin-Petar Meščić",
+        "yellow": 3,
+        "red": 0
+      },
+      {
+        "personId": 109072,
+        "name": "Mihael Abramović",
+        "yellow": 2,
+        "red": 0
+      },
+      {
+        "personId": 365457,
+        "name": "Leon Budić",
+        "yellow": 2,
+        "red": 0
+      },
+      {
+        "personId": 49013,
+        "name": "Florijan Kuzminski",
+        "yellow": 2,
+        "red": 0
+      },
+      {
+        "personId": 49014,
+        "name": "Marin Kuzminski",
+        "yellow": 2,
+        "red": 0
+      },
+      {
+        "personId": 389829,
+        "name": "Tin Mauhar",
+        "yellow": 2,
+        "red": 0
+      },
+      {
+        "personId": 110997,
+        "name": "Denis Ćosić",
+        "yellow": 1,
+        "red": 0
+      },
+      {
+        "personId": 49179,
+        "name": "Ivan Galinec",
+        "yellow": 1,
+        "red": 0
+      },
+      {
+        "personId": 110994,
+        "name": "David Rajs",
+        "yellow": 1,
+        "red": 0
+      },
+      {
+        "personId": 400435,
+        "name": "Filip Tomac",
+        "yellow": 1,
+        "red": 0
+      }
+    ]
+  },
+  "squad": [
+    {
+      "id": 48016,
+      "number": 12,
+      "name": "Tomica Barišić",
+      "position": "Vratar",
+      "stats": {
+        "appearances": 0,
+        "minutes": 0,
+        "goals": 0,
+        "cards": "0 / 0"
+      }
+    },
+    {
+      "id": 365472,
+      "number": 12,
+      "name": "Jan Rajs",
+      "position": "Vratar",
+      "stats": {
+        "appearances": 18,
+        "minutes": 0,
+        "goals": 0,
+        "cards": "0 / 1"
+      }
+    },
+    {
+      "id": 400434,
+      "number": 1,
+      "name": "Petar Tomac",
+      "position": "Vratar",
+      "stats": {
+        "appearances": 13,
+        "minutes": 0,
+        "goals": 0,
+        "cards": "0 / 0"
+      }
+    },
+    {
+      "id": 109072,
+      "number": 11,
+      "name": "Mihael Abramović",
+      "position": "Igrač",
+      "stats": {
+        "appearances": 11,
+        "minutes": 0,
+        "goals": 2,
+        "cards": "2 / 0"
+      }
+    },
+    {
+      "id": 48000,
+      "number": 13,
+      "name": "Tomislav Banaj",
+      "position": "Igrač",
+      "stats": {
+        "appearances": 1,
+        "minutes": 0,
+        "goals": 0,
+        "cards": "0 / 0"
+      }
+    },
+    {
+      "id": 389840,
+      "number": 18,
+      "name": "Petar Barišić",
+      "position": "Igrač",
+      "stats": {
+        "appearances": 12,
+        "minutes": 0,
+        "goals": 2,
+        "cards": "0 / 0"
+      }
+    },
+    {
+      "id": 365457,
+      "number": 7,
+      "name": "Leon Budić",
+      "position": "Igrač",
+      "stats": {
+        "appearances": 7,
+        "minutes": 0,
+        "goals": 1,
+        "cards": "2 / 0"
+      }
+    },
+    {
+      "id": 40531,
+      "number": 21,
+      "name": "Matko Cvetanić",
+      "position": "Igrač",
+      "stats": {
+        "appearances": 2,
+        "minutes": 0,
+        "goals": 0,
+        "cards": "0 / 0"
+      }
+    },
+    {
+      "id": 70771,
+      "number": 3,
+      "name": "Danijel Ćosić",
+      "position": "Igrač",
+      "stats": {
+        "appearances": 20,
+        "minutes": 0,
+        "goals": 10,
+        "cards": "3 / 0"
+      }
+    },
+    {
+      "id": 110997,
+      "number": 6,
+      "name": "Denis Ćosić",
+      "position": "Igrač",
+      "stats": {
+        "appearances": 17,
+        "minutes": 0,
+        "goals": 2,
+        "cards": "1 / 0"
+      }
+    },
+    {
+      "id": 213135,
+      "number": 11,
+      "name": "Lukas Đurinski",
+      "position": "Igrač",
+      "stats": {
+        "appearances": 7,
+        "minutes": 0,
+        "goals": 1,
+        "cards": "0 / 0"
+      }
+    },
+    {
+      "id": 49179,
+      "number": 9,
+      "name": "Ivan Galinec",
+      "position": "Igrač",
+      "stats": {
+        "appearances": 9,
+        "minutes": 0,
+        "goals": 1,
+        "cards": "1 / 0"
+      }
+    },
+    {
+      "id": 57552,
+      "number": 2,
+      "name": "Adam Ivatin",
+      "position": "Igrač",
+      "stats": {
+        "appearances": 0,
+        "minutes": 0,
+        "goals": 0,
+        "cards": "0 / 0"
+      }
+    },
+    {
+      "id": 58712,
+      "number": 5,
+      "name": "Hrvoje Kasapović",
+      "position": "Igrač",
+      "stats": {
+        "appearances": 18,
+        "minutes": 0,
+        "goals": 4,
+        "cards": "4 / 0"
+      }
+    },
+    {
+      "id": 182403,
+      "number": 24,
+      "name": "Ante Knežević",
+      "position": "Igrač",
+      "stats": {
+        "appearances": 18,
+        "minutes": 0,
+        "goals": 1,
+        "cards": "6 / 0"
+      }
+    },
+    {
+      "id": 49013,
+      "number": 8,
+      "name": "Florijan Kuzminski",
+      "position": "Igrač",
+      "stats": {
+        "appearances": 9,
+        "minutes": 0,
+        "goals": 0,
+        "cards": "2 / 0"
+      }
+    },
+    {
+      "id": 49014,
+      "number": 23,
+      "name": "Marin Kuzminski",
+      "position": "Igrač",
+      "stats": {
+        "appearances": 4,
+        "minutes": 0,
+        "goals": 1,
+        "cards": "2 / 0"
+      }
+    },
+    {
+      "id": 390748,
+      "number": 2,
+      "name": "Ivan Makaj",
+      "position": "Igrač",
+      "stats": {
+        "appearances": 6,
+        "minutes": 0,
+        "goals": 0,
+        "cards": "0 / 0"
+      }
+    },
+    {
+      "id": 216254,
+      "number": 7,
+      "name": "Patrik Makaj",
+      "position": "Igrač",
+      "stats": {
+        "appearances": 13,
+        "minutes": 0,
+        "goals": 0,
+        "cards": "0 / 0"
+      }
+    },
+    {
+      "id": 466352,
+      "number": 25,
+      "name": "Željko Martić",
+      "position": "Igrač",
+      "stats": {
+        "appearances": 4,
+        "minutes": 0,
+        "goals": 0,
+        "cards": "0 / 0"
+      }
+    },
+    {
+      "id": 125673,
+      "number": 17,
+      "name": "Josip Matić",
+      "position": "Igrač",
+      "stats": {
+        "appearances": 9,
+        "minutes": 0,
+        "goals": 15,
+        "cards": "3 / 0"
+      }
+    },
+    {
+      "id": 389829,
+      "number": 10,
+      "name": "Tin Mauhar",
+      "position": "Igrač",
+      "stats": {
+        "appearances": 18,
+        "minutes": 0,
+        "goals": 4,
+        "cards": "2 / 0"
+      }
+    },
+    {
+      "id": 437293,
+      "number": 15,
+      "name": "Marin-Petar Meščić",
+      "position": "Igrač",
+      "stats": {
+        "appearances": 20,
+        "minutes": 0,
+        "goals": 0,
+        "cards": "3 / 0"
+      }
+    },
+    {
+      "id": 48591,
+      "number": 22,
+      "name": "Silvester Misbrener",
+      "position": "Igrač",
+      "stats": {
+        "appearances": 6,
+        "minutes": 0,
+        "goals": 1,
+        "cards": "0 / 0"
+      }
+    },
+    {
+      "id": 190205,
+      "number": 14,
+      "name": "Mario Pranješ",
+      "position": "Igrač",
+      "stats": {
+        "appearances": 12,
+        "minutes": 0,
+        "goals": 7,
+        "cards": "5 / 0"
+      }
+    },
+    {
+      "id": 110994,
+      "number": 13,
+      "name": "David Rajs",
+      "position": "Igrač",
+      "stats": {
+        "appearances": 6,
+        "minutes": 0,
+        "goals": 0,
+        "cards": "1 / 0"
+      }
+    },
+    {
+      "id": 198154,
+      "number": 14,
+      "name": "Luka Stojaković",
+      "position": "Igrač",
+      "stats": {
+        "appearances": 0,
+        "minutes": 0,
+        "goals": 0,
+        "cards": "0 / 0"
+      }
+    },
+    {
+      "id": 400435,
+      "number": 19,
+      "name": "Filip Tomac",
+      "position": "Igrač",
+      "stats": {
+        "appearances": 10,
+        "minutes": 0,
+        "goals": 1,
+        "cards": "1 / 0"
+      }
+    },
+    {
+      "id": 48399,
+      "number": 30,
+      "name": "Josip Vladika",
+      "position": "Igrač",
+      "stats": {
+        "appearances": 1,
+        "minutes": 0,
+        "goals": 0,
+        "cards": "0 / 0"
+      }
+    },
+    {
+      "id": 365480,
+      "number": 4,
+      "name": "Daniel Vrbanić",
+      "position": "Igrač",
+      "stats": {
+        "appearances": 20,
+        "minutes": 0,
+        "goals": 0,
+        "cards": "0 / 0"
+      }
+    },
+    {
+      "id": 438362,
+      "number": 9,
+      "name": "Ivano Zušćak",
+      "position": "Igrač",
+      "stats": {
+        "appearances": 4,
+        "minutes": 0,
+        "goals": 0,
+        "cards": "0 / 0"
+      }
+    }
+  ]
+}

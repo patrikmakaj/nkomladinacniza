@@ -10,17 +10,37 @@ import hns from "../data/hns.json";
 import { url } from "../lib/url";
 import { golLabel } from "../lib/croatian";
 import { competitionsFor, type LeagueRow } from "../lib/matches";
+import { seasons } from "../lib/seasons";
 
-const table = (hns.table ?? []) as LeagueRow[];
+type Scorer = { personId: number | null; name: string; goals?: number | null };
+
+interface Props {
+  /** Ljestvica lige; bez nje tekuća seniorska. */
+  table?: LeagueRow[];
+  /** Strijelci (najbolji prvi); bez njih tekući. */
+  scorers?: Scorer[];
+  /** Naslov bloka; bez njega "Sezona 26/27 u brojkama". */
+  heading?: string;
+  /** Koja natjecanja zbrajaju strijelci ("liga i kup"). */
+  scope?: string;
+  /** Bez vanjskog razmaka i linka na arhivu — kad je blok dio stranice sezone. */
+  embedded?: boolean;
+}
+
+const props = Astro.props;
+const table = props.table ?? ((hns.table ?? []) as LeagueRow[]);
 const us = table.find((r) => r.isUs);
 
 const season = hns.competition?.name?.match(/\d{2}\/\d{2}/)?.[0] ?? null;
+const heading = props.heading ?? `Sezona${season ? ` ${season}` : ""} u brojkama`;
 
 // Strijelci: svi s najviše golova (zna biti izjednačeno).
-const scorers = ((hns.stats?.topScorers ?? []) as { personId: number | null; name: string; goals?: number }[])
-  .filter((s) => (s.goals ?? 0) > 0);
+const scorers = ((props.scorers ?? hns.stats?.topScorers ?? []) as Scorer[]).filter(
+  (s) => (s.goals ?? 0) > 0,
+);
 const topGoals = scorers[0]?.goals ?? 0;
 const leaders = scorers.filter((s) => s.goals === topGoals);
+// Profil postoji samo za igrače iz tekućeg rostera.
 const rosterIds = new Set(((hns.players ?? []) as { id: number | null }[]).map((p) => p.id));
 const leader = leaders[0];
 const leaderHref =
@@ -35,13 +55,24 @@ const show = !!us?.played || topGoals > 0;
 // Strijelci su zbroj seniorskih natjecanja — napiši kojih.
 const types = new Set(competitionsFor("Seniors").map((c) => c.type));
 const scope =
-  types.has("league") && types.has("cup") ? "liga i kup" : types.has("cup") ? "kup" : "liga";
+  props.scope ??
+  (types.has("league") && types.has("cup") ? "liga i kup" : types.has("cup") ? "kup" : "liga");
 ---
 
 {
   show && (
-    <section class="container-narrow mt-16">
-      <h2 class="text-2xl mb-4">Sezona{season ? ` ${season}` : ""} u brojkama</h2>
+    <section class={props.embedded ? "" : "container-narrow mt-16"}>
+      <div class="flex items-end justify-between gap-4 mb-4">
+        <h2 class="text-2xl">{heading}</h2>
+        {!props.embedded && seasons.length > 0 && (
+          <a
+            href={url("/povijest#sezone")}
+            class="text-sm font-display uppercase tracking-wider text-club-primary hover:underline whitespace-nowrap"
+          >
+            Prošle sezone →
+          </a>
+        )}
+      </div>
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
         {us && (
           <>
