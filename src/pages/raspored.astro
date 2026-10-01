@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { crestSrc } from "../lib/crests";
 import Hero from "../components/Hero.astro";
 import Logo from "../components/Logo.astro";
 import { url } from "../lib/url";
@@ -245,7 +246,7 @@ const icsPayload = upcoming.map((m) => ({
                       <Logo size={48} />
                     ) : m.home.logo ? (
                       <img
-                        src={m.home.logo}
+                        src={crestSrc(m.home.logo)}
                         alt=""
                         width="48"
                         height="48"
@@ -275,7 +276,7 @@ const icsPayload = upcoming.map((m) => ({
                       <Logo size={48} />
                     ) : m.away.logo ? (
                       <img
-                        src={m.away.logo}
+                        src={crestSrc(m.away.logo)}
                         alt=""
                         width="48"
                         height="48"

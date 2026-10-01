@@ -4,6 +4,7 @@
  * krug s početnim slovom (HNS ga nema za svaki klub).
  */
 import Logo from "./Logo.astro";
+import { crestSrc } from "../lib/crests";
 import { OUR_CLUB_ID, type TeamRef } from "../lib/matches";
 
 interface Props {
@@ -22,7 +23,7 @@ const initial = team.name.replace(/^H?NK\s+/i, "").charAt(0).toUpperCase() || "?
     <Logo size={size} class={className} />
   ) : team.logo ? (
     <img
-      src={team.logo}
+      src={crestSrc(team.logo)}
       alt={`${team.name} grb`}
       width={size}
       height={size}

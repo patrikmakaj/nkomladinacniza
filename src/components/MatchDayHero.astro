@@ -17,6 +17,7 @@
  * odbrojavanje točno i posjetiteljima izvan Hrvatske.
  */
 import Logo from "./Logo.astro";
+import { crestSrc } from "../lib/crests";
 
 interface Props {
   match: {
@@ -108,7 +109,7 @@ function shortName(name: string): string {
             <Logo size={96} />
           ) : match.home.logo ? (
             <img
-              src={match.home.logo}
+              src={crestSrc(match.home.logo)}
               alt={`${match.home.name} grb`}
               width="96"
               height="96"
@@ -141,7 +142,7 @@ function shortName(name: string): string {
             <Logo size={96} />
           ) : match.away.logo ? (
             <img
-              src={match.away.logo}
+              src={crestSrc(match.away.logo)}
               alt={`${match.away.name} grb`}
               width="96"
               height="96"

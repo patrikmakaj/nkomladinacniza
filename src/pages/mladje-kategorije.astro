@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { crestSrc } from "../lib/crests";
 import Hero from "../components/Hero.astro";
 import Logo from "../components/Logo.astro";
 import LeagueTable from "../components/LeagueTable.astro";
@@ -211,7 +212,7 @@ const categories = [
                               <Logo size={28} />
                             ) : opponent.logo ? (
                               <img
-                                src={opponent.logo}
+                                src={crestSrc(opponent.logo)}
                                 alt=""
                                 width="28"
                                 height="28"

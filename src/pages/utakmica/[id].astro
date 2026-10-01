@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import { crestSrc } from "../../lib/crests";
 import Logo from "../../components/Logo.astro";
 import MatchEventsList from "../../components/MatchEventsList.astro";
 import MatchLineup from "../../components/MatchLineup.astro";
@@ -160,7 +161,7 @@ const sportsEventSchema: Record<string, unknown> = {
               <Logo size={96} />
             ) : match.home.logo ? (
               <img
-                src={match.home.logo}
+                src={crestSrc(match.home.logo)}
                 alt=""
                 width="96"
                 height="96"
@@ -192,7 +193,7 @@ const sportsEventSchema: Record<string, unknown> = {
               <Logo size={96} />
             ) : match.away.logo ? (
               <img
-                src={match.away.logo}
+                src={crestSrc(match.away.logo)}
                 alt=""
                 width="96"
                 height="96"
@@ -295,14 +296,14 @@ const sportsEventSchema: Record<string, unknown> = {
           <MatchLineup
             team={detail.lineup.home}
             teamName={match.home.name}
-            teamLogo={match.home.logo}
+            teamLogo={crestSrc(match.home.logo)}
             isOurClub={match.home.id === OUR_CLUB_ID}
             linkableIds={ourRosterIds}
           />
           <MatchLineup
             team={detail.lineup.away}
             teamName={match.away.name}
-            teamLogo={match.away.logo}
+            teamLogo={crestSrc(match.away.logo)}
             isOurClub={match.away.id === OUR_CLUB_ID}
             linkableIds={ourRosterIds}
           />

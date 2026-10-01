@@ -1,5 +1,6 @@
 ---
 import hns from "../data/hns.json";
+import { crestSrc } from "../lib/crests";
 import { url } from "../lib/url";
 import type { LeagueRow } from "../lib/matches";
 
@@ -86,7 +87,7 @@ const isNext = (row: LeagueRow) =>
                     <div class="flex items-center gap-2">
                       {row.club.logo && (
                         <img
-                          src={row.club.logo}
+                          src={crestSrc(row.club.logo)}
                           alt=""
                           width="24"
                           height="24"
