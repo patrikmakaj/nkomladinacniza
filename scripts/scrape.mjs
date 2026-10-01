@@ -846,9 +846,9 @@ async function main() {
   const players = mergePlayers(seniors);
   const stats = mergeStats(seniors);
 
-  // Derived: next match (first unplayed) + last result (last played)
-  const nextMatch = matches.find((m) => !m.played) || null;
-  const lastResults = matches.filter((m) => m.played).slice(-10).reverse();
+  // Sljedeću utakmicu i zadnje rezultate NE spremamo — računa ih
+  // `src/lib/matches.ts`, jer tek on zna za prijateljske i za današnji datum.
+  // (Do 10/2026 ovdje su bili `nextMatch` i `lastResults` koje nitko nije čitao.)
   const ourRow = table.find((r) => r.isUs) || null;
 
   const existingDetails = await loadExistingMatchDetails();
@@ -860,8 +860,6 @@ async function main() {
     club,
     competition,
     competitions: parsed,
-    nextMatch,
-    lastResults,
     table,
     ourRow,
     matches,
