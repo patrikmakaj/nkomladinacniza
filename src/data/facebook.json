@@ -1,8 +1,22 @@
 {
-  "lastUpdated": "2026-09-29T14:12:33.942Z",
+  "lastUpdated": "2026-10-01T19:14:39.348Z",
   "enabled": true,
   "pageId": "55401829691",
   "posts": [
+    {
+      "id": "55401829691_1711029791029514",
+      "message": "",
+      "createdAt": "2026-10-01T17:19:36+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1711029791029514",
+      "images": [
+        {
+          "src": "/images/facebook/55401829691_1711029791029514.jpg",
+          "thumb": "/images/facebook/55401829691_1711029791029514.webp",
+          "width": 700,
+          "height": 875
+        }
+      ]
+    },
     {
       "id": "55401829691_1708185177980642",
       "message": "",
@@ -406,20 +420,6 @@
           "thumb": "/images/facebook/55401829691_1664952438970583.webp",
           "width": 700,
           "height": 875
-        }
-      ]
-    },
-    {
-      "id": "55401829691_1664766722322488",
-      "message": "Čestitke gostima.",
-      "createdAt": "2026-08-17T05:43:55+0000",
-      "permalink": "https://www.facebook.com/1551452460320582/posts/1664766722322488",
-      "images": [
-        {
-          "src": "/images/facebook/55401829691_1664766722322488.jpg",
-          "thumb": "/images/facebook/55401829691_1664766722322488.webp",
-          "width": 700,
-          "height": 874
         }
       ]
     }
