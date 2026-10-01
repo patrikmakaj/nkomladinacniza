@@ -3,7 +3,6 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import Hero from "../components/Hero.astro";
 import NextMatchCard from "../components/NextMatchCard.astro";
 import MatchDayHero from "../components/MatchDayHero.astro";
-import TurnirBanner from "../components/TurnirBanner.astro";
 import LeagueTable from "../components/LeagueTable.astro";
 import RecentResults from "../components/RecentResults.astro";
 import LatestPostBlock from "../components/LatestPostBlock.astro";
@@ -11,11 +10,12 @@ import SchemaSportsTeam from "../components/SchemaSportsTeam.astro";
 import { url } from "../lib/url";
 import { nextMatch, todayInZagreb } from "../lib/matches";
 
-// Detekcija "match day" — usporedba s današnjim datumom u Europe/Zagreb.
 // Countdown banner ima smisla samo kad znamo vrijeme početka (prijateljske
 // ponekad nemaju objavljeno vrijeme) — inače ostaje obična kartica.
-const matchDate = nextMatch?.iso?.slice(0, 10) ?? null;
-const isMatchDay = !!nextMatch && matchDate === todayInZagreb && !!nextMatch.time;
+// Je li danas dan utakmice konačno odlučuje skripta u MatchDayHero; ovo je
+// samo početno stanje prema datumu builda (Europe/Zagreb).
+const heroMatch = nextMatch?.time ? nextMatch : null;
+const isMatchDay = !!heroMatch && heroMatch.date === todayInZagreb;
 ---
 
 <BaseLayout
@@ -24,19 +24,14 @@ const isMatchDay = !!nextMatch && matchDate === todayInZagreb && !!nextMatch.tim
 >
   <SchemaSportsTeam slot="head" />
 
-  {/* Najava turnira — nestaje sama kad turnir prođe. Kad završi, obriši ovaj
-      blok i stavku "Turnir" iz Header.astro. */}
-  <TurnirBanner
-    href={url("/turnir/penali")}
-    kicker="DŠA Niza"
-    title="Turnir u pucanju jedanaesteraca"
-    meta="Petak 28.08. u 19:00 · Igralište u Nizi"
-    metaExtra="ekipe 4+1 · kotizacija 20 €"
-    until="2026-08-29T02:00:00"
-  />
+  {/* Najava turnira ide ovdje dok traje, npr.
+      <TurnirBanner href={url("/turnir/penali")} kicker="…" title="…" meta="…" until="…" />
+      Sama nestane nakon `until`; kad prođe, obriši je i stavku iz Header.astro. */}
 
-  {/* Match-day hero — prikazuje se samo na dan utakmice */}
-  {isMatchDay && nextMatch && <MatchDayHero match={nextMatch} />}
+  {/* Match-day hero — vidljiv samo na dan utakmice */}
+  {heroMatch && (
+    <MatchDayHero match={heroMatch} visible={isMatchDay} replaces="next-match-card" />
+  )}
 
   <Hero
     title="Omladinac Niza"
@@ -50,11 +45,13 @@ const isMatchDay = !!nextMatch && matchDate === todayInZagreb && !!nextMatch.tim
 
   {/* Sljedeća utakmica - flotira preko hero ruba.
        Skrivena na match day jer iste informacije su u MatchDayHero banneru iznad. */}
-  {!isMatchDay && (
-    <section class="container-narrow -mt-20 relative z-10">
-      <NextMatchCard />
-    </section>
-  )}
+  <section
+    id="next-match-card"
+    class="container-narrow -mt-20 relative z-10"
+    style={isMatchDay ? "display: none" : undefined}
+  >
+    <NextMatchCard />
+  </section>
 
   <!-- Najnovija objava s Facebooka (pinned) -->
   <LatestPostBlock />

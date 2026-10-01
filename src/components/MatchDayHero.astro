@@ -2,20 +2,26 @@
 /**
  * Match-day hero banner — prikazuje se samo na dan utakmice.
  *
- * Server-side renderira kad je `match.iso` datum jednak današnjem u
- * Europe/Zagreb timezone-u. Client-side ticker odbrojava do prvog
- * zvižduka, prelazi u "U tijeku" stanje nakon kickoffa, i auto-hide-a
- * cijeli banner ~2.5h nakon kickoffa.
+ * Markup se renderira uvijek kad znamo vrijeme početka, a je li danas dan
+ * utakmice odlučuje skripta u pregledniku. Na build se ne smijemo osloniti:
+ * stranica je statička i ne gradi se svaki dan (cron deploya samo kad se
+ * podaci promijene, plus jednom dnevno iza ponoći), pa bi banner koji ovisi
+ * samo o datumu builda znao izostati baš na dan utakmice.
  *
- * Napomena: za odbrojavanje koristimo `new Date(iso)` što ISO string
- * bez TZ-a parsira kao lokalno vrijeme. Posjetitelji izvan Europe/Zagreb
- * dobit će countdown pomaknut za vrijednost svoje TZ razlike — to je
- * prihvatljivo jer je stranica primarno za lokalnu publiku.
+ * Server ipak odmah prikaže ispravno stanje za dan builda, da se u normalnom
+ * slučaju ništa ne pomiče pri učitavanju. Skripta zatim odbrojava do prvog
+ * zvižduka, prelazi u "Uživo" nakon kickoffa i sakriva banner ~2.5h kasnije.
+ * Dok je banner vidljiv, sakriva element `replaces` (kartica sljedeće
+ * utakmice) jer bi prikazivao istu utakmicu.
+ *
+ * Vrijeme početka nosi zagrebački offset (`+02:00` / `+01:00`), pa je
+ * odbrojavanje točno i posjetiteljima izvan Hrvatske.
  */
 import Logo from "./Logo.astro";
 
 interface Props {
   match: {
+    date: string;
     iso: string;
     time: string | null;
     competition: string;
@@ -23,9 +29,28 @@ interface Props {
     home: { id: number | null; name: string; logo: string | null };
     away: { id: number | null; name: string; logo: string | null };
   };
+  /** Je li dan utakmice prema datumu builda — samo za početno stanje. */
+  visible: boolean;
+  /** id elementa koji se sakriva dok je banner vidljiv. */
+  replaces?: string;
 }
 
-const { match } = Astro.props;
+/** Offset Europe/Zagreb za zadani dan, npr. "+02:00". */
+function zagrebOffset(day: string): string {
+  // Podne izbjegava sat prelaska na ljetno/zimsko vrijeme (u 2-3 ujutro).
+  const name = new Intl.DateTimeFormat("en-US", {
+    timeZone: "Europe/Zagreb",
+    timeZoneName: "longOffset",
+  })
+    .formatToParts(new Date(`${day}T12:00:00Z`))
+    .find((p) => p.type === "timeZoneName")?.value; // "GMT+02:00"
+  const offset = name?.replace("GMT", "");
+  return offset && /^[+-]\d{2}:\d{2}$/.test(offset) ? offset : "+01:00";
+}
+
+const { match, visible, replaces } = Astro.props;
+
+const kickoffIso = `${match.iso.slice(0, 19)}${zagrebOffset(match.date)}`;
 
 // Vrijeme prikazujemo direktno iz ISO stringa (HH:MM dio) — izbjegava TZ trikove
 const kickoffTime = match.iso.slice(11, 16);
@@ -42,7 +67,10 @@ function shortName(name: string): string {
 
 <aside
   id="match-day-hero"
-  data-kickoff-iso={match.iso}
+  data-kickoff-iso={kickoffIso}
+  data-match-date={match.date}
+  data-replaces={replaces}
+  style={visible ? undefined : "display: none"}
   class="match-day-hero relative bg-gradient-to-br from-club-primary-deep via-club-secondary to-club-primary text-white overflow-hidden border-b-4 border-club-accent shadow-2xl"
 >
   {/* Decorativni grb watermark */}
@@ -86,7 +114,7 @@ function shortName(name: string): string {
               width="96"
               height="96"
               class="object-contain w-full h-full"
-              loading="eager"
+              loading="lazy"
             />
           ) : (
             <div class="w-full h-full rounded-full bg-white/10 flex items-center justify-center text-white/40">?</div>
@@ -119,7 +147,7 @@ function shortName(name: string): string {
               width="96"
               height="96"
               class="object-contain w-full h-full"
-              loading="eager"
+              loading="lazy"
             />
           ) : (
             <div class="w-full h-full rounded-full bg-white/10 flex items-center justify-center text-white/40">?</div>
@@ -172,79 +200,120 @@ function shortName(name: string): string {
 </aside>
 
 <script>
-  const banner = document.getElementById("match-day-hero");
-  if (banner) {
-    const iso = banner.dataset.kickoffIso;
-    if (iso) {
-      const kickoffMs = new Date(iso).getTime();
-      const HIDE_AFTER_MS = 2.5 * 60 * 60 * 1000; // 2.5h nakon kickoffa
-      const HALFTIME_MS = 45 * 60 * 1000;
-      const FULLTIME_MS = 105 * 60 * 1000; // 90 + 15 pauza, gruba procjena
+  const HIDE_AFTER_MS = 2.5 * 60 * 60 * 1000; // 2.5h nakon kickoffa
+  const HALFTIME_MS = 45 * 60 * 1000;
+  const FULLTIME_MS = 105 * 60 * 1000; // 90 + 15 pauza, gruba procjena
 
-      const hEl = document.getElementById("cd-h");
-      const mEl = document.getElementById("cd-m");
-      const sEl = document.getElementById("cd-s");
-      const labelEl = document.getElementById("match-countdown-label");
-      const countdownEl = document.getElementById("match-countdown");
-      const statusLabel = document.getElementById("match-status-label");
-      const statusBadge = document.getElementById("match-status-badge");
+  let timer: number | undefined;
 
-      function pad(n: number): string {
-        return String(n).padStart(2, "0");
-      }
-
-      function tick() {
-        const now = Date.now();
-        const diff = kickoffMs - now;
-
-        if (now > kickoffMs + HIDE_AFTER_MS) {
-          // Sakrij banner — utakmica je gotova davno
-          banner!.style.display = "none";
-          return;
-        }
-
-        if (diff > 0) {
-          // PRE-MATCH: countdown
-          const totalSec = Math.floor(diff / 1000);
-          const h = Math.floor(totalSec / 3600);
-          const m = Math.floor((totalSec % 3600) / 60);
-          const s = totalSec % 60;
-          if (hEl) hEl.textContent = pad(h);
-          if (mEl) mEl.textContent = pad(m);
-          if (sEl) sEl.textContent = pad(s);
-          if (labelEl) labelEl.textContent = "Do prvog zvižduka";
-          if (statusLabel) statusLabel.textContent = "Danas";
-          return;
-        }
-
-        // POST-KICKOFF: utakmica u tijeku
-        const elapsedMs = now - kickoffMs;
-        const elapsedMin = Math.floor(elapsedMs / 60000);
-
-        // Sakri countdown brojeve, prikaži stanje
-        if (countdownEl) {
-          let phase = "1. poluvrijeme";
-          if (elapsedMs > FULLTIME_MS) phase = "Završeno";
-          else if (elapsedMs > 60 * 60 * 1000) phase = "2. poluvrijeme";
-          else if (elapsedMs > HALFTIME_MS) phase = "Pauza";
-
-          countdownEl.innerHTML = `
-            <div class="text-center">
-              <span class="block text-2xl md:text-4xl font-display font-bold leading-tight text-club-accent">${phase}</span>
-              <span class="text-xs md:text-sm uppercase tracking-widest text-white/60 mt-1 inline-block">${elapsedMin} min od početka</span>
-            </div>
-          `;
-        }
-        if (labelEl) labelEl.textContent = "Status utakmice";
-        if (statusLabel) statusLabel.textContent = "Uživo";
-        if (statusBadge) {
-          statusBadge.classList.remove("bg-red-600");
-          statusBadge.classList.add("bg-green-600");
-        }
-      }
-
-      tick();
-      setInterval(tick, 1000);
-    }
+  function stop() {
+    if (timer !== undefined) clearInterval(timer);
+    timer = undefined;
   }
+
+  /** Današnji datum ("YYYY-MM-DD") u Europe/Zagreb, neovisno o zoni posjetitelja. */
+  function todayInZagreb(): string {
+    const parts = new Intl.DateTimeFormat("en-US", {
+      timeZone: "Europe/Zagreb",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).formatToParts(new Date());
+    const get = (type: string) => parts.find((p) => p.type === type)?.value ?? "";
+    return `${get("year")}-${get("month")}-${get("day")}`;
+  }
+
+  function pad(n: number): string {
+    return String(n).padStart(2, "0");
+  }
+
+  function setup() {
+    stop();
+    const banner = document.getElementById("match-day-hero");
+    if (!banner) return;
+    const kickoffMs = new Date(banner.dataset.kickoffIso ?? "").getTime();
+    if (Number.isNaN(kickoffMs)) return;
+
+    const replaced = banner.dataset.replaces
+      ? document.getElementById(banner.dataset.replaces)
+      : null;
+    const isMatchDay = banner.dataset.matchDate === todayInZagreb();
+
+    // Nije dan utakmice (npr. build je od jučer) → kartica umjesto bannera.
+    if (!isMatchDay) {
+      banner.style.display = "none";
+      if (replaced) replaced.style.display = "";
+      return;
+    }
+
+    banner.style.display = "";
+    if (replaced) replaced.style.display = "none";
+
+    const hEl = document.getElementById("cd-h");
+    const mEl = document.getElementById("cd-m");
+    const sEl = document.getElementById("cd-s");
+    const labelEl = document.getElementById("match-countdown-label");
+    const countdownEl = document.getElementById("match-countdown");
+    const statusLabel = document.getElementById("match-status-label");
+    const statusBadge = document.getElementById("match-status-badge");
+
+    function tick() {
+      const now = Date.now();
+      const diff = kickoffMs - now;
+
+      if (now > kickoffMs + HIDE_AFTER_MS) {
+        // Sakrij banner — utakmica je gotova davno
+        banner!.style.display = "none";
+        stop();
+        return;
+      }
+
+      if (diff > 0) {
+        // PRE-MATCH: countdown
+        const totalSec = Math.floor(diff / 1000);
+        const h = Math.floor(totalSec / 3600);
+        const m = Math.floor((totalSec % 3600) / 60);
+        const s = totalSec % 60;
+        if (hEl) hEl.textContent = pad(h);
+        if (mEl) mEl.textContent = pad(m);
+        if (sEl) sEl.textContent = pad(s);
+        if (labelEl) labelEl.textContent = "Do prvog zvižduka";
+        if (statusLabel) statusLabel.textContent = "Danas";
+        return;
+      }
+
+      // POST-KICKOFF: utakmica u tijeku
+      const elapsedMs = now - kickoffMs;
+      const elapsedMin = Math.floor(elapsedMs / 60000);
+
+      // Sakri countdown brojeve, prikaži stanje
+      if (countdownEl) {
+        let phase = "1. poluvrijeme";
+        if (elapsedMs > FULLTIME_MS) phase = "Završeno";
+        else if (elapsedMs > 60 * 60 * 1000) phase = "2. poluvrijeme";
+        else if (elapsedMs > HALFTIME_MS) phase = "Pauza";
+
+        countdownEl.innerHTML = `
+          <div class="text-center">
+            <span class="block text-2xl md:text-4xl font-display font-bold leading-tight text-club-accent">${phase}</span>
+            <span class="text-xs md:text-sm uppercase tracking-widest text-white/60 mt-1 inline-block">${elapsedMin} min od početka</span>
+          </div>
+        `;
+      }
+      if (labelEl) labelEl.textContent = "Status utakmice";
+      if (statusLabel) statusLabel.textContent = "Uživo";
+      if (statusBadge) {
+        statusBadge.classList.remove("bg-red-600");
+        statusBadge.classList.add("bg-green-600");
+      }
+    }
+
+    tick();
+    if (banner.style.display !== "none") timer = window.setInterval(tick, 1000);
+  }
+
+  // View Transitions: skripta se izvrši samo jednom, pa se odbrojavanje mora
+  // ponovo vezati na svaki dolazak na naslovnicu, a interval ugasiti pri odlasku.
+  document.addEventListener("astro:page-load", setup);
+  document.addEventListener("astro:before-swap", stop);
 </script>

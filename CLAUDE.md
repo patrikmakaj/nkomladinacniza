@@ -75,6 +75,14 @@ koji uspoređuje sadržaj bez `lastUpdated`. Novi scraper mora koristiti isti he
 Posljedica: `lastUpdated` znači **zadnja promjena podataka**, ne zadnja provjera.
 Zato na stranicama piše „podaci od", a ne „zadnje ažurirano".
 
+**Deploy na cron ide samo kad su se podaci promijenili** — plus jedan dnevni
+build iza ponoći po Zagrebu (`7 23 * * *` UTC), koji uvijek deploya. Sve što
+se u buildu računa iz „danas" (`todayInZagreb`, `nextMatch`) zato može biti
+staro do jedan dan, a bez dnevnog builda bilo je i više. Ono što ovisi o satu
+(dan utakmice, odbrojavanje, istek najave turnira) mora se dodatno provjeriti
+u pregledniku: `MatchDayHero` se uvijek renderira kad je poznato vrijeme
+početka, a skripta ga prikaže samo ako je u Zagrebu dan utakmice.
+
 ## Pravila koja se lako prekrše
 
 ### 1. Interni linkovi i public asseti idu kroz `url()`
@@ -156,7 +164,9 @@ izvršava ponovno. Inicijalizaciju veži na `astro:page-load`:
 </script>
 ```
 
-Vidi `components/Header.astro` (hamburger meni je već jednom puknuo zbog ovoga).
+Vidi `components/Header.astro` (hamburger meni je već jednom puknuo zbog ovoga),
+a za interval koji treba ugasiti pri odlasku sa stranice `MatchDayHero.astro`
+(`astro:before-swap`). Odbrojavanje se tamo smrzavalo nakon navigacije.
 
 ### 5. Podaci server → client idu kroz JSON script tag
 

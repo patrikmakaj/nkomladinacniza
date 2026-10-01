@@ -2,11 +2,18 @@ name: Scrape HNS data + deploy to GitHub Pages
 
 # Pokreće se:
 #  - svakih 30 minuta (cron)
+#  - jednom dnevno iza ponoći po zagrebačkom vremenu (cron) — uvijek deploya
 #  - na svaki push u main (npr. promjena dizajna ili sadržaja)
 #  - ručno preko Actions UI-a (workflow_dispatch)
 on:
   schedule:
     - cron: "*/30 * * * *"   # svakih 30 min
+    # Dnevni build, i kad se podaci nisu mijenjali. Naslovnica u buildu računa
+    # "danas" (sljedeća utakmica, dan utakmice), pa bez ovoga zna danima
+    # stajati jučerašnje stanje. 23:07 UTC je iza ponoći u Zagrebu i ljeti
+    # (01:07) i zimi (00:07). Ako mijenjaš izraz, promijeni i `if:` u
+    # build-and-deploy, koji ga uspoređuje doslovno.
+    - cron: "7 23 * * *"
   push:
     branches: [main]
   workflow_dispatch:
@@ -119,8 +126,11 @@ jobs:
   build-and-deploy:
     needs: scrape
     # Deploy uvijek na push (jer je možda promijenjen kod, ne samo data)
-    # Na cron: deploy samo ako su se podaci promijenili
-    if: github.event_name != 'schedule' || needs.scrape.outputs.data_changed == 'true'
+    # Na cron: deploy samo ako su se podaci promijenili, osim dnevnog builda
+    if: >-
+      github.event_name != 'schedule' ||
+      github.event.schedule == '7 23 * * *' ||
+      needs.scrape.outputs.data_changed == 'true'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
