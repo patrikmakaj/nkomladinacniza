@@ -126,5 +126,12 @@ async function main() {
 }
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {
-  await main();
+  try {
+    await main();
+  } catch (err) {
+    // Grbovi nisu kritični: pad ovdje ne smije srušiti `npm run scrape`
+    // (lanac s &&) pa time ni commit podataka i deploy. Stranica ionako
+    // ima HNS URL kao fallback.
+    console.warn(`[crests] ⚠ preskačem: ${err?.stack ?? err}`);
+  }
 }
