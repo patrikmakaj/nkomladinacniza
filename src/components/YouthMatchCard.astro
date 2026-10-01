@@ -6,6 +6,7 @@
  * ljestvica djece ostaju na /mladje-kategorije; na naslovnici ih ne ističemo.
  */
 import TeamCrest from "./TeamCrest.astro";
+import MatchActions from "./MatchActions.astro";
 import { url } from "../lib/url";
 import { matchBadge, type UnifiedMatch } from "../lib/matches";
 
@@ -48,6 +49,9 @@ const venue = match.isHome ? "Doma · Grbavica, Niza" : `Gosti · ${match.home.n
         ))
       }
       <p class="text-xs text-club-muted pt-1">{venue}</p>
+      <div class="pt-1">
+        <MatchActions match={match} variant="links" />
+      </div>
     </div>
   </div>
 

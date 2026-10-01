@@ -9,15 +9,21 @@
  */
 import TeamCrest from "./TeamCrest.astro";
 import FormStrip from "./FormStrip.astro";
+import MatchActions from "./MatchActions.astro";
+import { venueFor } from "../lib/venue";
 import { competitionShort, type LeagueRow, type UnifiedMatch } from "../lib/matches";
 
 interface Props {
   match: UnifiedMatch | null;
   /** Ljestvica iz koje se čita usporedba; bez nje je kartica samo najava. */
   table?: LeagueRow[];
+  /** Stranica najave za gumb "Podijeli", npr. "/najava/123". */
+  sharePath?: string;
+  /** Naslov u zaglavlju kartice. */
+  heading?: string;
 }
 
-const { match, table = [] } = Astro.props;
+const { match, table = [], sharePath, heading = "Sljedeća utakmica" } = Astro.props;
 
 let dateLabel = "";
 let dayLabel = "";
@@ -29,9 +35,11 @@ if (match) {
   timeLabel = match.time || "uskoro";
 }
 
+// Za gostovanje: igralište ako ga znamo iz ranijih utakmica, inače domaćin.
+const venueInfo = match ? venueFor(match) : null;
 const venue = match?.isHome
   ? "Grbavica, Niza"
-  : `Gosti · ${match?.venue ?? match?.home?.name ?? ""}`;
+  : `Gosti · ${venueInfo?.exact ? venueInfo.label : (match?.venue ?? match?.home?.name ?? "")}`;
 
 // ── Usporedba iz ljestvice ──────────────────────────────────────────────
 const rowOf = (id: number | null) =>
@@ -112,7 +120,7 @@ function valueClass(row: { better: Side }, side: "home" | "away"): string {
     <article class="bg-white shadow-2xl rounded-lg overflow-hidden border border-club-border">
       <div class="bg-gradient-to-r from-club-primary-deep to-club-primary text-white px-4 md:px-6 py-3 flex items-center justify-between gap-3">
         <span class="font-display uppercase tracking-wider text-sm font-bold">
-          Sljedeća utakmica
+          {heading}
         </span>
         <span class="text-xs font-display uppercase tracking-widest opacity-90 text-right">
           {competitionShort(match)}
@@ -199,6 +207,9 @@ function valueClass(row: { better: Side }, side: "home" | "away"): string {
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
           </svg>
           <span>{venue}</span>
+        </div>
+        <div class="mt-4">
+          <MatchActions match={match} sharePath={sharePath} />
         </div>
       </div>
     </article>
