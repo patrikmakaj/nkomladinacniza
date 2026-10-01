@@ -3,6 +3,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import Hero from "../components/Hero.astro";
 import NextMatchCard from "../components/NextMatchCard.astro";
 import YouthMatchCard from "../components/YouthMatchCard.astro";
+import YouthSignup from "../components/YouthSignup.astro";
 import LastMatchCard from "../components/LastMatchCard.astro";
 import MatchDayHero from "../components/MatchDayHero.astro";
 import LeagueTable from "../components/LeagueTable.astro";
@@ -174,6 +175,11 @@ function alsoToday(item: HeroItem): string | null {
   <section class="container-narrow mt-12">
     <h2 class="text-2xl mb-4">Zadnji rezultati</h2>
     <RecentResults limit={6} skip={lastMatch ? 1 : 0} grid={true} />
+  </section>
+
+  <!-- Upis u školu nogometa -->
+  <section class="container-narrow mt-12">
+    <YouthSignup compact />
   </section>
 
   <!-- Najnovija objava s Facebooka (pinned) -->

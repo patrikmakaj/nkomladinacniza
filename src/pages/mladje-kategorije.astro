@@ -5,6 +5,7 @@ import Hero from "../components/Hero.astro";
 import Logo from "../components/Logo.astro";
 import LeagueTable from "../components/LeagueTable.astro";
 import StatRanking from "../components/StatRanking.astro";
+import YouthSignup from "../components/YouthSignup.astro";
 import { url } from "../lib/url";
 import { golLabel, nastupLabel } from "../lib/croatian";
 import {
@@ -109,11 +110,11 @@ const categories = [
 
 <BaseLayout
   title="Mlađe kategorije"
-  description="Mlađe kategorije NK Omladinac Niza — raspored i ljestvica početnika U11, prijave za U9 i U11. Kroz povijest kluba afirmiralo se više od 100 djece iz Nize i okolice."
+  description="Mlađe kategorije NK Omladinac Niza — besplatna škola nogometa za djecu od 6 godina, treninzi utorkom i četvrtkom, raspored i ljestvica početnika U11."
 >
   <Hero
     title="Mlađe kategorije"
-    subtitle="Prijave za U9 i U11 otvorene su putem Facebooka"
+    subtitle="Škola nogometa za djecu od 6 godina — upis je besplatan"
     height="md"
   />
 
@@ -137,6 +138,11 @@ const categories = [
       </div>
     </div>
 
+    <!-- Upis — najvažnija informacija za roditelje, odmah iza uvoda -->
+    <div class="mb-10">
+      <YouthSignup />
+    </div>
+
     <!-- Selekcije -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
       {
@@ -153,12 +159,12 @@ const categories = [
                 {c.description}
               </p>
               <div class="pt-4 border-t border-club-border">
-                <span class="inline-flex items-center gap-1.5 text-sm font-medium text-club-primary">
-                  <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                  </svg>
-                  Prijave putem Facebooka
-                </span>
+                <a
+                  href="#upis"
+                  class="inline-flex items-center gap-1.5 text-sm font-medium text-club-primary hover:underline"
+                >
+                  Upis: poruka ili poziv →
+                </a>
               </div>
             </div>
           </article>
@@ -363,20 +369,25 @@ const categories = [
     <div class="bg-club-light border-l-4 border-club-primary p-6 rounded">
       <h3 class="text-xl mb-2">Želiš se priključiti?</h3>
       <p class="text-club-secondary/80 mb-4">
-        Pošalji nam poruku na Facebooku ili dođi na trening na
+        Javi se porukom ili pozivom, ili dođi na trening utorkom ili četvrtkom na
         <strong>ŠRC Miroslav Knežević-Bujdo</strong> — rado ćemo te dočekati!
       </p>
-      <a
-        href="https://www.facebook.com/omladinacniza"
-        target="_blank"
-        rel="noopener"
-        class="inline-flex items-center gap-2 bg-club-primary text-white px-5 py-2.5 rounded-lg font-medium hover:bg-club-primary-deep transition-colors"
-      >
-        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-          <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-        </svg>
-        Kontaktiraj nas na Facebooku
-      </a>
+      <div class="flex flex-wrap items-center gap-4">
+        <a
+          href="#upis"
+          class="inline-flex items-center gap-2 bg-club-primary text-white px-5 py-2.5 rounded-lg font-medium hover:bg-club-primary-deep transition-colors"
+        >
+          Upis djece ↑
+        </a>
+        <a
+          href="https://www.facebook.com/omladinacniza"
+          target="_blank"
+          rel="noopener"
+          class="text-sm text-club-primary hover:underline"
+        >
+          ili nam piši na Facebooku
+        </a>
+      </div>
     </div>
   </section>
 </BaseLayout>
