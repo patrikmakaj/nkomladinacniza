@@ -2,6 +2,9 @@
 /**
  * Gumbi uz nadolazeću utakmicu: dodaj u kalendar (.ics), upute (Google Maps)
  * i, ako postoji stranica najave, podijeli (Web Share API, inače kopira link).
+ *
+ * `data-umami-event` broji klikove u Umamiju (bez ikakvog JS-a s naše strane),
+ * da se vidi koristi li itko ove gumbe.
  */
 import { url } from "../lib/url";
 import { venueFor, mapsUrl } from "../lib/venue";
@@ -30,7 +33,12 @@ const icon = "w-4 h-4 flex-shrink-0";
 
 <div class={variant === "buttons" ? "flex flex-wrap justify-center gap-2" : "flex flex-wrap gap-x-4 gap-y-1"}>
   {/* Bez `download`: iOS tada .ics otvori ravno u "Dodaj u kalendar" umjesto u Datoteke. */}
-  <a href={url(`/utakmica/${match.id}.ics`)} class={cls}>
+  <a
+    href={url(`/utakmica/${match.id}.ics`)}
+    class={cls}
+    data-umami-event="U kalendar"
+    data-umami-event-utakmica={match.id}
+  >
     <svg class={icon} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
     </svg>
@@ -42,6 +50,8 @@ const icon = "w-4 h-4 flex-shrink-0";
     rel="noopener noreferrer"
     class={cls}
     title={venue.exact ? venue.label : `Pretraga: ${venue.query}`}
+    data-umami-event={venue.exact ? "Upute" : "Na karti"}
+    data-umami-event-utakmica={match.id}
   >
     <svg class={icon} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
@@ -50,7 +60,14 @@ const icon = "w-4 h-4 flex-shrink-0";
   </a>
   {
     shareUrl && (
-      <button type="button" class={cls} data-share-url={shareUrl} data-share-title={shareTitle}>
+      <button
+        type="button"
+        class={cls}
+        data-share-url={shareUrl}
+        data-share-title={shareTitle}
+        data-umami-event="Podijeli"
+        data-umami-event-utakmica={match.id}
+      >
         <svg class={icon} fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
         </svg>
