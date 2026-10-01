@@ -1,7 +1,7 @@
 ---
 import { url } from "../lib/url";
 import hns from "../data/hns.json";
-import { lastResults } from "../lib/matches";
+import { lastResults, competitionShort } from "../lib/matches";
 
 interface Props {
   limit?: number;
@@ -61,7 +61,7 @@ const outcomeLabel = { W: "P", D: "N", L: "I" };
           <div class="flex-1 min-w-0">
             <div class="flex items-center gap-2 text-xs text-club-muted mb-1">
               <span class="font-display uppercase tracking-wider truncate">
-                {r.competition}
+                {competitionShort(r)}
               </span>
               <span>·</span>
               <span class="flex-shrink-0">{dateLabel}</span>

@@ -49,7 +49,11 @@ const imageGridClass =
 const isFeaturedFirst = post.images.length === 3;
 ---
 
-<article class="bg-white border border-club-border rounded-lg overflow-hidden hover:shadow-md transition-shadow">
+{/* id: kartice na naslovnici linkaju ravno na objavu (/novosti#objava-…) */}
+<article
+  id={`objava-${post.id}`}
+  class="bg-white border border-club-border rounded-lg overflow-hidden hover:shadow-md transition-shadow scroll-mt-24"
+>
   {/* Header - datum + permalink */}
   <header class="flex items-center justify-between px-5 py-3 border-b border-club-border bg-club-light-2">
     <div class="flex items-center gap-2 text-sm">

@@ -1,14 +1,38 @@
 ---
-import FacebookPost from "./FacebookPost.astro";
+/**
+ * Zadnje objave s Facebooka na naslovnici — kompaktno, tri kartice sa
+ * sličicom i početkom teksta. Klik vodi na cijelu objavu na /novosti.
+ *
+ * Prije je ovdje bila jedna cijela objava sa slikom do 600 px, pa je
+ * nebitna obavijest (npr. kalendar odvoza otpada) znala pojesti pola ekrana.
+ */
 import facebook from "../data/facebook.json";
 import { url } from "../lib/url";
 
-const latest = facebook.posts?.[0];
+type PostImage = { src: string; thumb?: string | null; width?: number | null; height?: number | null };
+
 const enabled = facebook.enabled !== false;
+const posts = ((facebook.posts ?? []) as any[]).slice(0, 3).map((p) => {
+  // Stariji facebook.json ima slike kao obične stringove.
+  const raw = (p.images ?? [])[0] as string | PostImage | undefined;
+  const image = typeof raw === "string" ? { src: raw } : raw;
+  const message = String(p.message ?? "").replace(/\s+/g, " ").trim();
+  return {
+    id: String(p.id),
+    message,
+    image: image ?? null,
+    date: new Date(p.createdAt).toLocaleDateString("hr-HR", {
+      day: "numeric",
+      month: "long",
+      timeZone: "Europe/Zagreb",
+    }),
+    createdAt: String(p.createdAt),
+  };
+});
 ---
 
 {
-  enabled && latest && (
+  enabled && posts.length > 0 && (
     <section class="container-narrow mt-16">
       <div class="flex items-end justify-between mb-4 gap-4">
         <div>
@@ -24,7 +48,41 @@ const enabled = facebook.enabled !== false;
           Sve novosti →
         </a>
       </div>
-      <FacebookPost post={latest} collapsible={true} />
+
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {posts.map((post) => (
+          <a
+            href={url(`/novosti#objava-${post.id}`)}
+            class="group flex flex-col bg-white border border-club-border rounded-lg overflow-hidden hover:shadow-md transition-shadow"
+          >
+            {post.image && (
+              <div class="aspect-[4/3] bg-club-light-2 overflow-hidden">
+                <img
+                  src={url(post.image.thumb || post.image.src)}
+                  alt=""
+                  width={post.image.width ?? undefined}
+                  height={post.image.height ?? undefined}
+                  loading="lazy"
+                  class="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-300"
+                />
+              </div>
+            )}
+            <div class="p-4 flex-1 flex flex-col gap-1.5">
+              <time datetime={post.createdAt} class="text-xs text-club-muted">
+                {post.date}
+              </time>
+              {post.message ? (
+                <p class="text-sm text-club-secondary leading-snug line-clamp-3">{post.message}</p>
+              ) : (
+                <p class="text-sm text-club-muted italic">Objava sa slikom</p>
+              )}
+              <span class="mt-auto pt-2 text-xs font-display uppercase tracking-wider text-club-primary group-hover:underline">
+                Pročitaj →
+              </span>
+            </div>
+          </a>
+        ))}
+      </div>
     </section>
   )
 }

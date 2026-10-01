@@ -11,6 +11,7 @@ import LatestPostBlock from "../components/LatestPostBlock.astro";
 import SchemaSportsTeam from "../components/SchemaSportsTeam.astro";
 import hns from "../data/hns.json";
 import { url } from "../lib/url";
+import { pluralCroatian } from "../lib/croatian";
 import {
   nextMatch,
   nextYouthMatch,
@@ -24,6 +25,15 @@ import {
 } from "../lib/matches";
 
 const table = hns.table as LeagueRow[];
+
+// Godine tradicije iz godine osnutka — dnevni build ih sam osvježi u siječnju.
+const FOUNDED = 1963;
+const clubAge = Number(todayInZagreb.slice(0, 4)) - FOUNDED;
+const decadeWord =
+  ["", "jedno", "dva", "tri", "četiri", "pet", "šest", "sedam", "osam", "devet"][
+    Math.floor(clubAge / 10)
+  ] ?? String(Math.floor(clubAge / 10));
+const decadesText = `${clubAge % 10 === 0 ? "Punih" : "Više od"} ${decadeWord} desetljeća`;
 
 // U-11 na naslovnici samo kad igraju u idućih tjedan dana ("ovaj vikend").
 const youthMatch =
@@ -163,8 +173,8 @@ function alsoToday(item: HeroItem): string | null {
         <h2 class="text-3xl md:text-4xl mb-4">O klubu</h2>
         <p class="text-white/80 leading-relaxed mb-6">
           NK Omladinac Niza je nogometni klub iz mjesta Niza u Općini Koška, osnovan
-          <strong class="text-club-accent">davne 1963. godine</strong>. Više od šest
-          desetljeća okupljamo generacije mladih oko ljubavi prema nogometu — od mladih
+          <strong class="text-club-accent">davne {FOUNDED}. godine</strong>. {decadesText}
+          okupljamo generacije mladih oko ljubavi prema nogometu — od mladih
           nada koje su prošle kroz klub do seniorske momčadi koja danas brani naše boje.
         </p>
         <div class="flex flex-wrap gap-3">
@@ -174,8 +184,10 @@ function alsoToday(item: HeroItem): string | null {
       </div>
       <div class="relative grid grid-cols-2 gap-4">
         <div class="bg-white/5 backdrop-blur rounded-lg p-6 text-center">
-          <p class="font-display text-4xl font-bold text-club-accent">63</p>
-          <p class="text-sm text-white/70 mt-1">godine tradicije</p>
+          <p class="font-display text-4xl font-bold text-club-accent">{clubAge}</p>
+          <p class="text-sm text-white/70 mt-1">
+            {pluralCroatian(clubAge, "godina", "godine", "godina")} tradicije
+          </p>
         </div>
         <div class="bg-white/5 backdrop-blur rounded-lg p-6 text-center">
           <p class="font-display text-4xl font-bold text-club-accent">100+</p>
