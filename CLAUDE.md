@@ -80,8 +80,11 @@ build iza ponoći po Zagrebu (`7 23 * * *` UTC), koji uvijek deploya. Sve što
 se u buildu računa iz „danas" (`todayInZagreb`, `nextMatch`) zato može biti
 staro do jedan dan, a bez dnevnog builda bilo je i više. Ono što ovisi o satu
 (dan utakmice, odbrojavanje, istek najave turnira) mora se dodatno provjeriti
-u pregledniku: `MatchDayHero` se uvijek renderira kad je poznato vrijeme
-početka, a skripta ga prikaže samo ako je u Zagrebu dan utakmice.
+u pregledniku: naslovnica renderira po jedan `MatchDayHero` za sljedeću
+utakmicu seniora i U-11 (kad je poznato vrijeme početka), a skripta prikaže
+onaj čija je utakmica danas u Zagrebu i nije završila prije više od 2,5 h.
+Kad obje ekipe igraju isti dan, banner tako ujutro odbrojava do U-11, pa
+prijeđe na seniore.
 
 ## Pravila koja se lako prekrše
 
@@ -104,7 +107,8 @@ Nikad `href="/raspored"` direktno. Vanjske URL-ove (`http`, `mailto`, `tel`, `#`
 
 `lib/matches.ts` spaja HNS (liga + kup) i `friendlies.json` u jedinstveni
 `UnifiedMatch[]`. Izvozi `allMatches`, `upcoming`, `played`, `nextMatch`,
-`lastResults()`, `matchBadge()`, `badgeClass`, `todayInZagreb`, te za filtriranje
+`nextYouthMatch`, `lastResults()`, `matchBadge()`, `competitionShort()`,
+`badgeClass`, `todayInZagreb`, `daysFromToday()`, te za filtriranje
 `typeLabel`, `typeSlug`, `typeOrder` i `countByType()`.
 
 Ako čitaš `hns.matches` direktno, prijateljske utakmice ti nestanu s ekrana.
@@ -121,7 +125,12 @@ seniore** (U-11 namjerno nije u njima da ne upadne u seniorski raspored i `.ics`
 Za mlađe kategorije koristi `competitionsFor("Beginners")` iz `lib/matches.ts` —
 vraća `Competition[]` s već normaliziranim `matches` (`UnifiedMatch[]`), `table`
 (`LeagueRow[]`), `players` i `stats`. Tako radi U-11 sekcija na
-`/mladje-kategorije`.
+`/mladje-kategorije`, a `nextYouthMatch` je njihova sljedeća utakmica za
+naslovnicu.
+
+Na naslovnici U-11 namjerno ima **samo raspored** (`YouthMatchCard`, i to kad
+igraju u idućih 7 dana) — bez rezultata, forme i ljestvice. To ostaje na
+`/mladje-kategorije`; niz poraza desetogodišnjaka ne ističemo na naslovnici.
 
 `players` i `stats` HNS objavi **tek nakon prvih odigranih utakmica** — zato
 seniorska liga ima prazne, a kup pune. Sve što ih prikazuje mora se znati
@@ -255,7 +264,9 @@ src/
 │   ├── raspored.ics.ts        # cijeli raspored kao kalendar za pretplatu (webcal://)
 │   └── manifest.webmanifest.ts# PWA manifest (endpoint, da poštuje base path)
 ├── components/                # Header, Footer, Hero, MatchDayHero, LeagueTable,
-│                              # NextMatchCard, RecentResults, PlayerCard, StaffCard,
+│                              # NextMatchCard (+ usporedba iz ljestvice), YouthMatchCard,
+│                              # LastMatchCard, TeamCrest, FormStrip,
+│                              # RecentResults, PlayerCard, StaffCard,
 │                              # MatchLineup, MatchEventsList, StatRanking, FacebookPost,
 │                              # LatestPostBlock, InstallPrompt, Logo, SchemaSportsTeam
 ├── lib/                       # url.ts · matches.ts · croatian.ts · facebook.ts

@@ -1,0 +1,43 @@
+---
+/**
+ * Forma kluba — zadnjih N ishoda kao kružići P / N / I, najnoviji desno.
+ *
+ * HNS ljestvica šalje `form` kronološki (najstariji prvi), pa se ne okreće.
+ * Slova su obavezna uz boju: pobjeda i izgubljeno razlikuju se samo bojom,
+ * a daltonisti je ne vide.
+ */
+interface Props {
+  form: string[];
+  class?: string;
+}
+
+const { form, class: className = "" } = Astro.props;
+
+const style: Record<string, { letter: string; title: string; bg: string }> = {
+  W: { letter: "P", title: "Pobjeda", bg: "bg-green-600" },
+  D: { letter: "N", title: "Neriješeno", bg: "bg-yellow-500" },
+  L: { letter: "I", title: "Izgubljeno", bg: "bg-red-600" },
+};
+
+const items = form.map((r) => style[r]).filter(Boolean);
+---
+
+{
+  items.length > 0 && (
+    <span
+      class={`inline-flex gap-1 ${className}`}
+      aria-label={`Forma, najnovija zadnja: ${items.map((i) => i.title).join(", ")}`}
+      role="img"
+    >
+      {items.map((i) => (
+        <span
+          class={`${i.bg} w-[18px] h-[18px] rounded-full text-white font-display font-bold text-[10px] leading-none flex items-center justify-center`}
+          title={i.title}
+          aria-hidden="true"
+        >
+          {i.letter}
+        </span>
+      ))}
+    </span>
+  )
+}

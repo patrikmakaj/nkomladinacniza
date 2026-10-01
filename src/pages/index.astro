@@ -2,20 +2,78 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Hero from "../components/Hero.astro";
 import NextMatchCard from "../components/NextMatchCard.astro";
+import YouthMatchCard from "../components/YouthMatchCard.astro";
+import LastMatchCard from "../components/LastMatchCard.astro";
 import MatchDayHero from "../components/MatchDayHero.astro";
 import LeagueTable from "../components/LeagueTable.astro";
 import RecentResults from "../components/RecentResults.astro";
 import LatestPostBlock from "../components/LatestPostBlock.astro";
 import SchemaSportsTeam from "../components/SchemaSportsTeam.astro";
+import hns from "../data/hns.json";
 import { url } from "../lib/url";
-import { nextMatch, todayInZagreb } from "../lib/matches";
+import {
+  nextMatch,
+  nextYouthMatch,
+  played,
+  todayInZagreb,
+  daysFromToday,
+  competitionShort,
+  matchBadge,
+  type LeagueRow,
+  type UnifiedMatch,
+} from "../lib/matches";
 
-// Countdown banner ima smisla samo kad znamo vrijeme početka (prijateljske
-// ponekad nemaju objavljeno vrijeme) — inače ostaje obična kartica.
-// Je li danas dan utakmice konačno odlučuje skripta u MatchDayHero; ovo je
-// samo početno stanje prema datumu builda (Europe/Zagreb).
-const heroMatch = nextMatch?.time ? nextMatch : null;
-const isMatchDay = !!heroMatch && heroMatch.date === todayInZagreb;
+const table = hns.table as LeagueRow[];
+
+// U-11 na naslovnici samo kad igraju u idućih tjedan dana ("ovaj vikend").
+const youthMatch =
+  nextYouthMatch && daysFromToday(nextYouthMatch.date) <= 7 ? nextYouthMatch : null;
+const lastMatch = played[0] ?? null;
+const hasSide = !!youthMatch || !!lastMatch;
+
+// Sljedeći protivnik u ligi — ističe se u tablici.
+const nextOpponentId =
+  nextMatch?.type === "league"
+    ? nextMatch.isHome
+      ? nextMatch.away.id
+      : nextMatch.home.id
+    : null;
+
+// ── Match-day banneri ─────────────────────────────────────────────────
+// Po jedan za sljedeću utakmicu svake ekipe kojoj znamo vrijeme početka
+// (prijateljske ga ponekad nemaju — tada ostaje samo kartica). Koji je
+// vidljiv odlučuje skripta u MatchDayHero; `visible` je samo početno stanje
+// prema datumu builda (Europe/Zagreb).
+type HeroItem = { match: UnifiedMatch; team: string; label: string };
+const heroItems: HeroItem[] = [
+  nextMatch && {
+    match: nextMatch,
+    team: "Seniori",
+    label: `Seniori · ${competitionShort(nextMatch)}`,
+  },
+  nextYouthMatch && {
+    match: nextYouthMatch,
+    team: "Početnici U-11",
+    label: `Početnici U-11 · ${matchBadge(nextYouthMatch)}`,
+  },
+]
+  .filter((h): h is HeroItem => !!h && !!h.match.time)
+  .sort((a, b) => a.match.iso.localeCompare(b.match.iso));
+
+const initialHero = heroItems.find((h) => h.match.date === todayInZagreb) ?? null;
+
+/** "Danas još: Seniori u 18:00, u gostima kod NK Iskrica" — kasnije utakmice istog dana. */
+function alsoToday(item: HeroItem): string | null {
+  const later = heroItems.filter(
+    (o) => o !== item && o.match.date === item.match.date && o.match.iso > item.match.iso,
+  );
+  if (!later.length) return null;
+  const parts = later.map(({ match: m, team }) => {
+    const where = m.isHome ? `doma protiv ${m.away.name}` : `u gostima kod ${m.home.name}`;
+    return `${team} u ${m.time}, ${where}`;
+  });
+  return `Danas još: ${parts.join(" · ")}`;
+}
 ---
 
 <BaseLayout
@@ -29,9 +87,16 @@ const isMatchDay = !!heroMatch && heroMatch.date === todayInZagreb;
       Sama nestane nakon `until`; kad prođe, obriši je i stavku iz Header.astro. */}
 
   {/* Match-day hero — vidljiv samo na dan utakmice */}
-  {heroMatch && (
-    <MatchDayHero match={heroMatch} visible={isMatchDay} replaces="next-match-card" />
-  )}
+  {
+    heroItems.map((item) => (
+      <MatchDayHero
+        match={item.match}
+        label={item.label}
+        visible={item === initialHero}
+        alsoToday={alsoToday(item)}
+      />
+    ))
+  }
 
   <Hero
     title="Omladinac Niza"
@@ -43,23 +108,36 @@ const isMatchDay = !!heroMatch && heroMatch.date === todayInZagreb;
     </div>
   </Hero>
 
-  {/* Sljedeća utakmica - flotira preko hero ruba.
-       Skrivena na match day jer iste informacije su u MatchDayHero banneru iznad. */}
-  <section
-    id="next-match-card"
-    class="container-narrow -mt-20 relative z-10"
-    style={isMatchDay ? "display: none" : undefined}
-  >
-    <NextMatchCard />
+  {/* Utakmice — flotiraju preko hero ruba. Lijevo sljedeća seniorska s
+      usporedbom, desno U-11 (ako igraju ovaj tjedan) i zadnji rezultat.
+      Na dan utakmice ostaju vidljive: usporedba forme nije u banneru. */}
+  <section class="container-narrow -mt-20 relative z-10">
+    <div class={`grid gap-4 md:gap-6 items-start ${hasSide ? "lg:grid-cols-3" : ""}`}>
+      <div class={hasSide ? "lg:col-span-2" : ""}>
+        <NextMatchCard match={nextMatch} table={table} />
+      </div>
+      {
+        hasSide && (
+          <div
+            class={`grid gap-4 md:gap-6 ${
+              youthMatch && lastMatch ? "sm:grid-cols-2 lg:grid-cols-1" : ""
+            }`}
+          >
+            {youthMatch && <YouthMatchCard match={youthMatch} />}
+            {lastMatch && <LastMatchCard match={lastMatch} />}
+          </div>
+        )
+      }
+    </div>
   </section>
 
-  <!-- Najnovija objava s Facebooka (pinned) -->
-  <LatestPostBlock />
+  {/* Prvo sportski sadržaj (tablica, rezultati), a tek onda Facebook — zadnja
+      objava zna biti obavijest koja s nogometom nema veze. */}
 
   <!-- Tablica (cijela) -->
   <section class="container-narrow mt-16">
     <h2 class="text-2xl mb-4">Tablica</h2>
-    <LeagueTable />
+    <LeagueTable highlightId={nextOpponentId} />
   </section>
 
   <!-- Zadnji rezultati ispod tablice u 2 stupca -->
@@ -67,6 +145,9 @@ const isMatchDay = !!heroMatch && heroMatch.date === todayInZagreb;
     <h2 class="text-2xl mb-4">Zadnji rezultati</h2>
     <RecentResults limit={6} grid={true} />
   </section>
+
+  <!-- Najnovija objava s Facebooka (pinned) -->
+  <LatestPostBlock />
 
   <!-- O klubu CTA -->
   <section class="container-narrow mt-20">

@@ -9,9 +9,11 @@ interface Props {
   rows?: LeagueRow[];
   /** Naslov u preview headeru; bez ovoga naziv seniorskog natjecanja. */
   title?: string;
+  /** id kluba koji se ističe kao sljedeći protivnik. */
+  highlightId?: number | null;
 }
 
-const { preview = false, rows, title } = Astro.props;
+const { preview = false, rows, title, highlightId = null } = Astro.props;
 
 const fullTable: LeagueRow[] = rows ?? hns.table;
 const competitionName = title ?? hns.competition?.name ?? "Tablica lige";
@@ -23,6 +25,10 @@ const includeUs = usIdx >= 5;
 const previewRows = includeUs ? [...top5, fullTable[usIdx]] : top5;
 
 const tableData = preview ? previewRows : fullTable;
+
+// Oznaka uz ime (ne samo boja) — vidi se i bez razlikovanja boja.
+const isNext = (row: LeagueRow) =>
+  highlightId != null && !row.isUs && row.club.id === highlightId;
 ---
 
 <div class="bg-white rounded-lg shadow-md overflow-hidden border border-club-border">
@@ -68,9 +74,11 @@ const tableData = preview ? previewRows : fullTable;
                   class={`border-b border-club-border ${
                     row.isUs
                       ? "bg-club-primary/10 font-bold"
-                      : idx % 2 === 0
-                        ? "bg-white"
-                        : "bg-gray-50"
+                      : isNext(row)
+                        ? "bg-club-accent/15"
+                        : idx % 2 === 0
+                          ? "bg-white"
+                          : "bg-gray-50"
                   }`}
                 >
                   <td class="px-3 py-3 font-display">{row.position}</td>
@@ -89,6 +97,11 @@ const tableData = preview ? previewRows : fullTable;
                       <span class={row.isUs ? "text-club-primary" : ""}>
                         {row.club.name}
                       </span>
+                      {isNext(row) && (
+                        <span class="flex-shrink-0 bg-club-accent text-club-primary-deep text-[10px] font-display font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-sm">
+                          Sljedeći
+                        </span>
+                      )}
                     </div>
                   </td>
                   <td class="px-2 py-3 text-center">{row.played}</td>

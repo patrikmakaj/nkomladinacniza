@@ -12,7 +12,8 @@ const { title, subtitle, height = "lg" } = Astro.props;
 const heightClass = {
   sm: "h-[280px]",
   md: "h-[420px]",
-  lg: "h-[560px]",
+  // Na mobitelu niže, da kartice sljedeće utakmice stanu na prvi ekran.
+  lg: "h-[420px] md:h-[560px]",
 }[height];
 ---
 

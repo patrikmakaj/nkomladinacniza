@@ -135,12 +135,23 @@ export const played = allMatches
   .sort((a, b) => b.iso.localeCompare(a.iso));
 
 /**
- * Sljedeća utakmica: prva neodigrana čiji datum nije prošao.
+ * Prva neodigrana utakmica čiji datum nije prošao; popis mora biti kronološki.
  * (Uvjet `date >= danas` sprječava da ručno unesena prijateljska bez
- * upisanog rezultata zauvijek ostane "sljedeća".)
+ * upisanog rezultata zauvijek ostane "sljedeća", a HNS utakmica bez
+ * objavljenog rezultata ne ostane "sljedeća" dan nakon što je odigrana.)
  */
-export const nextMatch: UnifiedMatch | null =
-  upcoming.find((m) => m.date >= todayInZagreb) ?? null;
+function firstUpcoming(list: UnifiedMatch[]): UnifiedMatch | null {
+  return list.find((m) => !m.played && m.date >= todayInZagreb) ?? null;
+}
+
+/** Sljedeća seniorska utakmica (liga, kup ili prijateljska). */
+export const nextMatch: UnifiedMatch | null = firstUpcoming(allMatches);
+
+/** Koliko dana od danas (Europe/Zagreb) do datuma "YYYY-MM-DD"; 0 = danas. */
+export function daysFromToday(date: string): number {
+  const day = (d: string) => Date.parse(`${d}T00:00:00Z`);
+  return Math.round((day(date) - day(todayInZagreb)) / 86_400_000);
+}
 
 /** Zadnjih N rezultata kroz sva natjecanja. */
 export function lastResults(limit = 10): UnifiedMatch[] {
@@ -161,6 +172,19 @@ export function matchBadge(m: UnifiedMatch): string {
       ? m.competition
       : "Prijateljska";
   return m.round ? `${m.round}. kolo` : "Liga";
+}
+
+/**
+ * Kratak naziv natjecanja za zaglavlja kartica: "2. ŽNL · 6. kolo",
+ * "Kup · 1/16 finala", "Prijateljska". Puni HNS naziv
+ * ("2. ŽNL Našice - Seniori 26/27, 6. kolo") na mobitelu se lomi u dva reda.
+ */
+export function competitionShort(m: UnifiedMatch): string {
+  if (m.type !== "league") return matchBadge(m);
+  // "2. ŽNL Našice - Seniori 26/27, 6. kolo" → "2. ŽNL Našice" → "2. ŽNL"
+  const league = m.competition.split(",")[0].split(" - ")[0].trim();
+  const short = league.match(/^\d+\.\s*\S+/)?.[0] ?? league;
+  return m.round ? `${short} · ${m.round}. kolo` : short;
 }
 
 /** Tailwind klase za badge po tipu natjecanja. */
@@ -296,3 +320,13 @@ export function competitionsFor(age: AgeCategory): Competition[] {
       } satisfies CompetitionStats,
     }));
 }
+
+/**
+ * Sljedeća utakmica početnika (U-11), kroz sva njihova natjecanja.
+ * Nije u `allMatches` (vidi gore), pa ima svoj izvoz za naslovnicu.
+ */
+export const nextYouthMatch: UnifiedMatch | null = firstUpcoming(
+  competitionsFor("Beginners")
+    .flatMap((c) => c.matches)
+    .sort((a, b) => a.iso.localeCompare(b.iso)),
+);

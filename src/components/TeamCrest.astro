@@ -1,0 +1,41 @@
+---
+/**
+ * Grb kluba: za nas lokalni <Logo />, za ostale grb s HNS-a, a bez grba
+ * krug s početnim slovom (HNS ga nema za svaki klub).
+ */
+import Logo from "./Logo.astro";
+import { OUR_CLUB_ID, type TeamRef } from "../lib/matches";
+
+interface Props {
+  team: TeamRef;
+  size: number;
+  class?: string;
+}
+
+const { team, size, class: className = "" } = Astro.props;
+
+const initial = team.name.replace(/^H?NK\s+/i, "").charAt(0).toUpperCase() || "?";
+---
+
+{
+  team.id === OUR_CLUB_ID ? (
+    <Logo size={size} class={className} />
+  ) : team.logo ? (
+    <img
+      src={team.logo}
+      alt={`${team.name} grb`}
+      width={size}
+      height={size}
+      class={`object-contain ${className}`}
+      loading="lazy"
+    />
+  ) : (
+    <span
+      class={`rounded-full bg-club-light text-club-primary-deep font-display font-bold border-2 border-club-border flex items-center justify-center ${className}`}
+      style={`width: ${size}px; height: ${size}px; font-size: ${Math.round(size * 0.4)}px`}
+      aria-hidden="true"
+    >
+      {initial}
+    </span>
+  )
+}

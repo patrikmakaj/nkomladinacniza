@@ -1,0 +1,60 @@
+---
+/**
+ * Mala kartica sljedeće utakmice početnika (U-11) za naslovnicu.
+ *
+ * Namjerno samo raspored — kad, gdje, protiv koga. Rezultati, forma i
+ * ljestvica djece ostaju na /mladje-kategorije; na naslovnici ih ne ističemo.
+ */
+import TeamCrest from "./TeamCrest.astro";
+import { url } from "../lib/url";
+import { matchBadge, type UnifiedMatch } from "../lib/matches";
+
+interface Props {
+  match: UnifiedMatch;
+}
+
+const { match } = Astro.props;
+
+const dateObj = new Date(match.iso);
+const dayLabel = dateObj.toLocaleDateString("hr-HR", { weekday: "long" });
+const dateLabel = dateObj.toLocaleDateString("hr-HR", { day: "numeric", month: "long" });
+const venue = match.isHome ? "Doma · Grbavica, Niza" : `Gosti · ${match.home.name}`;
+---
+
+<article class="bg-white rounded-lg shadow-xl border border-club-border overflow-hidden">
+  <div class="bg-club-accent text-club-primary-deep px-4 md:px-5 py-2.5 flex items-center justify-between gap-3">
+    <span class="font-display uppercase tracking-wider text-sm font-bold">Početnici U-11</span>
+    <span class="text-xs font-display uppercase tracking-widest">{matchBadge(match)}</span>
+  </div>
+
+  <div class="p-4 md:p-5 flex items-center gap-4">
+    <div class="w-20 flex-shrink-0 text-center">
+      <p class="text-[11px] uppercase tracking-widest text-club-muted">{dayLabel}</p>
+      <p class="font-display font-bold text-2xl text-club-primary-deep leading-tight">
+        {match.time ?? "—"}
+      </p>
+      <p class="text-xs text-club-muted">{dateLabel}</p>
+    </div>
+
+    <div class="flex-1 min-w-0 border-l border-club-border pl-4 space-y-2">
+      {
+        [match.home, match.away].map((team) => (
+          <div class="flex items-center gap-2">
+            <span class="w-7 h-7 flex-shrink-0 flex items-center justify-center">
+              <TeamCrest team={team} size={28} class="w-full h-full" />
+            </span>
+            <span class="font-display font-bold uppercase text-sm leading-tight">{team.name}</span>
+          </div>
+        ))
+      }
+      <p class="text-xs text-club-muted pt-1">{venue}</p>
+    </div>
+  </div>
+
+  <a
+    href={url("/mladje-kategorije")}
+    class="block border-t border-club-border px-4 md:px-5 py-2.5 text-xs font-display uppercase tracking-wider text-club-primary hover:bg-club-light-2 transition-colors"
+  >
+    Sve o mlađim kategorijama →
+  </a>
+</article>

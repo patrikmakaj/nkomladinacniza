@@ -1,72 +1,139 @@
 ---
-import Logo from "./Logo.astro";
-import { nextMatch } from "../lib/matches";
+/**
+ * Kartica sljedeće seniorske utakmice, s usporedbom obje ekipe iz ljestvice
+ * (plasman, bodovi, forma zadnjih 5, golovi po utakmici).
+ *
+ * Usporedba se prikazuje samo ako su obje ekipe u ljestvici i odigrale su
+ * barem jedno kolo — za kup protiv kluba iz druge lige, prijateljsku ili
+ * početak sezone nema se što usporediti, pa ostaje samo najava.
+ */
+import TeamCrest from "./TeamCrest.astro";
+import FormStrip from "./FormStrip.astro";
+import { competitionShort, type LeagueRow, type UnifiedMatch } from "../lib/matches";
+
+interface Props {
+  match: UnifiedMatch | null;
+  /** Ljestvica iz koje se čita usporedba; bez nje je kartica samo najava. */
+  table?: LeagueRow[];
+}
+
+const { match, table = [] } = Astro.props;
 
 let dateLabel = "";
 let dayLabel = "";
 let timeLabel = "";
-if (nextMatch?.iso) {
-  const dateObj = new Date(nextMatch.iso);
-  dateLabel = dateObj.toLocaleDateString("hr-HR", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
+if (match) {
+  const dateObj = new Date(match.iso);
+  dateLabel = dateObj.toLocaleDateString("hr-HR", { day: "numeric", month: "long" });
   dayLabel = dateObj.toLocaleDateString("hr-HR", { weekday: "long" });
-  timeLabel = nextMatch.time || "uskoro";
+  timeLabel = match.time || "uskoro";
 }
 
-const venue = nextMatch?.isHome
+const venue = match?.isHome
   ? "Grbavica, Niza"
-  : `Gosti · ${nextMatch?.venue ?? nextMatch?.home?.name ?? ""}`;
+  : `Gosti · ${match?.venue ?? match?.home?.name ?? ""}`;
+
+// ── Usporedba iz ljestvice ──────────────────────────────────────────────
+const rowOf = (id: number | null) =>
+  id == null ? undefined : table.find((r) => r.club.id === id);
+const homeRow = match ? rowOf(match.home.id) : undefined;
+const awayRow = match ? rowOf(match.away.id) : undefined;
+
+type Side = "home" | "away" | null;
+
+/** Koja je strana bolja; `lowerIsBetter` za plasman i primljene golove. */
+function better(h: number | null, a: number | null, lowerIsBetter = false): Side {
+  if (h == null || a == null || h === a) return null;
+  return h < a === lowerIsBetter ? "home" : "away";
+}
+
+/** Prosjek po utakmici, zaokružen na jednu decimalu (uspoređuje se ono što piše). */
+function perGame(goals: number | null, played: number | null): number | null {
+  if (goals == null || !played) return null;
+  return Math.round((goals / played) * 10) / 10;
+}
+
+const decimal = (n: number | null) =>
+  n == null
+    ? "—"
+    : n.toLocaleString("hr-HR", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+
+type CompareRow =
+  | { kind: "value"; label: string; home: string; away: string; better: Side }
+  | { kind: "form"; label: string; home: string[]; away: string[] };
+
+const rows: CompareRow[] = [];
+if (homeRow?.played && awayRow?.played) {
+  rows.push({
+    kind: "value",
+    label: "Plasman",
+    home: homeRow.position != null ? `${homeRow.position}.` : "—",
+    away: awayRow.position != null ? `${awayRow.position}.` : "—",
+    better: better(homeRow.position, awayRow.position, true),
+  });
+  rows.push({
+    kind: "value",
+    label: "Bodovi",
+    home: String(homeRow.points ?? "—"),
+    away: String(awayRow.points ?? "—"),
+    better: better(homeRow.points, awayRow.points),
+  });
+  if (homeRow.form.length || awayRow.form.length) {
+    rows.push({ kind: "form", label: "Forma", home: homeRow.form, away: awayRow.form });
+  }
+  const hScored = perGame(homeRow.gf, homeRow.played);
+  const aScored = perGame(awayRow.gf, awayRow.played);
+  const hConceded = perGame(homeRow.ga, homeRow.played);
+  const aConceded = perGame(awayRow.ga, awayRow.played);
+  rows.push({
+    kind: "value",
+    label: "Golova po utakmici",
+    home: decimal(hScored),
+    away: decimal(aScored),
+    better: better(hScored, aScored),
+  });
+  rows.push({
+    kind: "value",
+    label: "Primljenih po utakmici",
+    home: decimal(hConceded),
+    away: decimal(aConceded),
+    better: better(hConceded, aConceded, true),
+  });
+}
+
+function valueClass(row: { better: Side }, side: "home" | "away"): string {
+  if (row.better === null) return "text-club-secondary";
+  return row.better === side ? "text-club-primary-deep" : "text-club-muted font-normal";
+}
 ---
 
 {
-  nextMatch ? (
+  match ? (
     <article class="bg-white shadow-2xl rounded-lg overflow-hidden border border-club-border">
-      <div class="bg-gradient-to-r from-club-primary-deep to-club-primary text-white px-6 py-3 flex items-center justify-between">
-        <div class="flex items-center gap-3">
-          <span class="font-display uppercase tracking-wider text-sm font-bold">
-            Sljedeća utakmica
-          </span>
-        </div>
-        <span class="text-xs font-display uppercase tracking-widest opacity-90">
-          {nextMatch.competition}
+      <div class="bg-gradient-to-r from-club-primary-deep to-club-primary text-white px-4 md:px-6 py-3 flex items-center justify-between gap-3">
+        <span class="font-display uppercase tracking-wider text-sm font-bold">
+          Sljedeća utakmica
+        </span>
+        <span class="text-xs font-display uppercase tracking-widest opacity-90 text-right">
+          {competitionShort(match)}
         </span>
       </div>
 
-      <div class="p-6 md:p-8">
-        <div class="grid grid-cols-3 items-center gap-4">
+      <div class="p-4 md:p-8">
+        <div class="grid grid-cols-3 items-center gap-2 md:gap-4">
           {/* Domaći */}
           <div class="text-center">
-            <div class="w-20 h-20 md:w-24 md:h-24 mx-auto mb-3 flex items-center justify-center">
-              {nextMatch.home.id === 134 ? (
-                <Logo size={96} />
-              ) : nextMatch.home.logo ? (
-                <img
-                  src={nextMatch.home.logo}
-                  alt={`${nextMatch.home.name} grb`}
-                  width="96"
-                  height="96"
-                  class="object-contain"
-                  loading="lazy"
-                />
-              ) : (
-                <div class="w-full h-full rounded-full bg-club-light flex items-center justify-center text-club-primary-deep font-display font-bold border-2 border-club-border">
-                  ?
-                </div>
-              )}
+            <div class="w-16 h-16 md:w-24 md:h-24 mx-auto mb-3 flex items-center justify-center">
+              <TeamCrest team={match.home} size={96} class="w-full h-full" />
             </div>
             <p class="font-display font-bold uppercase text-sm md:text-base leading-tight">
-              {nextMatch.home.name}
+              {match.home.name}
             </p>
           </div>
 
           {/* Vrijeme */}
           <div class="text-center">
-            <p class="text-xs uppercase tracking-widest text-club-muted mb-1">
-              {dayLabel}
-            </p>
+            <p class="text-xs uppercase tracking-widest text-club-muted mb-1">{dayLabel}</p>
             <p class="font-display font-bold text-2xl md:text-3xl text-club-primary-deep">
               {timeLabel}
             </p>
@@ -75,32 +142,59 @@ const venue = nextMatch?.isHome
 
           {/* Gosti */}
           <div class="text-center">
-            <div class="w-20 h-20 md:w-24 md:h-24 mx-auto mb-3 flex items-center justify-center">
-              {nextMatch.away.id === 134 ? (
-                <Logo size={96} />
-              ) : nextMatch.away.logo ? (
-                <img
-                  src={nextMatch.away.logo}
-                  alt={`${nextMatch.away.name} grb`}
-                  width="96"
-                  height="96"
-                  class="object-contain"
-                  loading="lazy"
-                />
-              ) : (
-                <div class="w-full h-full rounded-full bg-club-light flex items-center justify-center text-club-primary-deep font-display font-bold border-2 border-club-border">
-                  ?
-                </div>
-              )}
+            <div class="w-16 h-16 md:w-24 md:h-24 mx-auto mb-3 flex items-center justify-center">
+              <TeamCrest team={match.away} size={96} class="w-full h-full" />
             </div>
             <p class="font-display font-bold uppercase text-sm md:text-base leading-tight">
-              {nextMatch.away.name}
+              {match.away.name}
             </p>
           </div>
         </div>
 
+        {rows.length > 0 && (
+          <div class="mt-6 pt-5 border-t border-club-border">
+            <p class="text-center text-[11px] font-display uppercase tracking-widest text-club-muted mb-3">
+              Usporedba u ligi
+            </p>
+            <div class="space-y-2.5">
+              {rows.map((row) => (
+                <div class="grid grid-cols-3 items-center gap-2 md:gap-4">
+                  {row.kind === "form" ? (
+                    <>
+                      <div class="flex justify-center">
+                        <FormStrip form={row.home} />
+                      </div>
+                      <p class="text-center text-[11px] uppercase tracking-wider text-club-muted leading-tight">
+                        {row.label}
+                        <span class="block normal-case tracking-normal text-[10px]">
+                          najnovija desno
+                        </span>
+                      </p>
+                      <div class="flex justify-center">
+                        <FormStrip form={row.away} />
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <p class={`text-center font-display font-bold text-lg ${valueClass(row, "home")}`}>
+                        {row.home}
+                      </p>
+                      <p class="text-center text-[11px] uppercase tracking-wider text-club-muted leading-tight">
+                        {row.label}
+                      </p>
+                      <p class={`text-center font-display font-bold text-lg ${valueClass(row, "away")}`}>
+                        {row.away}
+                      </p>
+                    </>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         <div class="mt-6 pt-4 border-t border-club-border flex items-center justify-center gap-2 text-sm text-club-muted">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
           </svg>
