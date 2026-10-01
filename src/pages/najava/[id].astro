@@ -13,6 +13,8 @@
  */
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import NextMatchCard from "../../components/NextMatchCard.astro";
+import ClubPost from "../../components/ClubPost.astro";
+import { matchPreview } from "../../lib/match-posts";
 import hns from "../../data/hns.json";
 import { url } from "../../lib/url";
 import { sportsEventLd } from "../../lib/schema";
@@ -51,6 +53,8 @@ const description = `${competitionShort(match)} · ${when}, ${where}. Forma obje
 const site = Astro.site ?? new URL("https://omladinacniza.hr");
 const pageUrl = new URL(url(`/najava/${match.id}`), site).href;
 const ld = sportsEventLd(match, pageUrl, site);
+
+const preview = matchPreview(match.id);
 
 const others = upcoming
   .filter((m) => m.id !== match.id && m.date >= todayInZagreb)
@@ -105,6 +109,14 @@ const others = upcoming
       heading={isPast ? "Utakmica" : "Najava"}
     />
   </section>
+
+  {
+    preview && (
+      <section class="container-narrow mt-10">
+        <ClubPost post={preview} title="Najava kluba" />
+      </section>
+    )
+  }
 
   {
     others.length > 0 && (

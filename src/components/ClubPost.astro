@@ -1,0 +1,61 @@
+---
+/**
+ * Objava kluba s Facebooka uz utakmicu (izvještaj ili najava) — tekst,
+ * prva slika i link na objavu. Uparuje ih `lib/match-posts.ts`.
+ */
+import { url } from "../lib/url";
+import { linkify, formatPostDate } from "../lib/facebook";
+import type { MatchPost } from "../lib/match-posts";
+
+interface Props {
+  post: MatchPost;
+  /** Naslov, npr. "Izvještaj kluba" ili "Najava kluba". */
+  title: string;
+}
+
+const { post, title } = Astro.props;
+const html = linkify(post.message);
+---
+
+<article class="bg-white border border-club-border rounded-lg overflow-hidden">
+  <header class="flex items-center justify-between gap-3 px-5 py-3 border-b border-club-border bg-club-light-2">
+    <h2 class="text-lg">{title}</h2>
+    <time datetime={post.createdAt} class="text-xs text-club-muted">{formatPostDate(post.createdAt)}</time>
+  </header>
+  <div class={`p-5 ${post.image ? "md:grid md:grid-cols-[1fr_220px] md:gap-6" : ""}`}>
+    <p class="text-club-secondary leading-relaxed whitespace-normal" set:html={html} />
+    {
+      post.image && (
+        <a
+          href={url(post.image.src)}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="block mt-4 md:mt-0 rounded overflow-hidden self-start"
+        >
+          <img
+            src={url(post.image.thumb || post.image.src)}
+            alt="Slika uz objavu"
+            width={post.image.width ?? undefined}
+            height={post.image.height ?? undefined}
+            loading="lazy"
+            class="w-full h-auto object-cover max-h-80"
+          />
+        </a>
+      )
+    }
+  </div>
+  {
+    post.permalink && (
+      <footer class="px-5 py-3 border-t border-club-border">
+        <a
+          href={post.permalink}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-xs font-display uppercase tracking-wider text-club-primary hover:underline"
+        >
+          Objava na Facebooku →
+        </a>
+      </footer>
+    )
+  }
+</article>

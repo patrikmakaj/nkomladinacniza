@@ -9,6 +9,7 @@ import hns from "../data/hns.json";
 import TeamCrest from "./TeamCrest.astro";
 import { url } from "../lib/url";
 import { competitionShort, type UnifiedMatch } from "../lib/matches";
+import { matchReport } from "../lib/match-posts";
 
 interface Props {
   match: UnifiedMatch;
@@ -19,6 +20,7 @@ const { match } = Astro.props;
 type GoalEvent = { type: string; minute: number | null; playerName: string | null };
 
 const details = ((hns.matchDetails ?? {}) as Record<string, any>)[match.id];
+const report = matchReport(match.id);
 const hasDetail = !!details;
 
 // HNS zna poslati "Luka, Glavaš" — zarez nije dio imena.
@@ -103,6 +105,13 @@ const dateLabel = new Date(match.iso).toLocaleDateString("hr-HR", {
         </div>
       ))
     }
+    {
+      report && (
+        <p class="text-sm text-club-secondary/80 italic leading-snug line-clamp-3 border-l-2 border-club-accent pl-3">
+          {report.message}
+        </p>
+      )
+    }
   </div>
 
   <div class="border-t border-club-border px-4 md:px-5 py-2.5 flex items-center justify-between gap-3 text-xs">
@@ -118,7 +127,7 @@ const dateLabel = new Date(match.iso).toLocaleDateString("hr-HR", {
           href={url(`/utakmica/${match.id}`)}
           class="font-display uppercase tracking-wider text-club-primary hover:underline flex-shrink-0"
         >
-          Detalji →
+          {report ? "Izvještaj →" : "Detalji →"}
         </a>
       )
     }

@@ -5,6 +5,8 @@ import { kickoffIso } from "../../lib/matches";
 import Logo from "../../components/Logo.astro";
 import MatchEventsList from "../../components/MatchEventsList.astro";
 import MatchLineup from "../../components/MatchLineup.astro";
+import ClubPost from "../../components/ClubPost.astro";
+import { matchReport } from "../../lib/match-posts";
 import { url } from "../../lib/url";
 import hns from "../../data/hns.json";
 
@@ -43,6 +45,7 @@ if (!match || !detail) {
   return Astro.redirect(url("/raspored"));
 }
 
+const report = matchReport(match.id);
 const isHome = match.home.id === OUR_CLUB_ID;
 const ourScore = isHome ? match.score?.home : match.score?.away;
 const oppScore = isHome ? match.score?.away : match.score?.home;
@@ -273,6 +276,13 @@ const sportsEventSchema: Record<string, unknown> = {
             {detail.facility}
           </p>
         </div>
+      </div>
+    )}
+
+    {/* IZVJEŠTAJ KLUBA s Facebooka (lib/match-posts.ts) */}
+    {report && (
+      <div class="mb-10">
+        <ClubPost post={report} title="Izvještaj kluba" />
       </div>
     )}
 
