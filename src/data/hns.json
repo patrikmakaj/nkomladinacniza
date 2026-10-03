@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-03T18:30:40.756Z",
+  "lastUpdated": "2026-10-03T21:57:28.500Z",
   "sourceUrl": "https://semafor.hns.family/klubovi/134/nk-omladinac-niza/",
   "club": {
     "id": 134,
@@ -482,20 +482,20 @@
             "name": "NK Iskrica",
             "logo": "https://hns.family/files/images_comet/53/8/_resized/53808e6ce48919c1cf17ea580f20dae3362014e7_100_100_wg_t.png"
           },
-          "played": 5,
+          "played": 6,
           "wins": 1,
-          "draws": 1,
+          "draws": 2,
           "losses": 3,
           "gf": 10,
           "ga": 11,
           "gd": "-1",
-          "points": 4,
+          "points": 5,
           "form": [
-            "D",
             "L",
             "L",
             "W",
-            "L"
+            "L",
+            "D"
           ],
           "isUs": false
         },
@@ -530,20 +530,20 @@
             "name": "NK Omladinac Niza",
             "logo": "https://hns.family/files/images_comet/49/b/_resized/49b362069bd38a3154422c8f1c4b7cd4f5aee1b7_100_100_wg_t.png"
           },
-          "played": 5,
+          "played": 6,
           "wins": 1,
-          "draws": 0,
+          "draws": 1,
           "losses": 4,
           "gf": 10,
           "ga": 15,
           "gd": "-5",
-          "points": 3,
+          "points": 4,
           "form": [
-            "L",
             "W",
             "L",
             "L",
-            "L"
+            "L",
+            "D"
           ],
           "isUs": true
         },
@@ -2826,20 +2826,20 @@
         "name": "NK Iskrica",
         "logo": "https://hns.family/files/images_comet/53/8/_resized/53808e6ce48919c1cf17ea580f20dae3362014e7_100_100_wg_t.png"
       },
-      "played": 5,
+      "played": 6,
       "wins": 1,
-      "draws": 1,
+      "draws": 2,
       "losses": 3,
       "gf": 10,
       "ga": 11,
       "gd": "-1",
-      "points": 4,
+      "points": 5,
       "form": [
-        "D",
         "L",
         "L",
         "W",
-        "L"
+        "L",
+        "D"
       ],
       "isUs": false
     },
@@ -2874,20 +2874,20 @@
         "name": "NK Omladinac Niza",
         "logo": "https://hns.family/files/images_comet/49/b/_resized/49b362069bd38a3154422c8f1c4b7cd4f5aee1b7_100_100_wg_t.png"
       },
-      "played": 5,
+      "played": 6,
       "wins": 1,
-      "draws": 0,
+      "draws": 1,
       "losses": 4,
       "gf": 10,
       "ga": 15,
       "gd": "-5",
-      "points": 3,
+      "points": 4,
       "form": [
-        "L",
         "W",
         "L",
         "L",
-        "L"
+        "L",
+        "D"
       ],
       "isUs": true
     },
@@ -2947,20 +2947,20 @@
       "name": "NK Omladinac Niza",
       "logo": "https://hns.family/files/images_comet/49/b/_resized/49b362069bd38a3154422c8f1c4b7cd4f5aee1b7_100_100_wg_t.png"
     },
-    "played": 5,
+    "played": 6,
     "wins": 1,
-    "draws": 0,
+    "draws": 1,
     "losses": 4,
     "gf": 10,
     "ga": 15,
     "gd": "-5",
-    "points": 3,
+    "points": 4,
     "form": [
-      "L",
       "W",
       "L",
       "L",
-      "L"
+      "L",
+      "D"
     ],
     "isUs": true
   },
