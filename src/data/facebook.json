@@ -1,8 +1,22 @@
 {
-  "lastUpdated": "2026-10-01T19:14:39.348Z",
+  "lastUpdated": "2026-10-04T12:42:18.180Z",
   "enabled": true,
   "pageId": "55401829691",
   "posts": [
+    {
+      "id": "55401829691_1714026970729796",
+      "message": "Seniori remizirali u Šaptinovcima.\nNašem klubu se ovih dana priključio Anto Kostreš koji je u Šapsu upisao prvi nastup. Želimo mu puno sreće i što manje ozljeda! \nPočetnici poraženi doma od Šipovca.",
+      "createdAt": "2026-10-04T09:36:30+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1714026970729796",
+      "images": [
+        {
+          "src": "/images/facebook/55401829691_1714026970729796.jpg",
+          "thumb": "/images/facebook/55401829691_1714026970729796.webp",
+          "width": 700,
+          "height": 875
+        }
+      ]
+    },
     {
       "id": "55401829691_1711029791029514",
       "message": "",
@@ -404,20 +418,6 @@
         {
           "src": "/images/facebook/55401829691_1666911705441323.jpg",
           "thumb": "/images/facebook/55401829691_1666911705441323.webp",
-          "width": 700,
-          "height": 875
-        }
-      ]
-    },
-    {
-      "id": "55401829691_1664952438970583",
-      "message": "",
-      "createdAt": "2026-08-17T10:29:42+0000",
-      "permalink": "https://www.facebook.com/1551452460320582/posts/1664952438970583",
-      "images": [
-        {
-          "src": "/images/facebook/55401829691_1664952438970583.jpg",
-          "thumb": "/images/facebook/55401829691_1664952438970583.webp",
           "width": 700,
           "height": 875
         }
