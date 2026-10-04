@@ -57,7 +57,7 @@ const eventIcon = (t: EventType): string => {
   <div class={`px-4 py-3 flex items-center gap-3 ${isOurClub ? "bg-club-primary text-white" : "bg-club-light-2"}`}>
     <div class="w-8 h-8 flex-shrink-0 flex items-center justify-center">
       {isOurClub ? (
-        <Logo size={32} class="brightness-0 invert" />
+        <Logo size={32} class="drop-shadow" />
       ) : teamLogo ? (
         <img src={teamLogo} alt="" width="32" height="32" class="object-contain w-full h-full" />
       ) : null}
