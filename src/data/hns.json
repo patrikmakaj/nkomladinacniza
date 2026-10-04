@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-04T20:19:29.191Z",
+  "lastUpdated": "2026-10-04T23:25:53.709Z",
   "sourceUrl": "https://semafor.hns.family/klubovi/134/nk-omladinac-niza/",
   "club": {
     "id": 134,
@@ -602,7 +602,7 @@
           "number": 1,
           "name": "Tomica Barišić",
           "position": "Vratar",
-          "photo": "/static/images/nophoto_player_m.png",
+          "photo": "https://hns.family/files/images_comet/Person/_resized/48016_c0889198-b00f-4b63-980a-b975afabe36b_80_100_cut_wg_top.jpg",
           "profileUrl": "https://semafor.hns.family/igraci/48016/tomica-barisic/",
           "stats": {
             "appearances": 1,
@@ -784,7 +784,7 @@
           "number": 13,
           "name": "Anto Kostreš",
           "position": "Igrač",
-          "photo": "/static/images/nophoto_player_m.png",
+          "photo": "https://hns.family/files/images_comet/e2/0/_resized/e2030390219e4f4ed7f06aea8a0bd72edc1e3e6a_80_100_cut_wg_top.png",
           "profileUrl": "https://semafor.hns.family/igraci/225147/anto-kostres/",
           "stats": {
             "appearances": 1,
@@ -882,7 +882,7 @@
           "number": 19,
           "name": "Ivan Prišć",
           "position": "Igrač",
-          "photo": "/static/images/nophoto_player_m.png",
+          "photo": "https://hns.family/files/images_comet/8e/2/_resized/8e29eabcdf2a1da8abfd32911c180c985f0cae5c_80_100_cut_wg_top.png",
           "profileUrl": "https://semafor.hns.family/igraci/118545/ivan-prisc/",
           "stats": {
             "appearances": 5,
@@ -1047,7 +1047,7 @@
             "position": 5,
             "name": "Anto Kostreš",
             "profileUrl": "https://semafor.hns.family/igraci/225147/anto-kostres/",
-            "photo": "/static/images/nophoto_player_m.png",
+            "photo": "https://hns.family/files/images_comet/e2/0/_resized/e2030390219e4f4ed7f06aea8a0bd72edc1e3e6a_80_100_cut_wg_top.png",
             "value": "1 / 0",
             "yellow": 1,
             "red": 0
@@ -1057,7 +1057,7 @@
             "position": 5,
             "name": "Ivan Prišć",
             "profileUrl": "https://semafor.hns.family/igraci/118545/ivan-prisc/",
-            "photo": "/static/images/nophoto_player_m.png",
+            "photo": "https://hns.family/files/images_comet/8e/2/_resized/8e29eabcdf2a1da8abfd32911c180c985f0cae5c_80_100_cut_wg_top.png",
             "value": "1 / 0",
             "yellow": 1,
             "red": 0
@@ -1139,7 +1139,7 @@
             "position": 3,
             "name": "Ivan Prišć",
             "profileUrl": "https://semafor.hns.family/igraci/118545/ivan-prisc/",
-            "photo": "/static/images/nophoto_player_m.png",
+            "photo": "https://hns.family/files/images_comet/8e/2/_resized/8e29eabcdf2a1da8abfd32911c180c985f0cae5c_80_100_cut_wg_top.png",
             "value": "5 / 0",
             "appearances": 5,
             "minutes": 0
@@ -1239,7 +1239,7 @@
             "position": 17,
             "name": "Tomica Barišić",
             "profileUrl": "https://semafor.hns.family/igraci/48016/tomica-barisic/",
-            "photo": "/static/images/nophoto_player_m.png",
+            "photo": "https://hns.family/files/images_comet/Person/_resized/48016_c0889198-b00f-4b63-980a-b975afabe36b_80_100_cut_wg_top.jpg",
             "value": "1 / 0",
             "appearances": 1,
             "minutes": 0
@@ -1259,7 +1259,7 @@
             "position": 17,
             "name": "Anto Kostreš",
             "profileUrl": "https://semafor.hns.family/igraci/225147/anto-kostres/",
-            "photo": "/static/images/nophoto_player_m.png",
+            "photo": "https://hns.family/files/images_comet/e2/0/_resized/e2030390219e4f4ed7f06aea8a0bd72edc1e3e6a_80_100_cut_wg_top.png",
             "value": "1 / 0",
             "appearances": 1,
             "minutes": 0
@@ -1357,7 +1357,7 @@
           "number": 1,
           "name": "Tomica Barišić",
           "position": "Vratar",
-          "photo": "/static/images/nophoto_player_m.png",
+          "photo": "https://hns.family/files/images_comet/Person/_resized/48016_c0889198-b00f-4b63-980a-b975afabe36b_80_100_cut_wg_top.jpg",
           "profileUrl": "https://semafor.hns.family/igraci/48016/tomica-barisic/",
           "stats": {
             "appearances": 0,
@@ -1567,7 +1567,7 @@
           "number": 19,
           "name": "Ivan Prišć",
           "position": "Igrač",
-          "photo": "/static/images/nophoto_player_m.png",
+          "photo": "https://hns.family/files/images_comet/8e/2/_resized/8e29eabcdf2a1da8abfd32911c180c985f0cae5c_80_100_cut_wg_top.png",
           "profileUrl": "https://semafor.hns.family/igraci/118545/ivan-prisc/",
           "stats": {
             "appearances": 2,
@@ -1744,7 +1744,7 @@
             "position": 1,
             "name": "Ivan Prišć",
             "profileUrl": "https://semafor.hns.family/igraci/118545/ivan-prisc/",
-            "photo": "/static/images/nophoto_player_m.png",
+            "photo": "https://hns.family/files/images_comet/8e/2/_resized/8e29eabcdf2a1da8abfd32911c180c985f0cae5c_80_100_cut_wg_top.png",
             "value": "2 / 0",
             "appearances": 2,
             "minutes": 0
@@ -3423,7 +3423,7 @@
       "number": 1,
       "name": "Tomica Barišić",
       "position": "Vratar",
-      "photo": "/static/images/nophoto_player_m.png",
+      "photo": "https://hns.family/files/images_comet/Person/_resized/48016_c0889198-b00f-4b63-980a-b975afabe36b_80_100_cut_wg_top.jpg",
       "profileUrl": "https://semafor.hns.family/igraci/48016/tomica-barisic/",
       "stats": {
         "appearances": 1,
@@ -3754,7 +3754,7 @@
       "number": 13,
       "name": "Anto Kostreš",
       "position": "Igrač",
-      "photo": "/static/images/nophoto_player_m.png",
+      "photo": "https://hns.family/files/images_comet/e2/0/_resized/e2030390219e4f4ed7f06aea8a0bd72edc1e3e6a_80_100_cut_wg_top.png",
       "profileUrl": "https://semafor.hns.family/igraci/225147/anto-kostres/",
       "stats": {
         "appearances": 1,
@@ -4014,7 +4014,7 @@
       "number": 19,
       "name": "Ivan Prišć",
       "position": "Igrač",
-      "photo": "/static/images/nophoto_player_m.png",
+      "photo": "https://hns.family/files/images_comet/8e/2/_resized/8e29eabcdf2a1da8abfd32911c180c985f0cae5c_80_100_cut_wg_top.png",
       "profileUrl": "https://semafor.hns.family/igraci/118545/ivan-prisc/",
       "stats": {
         "appearances": 7,
@@ -4365,7 +4365,7 @@
         "position": 6,
         "name": "Anto Kostreš",
         "profileUrl": "https://semafor.hns.family/igraci/225147/anto-kostres/",
-        "photo": "/static/images/nophoto_player_m.png",
+        "photo": "https://hns.family/files/images_comet/e2/0/_resized/e2030390219e4f4ed7f06aea8a0bd72edc1e3e6a_80_100_cut_wg_top.png",
         "value": "1 / 0",
         "yellow": 1,
         "red": 0
@@ -4375,7 +4375,7 @@
         "position": 7,
         "name": "Ivan Prišć",
         "profileUrl": "https://semafor.hns.family/igraci/118545/ivan-prisc/",
-        "photo": "/static/images/nophoto_player_m.png",
+        "photo": "https://hns.family/files/images_comet/8e/2/_resized/8e29eabcdf2a1da8abfd32911c180c985f0cae5c_80_100_cut_wg_top.png",
         "value": "1 / 0",
         "yellow": 1,
         "red": 0
@@ -4457,7 +4457,7 @@
         "position": 7,
         "name": "Ivan Prišć",
         "profileUrl": "https://semafor.hns.family/igraci/118545/ivan-prisc/",
-        "photo": "/static/images/nophoto_player_m.png",
+        "photo": "https://hns.family/files/images_comet/8e/2/_resized/8e29eabcdf2a1da8abfd32911c180c985f0cae5c_80_100_cut_wg_top.png",
         "value": "7 / 0",
         "appearances": 7,
         "minutes": 0
@@ -4577,7 +4577,7 @@
         "position": 19,
         "name": "Tomica Barišić",
         "profileUrl": "https://semafor.hns.family/igraci/48016/tomica-barisic/",
-        "photo": "/static/images/nophoto_player_m.png",
+        "photo": "https://hns.family/files/images_comet/Person/_resized/48016_c0889198-b00f-4b63-980a-b975afabe36b_80_100_cut_wg_top.jpg",
         "value": "1 / 0",
         "appearances": 1,
         "minutes": 0
@@ -4597,7 +4597,7 @@
         "position": 21,
         "name": "Anto Kostreš",
         "profileUrl": "https://semafor.hns.family/igraci/225147/anto-kostres/",
-        "photo": "/static/images/nophoto_player_m.png",
+        "photo": "https://hns.family/files/images_comet/e2/0/_resized/e2030390219e4f4ed7f06aea8a0bd72edc1e3e6a_80_100_cut_wg_top.png",
         "value": "1 / 0",
         "appearances": 1,
         "minutes": 0
