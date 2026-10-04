@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-04T17:16:00.102Z",
+  "lastUpdated": "2026-10-04T20:19:29.191Z",
   "sourceUrl": "https://semafor.hns.family/klubovi/134/nk-omladinac-niza/",
   "club": {
     "id": 134,
@@ -742,7 +742,7 @@
           "number": 9,
           "name": "Dominik Hvizdak",
           "position": "Igrač",
-          "photo": "/static/images/nophoto_player_m.png",
+          "photo": "https://hns.family/files/images_comet/27/2/_resized/272b27612410f91f332ea3761ddc64d74333d12d_80_100_cut_wg_top.png",
           "profileUrl": "https://semafor.hns.family/igraci/211559/dominik-hvizdak/",
           "stats": {
             "appearances": 5,
@@ -896,7 +896,7 @@
           "number": 25,
           "name": "Luka Stojaković",
           "position": "Igrač",
-          "photo": "/static/images/nophoto_player_m.png",
+          "photo": "https://hns.family/files/images_comet/Person/_resized/198154_1ecf5cab-5d25-4e25-a4c9-58839dffebda_80_100_cut_wg_top.jpg",
           "profileUrl": "https://semafor.hns.family/igraci/198154/luka-stojakovic/",
           "stats": {
             "appearances": 0,
@@ -941,7 +941,7 @@
             "position": 1,
             "name": "Dominik Hvizdak",
             "profileUrl": "https://semafor.hns.family/igraci/211559/dominik-hvizdak/",
-            "photo": "/static/images/nophoto_player_m.png",
+            "photo": "https://hns.family/files/images_comet/27/2/_resized/272b27612410f91f332ea3761ddc64d74333d12d_80_100_cut_wg_top.png",
             "value": "3",
             "goals": 3
           },
@@ -1109,7 +1109,7 @@
             "position": 3,
             "name": "Dominik Hvizdak",
             "profileUrl": "https://semafor.hns.family/igraci/211559/dominik-hvizdak/",
-            "photo": "/static/images/nophoto_player_m.png",
+            "photo": "https://hns.family/files/images_comet/27/2/_resized/272b27612410f91f332ea3761ddc64d74333d12d_80_100_cut_wg_top.png",
             "value": "5 / 0",
             "appearances": 5,
             "minutes": 0
@@ -3651,7 +3651,7 @@
       "number": 9,
       "name": "Dominik Hvizdak",
       "position": "Igrač",
-      "photo": "/static/images/nophoto_player_m.png",
+      "photo": "https://hns.family/files/images_comet/27/2/_resized/272b27612410f91f332ea3761ddc64d74333d12d_80_100_cut_wg_top.png",
       "profileUrl": "https://semafor.hns.family/igraci/211559/dominik-hvizdak/",
       "stats": {
         "appearances": 5,
@@ -4220,7 +4220,7 @@
       "number": 25,
       "name": "Luka Stojaković",
       "position": "Igrač",
-      "photo": "/static/images/nophoto_player_m.png",
+      "photo": "https://hns.family/files/images_comet/Person/_resized/198154_1ecf5cab-5d25-4e25-a4c9-58839dffebda_80_100_cut_wg_top.jpg",
       "profileUrl": "https://semafor.hns.family/igraci/198154/luka-stojakovic/",
       "stats": {
         "appearances": 0,
@@ -4259,7 +4259,7 @@
         "position": 2,
         "name": "Dominik Hvizdak",
         "profileUrl": "https://semafor.hns.family/igraci/211559/dominik-hvizdak/",
-        "photo": "/static/images/nophoto_player_m.png",
+        "photo": "https://hns.family/files/images_comet/27/2/_resized/272b27612410f91f332ea3761ddc64d74333d12d_80_100_cut_wg_top.png",
         "value": "3",
         "goals": 3
       },
@@ -4487,7 +4487,7 @@
         "position": 10,
         "name": "Dominik Hvizdak",
         "profileUrl": "https://semafor.hns.family/igraci/211559/dominik-hvizdak/",
-        "photo": "/static/images/nophoto_player_m.png",
+        "photo": "https://hns.family/files/images_comet/27/2/_resized/272b27612410f91f332ea3761ddc64d74333d12d_80_100_cut_wg_top.png",
         "value": "5 / 0",
         "appearances": 5,
         "minutes": 0
