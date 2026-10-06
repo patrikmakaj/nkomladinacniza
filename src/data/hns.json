@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-06T00:33:43.432Z",
+  "lastUpdated": "2026-10-06T02:54:42.916Z",
   "sourceUrl": "https://semafor.hns.family/klubovi/134/nk-omladinac-niza/",
   "club": {
     "id": 134,
@@ -2415,7 +2415,7 @@
           "number": 2,
           "name": "Jona Ćosić",
           "position": "Igrač",
-          "photo": "/static/images/nophoto_player_m.png",
+          "photo": "https://hns.family/files/images_comet/d0/c/_resized/d0c99d965fadc3bee65a93bbaad54f62a33adb47_80_100_cut_wg_top.png",
           "profileUrl": "https://semafor.hns.family/igraci/1237580/jona-cosic/",
           "stats": {
             "appearances": 3,
@@ -2443,7 +2443,7 @@
           "number": 18,
           "name": "Tea Furjan",
           "position": "Igrač",
-          "photo": "/static/images/nophoto_player_m.png",
+          "photo": "https://hns.family/files/images_comet/52/c/_resized/52cb9b5748e9093afca204a6637ffe44824380a3_80_100_cut_wg_top.png",
           "profileUrl": "https://semafor.hns.family/igraci/1237573/tea-furjan/",
           "stats": {
             "appearances": 6,
@@ -2471,7 +2471,7 @@
           "number": 6,
           "name": "Lara Gudlin",
           "position": "Igrač",
-          "photo": "/static/images/nophoto_player_m.png",
+          "photo": "https://hns.family/files/images_comet/d6/0/_resized/d60c484424c6eca044af3f816a54d951d2a4cb36_80_100_cut_wg_top.jpg",
           "profileUrl": "https://semafor.hns.family/igraci/1238895/lara-gudlin/",
           "stats": {
             "appearances": 3,
@@ -2485,7 +2485,7 @@
           "number": 10,
           "name": "Una Hohoš",
           "position": "Igrač",
-          "photo": "/static/images/nophoto_player_m.png",
+          "photo": "https://hns.family/files/images_comet/d0/6/_resized/d062d9fbadd195a99a9e48577747a6a5d2923958_80_100_cut_wg_top.png",
           "profileUrl": "https://semafor.hns.family/igraci/1237576/una-hohos/",
           "stats": {
             "appearances": 5,
@@ -2499,7 +2499,7 @@
           "number": 10,
           "name": "Renato Musić",
           "position": "Igrač",
-          "photo": "/static/images/nophoto_player_m.png",
+          "photo": "https://hns.family/files/images_comet/40/1/_resized/4017c11932b19b26cc27cd48edfcf675eaa1312f_80_100_cut_wg_top.png",
           "profileUrl": "https://semafor.hns.family/igraci/1237579/renato-music/",
           "stats": {
             "appearances": 2,
@@ -2539,7 +2539,7 @@
             "position": 1,
             "name": "Una Hohoš",
             "profileUrl": "https://semafor.hns.family/igraci/1237576/una-hohos/",
-            "photo": "/static/images/nophoto_player_m.png",
+            "photo": "https://hns.family/files/images_comet/d0/6/_resized/d062d9fbadd195a99a9e48577747a6a5d2923958_80_100_cut_wg_top.png",
             "value": "1",
             "goals": 1
           }
@@ -2571,7 +2571,7 @@
             "position": 1,
             "name": "Tea Furjan",
             "profileUrl": "https://semafor.hns.family/igraci/1237573/tea-furjan/",
-            "photo": "/static/images/nophoto_player_m.png",
+            "photo": "https://hns.family/files/images_comet/52/c/_resized/52cb9b5748e9093afca204a6637ffe44824380a3_80_100_cut_wg_top.png",
             "value": "6 / 0",
             "appearances": 6,
             "minutes": 0
@@ -2611,7 +2611,7 @@
             "position": 5,
             "name": "Una Hohoš",
             "profileUrl": "https://semafor.hns.family/igraci/1237576/una-hohos/",
-            "photo": "/static/images/nophoto_player_m.png",
+            "photo": "https://hns.family/files/images_comet/d0/6/_resized/d062d9fbadd195a99a9e48577747a6a5d2923958_80_100_cut_wg_top.png",
             "value": "5 / 0",
             "appearances": 5,
             "minutes": 0
@@ -2651,7 +2651,7 @@
             "position": 9,
             "name": "Jona Ćosić",
             "profileUrl": "https://semafor.hns.family/igraci/1237580/jona-cosic/",
-            "photo": "/static/images/nophoto_player_m.png",
+            "photo": "https://hns.family/files/images_comet/d0/c/_resized/d0c99d965fadc3bee65a93bbaad54f62a33adb47_80_100_cut_wg_top.png",
             "value": "3 / 0",
             "appearances": 3,
             "minutes": 0
@@ -2661,7 +2661,7 @@
             "position": 9,
             "name": "Lara Gudlin",
             "profileUrl": "https://semafor.hns.family/igraci/1238895/lara-gudlin/",
-            "photo": "/static/images/nophoto_player_m.png",
+            "photo": "https://hns.family/files/images_comet/d6/0/_resized/d60c484424c6eca044af3f816a54d951d2a4cb36_80_100_cut_wg_top.jpg",
             "value": "3 / 0",
             "appearances": 3,
             "minutes": 0
@@ -2691,7 +2691,7 @@
             "position": 13,
             "name": "Renato Musić",
             "profileUrl": "https://semafor.hns.family/igraci/1237579/renato-music/",
-            "photo": "/static/images/nophoto_player_m.png",
+            "photo": "https://hns.family/files/images_comet/40/1/_resized/4017c11932b19b26cc27cd48edfcf675eaa1312f_80_100_cut_wg_top.png",
             "value": "2 / 0",
             "appearances": 2,
             "minutes": 0
