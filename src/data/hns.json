@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-06T02:54:42.916Z",
+  "lastUpdated": "2026-10-08T09:19:21.986Z",
   "sourceUrl": "https://semafor.hns.family/klubovi/134/nk-omladinac-niza/",
   "club": {
     "id": 134,
@@ -1986,23 +1986,23 @@
           "id": "114377490",
           "type": "league",
           "round": 7,
-          "date": "2026-10-10",
-          "time": "10:00",
-          "iso": "2026-10-10T10:00:00",
+          "date": "2026-10-15",
+          "time": "19:00",
+          "iso": "2026-10-15T19:00:00",
           "competition": "LM NS Našice - početnici U-11 26/27, 7. kolo",
           "home": {
-            "id": 139,
-            "name": "NK Željezničar (MN)",
-            "logo": "https://hns.family/files/images_comet/ba/1/_resized/ba1480acacd707e235b17832f3d7983b5e81d4a1_100_100_wg_t.png"
-          },
-          "away": {
             "id": 134,
             "name": "NK Omladinac Niza",
             "logo": "https://hns.family/files/images_comet/49/b/_resized/49b362069bd38a3154422c8f1c4b7cd4f5aee1b7_100_100_wg_t.png"
           },
+          "away": {
+            "id": 139,
+            "name": "NK Željezničar (MN)",
+            "logo": "https://hns.family/files/images_comet/ba/1/_resized/ba1480acacd707e235b17832f3d7983b5e81d4a1_100_100_wg_t.png"
+          },
           "score": null,
           "played": false,
-          "isHome": false,
+          "isHome": true,
           "result": null,
           "url": null
         },
