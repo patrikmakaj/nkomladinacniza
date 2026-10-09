@@ -197,8 +197,8 @@ zadnji commit sa starom sezonom bio je `6f7e5b23`. Isto se može za starije:
 izvještaj je prva objava s tekstom u 48 h nakon početka koja spominje
 protivnika (s padežnim nastavkom), najava zadnja takva u 7 dana prije, ako
 već nije izvještaj druge utakmice. Objava bez imena protivnika se namjerno
-ne uparuje. Prikaz: `ClubPost` na `/utakmica/[id]` i `/najava/[id]`, izvadak
-u `LastMatchCard`. Ako ikad krivo upari, popravlja se u uzorcima imena
+ne uparuje. Prikaz: `ClubPost` na `/utakmica/[id]` i `/najava/[id]`.
+Ako ikad krivo upari, popravlja se u uzorcima imena
 (`opponentPatterns`), ne ručnim iznimkama u stranicama.
 
 ### 4. Client skripte moraju preživjeti View Transitions
@@ -322,8 +322,8 @@ src/
 │   ├── raspored.ics.ts        # cijeli raspored kao kalendar za pretplatu (webcal://)
 │   └── manifest.webmanifest.ts# PWA manifest (endpoint, da poštuje base path)
 ├── components/                # Header, Footer, Hero, MatchDayHero, LeagueTable,
-│                              # NextMatchCard (+ usporedba iz ljestvice), YouthMatchCard,
-│                              # LastMatchCard, TeamCrest, FormStrip, MatchActions
+│                              # NextMatchCard (+ usporedba iz ljestvice), YouthMatchCard
+│                              # (traka U-11), TeamCrest, FormStrip, MatchActions
 │                              # (kalendar · upute · podijeli), SeasonStats, MatchWeather,
 │                              # ClubPost (FB izvještaj/najava), YouthSignup (upis),
 │                              # RecentResults, PlayerCard, StaffCard,

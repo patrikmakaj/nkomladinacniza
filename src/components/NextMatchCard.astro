@@ -1,11 +1,13 @@
 ---
 /**
- * Kartica sljedeće seniorske utakmice, s usporedbom obje ekipe iz ljestvice
- * (plasman, bodovi, forma zadnjih 5, golovi po utakmici).
+ * Kartica sljedeće seniorske utakmice: lijevo utakmica (grbovi, vrijeme,
+ * mjesto, prognoza, gumbi), desno usporedba obje ekipe iz ljestvice kao mala
+ * tablica (plasman, bodovi, golovi po utakmici) i forma zadnjih 5.
  *
  * Usporedba se prikazuje samo ako su obje ekipe u ljestvici i odigrale su
  * barem jedno kolo — za kup protiv kluba iz druge lige, prijateljsku ili
- * početak sezone nema se što usporediti, pa ostaje samo najava.
+ * početak sezone nema se što usporediti, pa kartica ostaje samo najava
+ * (lijevi dio na punoj širini).
  */
 import TeamCrest from "./TeamCrest.astro";
 import FormStrip from "./FormStrip.astro";
@@ -67,43 +69,38 @@ const decimal = (n: number | null) =>
     ? "—"
     : n.toLocaleString("hr-HR", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
 
-type CompareRow =
-  | { kind: "value"; label: string; home: string; away: string; better: Side }
-  | { kind: "form"; label: string; home: string[]; away: string[] };
+type CompareRow = { label: string; home: string; away: string; better: Side };
 
 const rows: CompareRow[] = [];
+let form: { home: string[]; away: string[] } | null = null;
 if (homeRow?.played && awayRow?.played) {
   rows.push({
-    kind: "value",
     label: "Plasman",
     home: homeRow.position != null ? `${homeRow.position}.` : "—",
     away: awayRow.position != null ? `${awayRow.position}.` : "—",
     better: better(homeRow.position, awayRow.position, true),
   });
   rows.push({
-    kind: "value",
     label: "Bodovi",
     home: String(homeRow.points ?? "—"),
     away: String(awayRow.points ?? "—"),
     better: better(homeRow.points, awayRow.points),
   });
   if (homeRow.form.length || awayRow.form.length) {
-    rows.push({ kind: "form", label: "Forma", home: homeRow.form, away: awayRow.form });
+    form = { home: homeRow.form, away: awayRow.form };
   }
   const hScored = perGame(homeRow.gf, homeRow.played);
   const aScored = perGame(awayRow.gf, awayRow.played);
   const hConceded = perGame(homeRow.ga, homeRow.played);
   const aConceded = perGame(awayRow.ga, awayRow.played);
   rows.push({
-    kind: "value",
-    label: "Golova po utakmici",
+    label: "Golova / ut.",
     home: decimal(hScored),
     away: decimal(aScored),
     better: better(hScored, aScored),
   });
   rows.push({
-    kind: "value",
-    label: "Primljenih po utakmici",
+    label: "Primljeno / ut.",
     home: decimal(hConceded),
     away: decimal(aConceded),
     better: better(hConceded, aConceded, true),
@@ -118,105 +115,111 @@ function valueClass(row: { better: Side }, side: "home" | "away"): string {
 
 {
   match ? (
-    <article class="bg-white shadow-2xl rounded-lg overflow-hidden border border-club-border">
-      <div class="bg-gradient-to-r from-club-primary-deep to-club-primary text-white px-4 md:px-6 py-3 flex items-center justify-between gap-3">
-        <span class="font-display uppercase tracking-wider text-sm font-bold">
-          {heading}
-        </span>
+    <article class="bg-white shadow-xl rounded-xl overflow-hidden border border-club-border">
+      <div class="bg-gradient-to-r from-club-primary-deep to-club-primary text-white px-5 py-3 flex items-center justify-between gap-3">
+        <span class="font-display uppercase tracking-wider text-sm font-bold">{heading}</span>
         <span class="text-xs font-display uppercase tracking-widest opacity-90 text-right">
           {competitionShort(match)}
         </span>
       </div>
 
-      <div class="p-4 md:p-8">
-        <div class="grid grid-cols-3 items-center gap-2 md:gap-4">
-          {/* Domaći */}
-          <div class="text-center">
-            <div class="w-16 h-16 md:w-24 md:h-24 mx-auto mb-3 flex items-center justify-center">
-              <TeamCrest team={match.home} size={96} class="w-full h-full" />
-            </div>
-            <p class="font-display font-bold uppercase text-sm md:text-base leading-tight">
-              {match.home.name}
-            </p>
+      <div class={rows.length > 0 ? "grid md:grid-cols-[1.1fr_1fr]" : ""}>
+        {/* Utakmica */}
+        <div class="p-5 md:p-6 flex flex-col justify-center">
+          <div class="grid grid-cols-[1fr_auto_1fr] items-center gap-3">
+            {[match.home, null, match.away].map((team) =>
+              team ? (
+                <div class="flex flex-col items-center text-center gap-2">
+                  <span class="w-16 h-16 flex items-center justify-center">
+                    <TeamCrest team={team} size={64} class="w-full h-full" />
+                  </span>
+                  <p class="font-display font-bold uppercase text-sm leading-tight">{team.name}</p>
+                </div>
+              ) : (
+                <div class="text-center px-2">
+                  <p class="text-[11px] uppercase tracking-widest text-club-muted">{dayLabel}</p>
+                  <p class="font-display font-bold text-4xl text-club-primary-deep leading-none my-1">
+                    {timeLabel}
+                  </p>
+                  <p class="text-xs text-club-muted">{dateLabel}</p>
+                </div>
+              ),
+            )}
           </div>
 
-          {/* Vrijeme */}
-          <div class="text-center">
-            <p class="text-xs uppercase tracking-widest text-club-muted mb-1">{dayLabel}</p>
-            <p class="font-display font-bold text-2xl md:text-3xl text-club-primary-deep">
-              {timeLabel}
-            </p>
-            <p class="text-sm text-club-muted mt-1">{dateLabel}</p>
-          </div>
-
-          {/* Gosti */}
-          <div class="text-center">
-            <div class="w-16 h-16 md:w-24 md:h-24 mx-auto mb-3 flex items-center justify-center">
-              <TeamCrest team={match.away} size={96} class="w-full h-full" />
-            </div>
-            <p class="font-display font-bold uppercase text-sm md:text-base leading-tight">
-              {match.away.name}
-            </p>
+          <p class="mt-5 flex items-center justify-center gap-1.5 text-sm text-club-muted">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            <span>{venue}</span>
+          </p>
+          <MatchWeather match={match} class="mt-1 text-center text-sm text-club-secondary" />
+          <div class="mt-4">
+            <MatchActions match={match} sharePath={sharePath} />
           </div>
         </div>
 
+        {/* Usporedba */}
         {rows.length > 0 && (
-          <div class="mt-6 pt-5 border-t border-club-border">
-            <p class="text-center text-[11px] font-display uppercase tracking-widest text-club-muted mb-3">
+          <div class="bg-club-light-2 border-t md:border-t-0 md:border-l border-club-border p-5 md:p-6">
+            <p class="text-[11px] font-display uppercase tracking-widest text-club-muted mb-2">
               Usporedba u ligi
             </p>
-            <div class="space-y-2.5">
-              {rows.map((row) => (
-                <div class="grid grid-cols-3 items-center gap-2 md:gap-4">
-                  {row.kind === "form" ? (
-                    <>
-                      <div class="flex justify-center">
-                        <FormStrip form={row.home} />
-                      </div>
-                      <p class="text-center text-[11px] uppercase tracking-wider text-club-muted leading-tight">
-                        {row.label}
-                        <span class="block normal-case tracking-normal text-[10px]">
-                          najnovija desno
-                        </span>
-                      </p>
-                      <div class="flex justify-center">
-                        <FormStrip form={row.away} />
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <p class={`text-center font-display font-bold text-lg ${valueClass(row, "home")}`}>
-                        {row.home}
-                      </p>
-                      <p class="text-center text-[11px] uppercase tracking-wider text-club-muted leading-tight">
-                        {row.label}
-                      </p>
-                      <p class={`text-center font-display font-bold text-lg ${valueClass(row, "away")}`}>
-                        {row.away}
-                      </p>
-                    </>
-                  )}
+            <table class="w-full text-sm">
+              <thead>
+                <tr>
+                  <th class="w-2/5"><span class="sr-only">Pokazatelj</span></th>
+                  {[match.home, match.away].map((team) => (
+                    <th class="pb-2 font-normal">
+                      <span class="inline-flex w-6 h-6 align-middle" title={team.name}>
+                        <TeamCrest team={team} size={24} class="w-full h-full" />
+                      </span>
+                      <span class="sr-only">{team.name}</span>
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-club-border">
+                {rows.map((row) => (
+                  <tr>
+                    <td class="py-2 text-xs uppercase tracking-wider text-club-muted">{row.label}</td>
+                    <td class={`py-2 text-center font-display font-bold text-base ${valueClass(row, "home")}`}>
+                      {row.home}
+                    </td>
+                    <td class={`py-2 text-center font-display font-bold text-base ${valueClass(row, "away")}`}>
+                      {row.away}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            {form && (
+              <div class="mt-3 pt-3 border-t border-club-border">
+                <p class="text-xs uppercase tracking-wider text-club-muted mb-2">
+                  Forma <span class="normal-case tracking-normal">· najnovija desno</span>
+                </p>
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                  {[
+                    { team: match.home, form: form.home },
+                    { team: match.away, form: form.away },
+                  ].map((f) => (
+                    <span class="inline-flex items-center gap-1.5">
+                      <span class="w-5 h-5 inline-flex">
+                        <TeamCrest team={f.team} size={20} class="w-full h-full" />
+                      </span>
+                      <FormStrip form={f.form} />
+                    </span>
+                  ))}
                 </div>
-              ))}
-            </div>
+              </div>
+            )}
           </div>
         )}
-
-        <div class="mt-6 pt-4 border-t border-club-border flex items-center justify-center gap-2 text-sm text-club-muted">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-          </svg>
-          <span>{venue}</span>
-        </div>
-        <MatchWeather match={match} class="mt-2 text-center text-sm text-club-secondary" />
-        <div class="mt-4">
-          <MatchActions match={match} sharePath={sharePath} />
-        </div>
       </div>
     </article>
   ) : (
-    <article class="bg-white shadow-xl rounded-lg overflow-hidden border border-club-border p-8 text-center">
+    <article class="bg-white shadow-xl rounded-xl overflow-hidden border border-club-border p-8 text-center">
       <p class="text-club-muted">Nema rasporeda za sljedeću utakmicu.</p>
     </article>
   )

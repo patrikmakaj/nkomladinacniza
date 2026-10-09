@@ -4,7 +4,6 @@ import Hero from "../components/Hero.astro";
 import NextMatchCard from "../components/NextMatchCard.astro";
 import YouthMatchCard from "../components/YouthMatchCard.astro";
 import YouthSignup from "../components/YouthSignup.astro";
-import LastMatchCard from "../components/LastMatchCard.astro";
 import MatchDayHero from "../components/MatchDayHero.astro";
 import LeagueTable from "../components/LeagueTable.astro";
 import SeasonStats from "../components/SeasonStats.astro";
@@ -18,7 +17,6 @@ import { sportsEventLd } from "../lib/schema";
 import {
   nextMatch,
   nextYouthMatch,
-  played,
   todayInZagreb,
   daysFromToday,
   competitionShort,
@@ -41,8 +39,6 @@ const decadesText = `${clubAge % 10 === 0 ? "Punih" : "Više od"} ${decadeWord} 
 // U-11 na naslovnici samo kad igraju u idućih tjedan dana ("ovaj vikend").
 const youthMatch =
   nextYouthMatch && daysFromToday(nextYouthMatch.date) <= 7 ? nextYouthMatch : null;
-const lastMatch = played[0] ?? null;
-const hasSide = !!youthMatch || !!lastMatch;
 
 // schema.org SportsEvent za sljedeću utakmicu; URL vodi na njezinu najavu.
 const site = Astro.site ?? new URL("https://omladinacniza.hr");
@@ -132,31 +128,17 @@ function alsoToday(item: HeroItem): string | null {
     </div>
   </Hero>
 
-  {/* Utakmice — flotiraju preko hero ruba. Lijevo sljedeća seniorska s
-      usporedbom, desno U-11 (ako igraju ovaj tjedan) i zadnji rezultat.
+  {/* Utakmice — flotiraju preko hero ruba. Sljedeća seniorska s usporedbom,
+      ispod tanka traka U-11 (ako igraju ovaj tjedan). Zadnji rezultat je prvi
+      u "Zadnjim rezultatima" niže, pa nema svoju karticu.
       Na dan utakmice ostaju vidljive: usporedba forme nije u banneru. */}
-  <section class="container-narrow -mt-20 relative z-10">
-    <div class={`grid gap-4 md:gap-6 items-start ${hasSide ? "lg:grid-cols-3" : ""}`}>
-      <div class={hasSide ? "lg:col-span-2" : ""}>
-        <NextMatchCard
-          match={nextMatch}
-          table={table}
-          sharePath={nextMatch ? `/najava/${nextMatch.id}` : undefined}
-        />
-      </div>
-      {
-        hasSide && (
-          <div
-            class={`grid gap-4 md:gap-6 ${
-              youthMatch && lastMatch ? "sm:grid-cols-2 lg:grid-cols-1" : ""
-            }`}
-          >
-            {youthMatch && <YouthMatchCard match={youthMatch} />}
-            {lastMatch && <LastMatchCard match={lastMatch} />}
-          </div>
-        )
-      }
-    </div>
+  <section class="container-narrow -mt-20 relative z-10 space-y-3">
+    <NextMatchCard
+      match={nextMatch}
+      table={table}
+      sharePath={nextMatch ? `/najava/${nextMatch.id}` : undefined}
+    />
+    {youthMatch && <YouthMatchCard match={youthMatch} />}
   </section>
 
   {/* Prvo sportski sadržaj (tablica, rezultati), a tek onda Facebook — zadnja
