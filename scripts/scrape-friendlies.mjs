@@ -41,11 +41,12 @@ const HNS = path.join(ROOT, "src/data/hns.json");
 
 /**
  * ID Google Sheeta (dio linka između /d/ i /edit). Javan je kao i sama
- * tablica — isto kao SHEET_ID turnira u pages/turnir.astro.
+ * tablica — isto kao SHEET_ID turnira u pages/turnir.astro. Tablica je na
+ * Driveu kluba (dsaniza@gmail.com). `FRIENDLIES_SHEET_ID=""` je isključuje.
  */
-const SHEET_ID = process.env.FRIENDLIES_SHEET_ID || "";
-/** Tab tablice (broj iza "gid=" u linku); prvi tab je 0. */
-const SHEET_GID = process.env.FRIENDLIES_SHEET_GID || "0";
+const SHEET_ID = process.env.FRIENDLIES_SHEET_ID ?? "1OWowTPFOH_Fy7DcW3sqxercGa_Q9JHj_HqBpH39Ox2g";
+/** Tab tablice (broj iza "gid=" u linku); prazno = prvi tab. */
+const SHEET_GID = process.env.FRIENDLIES_SHEET_GID || "";
 
 const LABEL = "[prijateljske]";
 
@@ -88,20 +89,32 @@ export function parseCsv(text) {
   return rows.filter((r) => r.some((v) => v.trim() !== ""));
 }
 
-/** "16.8.2026." · "16. 08. 2026" · "2026-08-16" → "2026-08-16" */
+/**
+ * "16.8.2026." · "16. 08. 2026" · "2026-08-16" · "8/16/2026" → "2026-08-16".
+ * Sheets u CSV izvozi datum onako kako ga prikazuje, a to ovisi o jeziku
+ * tablice; kosa crta je američki zapis (mjesec/dan).
+ */
 export function parseDate(value) {
   const v = value.trim();
+  const iso = (y, mo, d) => `${y}-${String(mo).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
   let m = v.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
-  if (m) return `${m[1]}-${m[2].padStart(2, "0")}-${m[3].padStart(2, "0")}`;
+  if (m) return iso(m[1], m[2], m[3]);
   m = v.match(/^(\d{1,2})\.\s*(\d{1,2})\.\s*(\d{4})/);
-  if (m) return `${m[3]}-${m[2].padStart(2, "0")}-${m[1].padStart(2, "0")}`;
+  if (m) return iso(m[3], m[2], m[1]);
+  m = v.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+  if (m) return iso(m[3], m[1], m[2]);
   return null;
 }
 
-/** "19:00" · "19.00" · "19:00:00" → "19:00"; prazno → null */
+/** "19:00" · "19.00" · "19:00:00" · "7:00:00 PM" → "19:00"; prazno → null */
 export function parseTime(value) {
-  const m = value.trim().match(/^(\d{1,2})[:.](\d{2})/);
-  return m ? `${m[1].padStart(2, "0")}:${m[2]}` : null;
+  const m = value.trim().match(/^(\d{1,2})[:.](\d{2})(?::\d{2})?\s*([AaPp][Mm])?/);
+  if (!m) return null;
+  let h = Number(m[1]);
+  const ampm = m[3]?.toUpperCase();
+  if (ampm === "PM" && h < 12) h += 12;
+  if (ampm === "AM" && h === 12) h = 0;
+  return `${String(h).padStart(2, "0")}:${m[2]}`;
 }
 
 /** "Denis Ćosić 2, Karlo Grubač (1), Tin Mauhar x2" → [{ name, goals }] */
@@ -224,7 +237,7 @@ async function main() {
     return;
   }
 
-  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${SHEET_GID}`;
+  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv${SHEET_GID ? `&gid=${SHEET_GID}` : ""}`;
   let text;
   try {
     const res = await fetch(url, { redirect: "follow" });

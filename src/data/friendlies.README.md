@@ -3,11 +3,12 @@
 Utakmice koje **nisu na HNS Semaforu** (prijateljske, memorijali, turniri) žive u
 [`friendlies.json`](./friendlies.json).
 
-## Google Sheet (kad je postavljen)
+## Google Sheet
 
-Ako je u `scripts/scrape-friendlies.mjs` postavljen `FRIENDLIES_SHEET_ID`, izvor je
-**Google tablica**, a `friendlies.json` generira scraper pri svakom prolazu (svakih
-30 min). Tada se JSON **ne uređuje ručno** — CI bi ga prepisao. Upisuje se u tablicu:
+Izvor je tablica [NK Omladinac Niza - prijateljske utakmice](https://docs.google.com/spreadsheets/d/1OWowTPFOH_Fy7DcW3sqxercGa_Q9JHj_HqBpH39Ox2g/edit)
+na Driveu kluba (`FRIENDLIES_SHEET_ID` u `scripts/scrape-friendlies.mjs`).
+`friendlies.json` generira scraper pri svakom prolazu (svakih 30 min), pa se
+JSON **ne uređuje ručno** — CI bi ga prepisao. Upisuje se u tablicu:
 
 | Datum | Vrijeme | Protivnik | Doma/Gosti | Mjesto | Natjecanje | Naši golovi | Golovi protivnika | Strijelci | HNS ID | Grb |
 |---|---|---|---|---|---|---|---|---|---|---|
@@ -22,12 +23,13 @@ Ako je u `scripts/scrape-friendlies.mjs` postavljen `FRIENDLIES_SHEET_ID`, izvor
 - Redak bez datuma, protivnika ili Doma/Gosti se preskače (vidi se u logu CI-a).
 - Tablica mora biti dijeljena kao *Svatko s linkom može pregledavati*.
 
-## Ručni unos (dok tablica nije postavljena)
+Ako tablica nije javno čitljiva ili je dohvat ne uspije, `friendlies.json`
+ostaje kakav je bio — stranica ne izgubi utakmice.
 
-Nakon commita stranica se automatski ponovno buildá i utakmice se pojave na
-rasporedu i naslovnici.
+## Ručni unos (samo ako se tablica isključi)
 
-Najlakše s mobitela: otvori datoteku na GitHubu → ikona olovke → uredi → **Commit changes**.
+S `FRIENDLIES_SHEET_ID=""` scraper ne dira JSON, pa se uređuje ručno: na GitHubu
+→ ikona olovke → uredi → **Commit changes**.
 
 ## Format jedne utakmice
 

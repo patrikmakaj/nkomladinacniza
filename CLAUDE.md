@@ -33,7 +33,7 @@ npm run scrape:hns         # HNS Semafor → src/data/hns.json
 npm run scrape:facebook    # FB postovi → src/data/facebook.json (treba FB_* env)
 npm run scrape:fb-albums   # FB albumi → src/data/facebook-albums.json (treba FB_* env)
 npm run scrape:images      # grbovi + fotke seniora s HNS-a → public/images/{clubs,players}/
-npm run scrape:friendlies  # Google Sheet → src/data/friendlies.json (samo ako je postavljen SHEET_ID)
+npm run scrape:friendlies  # Google Sheet → src/data/friendlies.json
 node scripts/archive-season.mjs <stari-hns.json>   # ručna arhiva sezone (npr. iz git povijesti)
 ```
 
@@ -51,7 +51,7 @@ CI vrti oba, `check` prije builda.
 ```
 HNS Semafor (klub 134)  ─┐
 Facebook Graph API v21   ─┼─► scripts/*.mjs ─► src/data/*.json ─► Astro build ─► dist/ ─► GH Pages
-friendlies.json (ručno) ─┘                          (commit-ano u repo)
+Google Sheet (prijat.)  ─┘                          (commit-ano u repo)
 ```
 
 GitHub Action `scrape-and-deploy.yml` vrti se **svakih 30 min** + na svaki push u `main`.
@@ -73,11 +73,13 @@ kasniti 5-15 min, pa je to „brže", ne „uživo".
 | `facebook-albums.json` | **NE** — generira `scripts/scrape-facebook-albums.mjs` |
 | `crests.json`, `photos.json` | **NE** — generira `scripts/fetch-images.mjs` (HNS URL slike → lokalna kopija) |
 | `sezone/*.json` | **NE** — arhiva sezone; zapiše je scraper pri promjeni sezone (vidi 3b) |
-| `friendlies.json` | **DA, dok nije postavljen Google Sheet** — tada ga generira `scripts/scrape-friendlies.mjs` i ručne izmjene se gube. Format i stupci tablice: `friendlies.README.md` |
+| `friendlies.json` | **NE** — generira `scripts/scrape-friendlies.mjs` iz Google tablice kluba; ručne izmjene se gube. Stupci tablice: `friendlies.README.md` |
 
-Prijateljske, memorijali i turniri nisu na HNS Semaforu → unose se u Google tablicu
-(`FRIENDLIES_SHEET_ID`) ili, dok je nema, ručno u `friendlies.json`. Scraper
-prijateljskih ide prije `fetch-images.mjs`, da se skinu i grbovi novih protivnika.
+Prijateljske, memorijali i turniri nisu na HNS Semaforu → klub ih upisuje u Google
+tablicu (`FRIENDLIES_SHEET_ID`, Drive kluba dsaniza@gmail.com; mora biti „Svatko s
+linkom može pregledavati"). Ako dohvat ne uspije ili tablica nije javna, JSON ostaje
+star. Scraper prijateljskih ide prije `fetch-images.mjs`, da se skinu i grbovi
+novih protivnika. Lokalno (sandbox) docs.google.com zna biti blokiran — to nije kvar.
 
 **Scraperi pišu samo kad se sadržaj promijenio.** Prije su na svakom prolazu
 upisivali svjež `lastUpdated`, pa je CI commitao i deployao stranicu svakih 30
@@ -459,7 +461,7 @@ Inter i Oswald su self-hostani (`src/assets/fonts/*.woff2`, `@font-face` u
 |---|---|---|
 | HNS Semafor | `scripts/scrape.mjs` | Bez autentikacije. Zna vraćati Cloudflare 52x → scraper ima retry i graceful skip |
 | Facebook Graph API | oba FB scrapera | Treba `FB_PAGE_ID` + `FB_ACCESS_TOKEN` (GitHub Secrets). Bez njih scraper ne ruši build |
-| Google Sheets | `pages/turnir.astro` | gviz endpoint, fetch iz browsera, sheet mora biti javno čitljiv |
+| Google Sheets | `pages/turnir.astro`, `scripts/scrape-friendlies.mjs` | Turnir: gviz iz preglednika. Prijateljske: CSV izvoz (`/export?format=csv`) u CI-u. Oba sheeta moraju biti javno čitljiva |
 | Umami analytics | `BaseLayout.astro` | `cloud.umami.is`, website id hardkodiran. Klikovi na gumbe se broje atributom `data-umami-event` (+ `data-umami-event-*` za detalje) — bez našeg JS-a |
 | Open-Meteo | `MatchWeather.astro` | Prognoza i geokodiranje iz preglednika, bez ključa. Samo utakmice u idućih 7 dana i poznato mjesto; svaka greška = bez prognoze |
 | Google Fonts | `BaseLayout.astro` | Inter + Oswald |
