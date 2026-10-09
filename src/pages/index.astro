@@ -170,11 +170,10 @@ function alsoToday(item: HeroItem): string | null {
     <LeagueTable highlightId={nextOpponentId} />
   </section>
 
-  <!-- Zadnji rezultati ispod tablice u 2 stupca. Najnoviji je već u kartici
-       "Zadnja utakmica" gore, pa se ovdje preskače. -->
+  <!-- Zadnji rezultati ispod tablice u 2 stupca -->
   <section class="container-narrow mt-12">
     <h2 class="text-2xl mb-4">Zadnji rezultati</h2>
-    <RecentResults limit={6} skip={lastMatch ? 1 : 0} grid={true} />
+    <RecentResults limit={6} grid={true} />
   </section>
 
   <!-- Upis u školu nogometa -->
