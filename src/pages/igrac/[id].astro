@@ -1,12 +1,13 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import { crestSrc, photoSrc } from "../../lib/images";
-import Logo from "../../components/Logo.astro";
+import { photoSrc } from "../../lib/images";
+import ResultCard from "../../components/ResultCard.astro";
 import { golLabel, nastupLabel } from "../../lib/croatian";
 import { url } from "../../lib/url";
 import hns from "../../data/hns.json";
 import {
-  matchBadge,
+  competitionShort,
+  shortDate,
   badgeClass,
   typeLabel,
   typeOrder,
@@ -192,6 +193,14 @@ function formatShortDate(iso: string): string {
   });
 }
 
+/** Igračeva utakmica u jednom retku: "⚽ 67' · 🟨 85' · pričuva". */
+function playerNote(a: PlayerMatchEntry): string {
+  const events = a.events
+    .filter((ev) => ev.type !== "other")
+    .map((ev) => `${eventIcon(ev.type)}${ev.minute != null ? ` ${ev.minute}'` : ""}`);
+  return [...events, a.isStarter ? null : "pričuva"].filter(Boolean).join(" · ");
+}
+
 function eventIcon(t: string): string {
   switch (t) {
     case "goal":
@@ -272,9 +281,10 @@ const pageDescription = `Profil igrača ${player.name} u sezoni ${hns.competitio
           <h1 class="font-display font-bold text-2xl md:text-4xl uppercase tracking-tight leading-tight">
             {player.name}
           </h1>
-          <p class="text-white/70 text-sm md:text-base mt-1">
-            {positionGroup}
-          </p>
+          {/* "Igrač" ne govori ništa (HNS drugo ne razlikuje) — piše se samo vratar */}
+          {positionGroup === "Vratar" && (
+            <p class="text-white/70 text-sm md:text-base mt-1">Vratar</p>
+          )}
         </div>
       </div>
     </div>
@@ -413,7 +423,7 @@ const pageDescription = `Profil igrača ${player.name} u sezoni ${hns.competitio
               Prosjek golova
             </p>
             <p class="text-club-secondary font-medium mt-1">
-              {(totalGoals / totalAppearances).toFixed(2)} po utakmici · zabio
+              {(totalGoals / totalAppearances).toLocaleString("hr-HR", { maximumFractionDigits: 2 })} po utakmici · zabio
               na {matchesWithGoals} {nastupLabel(matchesWithGoals)}
             </p>
           </div>
@@ -433,113 +443,18 @@ const pageDescription = `Profil igrača ${player.name} u sezoni ${hns.competitio
         Nema zabilježenih nastupa u tekućoj sezoni.
       </p>
     ) : (
-      <ul class="space-y-2">
-        {appearances.map((a) => {
-          const opponent =
-            a.ourSide === "home" ? a.match.away : a.match.home;
-          const ourScore =
-            a.ourSide === "home"
-              ? a.match.score!.home
-              : a.match.score!.away;
-          const oppScore =
-            a.ourSide === "home"
-              ? a.match.score!.away
-              : a.match.score!.home;
-          const resultColor =
-            a.match.result === "W"
-              ? "bg-green-600"
-              : a.match.result === "L"
-              ? "bg-red-600"
-              : "bg-yellow-500";
-          // Pobjeda i Poraz oba počinju na "P" — poraz je "I" (izgubljeno),
-          // isto kao na /raspored, inače se ishodi razlikuju samo po boji.
-          const resultLetter =
-            a.match.result === "W" ? "P"
-            : a.match.result === "L" ? "I"
-            : "N";
-          const resultTitle =
-            a.match.result === "W" ? "Pobjeda"
-            : a.match.result === "L" ? "Poraz"
-            : "Neriješeno";
-
-          return (
-            <li>
-              <a
-                href={url(`/utakmica/${a.match.id}`)}
-                class="flex items-center gap-3 bg-white border border-club-border rounded-lg px-3 py-3 hover:border-club-primary hover:shadow transition group"
-              >
-                {/* Ishod badge */}
-                <span
-                  class={`flex-shrink-0 w-7 h-7 rounded-full ${resultColor} text-white font-display font-bold text-xs flex items-center justify-center`}
-                  title={resultTitle}
-                >
-                  {resultLetter}
-                </span>
-
-                {/* Natjecanje + datum — matchBadge jer kup nema "kolo"
-                    nego fazu (HNS mu upiše round 10003 i sl.) */}
-                <div class="flex-shrink-0 w-24 text-xs">
-                  <p class="font-display font-bold text-club-primary-deep leading-tight">
-                    {matchBadge(a.match as unknown as UnifiedMatch)}
-                  </p>
-                  <p class="text-club-muted">{formatShortDate(a.match.iso)}</p>
-                </div>
-
-                {/* Protivnik + rezultat */}
-                <div class="flex-1 min-w-0 flex items-center gap-2">
-                  {opponent.logo && (
-                    <img
-                      src={crestSrc(opponent.logo)}
-                      alt=""
-                      width="20"
-                      height="20"
-                      class="w-5 h-5 object-contain flex-shrink-0"
-                      loading="lazy"
-                    />
-                  )}
-                  <span class="text-sm font-medium text-club-secondary truncate">
-                    {a.ourSide === "home" ? "vs" : "@"} {opponent.name}
-                  </span>
-                  <span class="font-display font-bold text-club-primary-deep ml-auto whitespace-nowrap">
-                    {ourScore} : {oppScore}
-                  </span>
-                </div>
-
-                {/* Igračevi eventi u toj utakmici */}
-                {a.events.length > 0 && (
-                  <div class="flex-shrink-0 hidden sm:flex items-center gap-1.5 ml-2 pl-3 border-l border-club-border">
-                    {a.events.map((ev) => (
-                      <span
-                        class="inline-flex items-center gap-0.5 text-xs"
-                        title={ev.label || ev.type}
-                      >
-                        <span>{eventIcon(ev.type)}</span>
-                        {ev.minute != null && (
-                          <span class="text-club-muted text-[10px]">
-                            {ev.minute}'
-                          </span>
-                        )}
-                      </span>
-                    ))}
-                  </div>
-                )}
-
-                {/* Starter/sub indicator */}
-                <span
-                  class={`flex-shrink-0 hidden md:inline-block text-[10px] font-display uppercase tracking-wider px-1.5 py-0.5 rounded ${
-                    a.isStarter
-                      ? "bg-club-primary/10 text-club-primary"
-                      : "bg-club-light text-club-muted"
-                  }`}
-                  title={a.isStarter ? "Početni 11" : "Pričuva"}
-                >
-                  {a.isStarter ? "11" : "Pr."}
-                </span>
-              </a>
-            </li>
-          );
-        })}
-      </ul>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        {appearances.map((a) => (
+          <ResultCard
+            match={{ ...a.match, isHome: a.ourSide === "home" }}
+            label={competitionShort(a.match as unknown as UnifiedMatch)}
+            date={shortDate(a.match.date)}
+            note={playerNote(a)}
+            noteIcon=""
+            href={url(`/utakmica/${a.match.id}`)}
+          />
+        ))}
+      </div>
     )}
   </section>
 </BaseLayout>

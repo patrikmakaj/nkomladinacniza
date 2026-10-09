@@ -1,0 +1,72 @@
+---
+/**
+ * Kartica odigrane utakmice — ista na naslovnici, rasporedu, profilu igrača,
+ * U-11 i u arhivi sezone.
+ *
+ * Grb i ime protivnika, rezultat domaćin:gost i ishod riječju. Naše ime i
+ * "doma/gosti" namjerno nisu na kartici: tko je pobijedio kažu boja trake i
+ * ishod, a iz njih se vidi i koji je broj naš.
+ *
+ * Boja ishoda je samo na lijevoj traci — rezultat je neutralan, da lista ne
+ * bude šarena. Ishod je uvijek i napisan, jer pobjedu od poraza daltonisti
+ * bojom ne vide.
+ */
+import TeamCrest from "./TeamCrest.astro";
+import { outcomeStyle, type UnifiedMatch } from "../lib/matches";
+
+interface Props {
+  match: Pick<UnifiedMatch, "home" | "away" | "isHome" | "score" | "result">;
+  /** Natjecanje, npr. "2. ŽNL · 6. kolo" — reže se ako je predugo. */
+  label: string;
+  /** Datum, npr. "3. 10." — uvijek cijeli. */
+  date: string;
+  /** Redak ispod protivnika, npr. naši strijelci. */
+  note?: string;
+  /** Ikona ispred retka `note`; prazno za bez ikone. */
+  noteIcon?: string;
+  href?: string | null;
+  /** Link vodi van (HNS Semafor) — otvara se u novoj kartici. */
+  external?: boolean;
+  /** Tip natjecanja za filter na /raspored (`data-match-type`). */
+  matchType?: string;
+}
+
+const { match: m, label, date, note, noteIcon = "⚽", href, external = false, matchType } = Astro.props;
+
+const o = outcomeStyle[(m.result ?? "D") as "W" | "D" | "L"];
+const opponent = m.isHome ? m.away : m.home;
+const opponentName = opponent.name.replace(/^NK\s+/, "");
+const Tag = href ? "a" : "article";
+---
+
+<Tag
+  href={href ?? undefined}
+  target={href && external ? "_blank" : undefined}
+  rel={href && external ? "noopener" : undefined}
+  data-match-type={matchType}
+  class={`flex items-center gap-3 bg-white border border-club-border border-l-4 ${o.bar} rounded-lg px-4 py-3 ${
+    href ? "hover:shadow-md hover:border-club-primary transition-shadow" : ""
+  }`}
+>
+  <span class="w-9 h-9 flex-shrink-0 flex items-center justify-center">
+    <TeamCrest team={opponent} size={36} class="w-full h-full" />
+  </span>
+  <div class="flex-1 min-w-0">
+    <p class="flex gap-1 text-[11px] uppercase tracking-wider text-club-muted whitespace-nowrap">
+      <span class="truncate">{label}</span>
+      <span class="flex-shrink-0">· {date}</span>
+    </p>
+    <p class="font-display font-bold uppercase leading-tight text-club-secondary">{opponentName}</p>
+    {note && (
+      <p class="text-xs text-club-muted leading-snug line-clamp-2">
+        {noteIcon && `${noteIcon} `}{note}
+      </p>
+    )}
+  </div>
+  <div class="text-right flex-shrink-0">
+    <p class="font-display font-bold text-2xl tabular-nums leading-none text-club-primary-deep">
+      {m.score?.home}:{m.score?.away}
+    </p>
+    <p class="text-[10px] font-display uppercase tracking-wider mt-1 text-club-muted">{o.label}</p>
+  </div>
+</Tag>

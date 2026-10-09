@@ -2,6 +2,7 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { crestSrc } from "../../lib/images";
 import { kickoffIso } from "../../lib/matches";
+import { groundFromFacility } from "../../lib/venue";
 import Logo from "../../components/Logo.astro";
 import MatchEventsList from "../../components/MatchEventsList.astro";
 import MatchLineup from "../../components/MatchLineup.astro";
@@ -62,13 +63,15 @@ function formatDate(iso: string): string {
   if (!iso) return "";
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return iso;
-  const weekday = d.toLocaleDateString("hr-HR", { weekday: "long" });
+  const weekday = d.toLocaleDateString("hr-HR", { weekday: "long", timeZone: "Europe/Zagreb" });
   const date = d.toLocaleDateString("hr-HR", {
     day: "numeric",
     month: "long",
     year: "numeric",
+    timeZone: "Europe/Zagreb",
   });
-  return `${weekday}, ${date}`;
+  // Samo prvo slovo — CSS `capitalize` bi napisao i "Rujna".
+  return `${weekday.charAt(0).toUpperCase()}${weekday.slice(1)}, ${date}`;
 }
 
 const pageTitle = `${match.home.name} ${match.score?.home ?? "-"} : ${match.score?.away ?? "-"} ${match.away.name}`;
@@ -109,7 +112,7 @@ const sportsEventSchema: Record<string, unknown> = {
   ],
   location: {
     "@type": "Place",
-    name: detail.facility || "Stadion Grbavica, Niza",
+    name: (detail.facility && groundFromFacility(detail.facility)) || "Stadion Grbavica, Niza",
     address: {
       "@type": "PostalAddress",
       addressCountry: "HR",
@@ -231,7 +234,7 @@ const sportsEventSchema: Record<string, unknown> = {
         <p class="text-[10px] font-display uppercase tracking-wider text-club-muted mb-1">
           Datum
         </p>
-        <p class="font-display font-bold text-sm md:text-base text-club-primary-deep capitalize">
+        <p class="font-display font-bold text-sm md:text-base text-club-primary-deep">
           {formatDate(match.iso)}
         </p>
       </div>
@@ -270,10 +273,11 @@ const sportsEventSchema: Record<string, unknown> = {
         </svg>
         <div>
           <p class="text-[10px] font-display uppercase tracking-wider text-club-muted mb-1">
-            Stadion
+            Igralište
           </p>
           <p class="text-sm md:text-base text-club-primary-deep">
-            {detail.facility}
+            {/* HNS uz igralište lijepi datum i vrijeme — oni su već u karticama iznad */}
+            {groundFromFacility(detail.facility) ?? detail.facility}
           </p>
         </div>
       </div>

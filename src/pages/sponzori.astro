@@ -8,6 +8,10 @@ type Sponsor = {
   logo?: string;
   url?: string;
   textOnly?: boolean;
+  /** Fotografija (osoba, OPG) umjesto logotipa — puni pločicu, ne stoji u sredini. */
+  photo?: boolean;
+  /** Svijetli logotip (npr. zlatni natpis) — treba tamnu podlogu da se vidi. */
+  dark?: boolean;
 };
 
 // Učitaj sve sponzorske logote iz src/assets/sponzori/ — Astro generira
@@ -24,7 +28,8 @@ function getLogo(filename: string): ImageMetadata | null {
   return match ? match[1].default : null;
 }
 
-const sponzori: Sponsor[] = [
+// Prvi je glavni pokrovitelj — veća kartica iznad ostalih.
+const [glavni, ...sponzori]: Sponsor[] = [
   { name: "Općina Koška", logo: "opcinakoska.png", url: "https://www.koska.hr/" },
   { name: "HANA d.o.o.", logo: "hanadoo.jpg", url: "https://hana.hr/" },
   { name: "NEXE d.d.", logo: "nexedd.png", url: "https://www.nexe.hr/" },
@@ -32,9 +37,9 @@ const sponzori: Sponsor[] = [
   { name: "PATERNA d.o.o.", logo: "paternadoo.png", url: "https://webshop.paterna.hr/" },
   { name: "JERKOVIĆ d.o.o. Koška", logo: "jerkovic.png", url: "https://www.jerkovic.hr/" },
   { name: "Nogometno središte Našice", logo: "nsnasice.jpeg", url: "https://nsnasice.blogspot.com/" },
-  { name: "OPG Radaković Nedeljko", logo: "nedeljkoradakovic.jpg", url: "https://www.facebook.com/nedeljko.radakovic" },
-  { name: "Branimir Petranović - Maka", logo: "branimirpetranovicmaka.jpg", url: "https://www.facebook.com/branimir.petranovicmaka" },
-  { name: "Osječka pivovara", logo: "osjeckapivovara.png", url: "https://pivovara.hr/" },
+  { name: "OPG Radaković Nedeljko", logo: "nedeljkoradakovic.jpg", url: "https://www.facebook.com/nedeljko.radakovic", photo: true },
+  { name: "Branimir Petranović - Maka", logo: "branimirpetranovicmaka.jpg", url: "https://www.facebook.com/branimir.petranovicmaka", photo: true },
+  { name: "Osječka pivovara", logo: "osjeckapivovara.png", url: "https://pivovara.hr/", dark: true },
   { name: "ĆOSO POSO", textOnly: true },
   { name: "Pro-mont", textOnly: true },
   { name: "IZOLACIJA-KOŠKA d.o.o.", textOnly: true, url: "https://www.izolacija.hr/" },
@@ -42,7 +47,14 @@ const sponzori: Sponsor[] = [
   { name: "Tunja Tomić", textOnly: true },
 ];
 
-const textLogo = (name: string) => name.replace(/-/g, " ").toUpperCase();
+/** Sponzor bez logotipa: ime kao natpis, bez pravnog oblika ("d.o.o."). */
+const wordmark = (name: string) =>
+  name
+    .replace(/\s+(d\.o\.o\.|d\.d\.|j\.d\.o\.o\.)$/i, "")
+    .replace(/-/g, " ")
+    .toUpperCase();
+
+const glavniLogo = glavni.logo ? getLogo(glavni.logo) : null;
 ---
 
 <BaseLayout
@@ -55,59 +67,108 @@ const textLogo = (name: string) => name.replace(/-/g, " ").toUpperCase();
     height="md"
   />
 
-  <section class="container-narrow mt-12 mb-20">
-    <ul class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+  <section class="container-narrow mt-10 md:mt-12 mb-20">
+    {/* Glavni pokrovitelj */}
+    <a
+      href={glavni.url}
+      target="_blank"
+      rel="noopener"
+      class="group flex flex-col sm:flex-row items-center gap-5 sm:gap-8 bg-white border border-club-border border-t-4 border-t-club-accent rounded-xl p-6 md:p-8 mb-8 hover:shadow-md transition"
+    >
+      <div class="w-full sm:w-72 h-24 md:h-28 flex items-center justify-center flex-shrink-0">
+        {glavniLogo && (
+          <Image
+            src={glavniLogo}
+            alt={glavni.name}
+            widths={[260, 520]}
+            sizes="260px"
+            class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform"
+          />
+        )}
+      </div>
+      <div class="text-center sm:text-left">
+        <p class="text-[11px] font-display uppercase tracking-widest text-club-muted">Glavni pokrovitelj</p>
+        <p class="font-display font-bold uppercase text-2xl md:text-3xl text-club-primary-deep leading-tight mt-1">
+          {glavni.name}
+        </p>
+      </div>
+    </a>
+
+    <h2 class="text-2xl mb-4">Sponzori i prijatelji kluba</h2>
+    <ul class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
       {sponzori.map((s) => {
         const logo = !s.textOnly && s.logo ? getLogo(s.logo) : null;
+        const Tag = s.url ? "a" : "div";
         return (
           <li>
-            {s.url ? (
-              <a
-                href={s.url}
-                target="_blank"
-                rel="noopener"
-                title={s.name}
-                class="group block bg-white border border-club-border rounded-lg aspect-square flex items-center justify-center p-4 hover:border-club-primary hover:shadow-md transition"
-              >
-                {s.textOnly ? (
-                  <span class="font-display font-bold text-2xl md:text-3xl text-club-primary text-center leading-tight tracking-wide">
-                    {textLogo(s.name)}
-                  </span>
-                ) : logo ? (
-                  <Image
-                    src={logo}
-                    alt={s.name}
-                    widths={[200, 400]}
-                    sizes="(max-width: 640px) 200px, 256px"
-                    loading="lazy"
-                    class="max-h-full max-w-full object-contain group-hover:scale-105 transition-transform"
-                  />
-                ) : null}
-              </a>
-            ) : (
+            <Tag
+              href={s.url}
+              target={s.url ? "_blank" : undefined}
+              rel={s.url ? "noopener" : undefined}
+              class={`group flex flex-col h-full bg-white border border-club-border rounded-lg overflow-hidden ${
+                s.url ? "hover:border-club-primary hover:shadow-md transition" : ""
+              }`}
+            >
               <div
-                title={s.name}
-                class="bg-white border border-club-border rounded-lg aspect-square flex items-center justify-center p-4"
+                class={`aspect-[4/3] overflow-hidden flex items-center justify-center ${
+                  s.photo ? "" : "p-4 md:p-5"
+                } ${s.dark ? "bg-club-primary-deep" : s.textOnly ? "bg-club-light-2" : "bg-white"}`}
               >
                 {s.textOnly ? (
-                  <span class="font-display font-bold text-2xl md:text-3xl text-club-primary text-center leading-tight tracking-wide">
-                    {textLogo(s.name)}
+                  <span class="font-display font-bold text-lg md:text-xl text-club-primary-deep text-center leading-tight tracking-wide">
+                    {wordmark(s.name)}
                   </span>
                 ) : logo ? (
                   <Image
                     src={logo}
                     alt={s.name}
                     widths={[200, 400]}
-                    sizes="(max-width: 640px) 200px, 256px"
+                    sizes="(max-width: 640px) 50vw, 280px"
                     loading="lazy"
-                    class="max-h-full max-w-full object-contain"
+                    class={`w-full h-full ${
+                      s.photo ? "object-cover" : "object-contain group-hover:scale-105 transition-transform"
+                    }`}
                   />
                 ) : null}
               </div>
-            )}
+              <p class="border-t border-club-border px-3 py-2 text-xs text-club-secondary text-center leading-snug flex-1 flex items-center justify-center">
+                {s.name}
+              </p>
+            </Tag>
           </li>
         );
       })}
     </ul>
+
+    {/* Postani sponzor */}
+    <div class="mt-12 hero-bg rounded-xl px-6 py-8 md:px-10 md:py-10 text-white flex flex-col md:flex-row md:items-center gap-6">
+      <div class="flex-1">
+        <h2 class="text-white text-2xl md:text-3xl">Postani sponzor</h2>
+        <p class="text-white/85 mt-2 max-w-xl">
+          Želiš podržati klub i besplatnu školu nogometa za djecu iz Nize i okolice?
+          Javi nam se — svaki sponzor dobiva mjesto na ovoj stranici.
+        </p>
+      </div>
+      <div class="flex flex-wrap gap-3 flex-shrink-0">
+        <a
+          href="mailto:omladinacniza@gmail.com?subject=Sponzorstvo%20NK%20Omladinac%20Niza"
+          class="btn-primary"
+          data-umami-event="Postani sponzor"
+          data-umami-event-kanal="email"
+        >
+          Pošalji e-mail
+        </a>
+        <a
+          href="https://www.facebook.com/omladinacniza"
+          target="_blank"
+          rel="noopener"
+          class="btn-outline"
+          data-umami-event="Postani sponzor"
+          data-umami-event-kanal="facebook"
+        >
+          Facebook
+        </a>
+      </div>
+    </div>
   </section>
 </BaseLayout>

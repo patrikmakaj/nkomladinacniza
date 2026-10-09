@@ -125,6 +125,16 @@ Nikad `href="/raspored"` direktno. Vanjske URL-ove (`http`, `mailto`, `tel`, `#`
 Ako čitaš `hns.matches` direktno, prijateljske utakmice ti nestanu s ekrana.
 (Iznimka: `matchDetails`, `table`, `players`, `stats` postoje samo u `hns.json`.)
 
+**Odigrana utakmica se svugdje prikazuje kroz `ResultCard`** — naslovnica,
+`/raspored`, profil igrača, U-11 i arhiva sezone. Grb i ime protivnika,
+rezultat domaćin:gost, ishod riječju; boja samo na lijevoj traci
+(`outcomeStyle`). Naše ime i "doma/gosti" namjerno nisu na kartici. Strijelci
+idu kroz `ourScorers()`, datum kroz `shortDate()`. Nemoj raditi novu listu
+rezultata sa svojim P/N/I kockama — prije su postojale četiri različite.
+
+HNS zna poslati ime kao „Luka, Glavaš" — svako ime igrača iz HNS-a koje se
+prikazuje ide kroz `personName()`.
+
 ### 3. Natjecanje je dimenzija, ne jedna vrijednost
 
 Klub istovremeno igra ligu, kup i (kao početnici) U-11 ligu. `hns.json` zato ima
@@ -321,12 +331,14 @@ src/
 │   ├── rss.xml.ts             # RSS iz FB postova
 │   ├── raspored.ics.ts        # cijeli raspored kao kalendar za pretplatu (webcal://)
 │   └── manifest.webmanifest.ts# PWA manifest (endpoint, da poštuje base path)
-├── components/                # Header, Footer, Hero, MatchDayHero, LeagueTable,
+├── components/                # Header, Footer, Hero (veliki samo na naslovnici,
+│                              # podstranice `height="md"` = niska traka), MatchDayHero, LeagueTable,
 │                              # NextMatchCard (+ usporedba iz ljestvice), YouthMatchCard
 │                              # (traka U-11), TeamCrest, FormStrip, MatchActions
 │                              # (kalendar · upute · podijeli), SeasonStats, MatchWeather,
 │                              # ClubPost (FB izvještaj/najava), YouthSignup (upis),
-│                              # RecentResults, PlayerCard, StaffCard,
+│                              # ResultCard (odigrana utakmica, svugdje ista),
+│                              # RecentResults (+ traka forme), PlayerCard, StaffCard,
 │                              # MatchLineup, MatchEventsList, StatRanking, FacebookPost,
 │                              # LatestPostBlock, InstallPrompt, Logo, SchemaSportsTeam
 ├── lib/                       # url.ts · matches.ts · croatian.ts · facebook.ts · images.ts

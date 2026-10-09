@@ -57,6 +57,9 @@ type FriendlyEntry = {
 
 export const OUR_CLUB_ID = 134;
 
+/** HNS zna poslati ime kao "Luka, Glavaš" — zarez nije dio imena. */
+export const personName = (name: string): string => name.replace(/\s*,\s*/g, " ").trim();
+
 const OUR_TEAM: TeamRef = {
   id: OUR_CLUB_ID,
   name: "NK Omladinac Niza",
@@ -178,6 +181,43 @@ export function daysFromToday(date: string): number {
 /** Zadnjih N rezultata kroz sva natjecanja. */
 export function lastResults(limit = 10): UnifiedMatch[] {
   return played.slice(0, limit);
+}
+
+/**
+ * Ishod iz naše perspektive: slovo, riječ i boje (traka kartice, čip forme).
+ * Poraz je "I" (izgubljeno), ne "P" — inače bi se od pobjede razlikovao samo
+ * bojom, a nju daltonisti ne vide.
+ */
+export const outcomeStyle = {
+  W: { letter: "P", label: "Pobjeda", bar: "border-l-green-600", chip: "bg-green-600" },
+  D: { letter: "N", label: "Neriješeno", bar: "border-l-yellow-500", chip: "bg-yellow-500" },
+  L: { letter: "I", label: "Izgubljeno", bar: "border-l-red-600", chip: "bg-red-600" },
+} as const;
+
+/** "2026-10-03" → "3. 10." (s godinom "3. 10. 2026.") — kratko, bez vodeće nule. */
+export function shortDate(date: string, withYear = false): string {
+  const [year, month, day] = date.split("-").map(Number);
+  return `${day}. ${month}.${withYear ? ` ${year}.` : ""}`;
+}
+
+/**
+ * Naši strijelci u utakmici: "Josip Matić (2), Tin Mauhar, autogol".
+ * HNS utakmice iz detalja, prijateljske iz ručno upisanih strijelaca.
+ */
+export function ourScorers(m: Pick<UnifiedMatch, "id" | "isHome" | "scorers">): string {
+  const events = (hns.matchDetails as Record<string, any> | undefined)?.[m.id]?.headerEvents;
+  if (!events) {
+    return (m.scorers ?? []).map((s) => `${s.name}${s.goals > 1 ? ` (${s.goals})` : ""}`).join(", ");
+  }
+  const counts = new Map<string, number>();
+  for (const e of (m.isHome ? events.home : events.away) ?? []) {
+    if (e.type === "own_goal") counts.set("autogol", (counts.get("autogol") ?? 0) + 1);
+    else if ((e.type === "goal" || e.type === "penalty") && e.playerName) {
+      const name = personName(String(e.playerName));
+      counts.set(name, (counts.get(name) ?? 0) + 1);
+    }
+  }
+  return [...counts].map(([name, n]) => (n > 1 ? `${name} (${n})` : name)).join(", ");
 }
 
 /** Kratka oznaka natjecanja za badge (npr. "5. kolo", "Kup · 1/16 finala", "Prijateljska"). */

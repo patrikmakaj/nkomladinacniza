@@ -27,10 +27,11 @@ const {
 
 const profileHref = personId ? url(`/igrac/${personId}`) : null;
 
-const groupLabels: Record<typeof positionGroup, string> = {
-  GK: "Vratar",
-  FIELD: "Igrač",
-};
+// HNS razlikuje samo "Vratar" i "Igrač". "Igrač" bi pisalo na skoro svakoj
+// kartici i ne bi ništa govorilo, pa se ističe samo vratar. Ispod imena
+// pozicija ide samo ako HNS ikad pošalje nešto preciznije.
+const isKeeper = positionGroup === "GK";
+const detail = position && !/^(igrač|vratar)$/i.test(position.trim()) ? position : null;
 
 // Inicijali za fallback ako nema slike
 const initials = name
@@ -68,15 +69,17 @@ const initials = name
         {number}
       </div>
     )}
-    <div class="absolute top-2 right-2 bg-club-primary text-white text-xs font-display uppercase tracking-wider px-2 py-1 rounded">
-      {groupLabels[positionGroup]}
-    </div>
+    {isKeeper && (
+      <div class="absolute top-2 right-2 bg-club-accent text-club-primary-deep text-xs font-display font-bold uppercase tracking-wider px-2 py-1 rounded shadow">
+        Vratar
+      </div>
+    )}
   </div>
   <div class="p-3">
     <p class="font-display font-bold uppercase text-sm leading-tight truncate" title={name}>
       {name}
     </p>
-    {position && <p class="text-xs text-club-muted mt-0.5">{position}</p>}
+    {detail && <p class="text-xs text-club-muted mt-0.5">{detail}</p>}
     {(appearances > 0 || goals > 0) && (
       <div class="flex items-center gap-3 mt-2 pt-2 border-t border-club-border text-xs">
         <span class="flex items-center gap-1">

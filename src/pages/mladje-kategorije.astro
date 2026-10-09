@@ -6,11 +6,14 @@ import Logo from "../components/Logo.astro";
 import LeagueTable from "../components/LeagueTable.astro";
 import StatRanking from "../components/StatRanking.astro";
 import YouthSignup from "../components/YouthSignup.astro";
+import ResultCard from "../components/ResultCard.astro";
 import { url } from "../lib/url";
 import { golLabel, nastupLabel } from "../lib/croatian";
 import {
   competitionsFor,
   hasStats,
+  matchBadge,
+  shortDate,
   todayInZagreb,
   OUR_CLUB_ID,
   type UnifiedMatch,
@@ -42,10 +45,6 @@ function formatMatchDate(iso: string): string {
     month: "short",
   });
 }
-
-const outcomeColor = { W: "bg-green-600", D: "bg-yellow-500", L: "bg-red-600" };
-const outcomeLetter = { W: "P", D: "N", L: "I" };
-const outcomeTitle = { W: "Pobjeda", D: "Neriješeno", L: "Poraz" };
 
 // ── Ranking liste ─────────────────────────────────────────────────────
 // Iste komponente kao na /momcad. Igrači mlađih kategorija nemaju profil na
@@ -243,30 +242,11 @@ const categories = [
               {results.length > 0 && (
                 <div>
                   <h3 class="text-lg mb-3">Odigrano</h3>
-                  <ul class="space-y-2">
-                    {results.slice(0, 8).map((m) => {
-                      const opponent = m.isHome ? m.away : m.home;
-                      const ours = m.isHome ? m.score!.home : m.score!.away;
-                      const theirs = m.isHome ? m.score!.away : m.score!.home;
-                      const outcome = (m.result ?? "D") as "W" | "D" | "L";
-                      return (
-                        <li class="bg-white border border-club-border rounded-lg px-3 py-3 flex items-center gap-3">
-                          <span
-                            class={`flex-shrink-0 w-7 h-7 rounded-full ${outcomeColor[outcome]} text-white font-display font-bold text-xs flex items-center justify-center`}
-                            title={outcomeTitle[outcome]}
-                          >
-                            {outcomeLetter[outcome]}
-                          </span>
-                          <span class="text-sm text-club-secondary truncate flex-1">
-                            {m.isHome ? "vs" : "@"} {opponent.name}
-                          </span>
-                          <span class="font-display font-bold text-club-primary-deep whitespace-nowrap">
-                            {ours} : {theirs}
-                          </span>
-                        </li>
-                      );
-                    })}
-                  </ul>
+                  <div class="space-y-2">
+                    {results.slice(0, 8).map((m) => (
+                      <ResultCard match={m} label={matchBadge(m)} date={shortDate(m.date)} />
+                    ))}
+                  </div>
                 </div>
               )}
 

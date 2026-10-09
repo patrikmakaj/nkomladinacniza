@@ -3,6 +3,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import { crestSrc } from "../lib/images";
 import Hero from "../components/Hero.astro";
 import Logo from "../components/Logo.astro";
+import ResultCard from "../components/ResultCard.astro";
 import { url } from "../lib/url";
 import hns from "../data/hns.json";
 import {
@@ -15,6 +16,9 @@ import {
   typeOrder,
   typeSlug,
   countByType,
+  competitionShort,
+  ourScorers,
+  shortDate,
 } from "../lib/matches";
 
 const matchDetails = (hns.matchDetails ?? {}) as Record<string, unknown>;
@@ -46,14 +50,6 @@ const lastUpdated = new Date(hns.lastUpdated).toLocaleString("hr-HR", {
   timeStyle: "short",
   timeZone: "Europe/Zagreb",
 });
-
-const outcomeColor = {
-  W: "bg-green-600",
-  D: "bg-yellow-500",
-  L: "bg-red-600",
-};
-const outcomeLabel = { W: "P", D: "N", L: "I" };
-const outcomeTitle = { W: "Pobjeda", D: "Neriješeno", L: "Poraz" };
 
 // Filter po natjecanju — prikazujemo samo tipove kojih stvarno ima.
 // Ako klub igra samo ligu, filter nema smisla pa se uopće ne renderira.
@@ -347,72 +343,19 @@ const icsPayload = upcoming.map((m) => ({
           </p>
         </div>
 
-        <div class="space-y-2">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
           {played.map((m) => {
-            const outcome = (m.result as "W" | "D" | "L") || "D";
             const hasDetail = !!matchDetails[m.id];
-            const isLink = hasDetail || !!m.url;
-            const Tag = isLink ? "a" : "article";
-            const href = hasDetail ? url(`/utakmica/${m.id}`) : m.url || undefined;
-            const externalLink = !hasDetail && !!m.url;
-            const scorersLabel = m.scorers
-              .map((s) => (s.goals > 1 ? `${s.name} ×${s.goals}` : s.name))
-              .join(", ");
             return (
-              <Tag
-                href={href}
-                data-match-type={m.type}
-                target={externalLink ? "_blank" : undefined}
-                rel={externalLink ? "noopener" : undefined}
-                class={`block bg-white border border-club-border rounded-lg p-3 md:p-4 transition-all ${
-                  isLink ? "hover:border-club-primary hover:shadow-md" : ""
-                }`}
-              >
-                <div class="grid grid-cols-[auto_auto_1fr_auto] items-center gap-3 md:gap-4">
-                  {/* Outcome badge */}
-                  <div
-                    class={`${outcomeColor[outcome]} text-white w-10 h-10 rounded flex items-center justify-center font-display font-bold flex-shrink-0`}
-                    title={outcomeTitle[outcome]}
-                  >
-                    {outcomeLabel[outcome]}
-                  </div>
-
-                  {/* Natjecanje + datum */}
-                  <div class="text-xs text-club-muted w-20 flex-shrink-0">
-                    <p class="font-display uppercase tracking-wider font-bold text-club-primary-deep">
-                      {matchBadge(m)}
-                    </p>
-                    <p>{new Date(m.iso).toLocaleDateString("hr-HR", { day: "numeric", month: "short" })}</p>
-                  </div>
-
-                  {/* Match */}
-                  <div class="flex items-center justify-center gap-2 md:gap-3 min-w-0">
-                    <span class={`text-xs md:text-sm truncate text-right flex-1 ${m.isHome ? "font-bold" : ""}`}>
-                      {m.home.name}
-                    </span>
-                    <span class="font-display font-bold text-base md:text-lg flex-shrink-0 bg-club-light-2 px-2 py-0.5 rounded">
-                      {m.score?.home} : {m.score?.away}
-                    </span>
-                    <span class={`text-xs md:text-sm truncate flex-1 ${!m.isHome ? "font-bold" : ""}`}>
-                      {m.away.name}
-                    </span>
-                  </div>
-
-                  {/* Arrow */}
-                  {isLink && (
-                    <svg class="w-4 h-4 text-club-muted flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                    </svg>
-                  )}
-                </div>
-
-                {/* Strijelci (prijateljske — nema stranice s detaljima) */}
-                {scorersLabel && (
-                  <p class="mt-2 pt-2 border-t border-club-border/60 text-xs text-club-muted text-center">
-                    ⚽ {scorersLabel}
-                  </p>
-                )}
-              </Tag>
+              <ResultCard
+                match={m}
+                label={competitionShort(m)}
+                date={shortDate(m.date)}
+                note={ourScorers(m)}
+                href={hasDetail ? url(`/utakmica/${m.id}`) : m.url}
+                external={!hasDetail && !!m.url}
+                matchType={m.type}
+              />
             );
           })}
         </div>

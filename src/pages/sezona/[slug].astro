@@ -7,10 +7,10 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import Hero from "../../components/Hero.astro";
 import LeagueTable from "../../components/LeagueTable.astro";
 import SeasonStats from "../../components/SeasonStats.astro";
-import TeamCrest from "../../components/TeamCrest.astro";
+import ResultCard from "../../components/ResultCard.astro";
 import { url } from "../../lib/url";
 import { golLabel, nastupLabel, pluralCroatian } from "../../lib/croatian";
-import { matchBadge, type MatchType } from "../../lib/matches";
+import { matchBadge, personName, shortDate, type MatchType } from "../../lib/matches";
 import {
   seasons,
   leagueOf,
@@ -38,18 +38,12 @@ const subtitle = us
 const types = new Set(season.competitions.map((c) => c.type));
 const scope = types.has("league") && types.has("cup") ? "liga i kup" : types.has("cup") ? "kup" : "liga";
 
-const outcome = {
-  W: { letter: "P", title: "Pobjeda", cls: "bg-green-600" },
-  D: { letter: "N", title: "Neriješeno", cls: "bg-yellow-500" },
-  L: { letter: "I", title: "Izgubljeno", cls: "bg-red-600" },
-};
-
 /** Naši strijelci u utakmici: "Ćosić 79', Kasapović 6'". */
 function ourScorers(m: ArchiveMatch): string {
   const goals = m.goals ? (m.isHome ? m.goals.home : m.goals.away) : [];
   return goals
     .map((g) => {
-      const name = g.name.replace(/\s*,\s*/g, " ").trim();
+      const name = personName(g.name);
       const note = g.type === "own_goal" ? " (autogol)" : g.type === "penalty" ? " (11 m)" : "";
       return `${name}${g.minute != null ? ` ${g.minute}'` : ""}${note}`;
     })
@@ -106,46 +100,21 @@ const description = us
       <section class="container-narrow mt-12">
         <h2 class="text-2xl mb-1">Rezultati</h2>
         <p class="text-sm text-club-muted mb-4">{c.name}</p>
-        <ul class="space-y-2">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
           {c.matches
             .filter((m) => m.played && m.score)
             .map((m) => {
-              const o = outcome[(m.result ?? "D") as "W" | "D" | "L"];
-              const scorers = ourScorers(m);
+              const u = toUnified(m, c.type as MatchType);
               return (
-                <li class="bg-white border border-club-border rounded-lg px-3 py-3 md:px-4">
-                  <div class="grid grid-cols-[auto_1fr_auto] items-center gap-3">
-                    <span
-                      class={`${o.cls} w-8 h-8 rounded text-white font-display font-bold text-sm flex items-center justify-center`}
-                      title={o.title}
-                    >
-                      {o.letter}
-                    </span>
-                    <div class="min-w-0">
-                      <p class="text-[11px] font-display uppercase tracking-wider text-club-muted">
-                        {matchBadge(toUnified(m, c.type as MatchType))} · {formatDate(m.date)}
-                      </p>
-                      <p class="text-sm leading-tight mt-0.5 flex items-center gap-1.5 flex-wrap">
-                        <span class="w-5 h-5 inline-flex flex-shrink-0">
-                          <TeamCrest team={m.home} size={20} class="w-full h-full" />
-                        </span>
-                        <span class={m.isHome ? "font-bold" : ""}>{m.home.name}</span>
-                        <span class="text-club-muted">–</span>
-                        <span class="w-5 h-5 inline-flex flex-shrink-0">
-                          <TeamCrest team={m.away} size={20} class="w-full h-full" />
-                        </span>
-                        <span class={!m.isHome ? "font-bold" : ""}>{m.away.name}</span>
-                      </p>
-                      {scorers && <p class="text-xs text-club-muted mt-1">⚽ {scorers}</p>}
-                    </div>
-                    <span class="font-display font-bold text-lg whitespace-nowrap">
-                      {m.score!.home} : {m.score!.away}
-                    </span>
-                  </div>
-                </li>
+                <ResultCard
+                  match={u}
+                  label={matchBadge(u)}
+                  date={shortDate(m.date, true)}
+                  note={ourScorers(m)}
+                />
               );
             })}
-        </ul>
+        </div>
       </section>
     ))
   }

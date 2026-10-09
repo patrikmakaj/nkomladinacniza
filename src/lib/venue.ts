@@ -25,7 +25,7 @@ export type Venue = {
 };
 
 /** "NK \"Motičina\", Donja Motičina, 13.09.2026. 17:00" → "NK Motičina, Donja Motičina" */
-function groundFromFacility(facility: string): string | null {
+export function groundFromFacility(facility: string): string | null {
   const m = facility.match(/^(.*?),\s*\d{1,2}\.\d{1,2}\.\d{4}\./);
   const ground = (m ? m[1] : "").replace(/["„“”]/g, "").trim();
   return ground || null;
