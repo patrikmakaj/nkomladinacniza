@@ -1,12 +1,13 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { crestSrc } from "../../lib/images";
-import { kickoffIso } from "../../lib/matches";
+import { kickoffIso, played } from "../../lib/matches";
 import { groundFromFacility } from "../../lib/venue";
 import Logo from "../../components/Logo.astro";
 import MatchEventsList from "../../components/MatchEventsList.astro";
 import MatchLineup from "../../components/MatchLineup.astro";
 import ClubPost from "../../components/ClubPost.astro";
+import PosterDownload from "../../components/PosterDownload.astro";
 import { matchReport } from "../../lib/match-posts";
 import { url } from "../../lib/url";
 import hns from "../../data/hns.json";
@@ -47,6 +48,8 @@ if (!match || !detail) {
 }
 
 const report = matchReport(match.id);
+// Plakat rezultata treba UnifiedMatch (strijelci, mjesto igranja) — ista utakmica iz lib/matches.
+const unified = played.find((m) => m.id === match.id) ?? null;
 const isHome = match.home.id === OUR_CLUB_ID;
 const ourScore = isHome ? match.score?.home : match.score?.away;
 const oppScore = isHome ? match.score?.away : match.score?.home;
@@ -323,6 +326,12 @@ const sportsEventSchema: Record<string, unknown> = {
             linkableIds={ourRosterIds}
           />
         </div>
+      </div>
+    )}
+
+    {unified && (
+      <div class="mb-10">
+        <PosterDownload kind="rezultat" match={unified} />
       </div>
     )}
 

@@ -1,0 +1,64 @@
+---
+/**
+ * Blok za preuzimanje plakata (lib/poster.ts): pregled 4:5 i dva gumba,
+ * objava 4:5 i story 9:16. Na /najava/[id] najava, na /utakmica/[id] rezultat.
+ */
+import { url } from "../lib/url";
+import { posterFilename, type PosterKind } from "../lib/poster";
+import type { UnifiedMatch } from "../lib/matches";
+
+interface Props {
+  kind: PosterKind;
+  match: UnifiedMatch;
+}
+
+const { kind, match } = Astro.props;
+
+const base = kind === "najava" ? `/najava/${match.id}` : `/utakmica/${match.id}`;
+const plakat = url(`${base}/plakat.jpg`);
+const story = url(`${base}/story.jpg`);
+const outline =
+  "inline-flex items-center justify-center px-6 py-3 rounded font-display text-sm font-bold uppercase tracking-widest text-club-primary-deep bg-white border-2 border-club-primary hover:bg-club-primary hover:text-white transition-colors";
+---
+
+<div class="bg-white border border-club-border rounded-xl p-5 md:p-6 flex flex-col sm:flex-row items-center gap-5 md:gap-8">
+  <a href={plakat} target="_blank" rel="noopener" class="flex-shrink-0" title="Otvori plakat">
+    <img
+      src={plakat}
+      alt={kind === "najava" ? "Plakat najave utakmice" : "Plakat rezultata utakmice"}
+      width="1080"
+      height="1350"
+      loading="lazy"
+      class="w-36 md:w-44 h-auto rounded-lg shadow-md"
+    />
+  </a>
+  <div class="flex-1 text-center sm:text-left">
+    <p class="text-[11px] font-display uppercase tracking-widest text-club-muted">Za društvene mreže</p>
+    <h2 class="text-2xl mt-1">{kind === "najava" ? "Plakat najave" : "Plakat rezultata"}</h2>
+    <p class="text-sm text-club-muted mt-1 max-w-md">
+      Spreman za objavu na Facebooku i Instagramu, a uži format za story i WhatsApp status.
+    </p>
+    <div class="flex flex-wrap gap-2 mt-4 justify-center sm:justify-start">
+      <a
+        href={plakat}
+        download={posterFilename(kind, match, "plakat")}
+        class="btn-primary text-sm"
+        data-umami-event="Preuzmi plakat"
+        data-umami-event-vrsta={kind}
+        data-umami-event-format="4:5"
+      >
+        Objava 4:5
+      </a>
+      <a
+        href={story}
+        download={posterFilename(kind, match, "story")}
+        class={outline}
+        data-umami-event="Preuzmi plakat"
+        data-umami-event-vrsta={kind}
+        data-umami-event-format="9:16"
+      >
+        Story 9:16
+      </a>
+    </div>
+  </div>
+</div>

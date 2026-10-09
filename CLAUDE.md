@@ -221,6 +221,21 @@ ne uparuje. Prikaz: `ClubPost` na `/utakmica/[id]` i `/najava/[id]`.
 Ako ikad krivo upari, popravlja se u uzorcima imena
 (`opponentPatterns`), ne ručnim iznimkama u stranicama.
 
+### 3d. Plakati za društvene mreže
+
+`lib/poster.ts` crta plakat najave i rezultata u dva formata: `plakat` (4:5,
+1080×1350) i `story` (9:16, 1080×1920), kao JPEG kroz `renderImage` iz
+`lib/og.ts` (isti cache u `.cache/og`). Rute: `/najava/[id]/{plakat,story}.jpg`
+za sve neodigrane i `/utakmica/[id]/{plakat,story}.jpg` za odigrane s detaljima.
+Gumbi za preuzimanje su u `PosterDownload` na tim dvjema stranicama.
+
+- Grbovi su lokalne kopije iz `crests.json` (HNS ih daje 100×100 px, pa su
+  malo mekši); naš je `logo.svg`. Bez lokalnog grba — krug s početnim slovom.
+- Fotke igrača se namjerno ne stavljaju: HNS ih daje 80×100 px.
+- Pozadina je `POSTER_BACKGROUND`: zatamnjena fotka Grbavice
+  (`src/assets/plakat/grbavica.jpg`, 1080 px, ~170 KB) ili klupske boje.
+- Promjena izgleda → podigni `v` u `cacheKey`, inače CI vrati stare iz cachea.
+
 ### 4. Client skripte moraju preživjeti View Transitions
 
 `BaseLayout` uključuje `<ClientRouter />`. Kod navigacije se `<script>` **ne**
@@ -337,6 +352,7 @@ src/
 │   ├── utakmica/[id].ics.ts   # jedna nadolazeća utakmica (seniori + U-11) za "U kalendar"
 │   ├── najava/[id].astro      # najava utakmice za dijeljenje; odigrane preusmjeravaju na detalje
 │   ├── najava/[id].png.ts     # OG slika najave ("NAJAVA · 18:00 · subota, 3. listopada")
+│   ├── najava/[id]/[format].jpg.ts, utakmica/[id]/[format].jpg.ts  # plakati (vidi 3d)
 │   ├── sezona/[slug].astro    # arhivirana sezona (src/data/sezone/)
 │   ├── rss.xml.ts             # RSS iz FB postova
 │   ├── raspored.ics.ts        # cijeli raspored kao kalendar za pretplatu (webcal://)
@@ -349,14 +365,16 @@ src/
 │                              # ClubPost (FB izvještaj/najava), YouthSignup (upis),
 │                              # ResultCard (odigrana utakmica, svugdje ista),
 │                              # UpcomingCard (nadolazeća, + MatchActions),
+│                              # PosterDownload (plakat 4:5 / story 9:16),
 │                              # RecentResults (+ traka forme), PlayerCard, StaffCard,
 │                              # MatchLineup, MatchEventsList, StatRanking, FacebookPost,
 │                              # LatestPostBlock, InstallPrompt, Logo, SchemaSportsTeam
 ├── lib/                       # url.ts · matches.ts · croatian.ts · facebook.ts · images.ts
 │                              # venue.ts (igralište, Google Maps, mjesto za prognozu) · ics.ts
-│                              # schema.ts · og.ts · match-posts.ts · seasons.ts
+│                              # schema.ts · og.ts · match-posts.ts · seasons.ts · poster.ts
 ├── data/                      # vidi tablicu gore
 ├── assets/                    # fontovi (za OG slike) + logotipi sponzora (Astro <Image>)
+│                              # + plakat/grbavica.jpg (pozadina plakata)
 └── styles/global.css
 
 scripts/    scrape.mjs · scrape-friendlies.mjs · fetch-images.mjs · scrape-facebook.mjs
@@ -463,4 +481,4 @@ ići kroz `preserveExisting`, nikad kroz `writeEmpty`.)
 - Skripta bez `astro:page-load` → radi na reload, puca na navigaciju.
 - Ručna izmjena `hns.json` / `facebook*.json` → CI je prepiše za max 30 minuta.
 - `<img src={team.logo}>` bez `crestSrc()` → grb se opet vuče s hns.family.
-- Nova OG slika bez `renderOgPng` iz `lib/og.ts` → generira se na svakom buildu.
+- Nova OG slika bez `renderOgPng` / `renderImage` iz `lib/og.ts` → generira se na svakom buildu.

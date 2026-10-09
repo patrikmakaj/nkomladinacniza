@@ -1,5 +1,5 @@
 /**
- * OG slike (1200×630) — satori + resvg, s cacheom na disku.
+ * OG slike (1200×630) i plakati — satori + resvg, s cacheom na disku.
  *
  * Generiranje traje ~1,4 s po slici, a build ide i svakih 30 min, pa se PNG
  * sprema u .cache/og po hashu svega što utječe na izgled (CI cache-a tu
@@ -7,6 +7,7 @@
  */
 import satori from "satori";
 import { Resvg } from "@resvg/resvg-js";
+import sharp from "sharp";
 import fs from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
@@ -35,26 +36,47 @@ export async function renderOgPng(
   tree: Parameters<typeof satori>[0],
   { name, cacheKey }: { name: string; cacheKey: string },
 ): Promise<Response> {
+  return renderImage(tree, { name, cacheKey, width: 1200, height: 630, format: "png" });
+}
+
+/**
+ * Isto kao renderOgPng, ali proizvoljne veličine i po želji JPEG — plakati
+ * (lib/poster.ts) su 1080×1350 i 1080×1920 s fotkom, pa bi PNG imao 2 MB.
+ */
+export async function renderImage(
+  tree: Parameters<typeof satori>[0],
+  {
+    name,
+    cacheKey,
+    width,
+    height,
+    format,
+  }: { name: string; cacheKey: string; width: number; height: number; format: "png" | "jpeg" },
+): Promise<Response> {
   fs.mkdirSync(CACHE_DIR, { recursive: true });
   const hash = crypto.createHash("sha256").update(cacheKey).digest("hex").slice(0, 16);
-  const cachePath = path.join(CACHE_DIR, `${name}-${hash}.png`);
+  const ext = format === "jpeg" ? "jpg" : "png";
+  const cachePath = path.join(CACHE_DIR, `${name}-${hash}.${ext}`);
+  const contentType = format === "jpeg" ? "image/jpeg" : "image/png";
 
   if (fs.existsSync(cachePath)) {
     return new Response(new Uint8Array(fs.readFileSync(cachePath)), {
-      headers: { "Content-Type": "image/png", "X-Cache": "HIT" },
+      headers: { "Content-Type": contentType, "X-Cache": "HIT" },
     });
   }
 
-  const svg = await satori(tree, { width: 1200, height: 630, fonts: OG_FONTS });
-  const png = new Resvg(svg, { fitTo: { mode: "width", value: 1200 } }).render().asPng();
+  const svg = await satori(tree, { width, height, fonts: OG_FONTS });
+  const png = new Resvg(svg, { fitTo: { mode: "width", value: width } }).render().asPng();
+  const out =
+    format === "jpeg" ? await sharp(png).jpeg({ quality: 86, mozjpeg: true }).toBuffer() : png;
 
   try {
-    fs.writeFileSync(cachePath, png);
+    fs.writeFileSync(cachePath, out);
   } catch {
     // Ako nije moguće pisati u cache (npr. read-only FS), tiho ignoriraj
   }
 
-  return new Response(new Uint8Array(png), {
-    headers: { "Content-Type": "image/png", "X-Cache": "MISS" },
+  return new Response(new Uint8Array(out), {
+    headers: { "Content-Type": contentType, "X-Cache": "MISS" },
   });
 }
