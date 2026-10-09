@@ -9,7 +9,8 @@
  * Slike na plakatu:
  *  - grbovi: lokalne kopije s HNS-a (crests.json). HNS ih daje 100×100 px,
  *    pa su na plakatu malo mekši; naš grb je vektorski (logo.svg).
- *  - pozadina: klupske boje ili zatamnjena fotka Grbavice (POSTER_BACKGROUND).
+ *  - pozadina: klupske boje i veliki prozirni grb. Fotka Grbavice je bila
+ *    druga opcija, ali je klub odabrao boje — vrijede i za gostovanja.
  *  - fotke igrača NE: HNS ih daje 80×100 px, premalo za plakat.
  */
 import fs from "node:fs";
@@ -28,9 +29,6 @@ export const POSTER_SIZE: Record<PosterFormat, { width: number; height: number; 
   story: { width: 1080, height: 1920, label: "9:16" },
 };
 
-/** "foto" = zatamnjena fotka Grbavice (src/assets/plakat/), "boje" = gradijent i grb. */
-const POSTER_BACKGROUND: "foto" | "boje" = "foto";
-
 const NAVY = "#0f2c6e";
 const GOLD = "#d4b659";
 
@@ -38,7 +36,6 @@ const fileUri = (file: string, mime: string) =>
   `data:${mime};base64,${fs.readFileSync(file).toString("base64")}`;
 
 const LOGO = fileUri(path.resolve("public/images/logo.svg"), "image/svg+xml");
-const PHOTO_FILE = path.resolve("src/assets/plakat/grbavica.jpg");
 
 /** Grb kao data URI; null ako ga nemamo lokalno (tada krug s početnim slovom). */
 function crestUri(team: TeamRef): string | null {
@@ -98,16 +95,6 @@ function crestBlock(team: TeamRef, size: number): Node {
 
 function background(width: number, height: number): Node[] {
   const full = { position: "absolute", left: 0, top: 0, width, height };
-  if (POSTER_BACKGROUND === "foto" && fs.existsSync(PHOTO_FILE)) {
-    return [
-      img(fileUri(PHOTO_FILE, "image/jpeg"), { ...full, objectFit: "cover" }),
-      box({
-        ...full,
-        backgroundImage:
-          "linear-gradient(180deg, rgba(10,31,79,0.92) 0%, rgba(15,44,110,0.72) 45%, rgba(10,31,79,0.95) 100%)",
-      }),
-    ];
-  }
   return [
     box({ ...full, backgroundImage: "linear-gradient(150deg, #0a1f4f 0%, #1e3d8c 55%, #2c5bc4 100%)" }),
     img(LOGO, { position: "absolute", right: -width * 0.22, bottom: height * 0.04, width: width * 0.85, opacity: 0.07 }),
@@ -141,7 +128,7 @@ export function posterScorers(m: UnifiedMatch): { home: string[]; away: string[]
 function posterTree(kind: PosterKind, m: UnifiedMatch, format: PosterFormat): Node {
   const { width, height } = POSTER_SIZE[format];
   const tall = format === "story";
-  const crest = tall ? 260 : 230;
+  const crest = tall ? 290 : 230;
 
   const day = new Date(`${m.date}T12:00:00`)
     .toLocaleDateString("hr-HR", { weekday: "long", day: "numeric", month: "long", timeZone: "Europe/Zagreb" })
@@ -195,8 +182,9 @@ function posterTree(kind: PosterKind, m: UnifiedMatch, format: PosterFormat): No
           height,
           flexDirection: "column",
           alignItems: "center",
-          justifyContent: "space-between",
-          padding: tall ? "120px 70px" : "70px 70px",
+          // Story je viši pa bi space-between ostavio rupu iznad grbova
+          justifyContent: tall ? "space-around" : "space-between",
+          padding: tall ? "100px 70px" : "70px 70px",
         },
         [
           // Vrh: klub, naslov, natjecanje
@@ -305,8 +293,7 @@ export function renderPoster(kind: PosterKind, m: UnifiedMatch, format: PosterFo
   // Ključ cachea: sve što je na plakatu + verzija dizajna. Grbovi se mijenjaju
   // rijetko, a kad se promijene, mijenja se i URL u crests.json.
   const cacheKey = JSON.stringify({
-    v: 2,
-    bg: POSTER_BACKGROUND,
+    v: 4,
     kind,
     format,
     m: [m.id, m.date, m.time, m.score, m.home, m.away, m.competition, m.round, m.isHome, m.venue],

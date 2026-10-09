@@ -232,8 +232,8 @@ Gumbi za preuzimanje su u `PosterDownload` na tim dvjema stranicama.
 - Grbovi su lokalne kopije iz `crests.json` (HNS ih daje 100×100 px, pa su
   malo mekši); naš je `logo.svg`. Bez lokalnog grba — krug s početnim slovom.
 - Fotke igrača se namjerno ne stavljaju: HNS ih daje 80×100 px.
-- Pozadina je `POSTER_BACKGROUND`: zatamnjena fotka Grbavice
-  (`src/assets/plakat/grbavica.jpg`, 1080 px, ~170 KB) ili klupske boje.
+- Pozadina su klupske boje s prozirnim grbom — klub je to odabrao umjesto
+  fotke Grbavice, koja bi na gostovanjima pokazivala krivo igralište.
 - Promjena izgleda → podigni `v` u `cacheKey`, inače CI vrati stare iz cachea.
 
 ### 4. Client skripte moraju preživjeti View Transitions
@@ -374,7 +374,6 @@ src/
 │                              # schema.ts · og.ts · match-posts.ts · seasons.ts · poster.ts
 ├── data/                      # vidi tablicu gore
 ├── assets/                    # fontovi (za OG slike) + logotipi sponzora (Astro <Image>)
-│                              # + plakat/grbavica.jpg (pozadina plakata)
 └── styles/global.css
 
 scripts/    scrape.mjs · scrape-friendlies.mjs · fetch-images.mjs · scrape-facebook.mjs
