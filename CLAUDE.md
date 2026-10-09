@@ -33,6 +33,7 @@ npm run scrape:hns         # HNS Semafor → src/data/hns.json
 npm run scrape:facebook    # FB postovi → src/data/facebook.json (treba FB_* env)
 npm run scrape:fb-albums   # FB albumi → src/data/facebook-albums.json (treba FB_* env)
 npm run scrape:images      # grbovi + fotke seniora s HNS-a → public/images/{clubs,players}/
+npm run scrape:friendlies  # Google Sheet → src/data/friendlies.json (samo ako je postavljen SHEET_ID)
 node scripts/archive-season.mjs <stari-hns.json>   # ručna arhiva sezone (npr. iz git povijesti)
 ```
 
@@ -57,6 +58,12 @@ GitHub Action `scrape-and-deploy.yml` vrti se **svakih 30 min** + na svaki push 
 Scrape job commita svježe podatke, build job gradi točno ono što je commitano
 (namjerno **ne** scrapa ponovno — inače se stranica i repo raziđu).
 
+**Na dan utakmice svakih 10 min.** Treći cron (`10,20,40,50 * * * *`) dodaje
+prolaze između redovnih, ali korak „Traje li utakmica?" (`scripts/match-window.mjs`)
+ih pusti dalje samo od početka seniorske utakmice do 3 h poslije, po Zagrebu.
+Ostatak vremena job završi u par sekundi bez scrapea i deploya. GitHub cron zna
+kasniti 5-15 min, pa je to „brže", ne „uživo".
+
 ### Datoteke u `src/data/` — što se smije dirati
 
 | Datoteka | Ručno uređivati? |
@@ -66,9 +73,11 @@ Scrape job commita svježe podatke, build job gradi točno ono što je commitano
 | `facebook-albums.json` | **NE** — generira `scripts/scrape-facebook-albums.mjs` |
 | `crests.json`, `photos.json` | **NE** — generira `scripts/fetch-images.mjs` (HNS URL slike → lokalna kopija) |
 | `sezone/*.json` | **NE** — arhiva sezone; zapiše je scraper pri promjeni sezone (vidi 3b) |
-| `friendlies.json` | **DA** — jedini ručni izvor. Format: `friendlies.README.md` |
+| `friendlies.json` | **DA, dok nije postavljen Google Sheet** — tada ga generira `scripts/scrape-friendlies.mjs` i ručne izmjene se gube. Format i stupci tablice: `friendlies.README.md` |
 
-Prijateljske, memorijali i turniri nisu na HNS Semaforu → unose se u `friendlies.json`.
+Prijateljske, memorijali i turniri nisu na HNS Semaforu → unose se u Google tablicu
+(`FRIENDLIES_SHEET_ID`) ili, dok je nema, ručno u `friendlies.json`. Scraper
+prijateljskih ide prije `fetch-images.mjs`, da se skinu i grbovi novih protivnika.
 
 **Scraperi pišu samo kad se sadržaj promijenio.** Prije su na svakom prolazu
 upisivali svjež `lastUpdated`, pa je CI commitao i deployao stranicu svakih 30
@@ -160,7 +169,8 @@ Facebook — tako je klub htio. Mijenja se samo u toj komponenti.
 
 `players` i `stats` HNS objavi **tek nakon prvih odigranih utakmica** — zato
 seniorska liga ima prazne, a kup pune. Sve što ih prikazuje mora se znati
-sakriti; koristi `hasStats(comp.stats)`. Igrači mlađih kategorija nemaju
+sakriti; koristi `hasStats(comp.stats)`. Kod U-11 se kartoni namjerno ne
+prikazuju, a prazna rang-lista se ne renderira. Igrači mlađih kategorija nemaju
 `/igrac/[id]` profil (te se rute grade samo iz seniorskog `hns.players`), pa se
 linka na njihov `profileUrl` na Semaforu.
 
@@ -230,13 +240,13 @@ a za interval koji treba ugasiti pri odlasku sa stranice `MatchDayHero.astro`
 ### 5. Podaci server → client idu kroz JSON script tag
 
 ```astro
-<script type="application/json" id="ics-data" set:html={JSON.stringify(payload)} />
+<script type="application/json" id="gallery-data" set:html={JSON.stringify(payload)} />
 <script>
-  const data = JSON.parse(document.getElementById("ics-data").textContent);
+  const data = JSON.parse(document.getElementById("gallery-data").textContent);
 </script>
 ```
 
-Tako rade `galerija.astro` i `raspored.astro`. Ne koristi `define:vars` osim za
+Tako rade `galerija.astro` i `TurnirLive.astro`. Ne koristi `define:vars` osim za
 skalare (kao `turnir.astro` sa `SHEET_ID`).
 
 Kad je podataka puno, inline payload nije opcija. Galerija ima 4000+ fotki kroz
@@ -338,6 +348,7 @@ src/
 │                              # (kalendar · upute · podijeli), SeasonStats, MatchWeather,
 │                              # ClubPost (FB izvještaj/najava), YouthSignup (upis),
 │                              # ResultCard (odigrana utakmica, svugdje ista),
+│                              # UpcomingCard (nadolazeća, + MatchActions),
 │                              # RecentResults (+ traka forme), PlayerCard, StaffCard,
 │                              # MatchLineup, MatchEventsList, StatRanking, FacebookPost,
 │                              # LatestPostBlock, InstallPrompt, Logo, SchemaSportsTeam
@@ -348,7 +359,8 @@ src/
 ├── assets/                    # fontovi (za OG slike) + logotipi sponzora (Astro <Image>)
 └── styles/global.css
 
-scripts/    scrape.mjs · fetch-images.mjs · scrape-facebook.mjs · scrape-facebook-albums.mjs
+scripts/    scrape.mjs · scrape-friendlies.mjs · fetch-images.mjs · scrape-facebook.mjs
+            scrape-facebook-albums.mjs · match-window.mjs (CI: traje li utakmica)
             archive-season.mjs · lib/ (write-json · hns-sanity · season-archive)
 public/     CNAME, favicons/ikone, images/ (logo.svg, og-image.png, facebook/, facebook-albums/)
 ```

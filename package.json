@@ -14,7 +14,8 @@
     "scrape:facebook": "node scripts/scrape-facebook.mjs",
     "scrape:fb-albums": "node scripts/scrape-facebook-albums.mjs",
     "scrape:images": "node scripts/fetch-images.mjs",
-    "scrape": "npm run scrape:hns && npm run scrape:images && npm run scrape:facebook && npm run scrape:fb-albums",
+    "scrape:friendlies": "node scripts/scrape-friendlies.mjs",
+    "scrape": "npm run scrape:hns && npm run scrape:friendlies && npm run scrape:images && npm run scrape:facebook && npm run scrape:fb-albums",
     "prebuild": "npm run scrape",
     "thumbs": "node scripts/backfill-thumbs.mjs",
     "check": "astro check"

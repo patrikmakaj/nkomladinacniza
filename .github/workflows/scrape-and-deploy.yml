@@ -2,6 +2,7 @@ name: Scrape HNS data + deploy to GitHub Pages
 
 # Pokreće se:
 #  - svakih 30 minuta (cron)
+#  - na dan utakmice svakih 10 minuta dok traje seniorska utakmica (cron + match-window)
 #  - jednom dnevno iza ponoći po zagrebačkom vremenu (cron) — uvijek deploya
 #  - na svaki push u main (npr. promjena dizajna ili sadržaja)
 #  - ručno preko Actions UI-a (workflow_dispatch)
@@ -14,6 +15,11 @@ on:
     # (01:07) i zimi (00:07). Ako mijenjaš izraz, promijeni i `if:` u
     # build-and-deploy, koji ga uspoređuje doslovno.
     - cron: "7 23 * * *"
+    # Dan utakmice: tri prolaza između redovnih, pa se scrapa svakih 10 min —
+    # ali samo dok traje seniorska utakmica (scripts/match-window.mjs).
+    # Ostatak vremena job završi u par sekundi, bez scrapea i deploya.
+    # Ako mijenjaš izraz, promijeni i `if:` koraka "Traje li utakmica?".
+    - cron: "10,20,40,50 * * * *"
   push:
     branches: [main]
   workflow_dispatch:
@@ -40,16 +46,27 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      # Dodatni prolazi svakih 10 min imaju smisla samo dok traje utakmica.
+      # Za sve ostale okidače korak se preskače, pa `active` ostaje prazan
+      # i scrape ide kao i uvijek. Node je na runneru i bez setup-node.
+      - name: Traje li utakmica?
+        id: window
+        if: github.event.schedule == '10,20,40,50 * * * *'
+        run: node scripts/match-window.mjs
+
       - uses: actions/setup-node@v4
+        if: steps.window.outputs.active != 'false'
         with:
           node-version: "22"
           cache: "npm"
 
       - name: Install dependencies
+        if: steps.window.outputs.active != 'false'
         run: npm ci
 
       - name: Scrape HNS Semafor + Facebook
         id: scrape
+        if: steps.window.outputs.active != 'false'
         env:
           FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
           FB_ACCESS_TOKEN: ${{ secrets.FB_ACCESS_TOKEN }}
@@ -57,6 +74,7 @@ jobs:
 
       - name: Commit if data changed
         id: commit
+        if: steps.window.outputs.active != 'false'
         run: |
           set -e
           git config user.name "github-actions[bot]"

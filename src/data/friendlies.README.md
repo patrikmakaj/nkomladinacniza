@@ -1,8 +1,31 @@
-# Prijateljske utakmice — ručni unos
+# Prijateljske utakmice
 
-Utakmice koje **nisu na HNS Semaforu** (prijateljske, memorijali, turniri) unose se
-ručno u [`friendlies.json`](./friendlies.json). Nakon commita stranica se
-automatski ponovno buildá i utakmice se pojave na rasporedu i naslovnici.
+Utakmice koje **nisu na HNS Semaforu** (prijateljske, memorijali, turniri) žive u
+[`friendlies.json`](./friendlies.json).
+
+## Google Sheet (kad je postavljen)
+
+Ako je u `scripts/scrape-friendlies.mjs` postavljen `FRIENDLIES_SHEET_ID`, izvor je
+**Google tablica**, a `friendlies.json` generira scraper pri svakom prolazu (svakih
+30 min). Tada se JSON **ne uređuje ručno** — CI bi ga prepisao. Upisuje se u tablicu:
+
+| Datum | Vrijeme | Protivnik | Doma/Gosti | Mjesto | Natjecanje | Naši golovi | Golovi protivnika | Strijelci | HNS ID | Grb |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 16.8.2026. | 19:00 | NK Mladost Stipanovci | Doma | Niza | Prijateljska utakmica | 0 | 3 | | 133 | |
+
+- Obavezni su samo **Datum**, **Protivnik** i **Doma/Gosti**.
+- Golovi idu u **dva stupca** iz naše perspektive (ne "3:1" — Sheets to pretvori u vrijeme).
+  Dok se ne odigra, ostave se prazni.
+- **Strijelci**: `Denis Ćosić 2, Karlo Grubač` (broj iza imena = koliko golova).
+- **HNS ID** je broj iz linka kluba na Semaforu; ako ga upišeš, grb se uzme sam
+  kad klub postoji u našim HNS podacima. Inače se link na grb može zalijepiti u **Grb**.
+- Redak bez datuma, protivnika ili Doma/Gosti se preskače (vidi se u logu CI-a).
+- Tablica mora biti dijeljena kao *Svatko s linkom može pregledavati*.
+
+## Ručni unos (dok tablica nije postavljena)
+
+Nakon commita stranica se automatski ponovno buildá i utakmice se pojave na
+rasporedu i naslovnici.
 
 Najlakše s mobitela: otvori datoteku na GitHubu → ikona olovke → uredi → **Commit changes**.
 

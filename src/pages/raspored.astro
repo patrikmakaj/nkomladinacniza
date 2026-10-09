@@ -1,8 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-import { crestSrc } from "../lib/images";
 import Hero from "../components/Hero.astro";
-import Logo from "../components/Logo.astro";
+import UpcomingCard from "../components/UpcomingCard.astro";
 import ResultCard from "../components/ResultCard.astro";
 import { url } from "../lib/url";
 import hns from "../data/hns.json";
@@ -10,8 +9,6 @@ import {
   allMatches,
   upcoming,
   played,
-  matchBadge,
-  badgeClass,
   typeLabel,
   typeOrder,
   typeSlug,
@@ -30,20 +27,6 @@ const competitionName = hns.competition?.name ?? "Sezona";
 const icsPath = url("/raspored.ics");
 const icsAbsolute = new URL(icsPath, Astro.site ?? "https://omladinacniza.hr").href;
 const icsWebcal = icsAbsolute.replace(/^https?:/, "webcal:");
-
-// Hrvatski format datuma (npr. "ned, 2. svibnja 2026.")
-function formatDate(iso: string): string {
-  if (!iso) return "";
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return iso;
-  const weekday = d.toLocaleDateString("hr-HR", { weekday: "short" });
-  const date = d.toLocaleDateString("hr-HR", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
-  return `${weekday}, ${date}`;
-}
 
 const lastUpdated = new Date(hns.lastUpdated).toLocaleString("hr-HR", {
   dateStyle: "short",
@@ -67,18 +50,6 @@ const filters = [
 ];
 const showFilters = filters.length > 2;
 
-// Embed-amo predstojeće utakmice u client-side payload za .ics download
-const icsPayload = upcoming.map((m) => ({
-  id: m.id,
-  iso: m.iso,
-  date: m.date,
-  time: m.time,
-  homeName: m.home.name,
-  awayName: m.away.name,
-  isHome: m.isHome,
-  competition: m.competition,
-  venue: m.venue,
-}));
 ---
 
 <BaseLayout
@@ -205,116 +176,9 @@ const icsPayload = upcoming.map((m) => ({
           </p>
         </div>
       ) : (
-        <div class="space-y-3">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
           {upcoming.map((m) => (
-            <article
-              data-match-id={m.id}
-              data-match-type={m.type}
-              class="bg-white border-2 border-club-border hover:border-club-primary rounded-lg overflow-hidden transition-colors"
-            >
-              {/* Header: kolo + datum + venue */}
-              <div class="bg-club-light-2 px-4 py-2 flex flex-wrap items-center justify-between gap-2 text-xs border-b border-club-border">
-                <div class="flex items-center gap-2">
-                  <span class={`font-display font-bold uppercase tracking-wider px-2 py-0.5 rounded ${badgeClass[m.type]}`}>
-                    {matchBadge(m)}
-                  </span>
-                  <span class="text-club-muted">{formatDate(m.iso)}</span>
-                </div>
-                <span class="font-display uppercase tracking-wider text-club-muted">
-                  {m.isHome
-                    ? "Doma · Grbavica"
-                    : `Gosti · ${m.venue ?? m.home.name}`}
-                </span>
-              </div>
-
-              {/* Body: home vs away + vrijeme */}
-              <div class="p-4 grid grid-cols-[1fr_auto_1fr] items-center gap-3 md:gap-6">
-                {/* Domaći */}
-                <div class="flex items-center gap-2 md:gap-3 justify-end text-right">
-                  <span
-                    class={`font-display font-bold uppercase text-sm md:text-base leading-tight ${
-                      m.home.id === 134 ? "text-club-primary-deep" : ""
-                    }`}
-                  >
-                    {m.home.name}
-                  </span>
-                  <div class="w-10 h-10 md:w-12 md:h-12 flex-shrink-0 flex items-center justify-center">
-                    {m.home.id === 134 ? (
-                      <Logo size={48} />
-                    ) : m.home.logo ? (
-                      <img
-                        src={crestSrc(m.home.logo)}
-                        alt=""
-                        width="48"
-                        height="48"
-                        class="object-contain w-full h-full"
-                        loading="lazy"
-                      />
-                    ) : (
-                      <div class="w-full h-full rounded-full bg-club-light flex items-center justify-center text-club-muted text-xs">?</div>
-                    )}
-                  </div>
-                </div>
-
-                {/* Vrijeme */}
-                <div class="text-center">
-                  <p class="font-display font-bold text-xl md:text-2xl text-club-primary-deep">
-                    {m.time || "—"}
-                  </p>
-                  <p class="text-[10px] md:text-xs uppercase tracking-widest text-club-muted">
-                    sat
-                  </p>
-                </div>
-
-                {/* Gosti */}
-                <div class="flex items-center gap-2 md:gap-3 justify-start">
-                  <div class="w-10 h-10 md:w-12 md:h-12 flex-shrink-0 flex items-center justify-center">
-                    {m.away.id === 134 ? (
-                      <Logo size={48} />
-                    ) : m.away.logo ? (
-                      <img
-                        src={crestSrc(m.away.logo)}
-                        alt=""
-                        width="48"
-                        height="48"
-                        class="object-contain w-full h-full"
-                        loading="lazy"
-                      />
-                    ) : (
-                      <div class="w-full h-full rounded-full bg-club-light flex items-center justify-center text-club-muted text-xs">?</div>
-                    )}
-                  </div>
-                  <span
-                    class={`font-display font-bold uppercase text-sm md:text-base leading-tight ${
-                      m.away.id === 134 ? "text-club-primary-deep" : ""
-                    }`}
-                  >
-                    {m.away.name}
-                  </span>
-                </div>
-              </div>
-
-              {/* Footer: najava + dodaj u kalendar */}
-              <div class="px-4 py-2 border-t border-club-border bg-club-light/50 flex items-center justify-between gap-3">
-                <a
-                  href={url(`/najava/${m.id}`)}
-                  class="text-xs font-display uppercase tracking-wider text-club-primary hover:text-club-primary-deep"
-                >
-                  Najava i forma →
-                </a>
-                <button
-                  type="button"
-                  data-ics-id={m.id}
-                  class="ics-btn text-xs font-display uppercase tracking-wider text-club-primary hover:text-club-primary-deep flex items-center gap-1.5"
-                  aria-label="Dodaj u kalendar"
-                >
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                  </svg>
-                  Dodaj u kalendar
-                </button>
-              </div>
-            </article>
+            <UpcomingCard match={m} label={competitionShort(m)} withPreview matchType={m.type} />
           ))}
         </div>
       )}
@@ -376,112 +240,7 @@ const icsPayload = upcoming.map((m) => ({
     </p>
   </section>
 
-  {/* ICS payload za client-side download */}
-  <script type="application/json" id="ics-data" set:html={JSON.stringify(icsPayload)} />
-
   <script>
-    type IcsMatch = {
-      id: string;
-      iso: string;
-      date: string;
-      time: string | null;
-      homeName: string;
-      awayName: string;
-      isHome: boolean;
-      competition: string;
-      venue: string | null;
-    };
-
-    const dataEl = document.getElementById("ics-data");
-    const matches: IcsMatch[] = dataEl ? JSON.parse(dataEl.textContent || "[]") : [];
-
-    /** Format ISO datetime → "20260502T173000" (lokalno vrijeme, bez Z) */
-    function fmtIcsLocal(iso: string): string {
-      const d = new Date(iso);
-      const pad = (n: number) => String(n).padStart(2, "0");
-      return (
-        d.getFullYear() +
-        pad(d.getMonth() + 1) +
-        pad(d.getDate()) +
-        "T" +
-        pad(d.getHours()) +
-        pad(d.getMinutes()) +
-        pad(d.getSeconds())
-      );
-    }
-
-    function buildIcs(m: IcsMatch): string {
-      const summary = `${m.homeName} – ${m.awayName}`;
-      const location = m.isHome ? "Grbavica, Niza" : m.venue || m.homeName;
-      const description = `${m.competition}\\nNK Omladinac Niza`;
-      const uid = `match-${m.id}@nkomladinacniza.hr`;
-      const stamp = fmtIcsLocal(new Date().toISOString().replace("Z", ""));
-
-      let dtLines: string[];
-      if (m.time) {
-        const dtStart = fmtIcsLocal(m.iso);
-        // Pretpostavljamo 90 min trajanje + 15 min poluvrijeme = 105 min, zaokruženo na 2h
-        const endDate = new Date(new Date(m.iso).getTime() + 2 * 60 * 60 * 1000);
-        const dtEnd = fmtIcsLocal(endDate.toISOString().replace("Z", ""));
-        dtLines = [
-          `DTSTART;TZID=Europe/Zagreb:${dtStart}`,
-          `DTEND;TZID=Europe/Zagreb:${dtEnd}`,
-        ];
-      } else {
-        // Vrijeme još nije poznato — cjelodnevni događaj
-        const day = m.date.replace(/-/g, "");
-        const next = new Date(`${m.date}T12:00:00`);
-        next.setDate(next.getDate() + 1);
-        const pad = (n: number) => String(n).padStart(2, "0");
-        const nextDay = `${next.getFullYear()}${pad(next.getMonth() + 1)}${pad(next.getDate())}`;
-        dtLines = [
-          `DTSTART;VALUE=DATE:${day}`,
-          `DTEND;VALUE=DATE:${nextDay}`,
-        ];
-      }
-
-      return [
-        "BEGIN:VCALENDAR",
-        "VERSION:2.0",
-        "PRODID:-//NK Omladinac Niza//Raspored//HR",
-        "CALSCALE:GREGORIAN",
-        "METHOD:PUBLISH",
-        "BEGIN:VEVENT",
-        `UID:${uid}`,
-        `DTSTAMP:${stamp}`,
-        ...dtLines,
-        `SUMMARY:${summary}`,
-        `LOCATION:${location}`,
-        `DESCRIPTION:${description}`,
-        "END:VEVENT",
-        "END:VCALENDAR",
-      ].join("\r\n");
-    }
-
-    function downloadIcs(m: IcsMatch) {
-      const ics = buildIcs(m);
-      const blob = new Blob([ics], { type: "text/calendar;charset=utf-8" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `omladinac-${m.date}.ics`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    }
-
-    function setupIcsButtons() {
-      document.querySelectorAll<HTMLButtonElement>(".ics-btn").forEach((btn) => {
-        btn.addEventListener("click", (e) => {
-          e.preventDefault();
-          const id = btn.dataset.icsId;
-          const m = matches.find((x) => x.id === id);
-          if (m) downloadIcs(m);
-        });
-      });
-    }
-
     // ── Filter po natjecanju (liga / kup / prijateljske) ───────────────
     // Sve utakmice su već u HTML-u; filter samo skriva one koje ne odgovaraju,
     // pa nema ni reloada ni drugog dohvata.
@@ -558,9 +317,6 @@ const icsPayload = upcoming.map((m) => ({
     }
 
     // ClientRouter ne pokreće <script> ponovo pri navigaciji — veži na page-load.
-    document.addEventListener("astro:page-load", () => {
-      setupIcsButtons();
-      setupFilter();
-    });
+    document.addEventListener("astro:page-load", setupFilter);
   </script>
 </BaseLayout>
