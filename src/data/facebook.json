@@ -1,8 +1,22 @@
 {
-  "lastUpdated": "2026-10-04T12:42:18.180Z",
+  "lastUpdated": "2026-10-09T08:25:42.167Z",
   "enabled": true,
   "pageId": "55401829691",
   "posts": [
+    {
+      "id": "55401829691_1719197040212789",
+      "message": "Sutra navečer nam u goste dolazi NK Zoljan. Obje momčadi se nalaze u donjem dijelu tablice ali zasigurno će utakmica biti kvalitetna i zanimljiva stoga Vas pozivamo na našu Grbavicu. 👋\nPočetnici ovaj vikend slobodni jer je utakmica u dogovoru s markovačkim Željezničarom premještena na četvrtak 15.10. 🤝",
+      "createdAt": "2026-10-09T07:37:48+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1719197040212789",
+      "images": [
+        {
+          "src": "/images/facebook/55401829691_1719197040212789.jpg",
+          "thumb": "/images/facebook/55401829691_1719197040212789.webp",
+          "width": 700,
+          "height": 875
+        }
+      ]
+    },
     {
       "id": "55401829691_1714026970729796",
       "message": "Seniori remizirali u Šaptinovcima.\nNašem klubu se ovih dana priključio Anto Kostreš koji je u Šapsu upisao prvi nastup. Želimo mu puno sreće i što manje ozljeda! \nPočetnici poraženi doma od Šipovca.",
@@ -406,20 +420,6 @@
           "thumb": "/images/facebook/55401829691_1667389192060241_2.webp",
           "width": 700,
           "height": 525
-        }
-      ]
-    },
-    {
-      "id": "55401829691_1666911705441323",
-      "message": "",
-      "createdAt": "2026-08-19T10:15:35+0000",
-      "permalink": "https://www.facebook.com/1551452460320582/posts/1666911705441323",
-      "images": [
-        {
-          "src": "/images/facebook/55401829691_1666911705441323.jpg",
-          "thumb": "/images/facebook/55401829691_1666911705441323.webp",
-          "width": 700,
-          "height": 875
         }
       ]
     }
