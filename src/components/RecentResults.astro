@@ -1,97 +1,142 @@
 ---
+/**
+ * Zadnji rezultati iz naše perspektive: protivnik (grb, "vs"/"@"), naš
+ * rezultat prvi, ishod riječju i naši strijelci. Uz naslov traka forme.
+ *
+ * Boja ishoda je samo na lijevoj traci kartice i u traci forme — rezultat je
+ * neutralan, da lista ne bude šarena. Ishod je uvijek i napisan (P/N/I u
+ * formi, riječ na kartici), jer pobjedu od poraza daltonisti bojom ne vide.
+ */
 import { url } from "../lib/url";
 import hns from "../data/hns.json";
-import { lastResults, competitionShort } from "../lib/matches";
+import TeamCrest from "./TeamCrest.astro";
+import { lastResults, competitionShort, type UnifiedMatch } from "../lib/matches";
 
 interface Props {
   limit?: number;
   /** Koliko najnovijih preskočiti — npr. 1 kad je zadnja utakmica već u kartici iznad. */
   skip?: number;
   grid?: boolean;
+  /** Naslov sekcije; uz njega se prikazuje traka forme. */
+  title?: string;
 }
 
-const { limit, skip = 0, grid = false } = Astro.props;
-const wrapperClass = grid
-  ? "grid grid-cols-1 md:grid-cols-2 gap-3"
-  : "space-y-3";
+const { limit, skip = 0, grid = false, title } = Astro.props;
 
 const results = lastResults((limit ?? 10) + skip).slice(skip);
-const matchDetails = (hns.matchDetails ?? {}) as Record<string, unknown>;
+const matchDetails = (hns.matchDetails ?? {}) as Record<string, any>;
 
-const outcomeColor = {
-  W: "bg-green-600",
-  D: "bg-yellow-500",
-  L: "bg-red-600",
+const outcome = {
+  W: { letter: "P", label: "Pobjeda", bar: "border-l-green-600", chip: "bg-green-600" },
+  D: { letter: "N", label: "Neriješeno", bar: "border-l-yellow-500", chip: "bg-yellow-500" },
+  L: { letter: "I", label: "Izgubljeno", bar: "border-l-red-600", chip: "bg-red-600" },
 };
-const outcomeLabel = { W: "P", D: "N", L: "I" };
+const outcomeOf = (m: UnifiedMatch) => outcome[(m.result ?? "D") as "W" | "D" | "L"];
+
+/** "26. 9." — kratko, bez vodeće nule (Intl je za hr-HR daje). */
+function shortDate(m: UnifiedMatch): string {
+  const [, month, day] = m.date.split("-").map(Number);
+  return `${day}. ${month}.`;
+}
+
+/** Naši strijelci: "Josip Matić (2), Tin Mauhar, autogol". */
+function ourScorers(m: UnifiedMatch): string {
+  const events = matchDetails[m.id]?.headerEvents;
+  if (!events) {
+    // Prijateljske: ručno upisani strijelci
+    return m.scorers.map((s) => `${s.name}${s.goals > 1 ? ` (${s.goals})` : ""}`).join(", ");
+  }
+  const counts = new Map<string, number>();
+  for (const e of (m.isHome ? events.home : events.away) ?? []) {
+    if (e.type === "own_goal") counts.set("autogol", (counts.get("autogol") ?? 0) + 1);
+    else if ((e.type === "goal" || e.type === "penalty") && e.playerName) {
+      // HNS zna poslati "Luka, Glavaš" — zarez nije dio imena
+      const name = String(e.playerName).replace(/\s*,\s*/g, " ").trim();
+      counts.set(name, (counts.get(name) ?? 0) + 1);
+    }
+  }
+  return [...counts].map(([name, n]) => (n > 1 ? `${name} (${n})` : name)).join(", ");
+}
+
+const cards = results.map((m) => {
+  const opponent = m.isHome ? m.away : m.home;
+  return {
+    m,
+    o: outcomeOf(m),
+    opponent,
+    opponentName: opponent.name.replace(/^NK\s+/, ""),
+    ours: m.isHome ? m.score?.home : m.score?.away,
+    theirs: m.isHome ? m.score?.away : m.score?.home,
+    scorers: ourScorers(m),
+    href: matchDetails[m.id] ? url(`/utakmica/${m.id}`) : null,
+  };
+});
+
+// Forma: najstarija lijevo, najnovija desno (kao u ljestvici i usporedbi).
+const form = [...cards].reverse();
 ---
 
-<div class={wrapperClass}>
+{
+  title && (
+    <div class="flex flex-wrap items-end justify-between gap-x-4 gap-y-2 mb-4">
+      <h2 class="text-2xl">{title}</h2>
+      {form.length > 0 && (
+        <div class="flex items-center gap-1.5" aria-label={`Forma, najnovija zadnja: ${form.map((c) => c.o.label).join(", ")}`}>
+          <span class="text-xs uppercase tracking-wider text-club-muted mr-1" aria-hidden="true">Forma</span>
+          {form.map((c) => (
+            <span
+              class={`${c.o.chip} w-6 h-6 rounded text-white font-display font-bold text-xs flex items-center justify-center`}
+              title={`${c.o.label} — ${c.m.home.name} ${c.m.score?.home}:${c.m.score?.away} ${c.m.away.name}`}
+              aria-hidden="true"
+            >
+              {c.o.letter}
+            </span>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+<div class={grid ? "grid grid-cols-1 md:grid-cols-2 gap-3" : "space-y-3"}>
   {
-    results.length === 0 && (
-      <p class="text-sm text-club-muted text-center py-4">
-        Nema rezultata za prikaz.
-      </p>
+    cards.length === 0 && (
+      <p class="text-sm text-club-muted text-center py-4">Nema rezultata za prikaz.</p>
     )
   }
   {
-    results.map((r) => {
-      const dateLabel = r.date
-        ? new Date(r.date).toLocaleDateString("hr-HR", {
-            day: "numeric",
-            month: "short",
-          })
-        : "";
-      const outcome = (r.result as "W" | "D" | "L") || "D";
-      const hasDetail = !!matchDetails[r.id];
-      const cardContent = (
-        <>
-          <div
-            class={`${outcomeColor[outcome]} text-white w-10 h-10 rounded flex items-center justify-center font-display font-bold flex-shrink-0`}
-            title={
-              outcome === "W"
-                ? "Pobjeda"
-                : outcome === "D"
-                  ? "Neriješeno"
-                  : "Poraz"
-            }
-          >
-            {outcomeLabel[outcome]}
-          </div>
-          <div class="flex-1 min-w-0">
-            <div class="flex items-center gap-2 text-xs text-club-muted mb-1">
-              <span class="font-display uppercase tracking-wider truncate">
-                {competitionShort(r)}
-              </span>
-              <span>·</span>
-              <span class="flex-shrink-0">{dateLabel}</span>
-            </div>
-            <div class="flex items-center justify-between gap-2">
-              <span class={`text-sm truncate ${r.isHome ? "font-bold" : ""}`}>
-                {r.home.name}
-              </span>
-              <span class="font-display font-bold text-lg flex-shrink-0">
-                {r.score?.home} : {r.score?.away}
-              </span>
-              <span class={`text-sm truncate text-right ${!r.isHome ? "font-bold" : ""}`}>
-                {r.away.name}
-              </span>
-            </div>
-          </div>
-        </>
-      );
-
-      return hasDetail ? (
-        <a
-          href={url(`/utakmica/${r.id}`)}
-          class="bg-white border border-club-border hover:border-club-primary rounded-lg p-4 flex items-center gap-4 hover:shadow-md transition-all"
+    cards.map((c) => {
+      const Tag = c.href ? "a" : "article";
+      return (
+        <Tag
+          href={c.href ?? undefined}
+          class={`flex items-center gap-3 bg-white border border-club-border border-l-4 ${c.o.bar} rounded-lg px-4 py-3 ${
+            c.href ? "hover:shadow-md hover:border-club-primary transition-shadow" : ""
+          }`}
         >
-          {cardContent}
-        </a>
-      ) : (
-        <article class="bg-white border border-club-border rounded-lg p-4 flex items-center gap-4">
-          {cardContent}
-        </article>
+          <span class="w-9 h-9 flex-shrink-0 flex items-center justify-center">
+            <TeamCrest team={c.opponent} size={36} class="w-full h-full" />
+          </span>
+          <div class="flex-1 min-w-0">
+            <p class="text-[11px] uppercase tracking-wider text-club-muted truncate">
+              {c.m.isHome ? "Doma" : "Gosti"} · {competitionShort(c.m)} · {shortDate(c.m)}
+            </p>
+            <p class="font-display font-bold uppercase text-club-secondary leading-tight truncate">
+              {c.m.isHome ? "vs" : "@"} {c.opponentName}
+            </p>
+            {c.scorers && (
+              <p class="text-xs text-club-muted leading-snug line-clamp-2">⚽ {c.scorers}</p>
+            )}
+          </div>
+          <div class="text-right flex-shrink-0">
+            <p class="font-display font-bold text-2xl tabular-nums leading-none text-club-primary-deep">
+              {c.ours}:{c.theirs}
+            </p>
+            <p class="text-[10px] font-display uppercase tracking-wider mt-1 text-club-muted">
+              {c.o.label}
+            </p>
+          </div>
+        </Tag>
       );
     })
   }
