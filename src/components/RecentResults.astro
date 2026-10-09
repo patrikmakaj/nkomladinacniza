@@ -1,8 +1,10 @@
 ---
 /**
- * Zadnji rezultati: grb protivnika, "Domaćin – Gost" s rezultatom istim
- * redom (domaćin uvijek prvi, kao svugdje u nogometu), ishod riječju i naši
- * strijelci. Uz naslov traka forme.
+ * Zadnji rezultati: grb i ime protivnika, rezultat domaćin:gost, ishod
+ * riječju i naši strijelci. Uz naslov traka forme.
+ *
+ * Naše ime i "doma/gosti" namjerno nisu na kartici — tko je pobijedio kažu
+ * boja trake i ishod, a iz njih se vidi i koji je broj naš.
  *
  * Boja ishoda je samo na lijevoj traci kartice i u traci forme — rezultat je
  * neutralan, da lista ne bude šarena. Ishod je uvijek i napisan (P/N/I u
@@ -11,7 +13,7 @@
 import { url } from "../lib/url";
 import hns from "../data/hns.json";
 import TeamCrest from "./TeamCrest.astro";
-import { lastResults, competitionShort, OUR_CLUB_ID, type UnifiedMatch } from "../lib/matches";
+import { lastResults, competitionShort, type UnifiedMatch } from "../lib/matches";
 
 interface Props {
   limit?: number;
@@ -59,15 +61,11 @@ function ourScorers(m: UnifiedMatch): string {
   return [...counts].map(([name, n]) => (n > 1 ? `${name} (${n})` : name)).join(", ");
 }
 
-/** Kratko ime za karticu: "NK Mladost Stipanovci" → "Mladost Stipanovci", mi → "Omladinac". */
-const shortName = (t: UnifiedMatch["home"]) =>
-  t.id === OUR_CLUB_ID ? "Omladinac" : t.name.replace(/^NK\s+/, "");
-
 const cards = results.map((m) => ({
   m,
   o: outcomeOf(m),
   opponent: m.isHome ? m.away : m.home,
-  sides: [m.home, m.away].map((t) => ({ name: shortName(t), isUs: t.id === OUR_CLUB_ID })),
+  opponentName: (m.isHome ? m.away : m.home).name.replace(/^NK\s+/, ""),
   scorers: ourScorers(m),
   href: matchDetails[m.id] ? url(`/utakmica/${m.id}`) : null,
 }));
@@ -119,12 +117,10 @@ const form = [...cards].reverse();
           </span>
           <div class="flex-1 min-w-0">
             <p class="text-[11px] uppercase tracking-wider text-club-muted truncate">
-              {c.m.isHome ? "Doma" : "Gosti"} · {competitionShort(c.m)} · {shortDate(c.m)}
+              {competitionShort(c.m)} · {shortDate(c.m)}
             </p>
-            <p class="font-display font-bold uppercase leading-tight">
-              <span class={c.sides[0].isUs ? "text-club-primary" : "text-club-secondary"}>{c.sides[0].name}</span>
-              <span class="text-club-muted font-normal"> – </span>
-              <span class={c.sides[1].isUs ? "text-club-primary" : "text-club-secondary"}>{c.sides[1].name}</span>
+            <p class="font-display font-bold uppercase leading-tight text-club-secondary">
+              {c.opponentName}
             </p>
             {c.scorers && (
               <p class="text-xs text-club-muted leading-snug line-clamp-2">⚽ {c.scorers}</p>
