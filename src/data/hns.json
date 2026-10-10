@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-08T09:19:21.986Z",
+  "lastUpdated": "2026-10-10T12:50:59.197Z",
   "sourceUrl": "https://semafor.hns.family/klubovi/134/nk-omladinac-niza/",
   "club": {
     "id": 134,
@@ -2135,43 +2135,43 @@
             "name": "NK Đurđenovac",
             "logo": "https://hns.family/files/images_comet/a5/0/_resized/a5019da3fed2f68e88845d5dd31abaa0f550b0ec_100_100_wg_t.png"
           },
-          "played": 5,
-          "wins": 3,
+          "played": 6,
+          "wins": 4,
           "draws": 0,
           "losses": 2,
-          "gf": 23,
-          "ga": 20,
-          "gd": "+3",
-          "points": 9,
+          "gf": 27,
+          "ga": 23,
+          "gd": "+4",
+          "points": 12,
           "form": [
+            "W",
+            "W",
+            "W",
             "L",
-            "W",
-            "W",
-            "W",
-            "L"
+            "W"
           ],
           "isUs": false
         },
         {
           "position": 5,
           "club": {
-            "id": 117,
-            "name": "NK Šipovac",
-            "logo": "https://hns.family/files/images_comet/f7/d/_resized/f7d87ca932c2a22b6cdd7a430be55b9fcad3038b_100_100_wg_t.png"
+            "id": 765,
+            "name": "NK Bratstvo (R)",
+            "logo": "https://hns.family/files/images_comet/21/2/_resized/21230a8a52c3a5d6ce147f21dc8a133fbee77b9f_100_100_wg_t.png"
           },
           "played": 6,
-          "wins": 2,
-          "draws": 1,
+          "wins": 3,
+          "draws": 0,
           "losses": 3,
-          "gf": 11,
-          "ga": 20,
-          "gd": "-9",
-          "points": 7,
+          "gf": 27,
+          "ga": 28,
+          "gd": "-1",
+          "points": 9,
           "form": [
             "L",
-            "D",
             "L",
             "W",
+            "L",
             "W"
           ],
           "isUs": false
@@ -2179,22 +2179,22 @@
         {
           "position": 6,
           "club": {
-            "id": 765,
-            "name": "NK Bratstvo (R)",
-            "logo": "https://hns.family/files/images_comet/21/2/_resized/21230a8a52c3a5d6ce147f21dc8a133fbee77b9f_100_100_wg_t.png"
+            "id": 117,
+            "name": "NK Šipovac",
+            "logo": "https://hns.family/files/images_comet/f7/d/_resized/f7d87ca932c2a22b6cdd7a430be55b9fcad3038b_100_100_wg_t.png"
           },
-          "played": 5,
+          "played": 7,
           "wins": 2,
-          "draws": 0,
-          "losses": 3,
-          "gf": 25,
-          "ga": 27,
-          "gd": "-2",
-          "points": 6,
+          "draws": 1,
+          "losses": 4,
+          "gf": 14,
+          "ga": 24,
+          "gd": "-10",
+          "points": 7,
           "form": [
+            "D",
+            "L",
             "W",
-            "L",
-            "L",
             "W",
             "L"
           ],
@@ -2207,20 +2207,20 @@
             "name": "NK Iskrica",
             "logo": "https://hns.family/files/images_comet/53/8/_resized/53808e6ce48919c1cf17ea580f20dae3362014e7_100_100_wg_t.png"
           },
-          "played": 5,
+          "played": 6,
           "wins": 1,
           "draws": 2,
-          "losses": 2,
-          "gf": 7,
-          "ga": 35,
-          "gd": "-28",
+          "losses": 3,
+          "gf": 8,
+          "ga": 37,
+          "gd": "-29",
           "points": 5,
           "form": [
             "L",
-            "L",
             "D",
             "D",
-            "W"
+            "W",
+            "L"
           ],
           "isUs": false
         },
