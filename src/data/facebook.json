@@ -1,8 +1,22 @@
 {
-  "lastUpdated": "2026-10-09T08:25:42.167Z",
+  "lastUpdated": "2026-10-10T21:06:00.527Z",
   "enabled": true,
   "pageId": "55401829691",
   "posts": [
+    {
+      "id": "55401829691_1720865150045978",
+      "message": "Večeras odigrali odličnu utakmicu. U utakmicu ulazimo ranim vodstvom, ali gosti se ne predaju lako. Krajem drugog poluvremena povećavamo vodstvo na 5-2 nakon crvenih kartona gostiju. Ekipa igra sve bolje i bolje i sve sjeda na svoje mjesto... Gostima čestitamo na dobroj i korektnoj igri te im želimo sreću u nastavku prvenstva! 💙",
+      "createdAt": "2026-10-10T20:02:29+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1720865150045978",
+      "images": [
+        {
+          "src": "/images/facebook/55401829691_1720865150045978.jpg",
+          "thumb": "/images/facebook/55401829691_1720865150045978.webp",
+          "width": 700,
+          "height": 875
+        }
+      ]
+    },
     {
       "id": "55401829691_1719197040212789",
       "message": "Sutra navečer nam u goste dolazi NK Zoljan. Obje momčadi se nalaze u donjem dijelu tablice ali zasigurno će utakmica biti kvalitetna i zanimljiva stoga Vas pozivamo na našu Grbavicu. 👋\nPočetnici ovaj vikend slobodni jer je utakmica u dogovoru s markovačkim Željezničarom premještena na četvrtak 15.10. 🤝",
@@ -394,32 +408,6 @@
           "thumb": "/images/facebook/55401829691_1668397785292715.webp",
           "width": 700,
           "height": 875
-        }
-      ]
-    },
-    {
-      "id": "55401829691_1667389192060241",
-      "message": "Večeras početnici odigrali prijateljsku s Vihorom. Sutra seniori igraju kup protiv Đurđenovca stoga poziv svima!",
-      "createdAt": "2026-08-19T20:00:49+0000",
-      "permalink": "https://www.facebook.com/1551452460320582/posts/1667389192060241",
-      "images": [
-        {
-          "src": "/images/facebook/55401829691_1667389192060241_0.jpg",
-          "thumb": "/images/facebook/55401829691_1667389192060241_0.webp",
-          "width": 700,
-          "height": 525
-        },
-        {
-          "src": "/images/facebook/55401829691_1667389192060241_1.jpg",
-          "thumb": "/images/facebook/55401829691_1667389192060241_1.webp",
-          "width": 700,
-          "height": 525
-        },
-        {
-          "src": "/images/facebook/55401829691_1667389192060241_2.jpg",
-          "thumb": "/images/facebook/55401829691_1667389192060241_2.webp",
-          "width": 700,
-          "height": 525
         }
       ]
     }
