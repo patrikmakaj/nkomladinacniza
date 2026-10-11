@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-11T01:48:36.852Z",
+  "lastUpdated": "2026-10-11T13:15:08.538Z",
   "sourceUrl": "https://semafor.hns.family/klubovi/134/nk-omladinac-niza/",
   "club": {
     "id": 134,
@@ -2110,14 +2110,14 @@
             "name": "NK FEŠK",
             "logo": "https://hns.family/files/images_comet/8c/8/_resized/8c89c6fc498b2f608ce3ce312b166a901e8a6821_100_100_wg_t.png"
           },
-          "played": 6,
-          "wins": 6,
+          "played": 7,
+          "wins": 7,
           "draws": 0,
           "losses": 0,
-          "gf": 82,
+          "gf": 90,
           "ga": 0,
-          "gd": "+82",
-          "points": 18,
+          "gd": "+90",
+          "points": 21,
           "form": [
             "W",
             "W",
@@ -2158,20 +2158,20 @@
             "name": "NK Martin",
             "logo": "https://hns.family/files/images_comet/b3/6/_resized/b366da4f8698b43fa0d8e9cc67f9847d52d44770_100_100_wg_t.png"
           },
-          "played": 6,
+          "played": 7,
           "wins": 5,
           "draws": 0,
-          "losses": 1,
+          "losses": 2,
           "gf": 36,
-          "ga": 8,
-          "gd": "+28",
+          "ga": 16,
+          "gd": "+20",
           "points": 15,
           "form": [
             "W",
-            "W",
             "L",
             "W",
-            "W"
+            "W",
+            "L"
           ],
           "isUs": false
         },
