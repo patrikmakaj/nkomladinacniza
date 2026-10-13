@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-12T18:32:19.055Z",
+  "lastUpdated": "2026-10-13T01:05:09.242Z",
   "sourceUrl": "https://semafor.hns.family/klubovi/134/nk-omladinac-niza/",
   "club": {
     "id": 134,
@@ -633,7 +633,7 @@
           "number": 23,
           "name": "Tomislav Banaj",
           "position": "Igrač",
-          "photo": "/static/images/nophoto_player_m.png",
+          "photo": "https://hns.family/files/images_comet/Person/_resized/48000_ed1f0b84-5ee7-4ce6-83a0-a1701a613b3d_80_100_cut_wg_top.png",
           "profileUrl": "https://semafor.hns.family/igraci/48000/tomislav-banaj/",
           "stats": {
             "appearances": 5,
@@ -717,7 +717,7 @@
           "number": 19,
           "name": "Lukas Đurinski",
           "position": "Igrač",
-          "photo": "/static/images/nophoto_player_m.png",
+          "photo": "https://hns.family/files/images_comet/1d/7/_resized/1d78eef65eecc63630429d5308334c10ca845b02_80_100_cut_wg_top.jpg",
           "profileUrl": "https://semafor.hns.family/igraci/213135/lukas-djurinski/",
           "stats": {
             "appearances": 1,
@@ -731,7 +731,7 @@
           "number": 8,
           "name": "Ivan Galinec",
           "position": "Igrač",
-          "photo": "/static/images/nophoto_player_m.png",
+          "photo": "https://hns.family/files/images_comet/Person/_resized/49179_4d4f0298-c249-4c7d-83d0-97242c22cf1d_80_100_cut_wg_top.jpg",
           "profileUrl": "https://semafor.hns.family/igraci/49179/ivan-galinec/",
           "stats": {
             "appearances": 1,
@@ -773,7 +773,7 @@
           "number": 5,
           "name": "Hrvoje Kasapović",
           "position": "Igrač",
-          "photo": "/static/images/nophoto_player_m.png",
+          "photo": "https://hns.family/files/images_comet/Person/_resized/58712_669f1d8e-2459-4cae-b94a-91e1dab5cd23_80_100_cut_wg_top.jpg",
           "profileUrl": "https://semafor.hns.family/igraci/58712/hrvoje-kasapovic/",
           "stats": {
             "appearances": 5,
@@ -885,7 +885,7 @@
           "number": 14,
           "name": "Mario Pranješ",
           "position": "Igrač",
-          "photo": "/static/images/nophoto_player_m.png",
+          "photo": "https://hns.family/files/images_comet/Person/_resized/190205_3704e9d9-8cff-449a-9db2-7a44acb56af9_80_100_cut_wg_top.jpg",
           "profileUrl": "https://semafor.hns.family/igraci/190205/mario-pranjes/",
           "stats": {
             "appearances": 1,
@@ -913,7 +913,7 @@
           "number": 25,
           "name": "Luka Stojaković",
           "position": "Igrač",
-          "photo": "/static/images/nophoto_player_m.png",
+          "photo": "https://hns.family/files/images_comet/Person/_resized/198154_1ecf5cab-5d25-4e25-a4c9-58839dffebda_80_100_cut_wg_top.jpg",
           "profileUrl": "https://semafor.hns.family/igraci/198154/luka-stojakovic/",
           "stats": {
             "appearances": 0,
@@ -927,7 +927,7 @@
           "number": 19,
           "name": "Filip Tomac",
           "position": "Igrač",
-          "photo": "/static/images/nophoto_player_m.png",
+          "photo": "https://hns.family/files/images_comet/19/6/_resized/196e90ca1bdae4b92c4b44ad4993f050af7379f2_80_100_cut_wg_top.jpg",
           "profileUrl": "https://semafor.hns.family/igraci/400435/filip-tomac/",
           "stats": {
             "appearances": 1,
@@ -976,7 +976,7 @@
             "position": 3,
             "name": "Tomislav Banaj",
             "profileUrl": "https://semafor.hns.family/igraci/48000/tomislav-banaj/",
-            "photo": "/static/images/nophoto_player_m.png",
+            "photo": "https://hns.family/files/images_comet/Person/_resized/48000_ed1f0b84-5ee7-4ce6-83a0-a1701a613b3d_80_100_cut_wg_top.png",
             "value": "1",
             "goals": 1
           },
@@ -994,7 +994,7 @@
             "position": 3,
             "name": "Hrvoje Kasapović",
             "profileUrl": "https://semafor.hns.family/igraci/58712/hrvoje-kasapovic/",
-            "photo": "/static/images/nophoto_player_m.png",
+            "photo": "https://hns.family/files/images_comet/Person/_resized/58712_669f1d8e-2459-4cae-b94a-91e1dab5cd23_80_100_cut_wg_top.jpg",
             "value": "1",
             "goals": 1
           },
@@ -1014,7 +1014,7 @@
             "position": 1,
             "name": "Hrvoje Kasapović",
             "profileUrl": "https://semafor.hns.family/igraci/58712/hrvoje-kasapovic/",
-            "photo": "/static/images/nophoto_player_m.png",
+            "photo": "https://hns.family/files/images_comet/Person/_resized/58712_669f1d8e-2459-4cae-b94a-91e1dab5cd23_80_100_cut_wg_top.jpg",
             "value": "1 / 1",
             "yellow": 1,
             "red": 1
@@ -1166,7 +1166,7 @@
             "position": 8,
             "name": "Tomislav Banaj",
             "profileUrl": "https://semafor.hns.family/igraci/48000/tomislav-banaj/",
-            "photo": "/static/images/nophoto_player_m.png",
+            "photo": "https://hns.family/files/images_comet/Person/_resized/48000_ed1f0b84-5ee7-4ce6-83a0-a1701a613b3d_80_100_cut_wg_top.png",
             "value": "5 / 0",
             "appearances": 5,
             "minutes": 0
@@ -1186,7 +1186,7 @@
             "position": 8,
             "name": "Hrvoje Kasapović",
             "profileUrl": "https://semafor.hns.family/igraci/58712/hrvoje-kasapovic/",
-            "photo": "/static/images/nophoto_player_m.png",
+            "photo": "https://hns.family/files/images_comet/Person/_resized/58712_669f1d8e-2459-4cae-b94a-91e1dab5cd23_80_100_cut_wg_top.jpg",
             "value": "5 / 0",
             "appearances": 5,
             "minutes": 0
@@ -1296,7 +1296,7 @@
             "position": 19,
             "name": "Lukas Đurinski",
             "profileUrl": "https://semafor.hns.family/igraci/213135/lukas-djurinski/",
-            "photo": "/static/images/nophoto_player_m.png",
+            "photo": "https://hns.family/files/images_comet/1d/7/_resized/1d78eef65eecc63630429d5308334c10ca845b02_80_100_cut_wg_top.jpg",
             "value": "1 / 0",
             "appearances": 1,
             "minutes": 0
@@ -1306,7 +1306,7 @@
             "position": 19,
             "name": "Ivan Galinec",
             "profileUrl": "https://semafor.hns.family/igraci/49179/ivan-galinec/",
-            "photo": "/static/images/nophoto_player_m.png",
+            "photo": "https://hns.family/files/images_comet/Person/_resized/49179_4d4f0298-c249-4c7d-83d0-97242c22cf1d_80_100_cut_wg_top.jpg",
             "value": "1 / 0",
             "appearances": 1,
             "minutes": 0
@@ -1316,7 +1316,7 @@
             "position": 19,
             "name": "Mario Pranješ",
             "profileUrl": "https://semafor.hns.family/igraci/190205/mario-pranjes/",
-            "photo": "/static/images/nophoto_player_m.png",
+            "photo": "https://hns.family/files/images_comet/Person/_resized/190205_3704e9d9-8cff-449a-9db2-7a44acb56af9_80_100_cut_wg_top.jpg",
             "value": "1 / 0",
             "appearances": 1,
             "minutes": 0
@@ -1326,7 +1326,7 @@
             "position": 19,
             "name": "Filip Tomac",
             "profileUrl": "https://semafor.hns.family/igraci/400435/filip-tomac/",
-            "photo": "/static/images/nophoto_player_m.png",
+            "photo": "https://hns.family/files/images_comet/19/6/_resized/196e90ca1bdae4b92c4b44ad4993f050af7379f2_80_100_cut_wg_top.jpg",
             "value": "1 / 0",
             "appearances": 1,
             "minutes": 0
@@ -1432,7 +1432,7 @@
           "number": 23,
           "name": "Tomislav Banaj",
           "position": "Igrač",
-          "photo": "/static/images/nophoto_player_m.png",
+          "photo": "https://hns.family/files/images_comet/Person/_resized/48000_ed1f0b84-5ee7-4ce6-83a0-a1701a613b3d_80_100_cut_wg_top.png",
           "profileUrl": "https://semafor.hns.family/igraci/48000/tomislav-banaj/",
           "stats": {
             "appearances": 2,
@@ -1502,7 +1502,7 @@
           "number": 8,
           "name": "Ivan Galinec",
           "position": "Igrač",
-          "photo": "/static/images/nophoto_player_m.png",
+          "photo": "https://hns.family/files/images_comet/Person/_resized/49179_4d4f0298-c249-4c7d-83d0-97242c22cf1d_80_100_cut_wg_top.jpg",
           "profileUrl": "https://semafor.hns.family/igraci/49179/ivan-galinec/",
           "stats": {
             "appearances": 1,
@@ -1530,7 +1530,7 @@
           "number": 5,
           "name": "Hrvoje Kasapović",
           "position": "Igrač",
-          "photo": "/static/images/nophoto_player_m.png",
+          "photo": "https://hns.family/files/images_comet/Person/_resized/58712_669f1d8e-2459-4cae-b94a-91e1dab5cd23_80_100_cut_wg_top.jpg",
           "profileUrl": "https://semafor.hns.family/igraci/58712/hrvoje-kasapovic/",
           "stats": {
             "appearances": 2,
@@ -1628,7 +1628,7 @@
           "number": 19,
           "name": "Filip Tomac",
           "position": "Igrač",
-          "photo": "/static/images/nophoto_player_m.png",
+          "photo": "https://hns.family/files/images_comet/19/6/_resized/196e90ca1bdae4b92c4b44ad4993f050af7379f2_80_100_cut_wg_top.jpg",
           "profileUrl": "https://semafor.hns.family/igraci/400435/filip-tomac/",
           "stats": {
             "appearances": 1,
@@ -1701,7 +1701,7 @@
             "position": 1,
             "name": "Tomislav Banaj",
             "profileUrl": "https://semafor.hns.family/igraci/48000/tomislav-banaj/",
-            "photo": "/static/images/nophoto_player_m.png",
+            "photo": "https://hns.family/files/images_comet/Person/_resized/48000_ed1f0b84-5ee7-4ce6-83a0-a1701a613b3d_80_100_cut_wg_top.png",
             "value": "2 / 0",
             "appearances": 2,
             "minutes": 0
@@ -1751,7 +1751,7 @@
             "position": 1,
             "name": "Hrvoje Kasapović",
             "profileUrl": "https://semafor.hns.family/igraci/58712/hrvoje-kasapovic/",
-            "photo": "/static/images/nophoto_player_m.png",
+            "photo": "https://hns.family/files/images_comet/Person/_resized/58712_669f1d8e-2459-4cae-b94a-91e1dab5cd23_80_100_cut_wg_top.jpg",
             "value": "2 / 0",
             "appearances": 2,
             "minutes": 0
@@ -1811,7 +1811,7 @@
             "position": 12,
             "name": "Ivan Galinec",
             "profileUrl": "https://semafor.hns.family/igraci/49179/ivan-galinec/",
-            "photo": "/static/images/nophoto_player_m.png",
+            "photo": "https://hns.family/files/images_comet/Person/_resized/49179_4d4f0298-c249-4c7d-83d0-97242c22cf1d_80_100_cut_wg_top.jpg",
             "value": "1 / 0",
             "appearances": 1,
             "minutes": 0
@@ -1841,7 +1841,7 @@
             "position": 12,
             "name": "Filip Tomac",
             "profileUrl": "https://semafor.hns.family/igraci/400435/filip-tomac/",
-            "photo": "/static/images/nophoto_player_m.png",
+            "photo": "https://hns.family/files/images_comet/19/6/_resized/196e90ca1bdae4b92c4b44ad4993f050af7379f2_80_100_cut_wg_top.jpg",
             "value": "1 / 0",
             "appearances": 1,
             "minutes": 0
@@ -2057,9 +2057,9 @@
           "id": "114377491",
           "type": "league",
           "round": 8,
-          "date": "2026-10-17",
-          "time": "10:00",
-          "iso": "2026-10-17T10:00:00",
+          "date": "2026-10-18",
+          "time": "11:30",
+          "iso": "2026-10-18T11:30:00",
           "competition": "LM NS Našice - početnici U-11 26/27, 8. kolo",
           "home": {
             "id": 128,
@@ -3596,7 +3596,7 @@
       "number": 5,
       "name": "Hrvoje Kasapović",
       "position": "Igrač",
-      "photo": "/static/images/nophoto_player_m.png",
+      "photo": "https://hns.family/files/images_comet/Person/_resized/58712_669f1d8e-2459-4cae-b94a-91e1dab5cd23_80_100_cut_wg_top.jpg",
       "profileUrl": "https://semafor.hns.family/igraci/58712/hrvoje-kasapovic/",
       "stats": {
         "appearances": 7,
@@ -3737,7 +3737,7 @@
       "number": 8,
       "name": "Ivan Galinec",
       "position": "Igrač",
-      "photo": "/static/images/nophoto_player_m.png",
+      "photo": "https://hns.family/files/images_comet/Person/_resized/49179_4d4f0298-c249-4c7d-83d0-97242c22cf1d_80_100_cut_wg_top.jpg",
       "profileUrl": "https://semafor.hns.family/igraci/49179/ivan-galinec/",
       "stats": {
         "appearances": 2,
@@ -3905,7 +3905,7 @@
       "number": 14,
       "name": "Mario Pranješ",
       "position": "Igrač",
-      "photo": "/static/images/nophoto_player_m.png",
+      "photo": "https://hns.family/files/images_comet/Person/_resized/190205_3704e9d9-8cff-449a-9db2-7a44acb56af9_80_100_cut_wg_top.jpg",
       "profileUrl": "https://semafor.hns.family/igraci/190205/mario-pranjes/",
       "stats": {
         "appearances": 1,
@@ -4062,7 +4062,7 @@
       "number": 19,
       "name": "Filip Tomac",
       "position": "Igrač",
-      "photo": "/static/images/nophoto_player_m.png",
+      "photo": "https://hns.family/files/images_comet/19/6/_resized/196e90ca1bdae4b92c4b44ad4993f050af7379f2_80_100_cut_wg_top.jpg",
       "profileUrl": "https://semafor.hns.family/igraci/400435/filip-tomac/",
       "stats": {
         "appearances": 2,
@@ -4100,7 +4100,7 @@
       "number": 19,
       "name": "Lukas Đurinski",
       "position": "Igrač",
-      "photo": "/static/images/nophoto_player_m.png",
+      "photo": "https://hns.family/files/images_comet/1d/7/_resized/1d78eef65eecc63630429d5308334c10ca845b02_80_100_cut_wg_top.jpg",
       "profileUrl": "https://semafor.hns.family/igraci/213135/lukas-djurinski/",
       "stats": {
         "appearances": 1,
@@ -4192,7 +4192,7 @@
       "number": 23,
       "name": "Tomislav Banaj",
       "position": "Igrač",
-      "photo": "/static/images/nophoto_player_m.png",
+      "photo": "https://hns.family/files/images_comet/Person/_resized/48000_ed1f0b84-5ee7-4ce6-83a0-a1701a613b3d_80_100_cut_wg_top.png",
       "profileUrl": "https://semafor.hns.family/igraci/48000/tomislav-banaj/",
       "stats": {
         "appearances": 7,
@@ -4268,7 +4268,7 @@
       "number": 25,
       "name": "Luka Stojaković",
       "position": "Igrač",
-      "photo": "/static/images/nophoto_player_m.png",
+      "photo": "https://hns.family/files/images_comet/Person/_resized/198154_1ecf5cab-5d25-4e25-a4c9-58839dffebda_80_100_cut_wg_top.jpg",
       "profileUrl": "https://semafor.hns.family/igraci/198154/luka-stojakovic/",
       "stats": {
         "appearances": 0,
@@ -4354,7 +4354,7 @@
         "position": 3,
         "name": "Tomislav Banaj",
         "profileUrl": "https://semafor.hns.family/igraci/48000/tomislav-banaj/",
-        "photo": "/static/images/nophoto_player_m.png",
+        "photo": "https://hns.family/files/images_comet/Person/_resized/48000_ed1f0b84-5ee7-4ce6-83a0-a1701a613b3d_80_100_cut_wg_top.png",
         "value": "1",
         "goals": 1
       },
@@ -4372,7 +4372,7 @@
         "position": 5,
         "name": "Hrvoje Kasapović",
         "profileUrl": "https://semafor.hns.family/igraci/58712/hrvoje-kasapovic/",
-        "photo": "/static/images/nophoto_player_m.png",
+        "photo": "https://hns.family/files/images_comet/Person/_resized/58712_669f1d8e-2459-4cae-b94a-91e1dab5cd23_80_100_cut_wg_top.jpg",
         "value": "1",
         "goals": 1
       },
@@ -4401,7 +4401,7 @@
         "position": 1,
         "name": "Hrvoje Kasapović",
         "profileUrl": "https://semafor.hns.family/igraci/58712/hrvoje-kasapovic/",
-        "photo": "/static/images/nophoto_player_m.png",
+        "photo": "https://hns.family/files/images_comet/Person/_resized/58712_669f1d8e-2459-4cae-b94a-91e1dab5cd23_80_100_cut_wg_top.jpg",
         "value": "1 / 1",
         "yellow": 1,
         "red": 1
@@ -4543,7 +4543,7 @@
         "position": 7,
         "name": "Tomislav Banaj",
         "profileUrl": "https://semafor.hns.family/igraci/48000/tomislav-banaj/",
-        "photo": "/static/images/nophoto_player_m.png",
+        "photo": "https://hns.family/files/images_comet/Person/_resized/48000_ed1f0b84-5ee7-4ce6-83a0-a1701a613b3d_80_100_cut_wg_top.png",
         "value": "7 / 0",
         "appearances": 7,
         "minutes": 0
@@ -4563,7 +4563,7 @@
         "position": 9,
         "name": "Hrvoje Kasapović",
         "profileUrl": "https://semafor.hns.family/igraci/58712/hrvoje-kasapovic/",
-        "photo": "/static/images/nophoto_player_m.png",
+        "photo": "https://hns.family/files/images_comet/Person/_resized/58712_669f1d8e-2459-4cae-b94a-91e1dab5cd23_80_100_cut_wg_top.jpg",
         "value": "7 / 0",
         "appearances": 7,
         "minutes": 0
@@ -4663,7 +4663,7 @@
         "position": 19,
         "name": "Ivan Galinec",
         "profileUrl": "https://semafor.hns.family/igraci/49179/ivan-galinec/",
-        "photo": "/static/images/nophoto_player_m.png",
+        "photo": "https://hns.family/files/images_comet/Person/_resized/49179_4d4f0298-c249-4c7d-83d0-97242c22cf1d_80_100_cut_wg_top.jpg",
         "value": "2 / 0",
         "appearances": 2,
         "minutes": 0
@@ -4673,7 +4673,7 @@
         "position": 20,
         "name": "Filip Tomac",
         "profileUrl": "https://semafor.hns.family/igraci/400435/filip-tomac/",
-        "photo": "/static/images/nophoto_player_m.png",
+        "photo": "https://hns.family/files/images_comet/19/6/_resized/196e90ca1bdae4b92c4b44ad4993f050af7379f2_80_100_cut_wg_top.jpg",
         "value": "2 / 0",
         "appearances": 2,
         "minutes": 0
@@ -4703,7 +4703,7 @@
         "position": 23,
         "name": "Lukas Đurinski",
         "profileUrl": "https://semafor.hns.family/igraci/213135/lukas-djurinski/",
-        "photo": "/static/images/nophoto_player_m.png",
+        "photo": "https://hns.family/files/images_comet/1d/7/_resized/1d78eef65eecc63630429d5308334c10ca845b02_80_100_cut_wg_top.jpg",
         "value": "1 / 0",
         "appearances": 1,
         "minutes": 0
@@ -4713,7 +4713,7 @@
         "position": 24,
         "name": "Mario Pranješ",
         "profileUrl": "https://semafor.hns.family/igraci/190205/mario-pranjes/",
-        "photo": "/static/images/nophoto_player_m.png",
+        "photo": "https://hns.family/files/images_comet/Person/_resized/190205_3704e9d9-8cff-449a-9db2-7a44acb56af9_80_100_cut_wg_top.jpg",
         "value": "1 / 0",
         "appearances": 1,
         "minutes": 0
