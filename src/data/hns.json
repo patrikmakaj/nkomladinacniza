@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-16T01:00:07.087Z",
+  "lastUpdated": "2026-10-17T12:52:57.397Z",
   "sourceUrl": "https://semafor.hns.family/klubovi/134/nk-omladinac-niza/",
   "club": {
     "id": 134,
@@ -2281,20 +2281,20 @@
             "name": "NK Iskrica",
             "logo": "https://hns.family/files/images_comet/53/8/_resized/53808e6ce48919c1cf17ea580f20dae3362014e7_100_100_wg_t.png"
           },
-          "played": 6,
+          "played": 7,
           "wins": 1,
-          "draws": 2,
+          "draws": 3,
           "losses": 3,
           "gf": 8,
           "ga": 37,
           "gd": "-29",
-          "points": 5,
+          "points": 6,
           "form": [
-            "L",
             "D",
             "D",
             "W",
-            "L"
+            "L",
+            "D"
           ],
           "isUs": false
         },
@@ -2305,20 +2305,20 @@
             "name": "NK Vihor (J)",
             "logo": "https://hns.family/files/images_comet/07/3/_resized/073548045a9ffd623cfb00b39796fde20ba35dd0_100_100_wg_t.png"
           },
-          "played": 7,
+          "played": 8,
           "wins": 1,
-          "draws": 0,
+          "draws": 1,
           "losses": 6,
           "gf": 16,
           "ga": 52,
           "gd": "-36",
-          "points": 3,
+          "points": 4,
           "form": [
             "L",
             "L",
             "L",
             "L",
-            "L"
+            "D"
           ],
           "isUs": false
         },
