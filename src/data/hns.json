@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-17T12:52:57.397Z",
+  "lastUpdated": "2026-10-17T16:07:17.622Z",
   "sourceUrl": "https://semafor.hns.family/klubovi/134/nk-omladinac-niza/",
   "club": {
     "id": 134,
@@ -317,20 +317,20 @@
             "name": "NK Đurđenovac",
             "logo": "https://hns.family/files/images_comet/a5/0/_resized/a5019da3fed2f68e88845d5dd31abaa0f550b0ec_100_100_wg_t.png"
           },
-          "played": 7,
-          "wins": 6,
+          "played": 8,
+          "wins": 7,
           "draws": 0,
           "losses": 1,
-          "gf": 23,
-          "ga": 8,
-          "gd": "+15",
-          "points": 18,
+          "gf": 30,
+          "ga": 9,
+          "gd": "+21",
+          "points": 21,
           "form": [
             "W",
             "W",
             "W",
-            "W",
-            "L"
+            "L",
+            "W"
           ],
           "isUs": false
         },
@@ -437,18 +437,18 @@
             "name": "NK Lila",
             "logo": "https://hns.family/files/images_comet/ef/0/_resized/ef0f2eb9faa8e182f6ec0ea528cdec636b5591b5_100_100_wg_t.png"
           },
-          "played": 7,
+          "played": 8,
           "wins": 3,
           "draws": 1,
-          "losses": 3,
-          "gf": 13,
-          "ga": 18,
-          "gd": "-5",
+          "losses": 4,
+          "gf": 14,
+          "ga": 25,
+          "gd": "-11",
           "points": 10,
           "form": [
             "W",
-            "W",
             "D",
+            "L",
             "L",
             "L"
           ],
@@ -2185,19 +2185,19 @@
             "name": "NK Đurđenovac",
             "logo": "https://hns.family/files/images_comet/a5/0/_resized/a5019da3fed2f68e88845d5dd31abaa0f550b0ec_100_100_wg_t.png"
           },
-          "played": 6,
-          "wins": 4,
+          "played": 7,
+          "wins": 5,
           "draws": 0,
           "losses": 2,
-          "gf": 27,
-          "ga": 23,
-          "gd": "+4",
-          "points": 12,
+          "gf": 37,
+          "ga": 24,
+          "gd": "+13",
+          "points": 15,
           "form": [
             "W",
             "W",
-            "W",
             "L",
+            "W",
             "W"
           ],
           "isUs": false
@@ -2257,20 +2257,20 @@
             "name": "NK Željezničar (MN)",
             "logo": "https://hns.family/files/images_comet/ba/1/_resized/ba1480acacd707e235b17832f3d7983b5e81d4a1_100_100_wg_t.png"
           },
-          "played": 7,
+          "played": 8,
           "wins": 2,
           "draws": 1,
-          "losses": 4,
-          "gf": 14,
-          "ga": 34,
-          "gd": "-20",
+          "losses": 5,
+          "gf": 15,
+          "ga": 44,
+          "gd": "-29",
           "points": 7,
           "form": [
-            "L",
             "D",
             "L",
             "L",
-            "W"
+            "W",
+            "L"
           ],
           "isUs": false
         },
@@ -2777,20 +2777,20 @@
         "name": "NK Đurđenovac",
         "logo": "https://hns.family/files/images_comet/a5/0/_resized/a5019da3fed2f68e88845d5dd31abaa0f550b0ec_100_100_wg_t.png"
       },
-      "played": 7,
-      "wins": 6,
+      "played": 8,
+      "wins": 7,
       "draws": 0,
       "losses": 1,
-      "gf": 23,
-      "ga": 8,
-      "gd": "+15",
-      "points": 18,
+      "gf": 30,
+      "ga": 9,
+      "gd": "+21",
+      "points": 21,
       "form": [
         "W",
         "W",
         "W",
-        "W",
-        "L"
+        "L",
+        "W"
       ],
       "isUs": false
     },
@@ -2897,18 +2897,18 @@
         "name": "NK Lila",
         "logo": "https://hns.family/files/images_comet/ef/0/_resized/ef0f2eb9faa8e182f6ec0ea528cdec636b5591b5_100_100_wg_t.png"
       },
-      "played": 7,
+      "played": 8,
       "wins": 3,
       "draws": 1,
-      "losses": 3,
-      "gf": 13,
-      "ga": 18,
-      "gd": "-5",
+      "losses": 4,
+      "gf": 14,
+      "ga": 25,
+      "gd": "-11",
       "points": 10,
       "form": [
         "W",
-        "W",
         "D",
+        "L",
         "L",
         "L"
       ],
