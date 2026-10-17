@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-17T16:07:17.622Z",
+  "lastUpdated": "2026-10-17T18:42:06.831Z",
   "sourceUrl": "https://semafor.hns.family/klubovi/134/nk-omladinac-niza/",
   "club": {
     "id": 134,
@@ -337,6 +337,30 @@
         {
           "position": 2,
           "club": {
+            "id": 124,
+            "name": "NK Motičina",
+            "logo": "https://hns.family/files/images_comet/1a/1/_resized/1a1bed16175357903eb41863550b59046f315ece_100_100_wg_t.png"
+          },
+          "played": 8,
+          "wins": 5,
+          "draws": 2,
+          "losses": 1,
+          "gf": 19,
+          "ga": 15,
+          "gd": "+4",
+          "points": 17,
+          "form": [
+            "L",
+            "W",
+            "W",
+            "D",
+            "W"
+          ],
+          "isUs": false
+        },
+        {
+          "position": 3,
+          "club": {
             "id": 140,
             "name": "NK Vihor (J)",
             "logo": "https://hns.family/files/images_comet/07/3/_resized/073548045a9ffd623cfb00b39796fde20ba35dd0_100_100_wg_t.png"
@@ -355,30 +379,6 @@
             "W",
             "L",
             "W"
-          ],
-          "isUs": false
-        },
-        {
-          "position": 3,
-          "club": {
-            "id": 124,
-            "name": "NK Motičina",
-            "logo": "https://hns.family/files/images_comet/1a/1/_resized/1a1bed16175357903eb41863550b59046f315ece_100_100_wg_t.png"
-          },
-          "played": 7,
-          "wins": 4,
-          "draws": 2,
-          "losses": 1,
-          "gf": 18,
-          "ga": 15,
-          "gd": "+3",
-          "points": 14,
-          "form": [
-            "W",
-            "L",
-            "W",
-            "W",
-            "D"
           ],
           "isUs": false
         },
@@ -509,19 +509,19 @@
             "name": "NK Lug",
             "logo": "https://hns.family/files/images_comet/bc/b/_resized/bcb44ae2bb76e29c13c5b61dbcf58620703d06fe_100_100_wg_t.png"
           },
-          "played": 7,
+          "played": 8,
           "wins": 2,
           "draws": 1,
-          "losses": 4,
+          "losses": 5,
           "gf": 9,
-          "ga": 16,
-          "gd": "-7",
+          "ga": 17,
+          "gd": "-8",
           "points": 7,
           "form": [
-            "D",
             "L",
             "L",
             "W",
+            "L",
             "L"
           ],
           "isUs": false
@@ -2797,6 +2797,30 @@
     {
       "position": 2,
       "club": {
+        "id": 124,
+        "name": "NK Motičina",
+        "logo": "https://hns.family/files/images_comet/1a/1/_resized/1a1bed16175357903eb41863550b59046f315ece_100_100_wg_t.png"
+      },
+      "played": 8,
+      "wins": 5,
+      "draws": 2,
+      "losses": 1,
+      "gf": 19,
+      "ga": 15,
+      "gd": "+4",
+      "points": 17,
+      "form": [
+        "L",
+        "W",
+        "W",
+        "D",
+        "W"
+      ],
+      "isUs": false
+    },
+    {
+      "position": 3,
+      "club": {
         "id": 140,
         "name": "NK Vihor (J)",
         "logo": "https://hns.family/files/images_comet/07/3/_resized/073548045a9ffd623cfb00b39796fde20ba35dd0_100_100_wg_t.png"
@@ -2815,30 +2839,6 @@
         "W",
         "L",
         "W"
-      ],
-      "isUs": false
-    },
-    {
-      "position": 3,
-      "club": {
-        "id": 124,
-        "name": "NK Motičina",
-        "logo": "https://hns.family/files/images_comet/1a/1/_resized/1a1bed16175357903eb41863550b59046f315ece_100_100_wg_t.png"
-      },
-      "played": 7,
-      "wins": 4,
-      "draws": 2,
-      "losses": 1,
-      "gf": 18,
-      "ga": 15,
-      "gd": "+3",
-      "points": 14,
-      "form": [
-        "W",
-        "L",
-        "W",
-        "W",
-        "D"
       ],
       "isUs": false
     },
@@ -2969,19 +2969,19 @@
         "name": "NK Lug",
         "logo": "https://hns.family/files/images_comet/bc/b/_resized/bcb44ae2bb76e29c13c5b61dbcf58620703d06fe_100_100_wg_t.png"
       },
-      "played": 7,
+      "played": 8,
       "wins": 2,
       "draws": 1,
-      "losses": 4,
+      "losses": 5,
       "gf": 9,
-      "ga": 16,
-      "gd": "-7",
+      "ga": 17,
+      "gd": "-8",
       "points": 7,
       "form": [
-        "D",
         "L",
         "L",
         "W",
+        "L",
         "L"
       ],
       "isUs": false
