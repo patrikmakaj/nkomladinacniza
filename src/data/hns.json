@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-22T12:13:32.425Z",
+  "lastUpdated": "2026-10-23T18:35:20.463Z",
   "sourceUrl": "https://semafor.hns.family/klubovi/134/nk-omladinac-niza/",
   "club": {
     "id": 134,
@@ -2255,19 +2255,19 @@
             "name": "NK Bratstvo (R)",
             "logo": "https://hns.family/files/images_comet/21/2/_resized/21230a8a52c3a5d6ce147f21dc8a133fbee77b9f_100_100_wg_t.png"
           },
-          "played": 6,
-          "wins": 3,
+          "played": 7,
+          "wins": 4,
           "draws": 0,
           "losses": 3,
-          "gf": 27,
+          "gf": 28,
           "ga": 28,
-          "gd": "-1",
-          "points": 9,
+          "gd": "0",
+          "points": 12,
           "form": [
-            "L",
             "L",
             "W",
             "L",
+            "W",
             "W"
           ],
           "isUs": false
@@ -2303,19 +2303,19 @@
             "name": "NK Željezničar (MN)",
             "logo": "https://hns.family/files/images_comet/ba/1/_resized/ba1480acacd707e235b17832f3d7983b5e81d4a1_100_100_wg_t.png"
           },
-          "played": 8,
+          "played": 9,
           "wins": 2,
           "draws": 1,
-          "losses": 5,
+          "losses": 6,
           "gf": 15,
-          "ga": 44,
-          "gd": "-29",
+          "ga": 45,
+          "gd": "-30",
           "points": 7,
           "form": [
-            "D",
             "L",
             "L",
             "W",
+            "L",
             "L"
           ],
           "isUs": false

@@ -1,8 +1,22 @@
 {
-  "lastUpdated": "2026-10-22T23:51:54.017Z",
+  "lastUpdated": "2026-10-23T18:35:27.274Z",
   "enabled": true,
   "pageId": "55401829691",
   "posts": [
+    {
+      "id": "55401829691_1734691408663352",
+      "message": "Obavijest za studente....",
+      "createdAt": "2026-10-23T14:34:17+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1734691408663352",
+      "images": [
+        {
+          "src": "/images/facebook/55401829691_1734691408663352.jpg",
+          "thumb": "/images/facebook/55401829691_1734691408663352.webp",
+          "width": 700,
+          "height": 689
+        }
+      ]
+    },
     {
       "id": "55401829691_1733974762068350",
       "message": "",
@@ -398,20 +412,6 @@
         {
           "src": "/images/facebook/55401829691_1677284204404073.jpg",
           "thumb": "/images/facebook/55401829691_1677284204404073.webp",
-          "width": 700,
-          "height": 875
-        }
-      ]
-    },
-    {
-      "id": "55401829691_1676237427842084",
-      "message": "",
-      "createdAt": "2026-08-28T16:11:22+0000",
-      "permalink": "https://www.facebook.com/1551452460320582/posts/1676237427842084",
-      "images": [
-        {
-          "src": "/images/facebook/55401829691_1676237427842084.jpg",
-          "thumb": "/images/facebook/55401829691_1676237427842084.webp",
           "width": 700,
           "height": 875
         }
