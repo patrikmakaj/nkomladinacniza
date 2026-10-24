@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-24T09:16:19.575Z",
+  "lastUpdated": "2026-10-24T16:49:06.490Z",
   "sourceUrl": "https://semafor.hns.family/klubovi/134/nk-omladinac-niza/",
   "club": {
     "id": 134,
@@ -2144,11 +2144,14 @@
             "name": "NK Đurđenovac",
             "logo": "https://hns.family/files/images_comet/a5/0/_resized/a5019da3fed2f68e88845d5dd31abaa0f550b0ec_100_100_wg_t.png"
           },
-          "score": null,
-          "played": false,
+          "score": {
+            "home": 0,
+            "away": 13
+          },
+          "played": true,
           "isHome": true,
-          "result": null,
-          "url": null
+          "result": "L",
+          "url": "https://semafor.hns.family/utakmice/114377500/nk-omladinac-niza-nk-djurdjenovac-0-13/"
         }
       ],
       "table": [
@@ -2203,6 +2206,30 @@
         {
           "position": 3,
           "club": {
+            "id": 127,
+            "name": "NK Đurđenovac",
+            "logo": "https://hns.family/files/images_comet/a5/0/_resized/a5019da3fed2f68e88845d5dd31abaa0f550b0ec_100_100_wg_t.png"
+          },
+          "played": 8,
+          "wins": 6,
+          "draws": 0,
+          "losses": 2,
+          "gf": 50,
+          "ga": 24,
+          "gd": "+26",
+          "points": 18,
+          "form": [
+            "W",
+            "L",
+            "W",
+            "W",
+            "W"
+          ],
+          "isUs": false
+        },
+        {
+          "position": 4,
+          "club": {
             "id": 4174,
             "name": "NK Martin",
             "logo": "https://hns.family/files/images_comet/b3/6/_resized/b366da4f8698b43fa0d8e9cc67f9847d52d44770_100_100_wg_t.png"
@@ -2220,30 +2247,6 @@
             "W",
             "L",
             "L",
-            "W"
-          ],
-          "isUs": false
-        },
-        {
-          "position": 4,
-          "club": {
-            "id": 127,
-            "name": "NK Đurđenovac",
-            "logo": "https://hns.family/files/images_comet/a5/0/_resized/a5019da3fed2f68e88845d5dd31abaa0f550b0ec_100_100_wg_t.png"
-          },
-          "played": 7,
-          "wins": 5,
-          "draws": 0,
-          "losses": 2,
-          "gf": 37,
-          "ga": 24,
-          "gd": "+13",
-          "points": 15,
-          "form": [
-            "W",
-            "W",
-            "L",
-            "W",
             "W"
           ],
           "isUs": false
@@ -2375,13 +2378,13 @@
             "name": "NK Omladinac Niza",
             "logo": "https://hns.family/files/images_comet/49/b/_resized/49b362069bd38a3154422c8f1c4b7cd4f5aee1b7_100_100_wg_t.png"
           },
-          "played": 8,
+          "played": 9,
           "wins": 0,
           "draws": 0,
-          "losses": 8,
+          "losses": 9,
           "gf": 3,
-          "ga": 76,
-          "gd": "-73",
+          "ga": 89,
+          "gd": "-86",
           "points": 0,
           "form": [
             "L",
