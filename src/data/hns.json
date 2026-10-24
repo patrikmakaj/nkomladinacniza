@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-24T19:12:53.267Z",
+  "lastUpdated": "2026-10-24T21:43:40.403Z",
   "sourceUrl": "https://semafor.hns.family/klubovi/134/nk-omladinac-niza/",
   "club": {
     "id": 134,
@@ -439,6 +439,30 @@
         {
           "position": 6,
           "club": {
+            "id": 144,
+            "name": "NK Lug",
+            "logo": "https://hns.family/files/images_comet/bc/b/_resized/bcb44ae2bb76e29c13c5b61dbcf58620703d06fe_100_100_wg_t.png"
+          },
+          "played": 9,
+          "wins": 3,
+          "draws": 1,
+          "losses": 5,
+          "gf": 14,
+          "ga": 18,
+          "gd": "-4",
+          "points": 10,
+          "form": [
+            "L",
+            "W",
+            "L",
+            "L",
+            "W"
+          ],
+          "isUs": false
+        },
+        {
+          "position": 7,
+          "club": {
             "id": 131,
             "name": "NK Lila",
             "logo": "https://hns.family/files/images_comet/ef/0/_resized/ef0f2eb9faa8e182f6ec0ea528cdec636b5591b5_100_100_wg_t.png"
@@ -461,7 +485,7 @@
           "isUs": false
         },
         {
-          "position": 7,
+          "position": 8,
           "club": {
             "id": 129,
             "name": "NK Iskrica",
@@ -485,7 +509,7 @@
           "isUs": false
         },
         {
-          "position": 8,
+          "position": 9,
           "club": {
             "id": 133,
             "name": "NK Mladost Stipanovci",
@@ -509,52 +533,28 @@
           "isUs": false
         },
         {
-          "position": 9,
+          "position": 10,
           "club": {
             "id": 134,
             "name": "NK Omladinac Niza",
             "logo": "https://hns.family/files/images_comet/49/b/_resized/49b362069bd38a3154422c8f1c4b7cd4f5aee1b7_100_100_wg_t.png"
           },
-          "played": 8,
+          "played": 9,
           "wins": 2,
           "draws": 1,
-          "losses": 5,
-          "gf": 15,
-          "ga": 20,
-          "gd": "-5",
+          "losses": 6,
+          "gf": 16,
+          "ga": 25,
+          "gd": "-9",
           "points": 7,
           "form": [
-            "L",
             "L",
             "D",
             "W",
+            "L",
             "L"
           ],
           "isUs": true
-        },
-        {
-          "position": 10,
-          "club": {
-            "id": 144,
-            "name": "NK Lug",
-            "logo": "https://hns.family/files/images_comet/bc/b/_resized/bcb44ae2bb76e29c13c5b61dbcf58620703d06fe_100_100_wg_t.png"
-          },
-          "played": 8,
-          "wins": 2,
-          "draws": 1,
-          "losses": 5,
-          "gf": 9,
-          "ga": 17,
-          "gd": "-8",
-          "points": 7,
-          "form": [
-            "L",
-            "L",
-            "W",
-            "L",
-            "L"
-          ],
-          "isUs": false
         },
         {
           "position": 11,
@@ -2945,6 +2945,30 @@
     {
       "position": 6,
       "club": {
+        "id": 144,
+        "name": "NK Lug",
+        "logo": "https://hns.family/files/images_comet/bc/b/_resized/bcb44ae2bb76e29c13c5b61dbcf58620703d06fe_100_100_wg_t.png"
+      },
+      "played": 9,
+      "wins": 3,
+      "draws": 1,
+      "losses": 5,
+      "gf": 14,
+      "ga": 18,
+      "gd": "-4",
+      "points": 10,
+      "form": [
+        "L",
+        "W",
+        "L",
+        "L",
+        "W"
+      ],
+      "isUs": false
+    },
+    {
+      "position": 7,
+      "club": {
         "id": 131,
         "name": "NK Lila",
         "logo": "https://hns.family/files/images_comet/ef/0/_resized/ef0f2eb9faa8e182f6ec0ea528cdec636b5591b5_100_100_wg_t.png"
@@ -2967,7 +2991,7 @@
       "isUs": false
     },
     {
-      "position": 7,
+      "position": 8,
       "club": {
         "id": 129,
         "name": "NK Iskrica",
@@ -2991,7 +3015,7 @@
       "isUs": false
     },
     {
-      "position": 8,
+      "position": 9,
       "club": {
         "id": 133,
         "name": "NK Mladost Stipanovci",
@@ -3015,52 +3039,28 @@
       "isUs": false
     },
     {
-      "position": 9,
+      "position": 10,
       "club": {
         "id": 134,
         "name": "NK Omladinac Niza",
         "logo": "https://hns.family/files/images_comet/49/b/_resized/49b362069bd38a3154422c8f1c4b7cd4f5aee1b7_100_100_wg_t.png"
       },
-      "played": 8,
+      "played": 9,
       "wins": 2,
       "draws": 1,
-      "losses": 5,
-      "gf": 15,
-      "ga": 20,
-      "gd": "-5",
+      "losses": 6,
+      "gf": 16,
+      "ga": 25,
+      "gd": "-9",
       "points": 7,
       "form": [
-        "L",
         "L",
         "D",
         "W",
+        "L",
         "L"
       ],
       "isUs": true
-    },
-    {
-      "position": 10,
-      "club": {
-        "id": 144,
-        "name": "NK Lug",
-        "logo": "https://hns.family/files/images_comet/bc/b/_resized/bcb44ae2bb76e29c13c5b61dbcf58620703d06fe_100_100_wg_t.png"
-      },
-      "played": 8,
-      "wins": 2,
-      "draws": 1,
-      "losses": 5,
-      "gf": 9,
-      "ga": 17,
-      "gd": "-8",
-      "points": 7,
-      "form": [
-        "L",
-        "L",
-        "W",
-        "L",
-        "L"
-      ],
-      "isUs": false
     },
     {
       "position": 11,
@@ -3112,25 +3112,25 @@
     }
   ],
   "ourRow": {
-    "position": 9,
+    "position": 10,
     "club": {
       "id": 134,
       "name": "NK Omladinac Niza",
       "logo": "https://hns.family/files/images_comet/49/b/_resized/49b362069bd38a3154422c8f1c4b7cd4f5aee1b7_100_100_wg_t.png"
     },
-    "played": 8,
+    "played": 9,
     "wins": 2,
     "draws": 1,
-    "losses": 5,
-    "gf": 15,
-    "ga": 20,
-    "gd": "-5",
+    "losses": 6,
+    "gf": 16,
+    "ga": 25,
+    "gd": "-9",
     "points": 7,
     "form": [
       "L",
-      "L",
       "D",
       "W",
+      "L",
       "L"
     ],
     "isUs": true
