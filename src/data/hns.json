@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-24T16:49:06.490Z",
+  "lastUpdated": "2026-10-24T19:12:53.267Z",
   "sourceUrl": "https://semafor.hns.family/klubovi/134/nk-omladinac-niza/",
   "club": {
     "id": 134,
@@ -257,11 +257,14 @@
             "name": "NK Lug",
             "logo": "https://hns.family/files/images_comet/bc/b/_resized/bcb44ae2bb76e29c13c5b61dbcf58620703d06fe_100_100_wg_t.png"
           },
-          "score": null,
-          "played": false,
+          "score": {
+            "home": 1,
+            "away": 5
+          },
+          "played": true,
           "isHome": true,
-          "result": null,
-          "url": null
+          "result": "L",
+          "url": "https://semafor.hns.family/utakmice/115208605/nk-omladinac-niza-nk-lug-1-5/"
         },
         {
           "id": "115208611",
@@ -3441,11 +3444,14 @@
         "name": "NK Lug",
         "logo": "https://hns.family/files/images_comet/bc/b/_resized/bcb44ae2bb76e29c13c5b61dbcf58620703d06fe_100_100_wg_t.png"
       },
-      "score": null,
-      "played": false,
+      "score": {
+        "home": 1,
+        "away": 5
+      },
+      "played": true,
       "isHome": true,
-      "result": null,
-      "url": null,
+      "result": "L",
+      "url": "https://semafor.hns.family/utakmice/115208605/nk-omladinac-niza-nk-lug-1-5/",
       "competitionId": 115182406,
       "ageCategory": "Seniors"
     },
@@ -8879,6 +8885,470 @@
               "captain": false,
               "photo": "https://hns.family/files/images_comet/Person/_resized/48815_301050c9-0c08-4c00-920e-0d0ef6db96b1_80_100_cut_wg_top.jpg",
               "profileUrl": "https://semafor.hns.family/treneri/48815/josip-rogac/",
+              "events": []
+            }
+          ]
+        }
+      }
+    },
+    "115208605": {
+      "status": "Završeno",
+      "facility": "Grbavica, Niza, 24.10.2026. 19:00",
+      "attendance": 50,
+      "referees": [
+        "Manuel Dendis",
+        "Danijel Molnar",
+        "Vinko Zahatek"
+      ],
+      "headerEvents": {
+        "home": [
+          {
+            "type": "goal",
+            "minute": 59,
+            "playerName": "Josip Matić"
+          }
+        ],
+        "away": [
+          {
+            "type": "goal",
+            "minute": 20,
+            "playerName": "Ivan Lacković"
+          },
+          {
+            "type": "goal",
+            "minute": 23,
+            "playerName": "Patrik Čuić"
+          },
+          {
+            "type": "goal",
+            "minute": 43,
+            "playerName": "Valentin Ploher"
+          },
+          {
+            "type": "goal",
+            "minute": 64,
+            "playerName": "Damir Pastvečko"
+          },
+          {
+            "type": "goal",
+            "minute": 83,
+            "playerName": "Marijan Kapraljević"
+          }
+        ]
+      },
+      "lineup": {
+        "home": {
+          "starters": [
+            {
+              "personId": 49179,
+              "number": 12,
+              "name": "Ivan Galinec",
+              "position": "Vratar",
+              "captain": false,
+              "photo": "https://hns.family/files/images_comet/Person/_resized/49179_4d4f0298-c249-4c7d-83d0-97242c22cf1d_80_100_cut_wg_top.jpg",
+              "profileUrl": "https://semafor.hns.family/igraci/49179/ivan-galinec/",
+              "events": []
+            },
+            {
+              "personId": 118545,
+              "number": 2,
+              "name": "Ivan Prišć",
+              "position": "Igrač",
+              "captain": false,
+              "photo": "https://hns.family/files/images_comet/8e/2/_resized/8e29eabcdf2a1da8abfd32911c180c985f0cae5c_80_100_cut_wg_top.png",
+              "profileUrl": "https://semafor.hns.family/igraci/118545/ivan-prisc/",
+              "events": []
+            },
+            {
+              "personId": 365480,
+              "number": 4,
+              "name": "Daniel Vrbanić",
+              "position": "Igrač",
+              "captain": true,
+              "photo": "https://hns.family/files/images_comet/97/b/_resized/97b5f153b275bc9340577267d4afd6c6b9a16ef5_80_100_cut_wg_top.png",
+              "profileUrl": "https://semafor.hns.family/igraci/365480/daniel-vrbanic/",
+              "events": []
+            },
+            {
+              "personId": 375906,
+              "number": 7,
+              "name": "Karlo Grubač",
+              "position": "Igrač",
+              "captain": false,
+              "photo": "https://hns.family/files/images_comet/0c/5/_resized/0c5b7fdbff352e6983a9b126458e9e5fe19de758_80_100_cut_wg_top.png",
+              "profileUrl": "https://semafor.hns.family/igraci/375906/karlo-grubac/",
+              "events": []
+            },
+            {
+              "personId": 389829,
+              "number": 10,
+              "name": "Tin Mauhar",
+              "position": "Igrač",
+              "captain": false,
+              "photo": "https://hns.family/files/images_comet/6a/4/_resized/6a4e068e61fb0acefa66e426b53bdbb0b3c3fc52_80_100_cut_wg_top.jpg",
+              "profileUrl": "https://semafor.hns.family/igraci/389829/tin-mauhar/",
+              "events": [
+                {
+                  "type": "yellow",
+                  "minute": 14,
+                  "label": "14'"
+                }
+              ]
+            },
+            {
+              "personId": 225147,
+              "number": 13,
+              "name": "Anto Kostreš",
+              "position": "Igrač",
+              "captain": false,
+              "photo": "https://hns.family/files/images_comet/e2/0/_resized/e2030390219e4f4ed7f06aea8a0bd72edc1e3e6a_80_100_cut_wg_top.png",
+              "profileUrl": "https://semafor.hns.family/igraci/225147/anto-kostres/",
+              "events": []
+            },
+            {
+              "personId": 329621,
+              "number": 16,
+              "name": "Ivan Mandić",
+              "position": "Igrač",
+              "captain": false,
+              "photo": "https://hns.family/files/images_comet/b9/f/b9fb8fe6d80fb1ff658a365e2d50db4afc1c5cae.png",
+              "profileUrl": "https://semafor.hns.family/igraci/329621/ivan-mandic/",
+              "events": []
+            },
+            {
+              "personId": 389840,
+              "number": 17,
+              "name": "Petar Barišić",
+              "position": "Igrač",
+              "captain": false,
+              "photo": "https://hns.family/files/images_comet/d8/9/_resized/d8931c5584d5b6fddb84eedf1db5103e8f0c3db6_80_100_cut_wg_top.jpg",
+              "profileUrl": "https://semafor.hns.family/igraci/389840/petar-barisic/",
+              "events": []
+            },
+            {
+              "personId": 125673,
+              "number": 21,
+              "name": "Josip Matić",
+              "position": "Igrač",
+              "captain": false,
+              "photo": "https://hns.family/files/images_comet/Person/_resized/125673_2f9825dc-889e-490b-8c18-4d7a41ed47c4_80_100_cut_wg_top.jpg",
+              "profileUrl": "https://semafor.hns.family/igraci/125673/josip-matic/",
+              "events": [
+                {
+                  "type": "goal",
+                  "minute": 59,
+                  "label": "59'"
+                }
+              ]
+            },
+            {
+              "personId": 48591,
+              "number": 22,
+              "name": "Silvester Misbrener",
+              "position": "Igrač",
+              "captain": false,
+              "photo": "https://hns.family/files/images_comet/Person/_resized/48591_66bb8aba-ca5d-4f9c-80a0-4a52a2a4dc3d_80_100_cut_wg_top.jpg",
+              "profileUrl": "https://semafor.hns.family/igraci/48591/silvester-misbrener/",
+              "events": []
+            },
+            {
+              "personId": 182403,
+              "number": 24,
+              "name": "Ante Knežević",
+              "position": "Igrač",
+              "captain": false,
+              "photo": "https://hns.family/files/images_comet/Person/_resized/182403_b500dbbf-2be1-4c02-9dc2-5c459899bea2_80_100_cut_wg_top.jpg",
+              "profileUrl": "https://semafor.hns.family/igraci/182403/ante-knezevic/",
+              "events": []
+            }
+          ],
+          "subs": [
+            {
+              "personId": 365462,
+              "number": 1,
+              "name": "Emanuel Galinec",
+              "position": "Vratar",
+              "captain": false,
+              "photo": "https://hns.family/files/images_comet/a0/a/_resized/a0a7b8824c80797fdddd74f55060b491112a2fb5_80_100_cut_wg_top.jpg",
+              "profileUrl": "https://semafor.hns.family/igraci/365462/emanuel-galinec/",
+              "events": []
+            },
+            {
+              "personId": 58712,
+              "number": 5,
+              "name": "Hrvoje Kasapović",
+              "position": "Igrač",
+              "captain": false,
+              "photo": "https://hns.family/files/images_comet/Person/_resized/58712_669f1d8e-2459-4cae-b94a-91e1dab5cd23_80_100_cut_wg_top.jpg",
+              "profileUrl": "https://semafor.hns.family/igraci/58712/hrvoje-kasapovic/",
+              "events": [
+                {
+                  "type": "yellow",
+                  "minute": 82,
+                  "label": "82'"
+                }
+              ]
+            },
+            {
+              "personId": 365457,
+              "number": 9,
+              "name": "Leon Budić",
+              "position": "Igrač",
+              "captain": false,
+              "photo": "https://hns.family/files/images_comet/92/2/_resized/92233740efd8c16744df6e0e13e406701f828910_80_100_cut_wg_top.png",
+              "profileUrl": "https://semafor.hns.family/igraci/365457/leon-budic/",
+              "events": []
+            },
+            {
+              "personId": 402949,
+              "number": 18,
+              "name": "Stjepan Barišić",
+              "position": "Igrač",
+              "captain": false,
+              "photo": "https://hns.family/files/images_comet/64/8/_resized/64817a3943bc6a72fab2c756c8f2c70123941fa3_80_100_cut_wg_top.png",
+              "profileUrl": "https://semafor.hns.family/igraci/402949/stjepan-barisic/",
+              "events": []
+            },
+            {
+              "personId": 48000,
+              "number": 23,
+              "name": "Tomislav Banaj",
+              "position": "Igrač",
+              "captain": false,
+              "photo": "https://hns.family/files/images_comet/Person/_resized/48000_ed1f0b84-5ee7-4ce6-83a0-a1701a613b3d_80_100_cut_wg_top.png",
+              "profileUrl": "https://semafor.hns.family/igraci/48000/tomislav-banaj/",
+              "events": []
+            },
+            {
+              "personId": 48815,
+              "number": null,
+              "name": "Josip Rogač",
+              "position": "Trener",
+              "captain": false,
+              "photo": "https://hns.family/files/images_comet/Person/_resized/48815_301050c9-0c08-4c00-920e-0d0ef6db96b1_80_100_cut_wg_top.jpg",
+              "profileUrl": "https://semafor.hns.family/treneri/48815/josip-rogac/",
+              "events": []
+            }
+          ]
+        },
+        "away": {
+          "starters": [
+            {
+              "personId": 226443,
+              "number": 25,
+              "name": "Domagoj Žagar",
+              "position": "Vratar",
+              "captain": false,
+              "photo": "https://hns.family/files/images_comet/22/0/_resized/220c6ffda9813f391ea80f68660949fae17afa5f_80_100_cut_wg_top.png",
+              "profileUrl": "https://semafor.hns.family/igraci/226443/domagoj-zagar/",
+              "events": []
+            },
+            {
+              "personId": 226444,
+              "number": 2,
+              "name": "Dominik Bencek",
+              "position": "Igrač",
+              "captain": false,
+              "photo": "https://hns.family/files/images_comet/31/8/_resized/31898b8604f6555409e7cbc0f97ccc08fee575e1_80_100_cut_wg_top.png",
+              "profileUrl": "https://semafor.hns.family/igraci/226444/dominik-bencek/",
+              "events": []
+            },
+            {
+              "personId": 327911,
+              "number": 4,
+              "name": "Patrik Čuić",
+              "position": "Igrač",
+              "captain": false,
+              "photo": "https://hns.family/files/images_comet/6b/b/_resized/6bb6a6170551263d75207058419b0ca446fafbbd_80_100_cut_wg_top.png",
+              "profileUrl": "https://semafor.hns.family/igraci/327911/patrik-cuic/",
+              "events": [
+                {
+                  "type": "goal",
+                  "minute": 23,
+                  "label": "23'"
+                }
+              ]
+            },
+            {
+              "personId": 124733,
+              "number": 5,
+              "name": "Kristijan Lacković",
+              "position": "Igrač",
+              "captain": false,
+              "photo": "https://hns.family/files/images_comet/ce/c/_resized/cecfde3e3052d6c7e94a71381ae5b981fe7012cb_80_100_cut_wg_top.png",
+              "profileUrl": "https://semafor.hns.family/igraci/124733/kristijan-lackovic/",
+              "events": []
+            },
+            {
+              "personId": 211280,
+              "number": 7,
+              "name": "Zvonimir Štefančić",
+              "position": "Igrač",
+              "captain": false,
+              "photo": "https://hns.family/files/images_comet/06/4/_resized/064f8ead54db2332ae240882020dcd0ec0cf3576_80_100_cut_wg_top.png",
+              "profileUrl": "https://semafor.hns.family/igraci/211280/zvonimir-stefancic/",
+              "events": []
+            },
+            {
+              "personId": 365569,
+              "number": 8,
+              "name": "Marin Tomanović",
+              "position": "Igrač",
+              "captain": false,
+              "photo": "https://hns.family/files/images_comet/5c/b/_resized/5cb2ea59e0b1ce2101d7366dbd5f5c49fbe74072_80_100_cut_wg_top.png",
+              "profileUrl": "https://semafor.hns.family/igraci/365569/marin-tomanovic/",
+              "events": []
+            },
+            {
+              "personId": 221286,
+              "number": 9,
+              "name": "Damir Pastvečko",
+              "position": "Igrač",
+              "captain": false,
+              "photo": "https://hns.family/files/images_comet/9a/8/_resized/9a867cfe26a7fa81a48a596798bafd70389f1c72_80_100_cut_wg_top.jpg",
+              "profileUrl": "https://semafor.hns.family/igraci/221286/damir-pastvecko/",
+              "events": [
+                {
+                  "type": "goal",
+                  "minute": 64,
+                  "label": "64'"
+                }
+              ]
+            },
+            {
+              "personId": 224495,
+              "number": 10,
+              "name": "Valentin Ploher",
+              "position": "Igrač",
+              "captain": false,
+              "photo": "https://hns.family/files/images_comet/Person/_resized/224495_ced40d00-95aa-4dc7-93d6-679057018dd0_80_100_cut_wg_top.jpg",
+              "profileUrl": "https://semafor.hns.family/igraci/224495/valentin-ploher/",
+              "events": [
+                {
+                  "type": "goal",
+                  "minute": 43,
+                  "label": "43'"
+                }
+              ]
+            },
+            {
+              "personId": 228849,
+              "number": 11,
+              "name": "Ivan Lacković",
+              "position": "Igrač",
+              "captain": false,
+              "photo": "https://hns.family/files/images_comet/7e/8/_resized/7e89463347b10abd9d99f9619a2fa325c7740f18_80_100_cut_wg_top.png",
+              "profileUrl": "https://semafor.hns.family/igraci/228849/ivan-lackovic/",
+              "events": [
+                {
+                  "type": "goal",
+                  "minute": 20,
+                  "label": "20'"
+                }
+              ]
+            },
+            {
+              "personId": 49380,
+              "number": 19,
+              "name": "Marijan Kapraljević",
+              "position": "Igrač",
+              "captain": true,
+              "photo": "https://hns.family/files/images_comet/Person/_resized/49380_34450973-f63c-4811-b368-70bc55f5288b_80_100_cut_wg_top.png",
+              "profileUrl": "https://semafor.hns.family/igraci/49380/marijan-kapraljevic/",
+              "events": [
+                {
+                  "type": "goal",
+                  "minute": 83,
+                  "label": "83'"
+                }
+              ]
+            },
+            {
+              "personId": 155635,
+              "number": 20,
+              "name": "Matej Dubravac",
+              "position": "Igrač",
+              "captain": false,
+              "photo": "https://hns.family/files/images_comet/Person/_resized/155635_a3280a77-c4c6-4dd2-929e-ae9ade02f35c_80_100_cut_wg_top.png",
+              "profileUrl": "https://semafor.hns.family/igraci/155635/matej-dubravac/",
+              "events": [
+                {
+                  "type": "yellow",
+                  "minute": 63,
+                  "label": "63'"
+                }
+              ]
+            }
+          ],
+          "subs": [
+            {
+              "personId": 235518,
+              "number": 3,
+              "name": "Luka Ceilinger",
+              "position": "Igrač",
+              "captain": false,
+              "photo": "https://hns.family/files/images_comet/7b/f/_resized/7bf8197b14530f08fcf9adaef4d1c05bb4b12e24_80_100_cut_wg_top.png",
+              "profileUrl": "https://semafor.hns.family/igraci/235518/luka-ceilinger/",
+              "events": []
+            },
+            {
+              "personId": 390766,
+              "number": 6,
+              "name": "Petar Tolić",
+              "position": "Igrač",
+              "captain": false,
+              "photo": "https://hns.family/files/images_comet/04/1/_resized/04167685f6386dd5703e003d997589345844fe14_80_100_cut_wg_top.jpg",
+              "profileUrl": "https://semafor.hns.family/igraci/390766/petar-tolic/",
+              "events": []
+            },
+            {
+              "personId": 382518,
+              "number": 13,
+              "name": "Deni Lijić",
+              "position": "Igrač",
+              "captain": false,
+              "photo": "https://hns.family/files/images_comet/97/c/_resized/97cc0a7acc8a00b61b73243307475a3b5acfe35c_80_100_cut_wg_top.png",
+              "profileUrl": "https://semafor.hns.family/igraci/382518/deni-lijic/",
+              "events": []
+            },
+            {
+              "personId": 48059,
+              "number": 14,
+              "name": "Mirko Bencek",
+              "position": "Igrač",
+              "captain": false,
+              "photo": "https://hns.family/files/images_comet/c1/0/_resized/c10a139dc264bb2b5c51f22a9c734e57324b024a_80_100_cut_wg_top.png",
+              "profileUrl": "https://semafor.hns.family/igraci/48059/mirko-bencek/",
+              "events": []
+            },
+            {
+              "personId": 138221,
+              "number": 15,
+              "name": "Matija Bandić",
+              "position": "Igrač",
+              "captain": false,
+              "photo": "https://hns.family/files/images_comet/Person/_resized/138221_b630a493-3470-4552-9581-9623b531383d_80_100_cut_wg_top.jpg",
+              "profileUrl": "https://semafor.hns.family/igraci/138221/matija-bandic/",
+              "events": []
+            },
+            {
+              "personId": 211359,
+              "number": 17,
+              "name": "Marin Pastvečko",
+              "position": "Igrač",
+              "captain": false,
+              "photo": "https://hns.family/files/images_comet/Person/_resized/211359_559f1f21-e72c-4623-ae20-549a24ead720_80_100_cut_wg_top.png",
+              "profileUrl": "https://semafor.hns.family/igraci/211359/marin-pastvecko/",
+              "events": []
+            },
+            {
+              "personId": 79492,
+              "number": 18,
+              "name": "David - Borna Mandić",
+              "position": "Igrač",
+              "captain": false,
+              "photo": "https://hns.family/files/images_comet/68/4/_resized/6840189a4df29c372796cd35817de7ac7e56d446_80_100_cut_wg_top.png",
+              "profileUrl": "https://semafor.hns.family/igraci/79492/david-borna-mandic/",
               "events": []
             }
           ]
