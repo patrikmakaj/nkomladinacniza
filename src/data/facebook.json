@@ -1,8 +1,22 @@
 {
-  "lastUpdated": "2026-10-23T18:35:27.274Z",
+  "lastUpdated": "2026-10-25T13:32:08.363Z",
   "enabled": true,
   "pageId": "55401829691",
   "posts": [
+    {
+      "id": "55401829691_1736617718470721",
+      "message": "",
+      "createdAt": "2026-10-25T10:37:21+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1736617718470721",
+      "images": [
+        {
+          "src": "/images/facebook/55401829691_1736617718470721.jpg",
+          "thumb": "/images/facebook/55401829691_1736617718470721.webp",
+          "width": 700,
+          "height": 875
+        }
+      ]
+    },
     {
       "id": "55401829691_1734691408663352",
       "message": "Obavijest za studente....",
