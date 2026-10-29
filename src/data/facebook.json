@@ -1,8 +1,22 @@
 {
-  "lastUpdated": "2026-10-25T13:32:08.363Z",
+  "lastUpdated": "2026-10-29T23:28:46.088Z",
   "enabled": true,
   "pageId": "55401829691",
   "posts": [
+    {
+      "id": "55401829691_1742223157910177",
+      "message": "",
+      "createdAt": "2026-10-29T23:22:14+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1742223157910177",
+      "images": [
+        {
+          "src": "/images/facebook/55401829691_1742223157910177.jpg",
+          "thumb": "/images/facebook/55401829691_1742223157910177.webp",
+          "width": 700,
+          "height": 875
+        }
+      ]
+    },
     {
       "id": "55401829691_1736617718470721",
       "message": "",
@@ -414,20 +428,6 @@
           "thumb": "/images/facebook/55401829691_1677896304342863_8.webp",
           "width": 700,
           "height": 525
-        }
-      ]
-    },
-    {
-      "id": "55401829691_1677284204404073",
-      "message": "Unatoč našem vodstvu, domaćini dolaze do preokreta. Čestitke Lili na pobjedi, a mi iduće subote dočekujemo Lađansku od 19:00h...",
-      "createdAt": "2026-08-29T18:15:18+0000",
-      "permalink": "https://www.facebook.com/1551452460320582/posts/1677284204404073",
-      "images": [
-        {
-          "src": "/images/facebook/55401829691_1677284204404073.jpg",
-          "thumb": "/images/facebook/55401829691_1677284204404073.webp",
-          "width": 700,
-          "height": 875
         }
       ]
     }
