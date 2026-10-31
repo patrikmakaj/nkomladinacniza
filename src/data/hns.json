@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-31T17:51:10.322Z",
+  "lastUpdated": "2026-10-31T20:56:18.523Z",
   "sourceUrl": "https://semafor.hns.family/klubovi/134/nk-omladinac-niza/",
   "club": {
     "id": 134,
@@ -515,19 +515,19 @@
             "name": "NK Mladost Stipanovci",
             "logo": "https://hns.family/files/images_comet/2b/2/_resized/2b29ebd8980577c3191bac933b14de4e196a2405_100_100_wg_t.png"
           },
-          "played": 9,
+          "played": 10,
           "wins": 2,
-          "draws": 3,
+          "draws": 4,
           "losses": 4,
           "gf": 13,
           "ga": 18,
           "gd": "-5",
-          "points": 9,
+          "points": 10,
           "form": [
-            "L",
             "D",
             "W",
             "L",
+            "D",
             "D"
           ],
           "isUs": false
@@ -587,20 +587,20 @@
             "name": "NK Zoljan",
             "logo": "https://hns.family/files/images_comet/c4/8/_resized/c48aa5a81cba18f656c49eb1b316dc10e207ca08_100_100_wg_t.png"
           },
-          "played": 9,
+          "played": 10,
           "wins": 2,
-          "draws": 0,
+          "draws": 1,
           "losses": 7,
           "gf": 15,
           "ga": 28,
           "gd": "-13",
-          "points": 6,
+          "points": 7,
           "form": [
-            "W",
             "L",
             "L",
             "W",
-            "L"
+            "L",
+            "D"
           ],
           "isUs": false
         }
@@ -3035,19 +3035,19 @@
         "name": "NK Mladost Stipanovci",
         "logo": "https://hns.family/files/images_comet/2b/2/_resized/2b29ebd8980577c3191bac933b14de4e196a2405_100_100_wg_t.png"
       },
-      "played": 9,
+      "played": 10,
       "wins": 2,
-      "draws": 3,
+      "draws": 4,
       "losses": 4,
       "gf": 13,
       "ga": 18,
       "gd": "-5",
-      "points": 9,
+      "points": 10,
       "form": [
-        "L",
         "D",
         "W",
         "L",
+        "D",
         "D"
       ],
       "isUs": false
@@ -3107,20 +3107,20 @@
         "name": "NK Zoljan",
         "logo": "https://hns.family/files/images_comet/c4/8/_resized/c48aa5a81cba18f656c49eb1b316dc10e207ca08_100_100_wg_t.png"
       },
-      "played": 9,
+      "played": 10,
       "wins": 2,
-      "draws": 0,
+      "draws": 1,
       "losses": 7,
       "gf": 15,
       "ga": 28,
       "gd": "-13",
-      "points": 6,
+      "points": 7,
       "form": [
-        "W",
         "L",
         "L",
         "W",
-        "L"
+        "L",
+        "D"
       ],
       "isUs": false
     }
