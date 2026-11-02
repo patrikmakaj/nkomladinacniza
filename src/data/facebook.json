@@ -1,8 +1,22 @@
 {
-  "lastUpdated": "2026-10-29T23:28:46.088Z",
+  "lastUpdated": "2026-11-02T01:12:28.514Z",
   "enabled": true,
   "pageId": "55401829691",
   "posts": [
+    {
+      "id": "55401829691_1745744900891336",
+      "message": "",
+      "createdAt": "2026-11-01T23:16:41+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1745744900891336",
+      "images": [
+        {
+          "src": "/images/facebook/55401829691_1745744900891336.jpg",
+          "thumb": "/images/facebook/55401829691_1745744900891336.webp",
+          "width": 700,
+          "height": 875
+        }
+      ]
+    },
     {
       "id": "55401829691_1742223157910177",
       "message": "",
@@ -366,68 +380,6 @@
           "thumb": "/images/facebook/55401829691_1682162817249545.webp",
           "width": 700,
           "height": 875
-        }
-      ]
-    },
-    {
-      "id": "55401829691_1677896304342863",
-      "message": "",
-      "createdAt": "2026-08-30T10:55:20+0000",
-      "permalink": "https://www.facebook.com/1551452460320582/posts/1677896304342863",
-      "images": [
-        {
-          "src": "/images/facebook/55401829691_1677896304342863_0.jpg",
-          "thumb": "/images/facebook/55401829691_1677896304342863_0.webp",
-          "width": 700,
-          "height": 525
-        },
-        {
-          "src": "/images/facebook/55401829691_1677896304342863_1.jpg",
-          "thumb": "/images/facebook/55401829691_1677896304342863_1.webp",
-          "width": 700,
-          "height": 933
-        },
-        {
-          "src": "/images/facebook/55401829691_1677896304342863_2.jpg",
-          "thumb": "/images/facebook/55401829691_1677896304342863_2.webp",
-          "width": 700,
-          "height": 933
-        },
-        {
-          "src": "/images/facebook/55401829691_1677896304342863_3.jpg",
-          "thumb": "/images/facebook/55401829691_1677896304342863_3.webp",
-          "width": 700,
-          "height": 933
-        },
-        {
-          "src": "/images/facebook/55401829691_1677896304342863_4.jpg",
-          "thumb": "/images/facebook/55401829691_1677896304342863_4.webp",
-          "width": 700,
-          "height": 933
-        },
-        {
-          "src": "/images/facebook/55401829691_1677896304342863_5.jpg",
-          "thumb": "/images/facebook/55401829691_1677896304342863_5.webp",
-          "width": 700,
-          "height": 933
-        },
-        {
-          "src": "/images/facebook/55401829691_1677896304342863_6.jpg",
-          "thumb": "/images/facebook/55401829691_1677896304342863_6.webp",
-          "width": 700,
-          "height": 933
-        },
-        {
-          "src": "/images/facebook/55401829691_1677896304342863_7.jpg",
-          "thumb": "/images/facebook/55401829691_1677896304342863_7.webp",
-          "width": 700,
-          "height": 933
-        },
-        {
-          "src": "/images/facebook/55401829691_1677896304342863_8.jpg",
-          "thumb": "/images/facebook/55401829691_1677896304342863_8.webp",
-          "width": 700,
-          "height": 525
         }
       ]
     }
