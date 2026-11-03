@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-11-02T02:23:14.856Z",
+  "lastUpdated": "2026-11-03T15:23:59.454Z",
   "sourceUrl": "https://semafor.hns.family/klubovi/134/nk-omladinac-niza/",
   "club": {
     "id": 134,
@@ -298,8 +298,8 @@
           "type": "league",
           "round": 11,
           "date": "2026-11-07",
-          "time": "19:00",
-          "iso": "2026-11-07T19:00:00",
+          "time": "17:30",
+          "iso": "2026-11-07T17:30:00",
           "competition": "2. ŽNL Našice - Seniori 26/27, 11. kolo",
           "home": {
             "id": 134,
@@ -3515,8 +3515,8 @@
       "type": "league",
       "round": 11,
       "date": "2026-11-07",
-      "time": "19:00",
-      "iso": "2026-11-07T19:00:00",
+      "time": "17:30",
+      "iso": "2026-11-07T17:30:00",
       "competition": "2. ŽNL Našice - Seniori 26/27, 11. kolo",
       "home": {
         "id": 134,
