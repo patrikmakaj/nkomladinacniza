@@ -1,8 +1,22 @@
 {
-  "lastUpdated": "2026-11-02T01:12:28.514Z",
+  "lastUpdated": "2026-11-05T10:16:45.456Z",
   "enabled": true,
   "pageId": "55401829691",
   "posts": [
+    {
+      "id": "55401829691_1749930340472792",
+      "message": "",
+      "createdAt": "2026-11-05T08:03:01+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1749930340472792",
+      "images": [
+        {
+          "src": "/images/facebook/55401829691_1749930340472792.jpg",
+          "thumb": "/images/facebook/55401829691_1749930340472792.webp",
+          "width": 700,
+          "height": 875
+        }
+      ]
+    },
     {
       "id": "55401829691_1745744900891336",
       "message": "",
@@ -366,20 +380,6 @@
           "thumb": "/images/facebook/55401829691_1683962373736256_2.webp",
           "width": 700,
           "height": 933
-        }
-      ]
-    },
-    {
-      "id": "55401829691_1682162817249545",
-      "message": "",
-      "createdAt": "2026-09-03T19:06:07+0000",
-      "permalink": "https://www.facebook.com/1551452460320582/posts/1682162817249545",
-      "images": [
-        {
-          "src": "/images/facebook/55401829691_1682162817249545.jpg",
-          "thumb": "/images/facebook/55401829691_1682162817249545.webp",
-          "width": 700,
-          "height": 875
         }
       ]
     }
