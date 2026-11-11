@@ -13,18 +13,24 @@
  *
  * Koji turnir — `src/config/pikado.json` (isti fajl čita i stranica).
  *
- * Štednja zahtjeva: besplatna aplikacija ima 500 zahtjeva mjesečno, a CI se
- * vrti svakih 30 min. Po prolazu idu dva poziva (token + turnir sa
- * sudionicima, `include=participants`), pa:
- *  - API se pita samo u prvoj polovici sata, i to svakih `refreshHours` sati
- *    (config). `CHALLONGE_EVERY_RUN=1` to preskače (ručno pokretanje).
- *  - kad turnir krene, popis je zaključan — dalje se ne pita ništa, dok se u
+ * Štednja zahtjeva: besplatna aplikacija ima 500 zahtjeva mjesečno, a po
+ * prolazu idu dva poziva (token + turnir sa sudionicima, `include=participants`).
+ *  - API se pita najviše jednom u `refreshHours` sati (config). Vrijeme zadnje
+ *    provjere je u `.cache/challonge-last.json` (nije u gitu; CI ga prenosi
+ *    kroz `actions/cache`, isto kao stanje ispada HNS-a). Prije je uvjet bio
+ *    „prva polovica sata", ali GitHub zakazane runove pokreće rijetko i
+ *    neredovito (11.11. samo 5 puta u danu), pa je to propuštalo i one koji
+ *    jesu došli — prvi prijavljeni par čekao bi satima.
+ *  - Ručno pokretanje (workflow_dispatch) postavi `CHALLONGE_EVERY_RUN=1` i
+ *    pita uvijek.
+ *  - Kad turnir krene, popis je zaključan — dalje se ne pita ništa, dok se u
  *    configu ne promijeni turnir.
  *
  * Bez tajni ili kad dohvat ne uspije, postojeći pikado.json ostaje kakav jest.
  */
 
-import { readFile } from "node:fs/promises";
+import { appendFileSync } from "node:fs";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { writeJsonIfChanged } from "./lib/write-json.mjs";
@@ -32,6 +38,7 @@ import { writeJsonIfChanged } from "./lib/write-json.mjs";
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = path.join(ROOT, "src/data/pikado.json");
 const CONFIG = path.join(ROOT, "src/config/pikado.json");
+const LAST_CHECK = path.join(ROOT, ".cache/challonge-last.json");
 const LABEL = "[challonge]";
 const API = "https://api.challonge.com";
 
@@ -46,10 +53,24 @@ async function readJson(file) {
   }
 }
 
-/** Je li na redu dohvat — jednom svakih `hours` sati, u prvoj polovici sata. */
-function isDue(hours, now = new Date()) {
-  const h = Math.max(1, Math.floor(Number(hours) || 1));
-  return now.getUTCMinutes() < 30 && now.getUTCHours() % h === 0;
+/**
+ * Je li na redu dohvat: prošlo je barem `hours` sati od zadnje provjere.
+ * 10 min tolerancije, jer runovi ne kreću u točnu minutu — inače bi run koji
+ * stigne 2 minute „prerano" čekao još cijeli interval.
+ */
+async function isDue(hours, now = Date.now()) {
+  const h = Math.max(1, Number(hours) || 1);
+  const last = (await readJson(LAST_CHECK))?.checkedAt;
+  const lastMs = last ? Date.parse(last) : NaN;
+  if (Number.isNaN(lastMs)) return true;
+  return now - lastMs >= h * 3600_000 - 10 * 60_000;
+}
+
+/** Zapamti provjeru i javi CI-ju da spremi cache. */
+async function rememberCheck() {
+  await mkdir(path.dirname(LAST_CHECK), { recursive: true });
+  await writeFile(LAST_CHECK, JSON.stringify({ checkedAt: new Date().toISOString() }) + "\n");
+  if (process.env.GITHUB_OUTPUT) appendFileSync(process.env.GITHUB_OUTPUT, "challonge_checked=true\n");
 }
 
 async function getToken(clientId, clientSecret) {
@@ -106,7 +127,7 @@ async function main() {
     return;
   }
   // Novi turnir u configu dohvaća se odmah, da stranica ne pokazuje stari popis.
-  if (sameTournament && existing.lastUpdated && !everyRun && !isDue(config.refreshHours)) {
+  if (sameTournament && existing.lastUpdated && !everyRun && !(await isDue(config.refreshHours))) {
     console.log(`${LABEL} nije na redu (svakih ${config.refreshHours ?? 1} h) — štedim API zahtjeve`);
     return;
   }
@@ -165,6 +186,7 @@ async function main() {
   };
 
   await writeJsonIfChanged(OUT, data, { label: LABEL });
+  await rememberCheck();
   console.log(`${LABEL} prijavljenih parova: ${participants.length}, stanje: ${data.state}`);
 }
 

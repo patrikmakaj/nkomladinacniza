@@ -448,8 +448,11 @@ stranica i scraper. Popis prijavljenih iframe ne pokazuje, pa ga
 Autentikacija je OAuth client credentials (GitHub Secrets
 `CHALLONGE_CLIENT_ID` / `CHALLONGE_CLIENT_SECRET`; ne smiju u preglednik).
 Besplatna aplikacija ima 500 zahtjeva mjesečno, a prolaz troši dva (token +
-turnir), zato scraper pita samo u prvoj polovici sata, svakih `refreshHours`
-sati, i prestaje čim turnir krene. Challonge za prijavu traži račun, pa je glavna
+turnir), zato scraper pita najviše jednom u `refreshHours` sati — zadnju
+provjeru pamti u `.cache/challonge-last.json` (CI ga prenosi kroz
+`actions/cache`, kao `hns-outage`) — i prestaje čim turnir krene. Ručno
+pokretanje workflowa pita uvijek. GitHub zakazane runove pokreće rijetko i
+neredovito (11.11. samo 5 puta u danu), pa uvjet po minuti/satu ne valja. Challonge za prijavu traži račun, pa je glavna
 prijava Google obrazac (`formUrl` u configu; prazno = gumb vodi na Challonge).
 Odgovori obrasca imaju brojeve mobitela, pa tablica odgovora ostaje privatna —
 nikad je ne čitaj iz scrapera ni s javnim linkom; organizator parove ručno

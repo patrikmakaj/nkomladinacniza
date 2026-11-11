@@ -79,6 +79,17 @@ jobs:
           restore-keys: |
             hns-outage-
 
+      # Kad je pikado scraper zadnji put pitao Challonge (limit 500 zahtjeva
+      # mjesečno) — scripts/scrape-challonge.mjs. Isti obrazac kao gore.
+      - name: Zadnja provjera Challongea (restore)
+        if: steps.window.outputs.active != 'false'
+        uses: actions/cache/restore@v4
+        with:
+          path: .cache/challonge-last.json
+          key: challonge-last-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            challonge-last-
+
       - name: Scrape HNS Semafor + Facebook
         id: scrape
         if: steps.window.outputs.active != 'false'
@@ -88,7 +99,16 @@ jobs:
           # Popis prijavljenih za turnir u pikadu (scripts/scrape-challonge.mjs).
           CHALLONGE_CLIENT_ID: ${{ secrets.CHALLONGE_CLIENT_ID }}
           CHALLONGE_CLIENT_SECRET: ${{ secrets.CHALLONGE_CLIENT_SECRET }}
+          # Ručno pokretanje = „osvježi sad", bez čekanja intervala.
+          CHALLONGE_EVERY_RUN: ${{ github.event_name == 'workflow_dispatch' && '1' || '' }}
         run: npm run scrape
+
+      - name: Zadnja provjera Challongea (save)
+        if: always() && steps.scrape.outputs.challonge_checked == 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: .cache/challonge-last.json
+          key: challonge-last-${{ github.run_id }}-${{ github.run_attempt }}
 
       # Sprema samo kad se stanje promijenilo (novi neuspjeli prolaz ili kraj
       # ispada), pa u normalnom radu ne nastaju novi unosi u cacheu.
