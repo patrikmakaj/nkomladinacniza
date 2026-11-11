@@ -649,7 +649,13 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 // Statusi kod kojih ima smisla ponoviti zahtjev — rate limit, serverske
 // greške i Cloudflareovi 52x (npr. 522 = origin nedostupan, viđamo ga
 // povremeno kad HNS-ov server ne odgovori).
-const RETRY_STATUS = new Set([429, 500, 502, 503, 504, 520, 521, 522, 523, 524, 525, 526]);
+//
+// 403: od 10.11.2026. Cloudflare ispred Semafora otprilike svaki drugi
+// prolaz odbije GitHubov runner. Dok je bio „trajna greška", scraper je
+// izlazio s kodom 1, pa se preskakao ostatak `npm run scrape` (Facebook,
+// Challonge) i deploy — i na push u main. Sad se ponavlja, a ako ne prođe,
+// postojeći hns.json ostaje i lanac ide dalje.
+const RETRY_STATUS = new Set([403, 429, 500, 502, 503, 504, 520, 521, 522, 523, 524, 525, 526]);
 
 /**
  * Dohvaća HTML s retryjem: do `attempts` pokušaja s eksponencijalnim

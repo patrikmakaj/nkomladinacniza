@@ -476,7 +476,7 @@ Inter i Oswald su self-hostani (`src/assets/fonts/*.woff2`, `@font-face` u
 
 | Što | Gdje | Napomena |
 |---|---|---|
-| HNS Semafor | `scripts/scrape.mjs` | Bez autentikacije. Zna vraćati Cloudflare 52x → scraper ima retry i graceful skip |
+| HNS Semafor | `scripts/scrape.mjs` | Bez autentikacije. Zna vraćati Cloudflare 52x, a od 11/2026 i 403 → scraper ima retry i graceful skip (zadrži stari `hns.json`, lanac ide dalje) |
 | Facebook Graph API | oba FB scrapera | Treba `FB_PAGE_ID` + `FB_ACCESS_TOKEN` (GitHub Secrets). Bez njih scraper ne ruši build |
 | Google Sheets | `pages/turnir.astro`, `scripts/scrape-friendlies.mjs` | Turnir: gviz iz preglednika. Prijateljske: CSV izvoz (`/export?format=csv`) u CI-u. Oba sheeta moraju biti javno čitljiva |
 | Challonge | `scripts/scrape-challonge.mjs`, `pages/turnir/pikado.astro` | Turnir u pikadu. Iframe bez ključa; popis prijavljenih kroz API v2.1 uz `CHALLONGE_CLIENT_ID`/`_SECRET` (GitHub Secrets). Bez njih ostaje stari `pikado.json` |
