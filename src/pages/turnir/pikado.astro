@@ -16,12 +16,25 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import { url } from "../../lib/url";
 import { pluralCroatian } from "../../lib/croatian";
 import config from "../../config/pikado.json";
-import data from "../../data/pikado.json";
+import rawData from "../../data/pikado.json";
 
 interface Participant {
   name: string;
   seed: number | null;
 }
+
+/** Oblik koji piše scripts/scrape-challonge.mjs. Bez ovoga TS tipove izvede
+ *  iz početnog fajla, u kojem je sve `null`. */
+interface PikadoData {
+  lastUpdated: string | null;
+  tournament: string;
+  name: string | null;
+  state: string | null;
+  signupCap: number | null;
+  participants: Participant[];
+}
+
+const data = rawData as unknown as PikadoData;
 
 const slug = config.tournament;
 const challongeUrl = `https://challonge.com/${slug}`;
@@ -30,9 +43,9 @@ const moduleUrl = `${challongeUrl}/module?show_standings=1`;
 
 // Podaci za drugi turnir (stari slug u JSON-u) se ne prikazuju.
 const fresh = data.tournament === slug && data.lastUpdated != null;
-const participants: Participant[] = fresh ? (data.participants as Participant[]) : [];
-const state: string | null = fresh ? data.state : null;
-const signupCap: number | null = fresh ? data.signupCap : null;
+const participants = fresh ? data.participants : [];
+const state = fresh ? data.state : null;
+const signupCap = fresh ? data.signupCap : null;
 const registrationOpen = state == null || state === "pending" || state === "checking_in" || state === "checked_in";
 
 const count = participants.length;
@@ -40,8 +53,8 @@ const countLabel = pluralCroatian(count, "par", "para", "parova");
 // „Prijavljen je 1 par" · „Prijavljena su 3 para" · „Prijavljeno je 7 parova"
 const prijavljenoLabel = pluralCroatian(count, "Prijavljen je", "Prijavljena su", "Prijavljeno je");
 
-const lastUpdated = fresh
-  ? new Date(data.lastUpdated as string).toLocaleString("hr-HR", {
+const lastUpdated = data.lastUpdated && fresh
+  ? new Date(data.lastUpdated).toLocaleString("hr-HR", {
       dateStyle: "short",
       timeStyle: "short",
       timeZone: "Europe/Zagreb",
