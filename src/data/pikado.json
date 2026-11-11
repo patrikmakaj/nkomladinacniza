@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-11-11T08:44:39.889Z",
+  "lastUpdated": "2026-11-11T14:21:29.363Z",
   "tournament": "dsanizapikadoturnir2026",
   "name": "DŠA NIZA 2. PIKADO TURNIR",
   "state": "pending",
@@ -12,5 +12,10 @@
     "advancePerGroup": 2,
     "finalStage": "single elimination"
   },
-  "participants": []
+  "participants": [
+    {
+      "name": "Krešo Bušić / Petar Galinec",
+      "seed": 1
+    }
+  ]
 }
