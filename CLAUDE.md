@@ -254,6 +254,9 @@ Gumbi za preuzimanje su u `PosterDownload` na tim dvjema stranicama.
 
 - Grbovi su lokalne kopije iz `crests.json` (HNS ih daje 100×100 px, pa su
   malo mekši); naš je `logo.svg`. Bez lokalnog grba — krug s početnim slovom.
+- Natpis na `logo.svg` mora biti u oblicima (`<path>`), ne `<text>`: resvg u
+  ugniježđenom SVG-u ne učita fontove pa tekst tiho preskoči (traka ostane
+  prazna). Ako se grb ikad zamijeni, tekst pretvori u krivulje.
 - Fotke igrača se namjerno ne stavljaju: HNS ih daje 80×100 px.
 - Pozadina su klupske boje s prozirnim grbom — klub je to odabrao umjesto
   fotke Grbavice, koja bi na gostovanjima pokazivala krivo igralište.

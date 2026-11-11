@@ -8,7 +8,8 @@
  *
  * Slike na plakatu:
  *  - grbovi: lokalne kopije s HNS-a (crests.json). HNS ih daje 100×100 px,
- *    pa su na plakatu malo mekši; naš grb je vektorski (logo.svg).
+ *    pa su na plakatu malo mekši; naš grb je vektorski (logo.svg; natpis je pretvoren u oblike jer
+ *    resvg u ugniježđenom SVG-u ne crta `<text>`).
  *  - pozadina: klupske boje i veliki prozirni grb. Fotka Grbavice je bila
  *    druga opcija, ali je klub odabrao boje — vrijede i za gostovanja.
  *  - fotke igrača NE: HNS ih daje 80×100 px, premalo za plakat.
@@ -293,7 +294,7 @@ export function renderPoster(kind: PosterKind, m: UnifiedMatch, format: PosterFo
   // Ključ cachea: sve što je na plakatu + verzija dizajna. Grbovi se mijenjaju
   // rijetko, a kad se promijene, mijenja se i URL u crests.json.
   const cacheKey = JSON.stringify({
-    v: 4,
+    v: 5,
     kind,
     format,
     m: [m.id, m.date, m.time, m.score, m.home, m.away, m.competition, m.round, m.isHome, m.venue],
