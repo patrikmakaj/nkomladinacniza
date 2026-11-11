@@ -1,8 +1,22 @@
 {
-  "lastUpdated": "2026-11-11T08:27:23.572Z",
+  "lastUpdated": "2026-11-11T12:04:46.166Z",
   "enabled": true,
   "pageId": "55401829691",
   "posts": [
+    {
+      "id": "55401829691_1757624219703404",
+      "message": "",
+      "createdAt": "2026-11-11T11:13:57+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1757624219703404",
+      "images": [
+        {
+          "src": "/images/facebook/55401829691_1757624219703404.jpg",
+          "thumb": "/images/facebook/55401829691_1757624219703404.webp",
+          "width": 700,
+          "height": 875
+        }
+      ]
+    },
     {
       "id": "55401829691_1756494719816354",
       "message": "Osvrt na jesenski dio prvenstva\nKao što vidite i znate na polovici 2.Žnl Našice trenutno zauzimamo posljednje 12 mjesto sa 7 osvojenih bodova. Na žalost nije išlo kako je planirano prije početka sezone. Nekoliko ozljeda igrača je dosta utjecalo na utakmice gdje smo možda trebali bolje proći nego što je to pokazao postignuti rezultat. Na sreću pola donjeg dijela tablice lige nalazi se unutar 6-7 bodova, tako da je još puno stvari otvoreno. Nadamo se tokom zimske stanke presložiti i dočekati proljetni dio sezone što bolje pripremljeni, spremniji i uz što manje ozljeda osigurati opstanak u ligi i slijedeće godine. Na kraju moram pohvaliti naše najmlađe ekipu početnika U-11 koji su oformljeni ovo ljeto i koje je lijepo vidjeti da dolaze na treninge i utakmice u velikom broju posebno raduje volja i želja za nogometom. Hvala svima koji se brinu o djeci preko roditelja i članova Dša Niza. Također hvala svima koji su ove godine pomogli radu kluba na bilo koji način, posebno Općini Koška bez čije pomoći bilo bi teško pokrenuti ovu priču. Uz sportski pozdrav! ifo",
@@ -354,20 +368,6 @@
           "thumb": "/images/facebook/55401829691_1690860406379786.webp",
           "width": 700,
           "height": 831
-        }
-      ]
-    },
-    {
-      "id": "55401829691_1689676099831550",
-      "message": "Nedjelju startamo utakmicom početnika u Martinu od 10:00, a zatim seniori igraju u Motičini od 17:00h.",
-      "createdAt": "2026-09-11T09:38:36+0000",
-      "permalink": "https://www.facebook.com/1551452460320582/posts/1689676099831550",
-      "images": [
-        {
-          "src": "/images/facebook/55401829691_1689676099831550.jpg",
-          "thumb": "/images/facebook/55401829691_1689676099831550.webp",
-          "width": 700,
-          "height": 875
         }
       ]
     }
