@@ -1,0 +1,236 @@
+---
+/**
+ * Turnir u pikadu (parovi 2v2) — DŠA Niza.
+ *
+ * Za razliku od boćanja i penala (lib/turnir.ts + Google Sheet), ovaj turnir
+ * vodi se na Challongeu: tamo se prijavljuju parovi, slažu grupe i upisuju
+ * rezultati. Stranica samo ugrađuje njihov prikaz (iframe `/module`).
+ *
+ * Popis prijavljenih ne dolazi iz iframea nego iz `src/data/pikado.json`, koji
+ * CI osvježava kroz Challonge API (scripts/scrape-challonge.mjs) — otprilike
+ * jednom na sat, pa i stranica kasni toliko plus deploy.
+ *
+ * Koji je turnir i link za prijavu: `src/config/pikado.json`.
+ */
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { url } from "../../lib/url";
+import { pluralCroatian } from "../../lib/croatian";
+import config from "../../config/pikado.json";
+import data from "../../data/pikado.json";
+
+interface Participant {
+  name: string;
+  seed: number | null;
+}
+
+const slug = config.tournament;
+const challongeUrl = `https://challonge.com/${slug}`;
+// show_standings: ispod grupa i eliminacije prikaži i konačni poredak.
+const moduleUrl = `${challongeUrl}/module?show_standings=1`;
+
+// Podaci za drugi turnir (stari slug u JSON-u) se ne prikazuju.
+const fresh = data.tournament === slug && data.lastUpdated != null;
+const participants: Participant[] = fresh ? (data.participants as Participant[]) : [];
+const state: string | null = fresh ? data.state : null;
+const signupCap: number | null = fresh ? data.signupCap : null;
+const registrationOpen = state == null || state === "pending" || state === "checking_in" || state === "checked_in";
+
+const count = participants.length;
+const countLabel = pluralCroatian(count, "par", "para", "parova");
+// „Prijavljen je 1 par" · „Prijavljena su 3 para" · „Prijavljeno je 7 parova"
+const prijavljenoLabel = pluralCroatian(count, "Prijavljen je", "Prijavljena su", "Prijavljeno je");
+
+const lastUpdated = fresh
+  ? new Date(data.lastUpdated as string).toLocaleString("hr-HR", {
+      dateStyle: "short",
+      timeStyle: "short",
+      timeZone: "Europe/Zagreb",
+    })
+  : null;
+---
+
+{/* Jednokratni događaj — nije u navigaciji ni u tražilicama (prefiks /turnir
+    je izbačen iz sitemapa u astro.config.mjs). */}
+<BaseLayout
+  title="Turnir u pikadu"
+  description="Turnir u pikadu u parovima — DŠA Niza. Prijavljeni parovi, grupe, raspored i rezultati uživo."
+  noIndex
+>
+  <!-- HERO -->
+  <section
+    class="relative overflow-hidden py-12 md:py-16"
+    style="background:linear-gradient(135deg,#0b1c44 0%,#10275c 55%,#1e4fa0 100%)"
+  >
+    <div
+      class="absolute inset-0 opacity-10"
+      style="background:repeating-linear-gradient(45deg,transparent,transparent 30px,#ffffff 30px,#ffffff 31px)"
+    >
+    </div>
+    <div class="relative container-narrow">
+      <div class="flex items-center gap-4 mb-4 flex-wrap">
+        <img
+          src={url("/images/dsa-niza.png")}
+          alt="DŠA Niza"
+          width="80"
+          height="120"
+          class="h-20 md:h-24 w-auto drop-shadow-lg shrink-0"
+        />
+        <div
+          class="inline-flex items-center gap-2 px-3 py-1 bg-[#F6C500] text-[#10275c] text-xs font-display uppercase tracking-widest font-bold rounded-sm"
+        >
+          <span class="w-2 h-2 rounded-full bg-[#CF2130] animate-pulse"></span>
+          {registrationOpen ? "Prijave otvorene" : "Rezultati uživo"}
+        </div>
+      </div>
+      <h1 class="text-white text-4xl md:text-6xl font-bold leading-none mb-3 drop-shadow-lg">
+        Turnir u pikadu
+      </h1>
+      <p class="text-white/90 text-base md:text-lg max-w-2xl">DŠA Niza · Igra se u parovima (2 na 2)</p>
+    </div>
+  </section>
+
+  <div class="container-narrow py-8 md:py-10 space-y-8">
+    <!-- PRIJAVE -->
+    <section id="prijave" class="bg-white rounded-lg shadow-md border border-[#C9D4E8] overflow-hidden">
+      <div
+        class="px-5 py-3 text-white font-display uppercase tracking-wider text-sm flex flex-wrap items-center justify-between gap-2"
+        style="background:#10275c"
+      >
+        <span>Prijavljeni parovi</span>
+        {
+          fresh && (
+            <span class="text-[#F6C500] font-bold tabular-nums">
+              {count}
+              {signupCap ? ` / ${signupCap}` : ""}
+            </span>
+          )
+        }
+      </div>
+
+      <div class="p-5 md:p-6">
+        {
+          fresh ? (
+            <p class="text-[#334155] mb-4">
+              {count === 0 ? (
+                "Još nema prijavljenih parova — budite prvi!"
+              ) : (
+                <>
+                  {`${prijavljenoLabel} `}
+                  <strong class="text-[#10275c]">{`${count} ${countLabel}`}</strong>
+                  {signupCap ? ` od najviše ${signupCap}.` : "."}
+                </>
+              )}
+            </p>
+          ) : (
+            <p class="text-[#334155] mb-4">
+              Popis prijavljenih parova pogledajte{" "}
+              <a href={`${challongeUrl}/participants`} class="text-[#1e4fa0] underline" target="_blank" rel="noopener">
+                na Challongeu
+              </a>
+              .
+            </p>
+          )
+        }
+
+        {
+          count > 0 && (
+            <ol class="grid gap-x-6 gap-y-1.5 sm:grid-cols-2 lg:grid-cols-3 mb-5">
+              {participants.map((p, i) => (
+                <li class="flex items-baseline gap-2 border-b border-[#EAF0FB] py-1.5">
+                  <span class="text-xs text-[#64748B] tabular-nums w-6 text-right shrink-0">{i + 1}.</span>
+                  <span class="text-[#10275c] font-medium">{p.name}</span>
+                </li>
+              ))}
+            </ol>
+          )
+        }
+
+        {
+          registrationOpen && (
+            <div class="flex flex-wrap items-center gap-3">
+              <a
+                href={config.signupUrl}
+                target="_blank"
+                rel="noopener"
+                data-umami-event="pikado-prijava"
+                class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg font-display uppercase tracking-wider text-sm font-bold bg-[#F6C500] text-[#10275c] hover:brightness-110 transition"
+              >
+                🎯 Prijavi par
+              </a>
+              <span class="text-sm text-[#64748B]">Prijava ide preko Challongea — upišite imena oba igrača.</span>
+            </div>
+          )
+        }
+
+        {
+          lastUpdated && (
+            <p class="text-xs text-[#64748B] mt-4">
+              Popis se osvježava otprilike jednom na sat · podaci od {lastUpdated}
+            </p>
+          )
+        }
+      </div>
+    </section>
+
+    <!-- GRUPE I ELIMINACIJA (Challonge) -->
+    <section id="raspored" class="bg-white rounded-lg shadow-md border border-[#C9D4E8] overflow-hidden">
+      <div
+        class="px-5 py-3 text-white font-display uppercase tracking-wider text-sm flex flex-wrap items-center justify-between gap-2"
+        style="background:#10275c"
+      >
+        <span>Grupe, raspored i rezultati</span>
+        <button
+          id="pikado-refresh"
+          type="button"
+          class="text-xs font-display uppercase tracking-wider px-3 py-1.5 rounded bg-[#F6C500] text-[#10275c] font-bold hover:brightness-110 transition"
+          >Osvježi</button
+        >
+      </div>
+      {
+        registrationOpen && (
+          <p class="px-5 pt-4 text-sm text-[#64748B]">
+            Grupe i raspored pojavljuju se ovdje nakon ždrijeba, kad se prijave zatvore.
+          </p>
+        )
+      }
+      <iframe
+        id="pikado-frame"
+        src={moduleUrl}
+        title="Turnir u pikadu — grupe i eliminacija"
+        loading="lazy"
+        class="block w-full border-0"
+        style={registrationOpen ? "height:500px" : "height:min(1100px,85vh);min-height:600px"}></iframe>
+      <p class="px-5 py-3 text-sm text-[#64748B] border-t border-[#C9D4E8]">
+        Ne vidi se dobro na mobitelu?{" "}
+        <a href={challongeUrl} class="text-[#1e4fa0] underline" target="_blank" rel="noopener">
+          Otvori turnir na Challongeu
+        </a>
+      </p>
+    </section>
+
+    <!-- FORMAT -->
+    <section class="bg-white rounded-lg shadow-md border border-[#C9D4E8] p-5 md:p-6 text-[#334155]">
+      <h2 class="font-display font-bold text-[#10275c] uppercase tracking-wide text-xl mb-3">Format</h2>
+      <ul class="list-disc pl-5 space-y-1">
+        <li>Igra se <strong>u parovima</strong> (2 na 2).</li>
+        <li>Parovi se ždrijebom raspoređuju u <strong>grupe</strong>; u grupi igra <strong>svatko sa svakim</strong>.</li>
+        <li>Najbolji iz svake grupe idu u <strong>eliminaciju</strong> do finala.</li>
+        <li>Broj grupa i koliko parova prolazi određuje se prema broju prijavljenih, nakon zatvaranja prijava.</li>
+      </ul>
+    </section>
+  </div>
+</BaseLayout>
+
+<script>
+  // Challongeov iframe se sam ne osvježava — gumb ga ponovo učita.
+  function setup() {
+    const btn = document.getElementById("pikado-refresh");
+    const frame = document.getElementById("pikado-frame") as HTMLIFrameElement | null;
+    if (!btn || !frame) return;
+    // Ponovno postavljanje `src` uvijek ponovo učita iframe, i cross-origin.
+    btn.addEventListener("click", () => {
+      frame.src = frame.src;
+    });
+  }
+  document.addEventListener("astro:page-load", setup);
+</script>

@@ -34,6 +34,7 @@ npm run scrape:facebook    # FB postovi → src/data/facebook.json (treba FB_* e
 npm run scrape:fb-albums   # FB albumi → src/data/facebook-albums.json (treba FB_* env)
 npm run scrape:images      # grbovi + fotke seniora s HNS-a → public/images/{clubs,players}/
 npm run scrape:friendlies  # Google Sheet → src/data/friendlies.json
+npm run scrape:challonge   # prijavljeni za pikado → src/data/pikado.json (treba CHALLONGE_API_KEY)
 node scripts/archive-season.mjs <stari-hns.json>   # ručna arhiva sezone (npr. iz git povijesti)
 ```
 
@@ -73,6 +74,7 @@ kasniti 5-15 min, pa je to „brže", ne „uživo".
 | `facebook-albums.json` | **NE** — generira `scripts/scrape-facebook-albums.mjs` |
 | `crests.json`, `photos.json` | **NE** — generira `scripts/fetch-images.mjs` (HNS URL slike → lokalna kopija) |
 | `sezone/*.json` | **NE** — arhiva sezone; zapiše je scraper pri promjeni sezone (vidi 3b) |
+| `pikado.json` | **NE** — generira `scripts/scrape-challonge.mjs` (prijavljeni parovi s Challongea) |
 | `friendlies.json` | **NE** — generira `scripts/scrape-friendlies.mjs` iz Google tablice kluba; ručne izmjene se gube. Stupci tablice: `friendlies.README.md` |
 
 Prijateljske, memorijali i turniri nisu na HNS Semaforu → klub ih upisuje u Google
@@ -379,7 +381,7 @@ src/
 └── styles/global.css
 
 scripts/    scrape.mjs · scrape-friendlies.mjs · fetch-images.mjs · scrape-facebook.mjs
-            scrape-facebook-albums.mjs · match-window.mjs (CI: traje li utakmica)
+            scrape-facebook-albums.mjs · scrape-challonge.mjs · match-window.mjs (CI: traje li utakmica)
             archive-season.mjs · lib/ (write-json · hns-sanity · season-archive)
 public/     CNAME, favicons/ikone, images/ (logo.svg, og-image.png, facebook/, facebook-albums/)
 ```
@@ -413,6 +415,17 @@ Dvije stvari koje se ne smiju izgubiti iz vida:
   1 grupu (tablica je poredak → finale 1-2, meč za 3. mjesto 3-4), 2 grupe
   (odmah polufinale) i 4 grupe (četvrtfinale). Za drugi broj grupa parovi se
   upisuju ručno u Sheet. Bracket ima tri oblika i sam bira po tome što postoji.
+
+**Iznimka: pikado (`pages/turnir/pikado.astro`) ne koristi ovaj motor.** Vodi
+se na Challongeu (prijave, grupe, rezultati), a stranica ugrađuje njihov
+iframe `https://challonge.com/<turnir>/module`. Koji turnir i link prijave
+su u `src/config/pikado.json` — taj fajl je ručni i čitaju ga i stranica i
+scraper. Popis prijavljenih iframe ne pokazuje, pa ga `scrape-challonge.mjs`
+vuče kroz API v1 (GitHub Secret `CHALLONGE_API_KEY`; ključ ne smije u
+preglednik). Besplatni API ima ~500 zahtjeva mjesečno, zato scraper pita samo
+u prvoj polovici sata i prestaje čim turnir krene. U repo ide samo ime para,
+bez e-maila i korisničkog imena iz prijave. challonge.com je u sandboxu
+blokiran — stranica se ne može lokalno provjeriti protiv pravog turnira.
 
 `initTurnir` vraća `dispose` koji gasi pollanje Sheeta; komponenta ga zove na
 `astro:before-swap`, inače interval nastavi raditi nakon odlaska sa stranice.
@@ -462,6 +475,7 @@ Inter i Oswald su self-hostani (`src/assets/fonts/*.woff2`, `@font-face` u
 | HNS Semafor | `scripts/scrape.mjs` | Bez autentikacije. Zna vraćati Cloudflare 52x → scraper ima retry i graceful skip |
 | Facebook Graph API | oba FB scrapera | Treba `FB_PAGE_ID` + `FB_ACCESS_TOKEN` (GitHub Secrets). Bez njih scraper ne ruši build |
 | Google Sheets | `pages/turnir.astro`, `scripts/scrape-friendlies.mjs` | Turnir: gviz iz preglednika. Prijateljske: CSV izvoz (`/export?format=csv`) u CI-u. Oba sheeta moraju biti javno čitljiva |
+| Challonge | `scripts/scrape-challonge.mjs`, `pages/turnir/pikado.astro` | Turnir u pikadu. Iframe bez ključa; popis prijavljenih kroz API uz `CHALLONGE_API_KEY` (GitHub Secret). Bez ključa ostaje stari `pikado.json` |
 | Umami analytics | `BaseLayout.astro` | `cloud.umami.is`, website id hardkodiran. Klikovi na gumbe se broje atributom `data-umami-event` (+ `data-umami-event-*` za detalje) — bez našeg JS-a |
 | Open-Meteo | `MatchWeather.astro` | Prognoza i geokodiranje iz preglednika, bez ključa. Samo utakmice u idućih 7 dana i poznato mjesto; svaka greška = bez prognoze |
 | Google Fonts | `BaseLayout.astro` | Inter + Oswald |
