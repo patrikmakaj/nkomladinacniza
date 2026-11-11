@@ -449,7 +449,11 @@ Autentikacija je OAuth client credentials (GitHub Secrets
 `CHALLONGE_CLIENT_ID` / `CHALLONGE_CLIENT_SECRET`; ne smiju u preglednik).
 Besplatna aplikacija ima 500 zahtjeva mjesečno, a prolaz troši dva (token +
 turnir), zato scraper pita samo u prvoj polovici sata, svakih `refreshHours`
-sati, i prestaje čim turnir krene. Kotizacija, nagrade, mjesto i WhatsApp
+sati, i prestaje čim turnir krene. Challonge za prijavu traži račun, pa je glavna
+prijava Google obrazac (`formUrl` u configu; prazno = gumb vodi na Challonge).
+Odgovori obrasca imaju brojeve mobitela, pa tablica odgovora ostaje privatna —
+nikad je ne čitaj iz scrapera ni s javnim linkom; organizator parove ručno
+prepisuje na Challonge. Kotizacija, nagrade, mjesto i WhatsApp
 kontakt su konstante na vrhu `pikado.astro`; vrijeme početka mijenja se na
 Challongeu. Dok turnir traje, stavka „Turnir" je u `navItems` (Header), a
 najava (`TurnirBanner`) na naslovnici sama nestane 6 h nakon početka. U repo ide samo ime para, bez e-maila i

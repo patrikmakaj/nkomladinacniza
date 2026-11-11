@@ -73,6 +73,10 @@ const state = fresh ? data.state : null;
 const signupCap = fresh ? data.signupCap : null;
 const registrationOpen = state == null || state === "pending" || state === "checking_in" || state === "checked_in";
 const signupUrl = (fresh && data.signupUrl) || config.signupUrl;
+// Google obrazac za prijavu bez Challonge računa (odgovori idu u privatnu
+// tablicu na klupskom Driveu, organizator ih prepisuje na Challonge).
+// Prazno = prijava ide izravno na Challonge.
+const formUrl = (config as { formUrl?: string }).formUrl?.trim() || null;
 
 const count = participants.length;
 const countLabel = pluralCroatian(count, "par", "para", "parova");
@@ -236,18 +240,43 @@ const heroBtn =
               <p class="text-xs text-[#64748B] mt-0.5">npr. {NAME_EXAMPLE}</p>
             </div>
 
-            <div class="grid gap-3 md:grid-cols-3">
-              <a
-                href={signupUrl}
-                target="_blank"
-                rel="noopener"
-                data-umami-event="pikado-prijava"
-                data-umami-event-nacin="challonge"
-                class="flex flex-col gap-1 rounded-lg p-4 bg-[#F6C500] text-[#10275c] hover:brightness-105 transition"
-              >
-                <span class="font-display uppercase tracking-wider font-bold">🎯 Prijava online</span>
-                <span class="text-sm">Upišite par sami, na Challongeu.</span>
-              </a>
+            {
+              formUrl && (
+                <a
+                  href={formUrl}
+                  target="_blank"
+                  rel="noopener"
+                  data-umami-event="pikado-prijava"
+                  data-umami-event-nacin="obrazac"
+                  class="flex items-center justify-between gap-4 rounded-lg p-4 md:p-5 mb-3 bg-[#F6C500] text-[#10275c] hover:brightness-105 transition"
+                >
+                  <span class="flex flex-col gap-1">
+                    <span class="font-display uppercase tracking-wider font-bold text-lg">📝 Prijavi par</span>
+                    <span class="text-sm">Kratki obrazac, bez registracije — imena igrača i broj mobitela.</span>
+                  </span>
+                  <svg class="w-6 h-6 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7" />
+                  </svg>
+                </a>
+              )
+            }
+
+            <div class:list={["grid gap-3", formUrl ? "sm:grid-cols-2" : "md:grid-cols-3"]}>
+              {
+                !formUrl && (
+                  <a
+                    href={signupUrl}
+                    target="_blank"
+                    rel="noopener"
+                    data-umami-event="pikado-prijava"
+                    data-umami-event-nacin="challonge"
+                    class="flex flex-col gap-1 rounded-lg p-4 bg-[#F6C500] text-[#10275c] hover:brightness-105 transition"
+                  >
+                    <span class="font-display uppercase tracking-wider font-bold">🎯 Prijava online</span>
+                    <span class="text-sm">Na Challongeu (treba Challonge račun).</span>
+                  </a>
+                )
+              }
               <a
                 href={waHref}
                 target="_blank"
@@ -272,8 +301,23 @@ const heroBtn =
               </a>
             </div>
             <p class="text-sm text-[#64748B] mt-4">
-              Parove prijavljene preko WhatsAppa ili Facebooka upisujemo mi. Popis na ovoj stranici osvježava
-              se otprilike jednom na sat. Kotizacija se plaća na dan turnira, prije početka.
+              Prijavljene parove upisujemo na popis mi, pa se na ovoj stranici pojave s malim zakašnjenjem.
+              Kotizacija se plaća na dan turnira, prije početka.
+              {
+                formUrl && (
+                  <>
+                    {" "}Imate Challonge račun?{" "}
+                    <a
+                      href={signupUrl}
+                      target="_blank"
+                      rel="noopener"
+                      data-umami-event="pikado-prijava"
+                      data-umami-event-nacin="challonge"
+                      class="text-[#1e4fa0] underline"
+                    >Prijavite se izravno</a>.
+                  </>
+                )
+              }
             </p>
           </div>
         </section>
@@ -421,7 +465,7 @@ const heroBtn =
         <li>Igra se <strong>u parovima</strong> (2 na 2).</li>
         <li>Par se prijavljuje imenima i prezimenima oba igrača: <strong>{NAME_FORMAT}</strong>.</li>
         <li>
-          Prijave su otvorene <strong>do početka turnira</strong>: online na Challongeu, WhatsAppom na
+          Prijave su otvorene <strong>do početka turnira</strong>: {formUrl ? "obrascem na ovoj stranici, " : "online na Challongeu, "}WhatsAppom na
           <strong> {CONTACT.phoneDisplay}</strong> ({CONTACT.name}) ili porukom Facebook stranici kluba.
         </li>
         <li>Kotizacija je <strong>{FEE} € po paru</strong> i plaća se na dan turnira, prije početka.</li>
