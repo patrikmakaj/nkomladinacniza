@@ -1,25 +1,27 @@
 #!/usr/bin/env node
 /**
- * Prijavljeni parovi turnira u pikadu s Challongea → src/data/pikado.json
+ * Turnir u pikadu s Challongea → src/data/pikado.json
  *
  * Turnir (grupe, raspored, rezultati) vodi se na Challongeu i na stranici se
- * prikazuje njihovim iframeom. Iframe prije početka turnira ne pokazuje tko se
- * prijavio, pa popis prijavljenih vučemo ovdje, kroz API.
+ * prikazuje njihovim iframeom. Iframe prije početka ne pokazuje tko se
+ * prijavio, pa popis prijavljenih (uz datum, limit prijava i format) vučemo
+ * ovdje, kroz API v2.1.
  *
- * Zašto ne iz preglednika: Challonge API traži ključ, a ključ u JavaScriptu
- * stranice mogao bi pročitati bilo tko. Zato ide kroz CI (GitHub Secret
- * `CHALLONGE_API_KEY`) kao i Facebook token.
+ * Autentikacija: OAuth „client credentials" (aplikacija na Challonge
+ * Developer Portalu, račun kluba). GitHub Secrets `CHALLONGE_CLIENT_ID` i
+ * `CHALLONGE_CLIENT_SECRET`. Iz preglednika se ne smije — secret bi bio javan.
  *
  * Koji turnir — `src/config/pikado.json` (isti fajl čita i stranica).
  *
- * Štednja zahtjeva: besplatni Challonge API dopušta ~500 zahtjeva mjesečno,
- * a CI se vrti svakih 30 min (≈ 1440 mjesečno). Zato:
- *  - zahtjev ide samo u prvoj polovici sata (UTC minuta < 30) → otprilike
- *    jednom na sat. `CHALLONGE_EVERY_RUN=1` to preskače (ručno pokretanje).
+ * Štednja zahtjeva: besplatna aplikacija ima 500 zahtjeva mjesečno, a CI se
+ * vrti svakih 30 min. Po prolazu idu dva poziva (token + turnir sa
+ * sudionicima, `include=participants`), pa:
+ *  - API se pita samo u prvoj polovici sata, i to svakih `refreshHours` sati
+ *    (config). `CHALLONGE_EVERY_RUN=1` to preskače (ručno pokretanje).
  *  - kad turnir krene, popis je zaključan — dalje se ne pita ništa, dok se u
  *    configu ne promijeni turnir.
  *
- * Bez ključa ili kad dohvat ne uspije, postojeći pikado.json ostaje kakav jest.
+ * Bez tajni ili kad dohvat ne uspije, postojeći pikado.json ostaje kakav jest.
  */
 
 import { readFile } from "node:fs/promises";
@@ -31,6 +33,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const OUT = path.join(ROOT, "src/data/pikado.json");
 const CONFIG = path.join(ROOT, "src/config/pikado.json");
 const LABEL = "[challonge]";
+const API = "https://api.challonge.com";
 
 /** Stanja u kojima se još netko može prijaviti ili odjaviti. */
 const OPEN_STATES = new Set(["pending", "checking_in", "checked_in"]);
@@ -43,6 +46,42 @@ async function readJson(file) {
   }
 }
 
+/** Je li na redu dohvat — jednom svakih `hours` sati, u prvoj polovici sata. */
+function isDue(hours, now = new Date()) {
+  const h = Math.max(1, Math.floor(Number(hours) || 1));
+  return now.getUTCMinutes() < 30 && now.getUTCHours() % h === 0;
+}
+
+async function getToken(clientId, clientSecret) {
+  const res = await fetch(`${API}/oauth/token`, {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({
+      grant_type: "client_credentials",
+      client_id: clientId,
+      client_secret: clientSecret,
+      // Samo čitanje. Bez `scope` bi token dobio i application:manage.
+      scope: "me tournaments:read participants:read",
+    }),
+    signal: AbortSignal.timeout(20_000),
+  });
+  if (!res.ok) throw new Error(`OAuth HTTP ${res.status}`);
+  const body = await res.json();
+  if (!body?.access_token) throw new Error("OAuth odgovor bez tokena");
+  return body.access_token;
+}
+
+/** Format iz group_stage_options, bez prijevoda — to radi stranica. */
+function formatOf(a) {
+  const g = a.group_stage_enabled ? a.group_stage_options ?? {} : null;
+  return {
+    groupSize: g ? Number(g.group_size) || null : null,
+    advancePerGroup: g ? Number(g.participant_count_to_advance_per_group) || null : null,
+    // "single elimination" | "double elimination" | "round robin" | "swiss"
+    finalStage: a.tournament_type ?? null,
+  };
+}
+
 async function main() {
   const config = await readJson(CONFIG);
   const slug = config?.tournament?.trim();
@@ -51,9 +90,10 @@ async function main() {
     return;
   }
 
-  const key = process.env.CHALLONGE_API_KEY;
-  if (!key) {
-    console.log(`${LABEL} nema CHALLONGE_API_KEY — postojeći pikado.json ostaje`);
+  const clientId = process.env.CHALLONGE_CLIENT_ID;
+  const clientSecret = process.env.CHALLONGE_CLIENT_SECRET;
+  if (!clientId || !clientSecret) {
+    console.log(`${LABEL} nema CHALLONGE_CLIENT_ID/SECRET — postojeći pikado.json ostaje`);
     return;
   }
 
@@ -66,56 +106,61 @@ async function main() {
     return;
   }
   // Novi turnir u configu dohvaća se odmah, da stranica ne pokazuje stari popis.
-  if (sameTournament && !everyRun && new Date().getUTCMinutes() >= 30) {
-    console.log(`${LABEL} druga polovica sata — preskačem radi limita API-ja`);
+  if (sameTournament && existing.lastUpdated && !everyRun && !isDue(config.refreshHours)) {
+    console.log(`${LABEL} nije na redu (svakih ${config.refreshHours ?? 1} h) — štedim API zahtjeve`);
     return;
   }
-
-  const api = new URL(`https://api.challonge.com/v1/tournaments/${encodeURIComponent(slug)}.json`);
-  api.searchParams.set("api_key", key);
-  api.searchParams.set("include_participants", "1");
 
   let body;
   try {
-    const res = await fetch(api, {
-      headers: { Accept: "application/json" },
-      signal: AbortSignal.timeout(20_000),
-    });
-    if (!res.ok) {
-      // Ključ nikad ne ide u log — samo status.
-      console.warn(`${LABEL} HTTP ${res.status} za turnir „${slug}" — postojeći podaci ostaju`);
-      return;
-    }
+    const token = await getToken(clientId, clientSecret);
+    const res = await fetch(
+      `${API}/v2.1/tournaments/${encodeURIComponent(slug)}.json?include=participants`,
+      {
+        headers: {
+          "Authorization-Type": "v2",
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/vnd.api+json",
+          Accept: "application/json",
+        },
+        signal: AbortSignal.timeout(20_000),
+      },
+    );
+    if (!res.ok) throw new Error(`HTTP ${res.status} za turnir „${slug}"`);
     body = await res.json();
   } catch (err) {
-    console.warn(`${LABEL} dohvat nije uspio (${err?.name ?? "greška"}) — postojeći podaci ostaju`);
+    // Nikad ne logiramo token ni secret — samo poruku.
+    console.warn(`${LABEL} dohvat nije uspio (${err?.message ?? err}) — postojeći podaci ostaju`);
     return;
   }
 
-  const t = body?.tournament;
-  if (!t || !Array.isArray(t.participants)) {
+  const a = body?.data?.attributes;
+  if (!a) {
     console.warn(`${LABEL} neočekivan odgovor API-ja — postojeći podaci ostaju`);
     return;
   }
 
   // Samo ime para. E-mail i Challonge korisničko ime iz prijave namjerno
   // ne idu u repo — javni su zauvijek kroz git povijest.
-  const participants = t.participants
-    .map((p) => p?.participant)
-    .filter((p) => p && p.active !== false)
-    .map((p) => ({
-      name: String(p.display_name || p.name || "").trim(),
-      seed: Number(p.seed) || null,
+  const participants = (body.included ?? [])
+    .filter((x) => x?.type === "participant" && x.attributes?.states?.active !== false)
+    .map((x) => ({
+      name: String(x.attributes.name ?? "").trim(),
+      seed: Number(x.attributes.seed) || null,
     }))
     .filter((p) => p.name)
-    .sort((a, b) => (a.seed ?? Infinity) - (b.seed ?? Infinity));
+    .sort((x, y) => (x.seed ?? Infinity) - (y.seed ?? Infinity));
 
   const data = {
     lastUpdated: new Date().toISOString(),
     tournament: slug,
-    name: t.name ?? null,
-    state: t.state ?? null,
-    signupCap: Number(t.signup_cap) || null,
+    name: a.name ?? null,
+    state: a.state ?? null,
+    startsAt: a.timestamps?.starts_at ?? null,
+    signupUrl: a.sign_up_url ?? null,
+    signupOpen: Boolean(a.registration_options?.open_signup),
+    signupCap: Number(a.registration_options?.signup_cap) || null,
+    format: formatOf(a),
     participants,
   };
 

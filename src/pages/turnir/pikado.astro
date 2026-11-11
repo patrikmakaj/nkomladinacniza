@@ -6,11 +6,13 @@
  * vodi se na Challongeu: tamo se prijavljuju parovi, slažu grupe i upisuju
  * rezultati. Stranica samo ugrađuje njihov prikaz (iframe `/module`).
  *
- * Popis prijavljenih ne dolazi iz iframea nego iz `src/data/pikado.json`, koji
- * CI osvježava kroz Challonge API (scripts/scrape-challonge.mjs) — otprilike
- * jednom na sat, pa i stranica kasni toliko plus deploy.
+ * Popis prijavljenih, datum, limit prijava i format ne dolaze iz iframea nego
+ * iz `src/data/pikado.json`, koji CI osvježava kroz Challonge API
+ * (scripts/scrape-challonge.mjs) — otprilike jednom na sat, pa i stranica
+ * kasni toliko plus deploy.
  *
- * Koji je turnir i link za prijavu: `src/config/pikado.json`.
+ * Koji je turnir: `src/config/pikado.json` (tamo je i rezervni link prijave,
+ * dok scraper ne dohvati pravi).
  */
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { url } from "../../lib/url";
@@ -30,7 +32,15 @@ interface PikadoData {
   tournament: string;
   name: string | null;
   state: string | null;
+  startsAt: string | null;
+  signupUrl: string | null;
+  signupOpen: boolean;
   signupCap: number | null;
+  format: {
+    groupSize: number | null;
+    advancePerGroup: number | null;
+    finalStage: string | null;
+  } | null;
   participants: Participant[];
 }
 
@@ -47,8 +57,32 @@ const participants = fresh ? data.participants : [];
 const state = fresh ? data.state : null;
 const signupCap = fresh ? data.signupCap : null;
 const registrationOpen = state == null || state === "pending" || state === "checking_in" || state === "checked_in";
+const signupUrl = (fresh && data.signupUrl) || config.signupUrl;
 
 const count = participants.length;
+const full = signupCap != null && count >= signupCap;
+// Gumb za prijavu samo dok turnir nije krenuo, prijava je uključena i ima mjesta.
+const showSignup = registrationOpen && (!fresh || data.signupOpen) && !full;
+
+// „petak, 20. studenoga u 18:00"
+const startsAt = fresh && data.startsAt ? new Date(data.startsAt) : null;
+const startLabel = startsAt
+  ? `${startsAt.toLocaleDateString("hr-HR", { weekday: "long", day: "numeric", month: "long", timeZone: "Europe/Zagreb" })} u ${startsAt.toLocaleTimeString("hr-HR", { hour: "2-digit", minute: "2-digit", timeZone: "Europe/Zagreb" })}`
+  : null;
+
+// Format s Challongea, na hrvatskom.
+const FINAL_STAGE: Record<string, string> = {
+  "single elimination": "eliminacija (ispada se nakon poraza)",
+  "double elimination": "dvostruka eliminacija (ispada se nakon drugog poraza)",
+  "round robin": "svatko sa svakim",
+  swiss: "švicarski sustav",
+};
+const format = fresh ? data.format : null;
+// „Prvi par" · „Prva 2 para" · „Prvih 5 parova"
+const adv = format?.advancePerGroup ?? 0;
+const advanceLabel =
+  adv === 1 ? "Prvi par" : `${pluralCroatian(adv, "Prvi", "Prva", "Prvih")} ${adv} ${pluralCroatian(adv, "par", "para", "parova")}`;
+const finalStage = format?.finalStage ? (FINAL_STAGE[format.finalStage] ?? format.finalStage) : null;
 const countLabel = pluralCroatian(count, "par", "para", "parova");
 // „Prijavljen je 1 par" · „Prijavljena su 3 para" · „Prijavljeno je 7 parova"
 const prijavljenoLabel = pluralCroatian(count, "Prijavljen je", "Prijavljena su", "Prijavljeno je");
@@ -98,7 +132,9 @@ const lastUpdated = data.lastUpdated && fresh
       <h1 class="text-white text-4xl md:text-6xl font-bold leading-none mb-3 drop-shadow-lg">
         Turnir u pikadu
       </h1>
-      <p class="text-white/90 text-base md:text-lg max-w-2xl">DŠA Niza · Igra se u parovima (2 na 2)</p>
+      <p class="text-white/90 text-base md:text-lg max-w-2xl">
+        DŠA Niza{startLabel ? ` · ${startLabel}` : ""} · Igra se u parovima (2 na 2)
+      </p>
     </div>
   </section>
 
@@ -159,10 +195,16 @@ const lastUpdated = data.lastUpdated && fresh
         }
 
         {
-          registrationOpen && (
+          registrationOpen && full && (
+            <p class="text-[#10275c] font-medium">Sva mjesta su popunjena.</p>
+          )
+        }
+
+        {
+          showSignup && (
             <div class="flex flex-wrap items-center gap-3">
               <a
-                href={config.signupUrl}
+                href={signupUrl}
                 target="_blank"
                 rel="noopener"
                 data-umami-event="pikado-prijava"
@@ -226,9 +268,26 @@ const lastUpdated = data.lastUpdated && fresh
       <h2 class="font-display font-bold text-[#10275c] uppercase tracking-wide text-xl mb-3">Format</h2>
       <ul class="list-disc pl-5 space-y-1">
         <li>Igra se <strong>u parovima</strong> (2 na 2).</li>
-        <li>Parovi se ždrijebom raspoređuju u <strong>grupe</strong>; u grupi igra <strong>svatko sa svakim</strong>.</li>
-        <li>Najbolji iz svake grupe idu u <strong>eliminaciju</strong> do finala.</li>
-        <li>Broj grupa i koliko parova prolazi određuje se prema broju prijavljenih, nakon zatvaranja prijava.</li>
+        {
+          format?.groupSize ? (
+            <li>
+              Parovi se ždrijebom raspoređuju u <strong>grupe po {format.groupSize}</strong>; u grupi
+              igra <strong>svatko sa svakim</strong>.
+            </li>
+          ) : (
+            <li>Parovi se ždrijebom raspoređuju u <strong>grupe</strong>; u grupi igra <strong>svatko sa svakim</strong>.</li>
+          )
+        }
+        {
+          format?.advancePerGroup ? (
+            <li>
+              {`${advanceLabel} iz svake grupe ${format.advancePerGroup === 1 ? "ide" : "idu"} dalje`}
+              {finalStage ? <>: <strong>{finalStage}</strong>, do finala.</> : " u eliminaciju, do finala."}
+            </li>
+          ) : (
+            <li>Najbolji iz svake grupe idu u <strong>eliminaciju</strong> do finala.</li>
+          )
+        }
       </ul>
     </section>
   </div>

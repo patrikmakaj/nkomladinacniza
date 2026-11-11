@@ -71,7 +71,8 @@ jobs:
           FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
           FB_ACCESS_TOKEN: ${{ secrets.FB_ACCESS_TOKEN }}
           # Popis prijavljenih za turnir u pikadu (scripts/scrape-challonge.mjs).
-          CHALLONGE_API_KEY: ${{ secrets.CHALLONGE_API_KEY }}
+          CHALLONGE_CLIENT_ID: ${{ secrets.CHALLONGE_CLIENT_ID }}
+          CHALLONGE_CLIENT_SECRET: ${{ secrets.CHALLONGE_CLIENT_SECRET }}
         run: npm run scrape
 
       - name: Commit if data changed
