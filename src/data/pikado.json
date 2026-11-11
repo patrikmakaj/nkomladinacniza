@@ -1,97 +1,16 @@
 {
-  "lastUpdated": "2026-11-11T08:11:30.808Z",
-  "tournament": "dsanizatestturnir",
-  "name": "TEST TURNIT NIZA",
+  "lastUpdated": "2026-11-11T08:44:39.889Z",
+  "tournament": "dsanizapikadoturnir2026",
+  "name": "DŠA NIZA 2. PIKADO TURNIR",
   "state": "pending",
-  "startsAt": "2026-11-20T05:00:00.000Z",
-  "signupUrl": "https://challonge.com/tournaments/signup/vuB5xjTZKH",
+  "startsAt": "2026-11-21T17:00:00.000Z",
+  "signupUrl": "https://challonge.com/tournaments/signup/LtinZvnFOS",
   "signupOpen": true,
-  "signupCap": 20,
+  "signupCap": 24,
   "format": {
     "groupSize": 4,
     "advancePerGroup": 2,
-    "finalStage": "double elimination"
+    "finalStage": "single elimination"
   },
-  "participants": [
-    {
-      "name": "patrik",
-      "seed": 1
-    },
-    {
-      "name": "ivan",
-      "seed": 2
-    },
-    {
-      "name": "luka",
-      "seed": 3
-    },
-    {
-      "name": "matija",
-      "seed": 4
-    },
-    {
-      "name": "dino",
-      "seed": 5
-    },
-    {
-      "name": "kristina",
-      "seed": 6
-    },
-    {
-      "name": "teodor",
-      "seed": 7
-    },
-    {
-      "name": "marko",
-      "seed": 8
-    },
-    {
-      "name": "zoran",
-      "seed": 9
-    },
-    {
-      "name": "jura",
-      "seed": 10
-    },
-    {
-      "name": "matej",
-      "seed": 11
-    },
-    {
-      "name": "filip",
-      "seed": 12
-    },
-    {
-      "name": "karlo",
-      "seed": 13
-    },
-    {
-      "name": "ana",
-      "seed": 14
-    },
-    {
-      "name": "luna",
-      "seed": 15
-    },
-    {
-      "name": "mica",
-      "seed": 16
-    },
-    {
-      "name": "zdravka",
-      "seed": 17
-    },
-    {
-      "name": "tihana",
-      "seed": 18
-    },
-    {
-      "name": "petar",
-      "seed": 19
-    },
-    {
-      "name": "nikolina",
-      "seed": 20
-    }
-  ]
+  "participants": []
 }

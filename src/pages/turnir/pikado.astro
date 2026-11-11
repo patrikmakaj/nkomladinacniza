@@ -1,6 +1,6 @@
 ---
 /**
- * Turnir u pikadu (parovi 2v2) — DŠA Niza.
+ * 2. pikado turnir (parovi 2 na 2) — DŠA Niza, Društveni dom u Nizi.
  *
  * Za razliku od boćanja i penala (lib/turnir.ts + Google Sheet), ovaj turnir
  * vodi se na Challongeu: tamo se prijavljuju parovi, slažu grupe i upisuju
@@ -9,10 +9,10 @@
  * Popis prijavljenih, datum, limit prijava i format ne dolaze iz iframea nego
  * iz `src/data/pikado.json`, koji CI osvježava kroz Challonge API
  * (scripts/scrape-challonge.mjs) — otprilike jednom na sat, pa i stranica
- * kasni toliko plus deploy.
+ * kasni toliko plus deploy. Vrijeme početka mijenja se na Challongeu.
  *
- * Koji je turnir: `src/config/pikado.json` (tamo je i rezervni link prijave,
- * dok scraper ne dohvati pravi).
+ * Koji turnir: `src/config/pikado.json`. Kotizacija, nagrade, mjesto i
+ * kontakt su ovdje, u konstantama ispod.
  */
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { url } from "../../lib/url";
@@ -26,7 +26,7 @@ interface Participant {
 }
 
 /** Oblik koji piše scripts/scrape-challonge.mjs. Bez ovoga TS tipove izvede
- *  iz početnog fajla, u kojem je sve `null`. */
+ *  iz trenutnog fajla, a početni ima `null` gdje kasnije dolaze vrijednosti. */
 interface PikadoData {
   lastUpdated: string | null;
   tournament: string;
@@ -46,9 +46,24 @@ interface PikadoData {
 
 const data = rawData as unknown as PikadoData;
 
+// ── Podaci turnira koje Challonge ne zna ─────────────────────────────
+const TITLE = "2. pikado turnir";
+const VENUE = "Društveni dom u Nizi";
+const FEE = 15; // € po paru
+// Udio kotizacije po mjestu (ostatak ide za trofeje — namjerno se ne piše).
+const PRIZES = [0.5, 0.3, 0.1];
+const CONTACT = { name: "Patrik Makaj", phone: "+385912680220", phoneDisplay: "091 268 0220" };
+const FACEBOOK_MSG = "https://m.me/omladinacniza";
+const NAME_FORMAT = "Ime1 Prezime1 / Ime2 Prezime2";
+const NAME_EXAMPLE = "Ivan Horvat / Marko Kovač";
+
+const waText = `Pozdrav! Prijavljujem par za ${TITLE}: ${NAME_FORMAT}`;
+const waHref = `https://wa.me/${CONTACT.phone.replace(/\D/g, "")}?text=${encodeURIComponent(waText)}`;
+
+// ── Challonge ────────────────────────────────────────────────────────
 const slug = config.tournament;
 const challongeUrl = `https://challonge.com/${slug}`;
-// show_standings: ispod grupa i eliminacije prikaži i konačni poredak.
+// show_standings: uz grupe i eliminaciju i kartica s konačnim poretkom.
 const moduleUrl = `${challongeUrl}/module?show_standings=1`;
 
 // Podaci za drugi turnir (stari slug u JSON-u) se ne prikazuju.
@@ -60,17 +75,43 @@ const registrationOpen = state == null || state === "pending" || state === "chec
 const signupUrl = (fresh && data.signupUrl) || config.signupUrl;
 
 const count = participants.length;
+const countLabel = pluralCroatian(count, "par", "para", "parova");
+// „Prijavljen je 1 par" · „Prijavljena su 3 para" · „Prijavljeno je 7 parova"
+const prijavljenoLabel = pluralCroatian(count, "Prijavljen je", "Prijavljena su", "Prijavljeno je");
 const full = signupCap != null && count >= signupCap;
-// Gumb za prijavu samo dok turnir nije krenuo, prijava je uključena i ima mjesta.
+// Prijava samo dok turnir nije krenuo, prijava je uključena i ima mjesta.
 const showSignup = registrationOpen && (!fresh || data.signupOpen) && !full;
 
-// „petak, 20. studenoga u 18:00"
+// ── Vrijeme ──────────────────────────────────────────────────────────
 const startsAt = fresh && data.startsAt ? new Date(data.startsAt) : null;
-const startLabel = startsAt
-  ? `${startsAt.toLocaleDateString("hr-HR", { weekday: "long", day: "numeric", month: "long", timeZone: "Europe/Zagreb" })} u ${startsAt.toLocaleTimeString("hr-HR", { hour: "2-digit", minute: "2-digit", timeZone: "Europe/Zagreb" })}`
+const tz = "Europe/Zagreb";
+const weekday = startsAt ? startsAt.toLocaleDateString("hr-HR", { weekday: "long", timeZone: tz }) : null;
+const dayLabel = startsAt
+  ? startsAt.toLocaleDateString("hr-HR", { weekday: "long", day: "numeric", month: "long", timeZone: tz })
+  : null;
+const timeLabel = startsAt
+  ? startsAt.toLocaleTimeString("hr-HR", { hour: "2-digit", minute: "2-digit", timeZone: tz })
+  : null;
+const shortDate = startsAt
+  ? startsAt.toLocaleDateString("hr-HR", { day: "numeric", month: "numeric", timeZone: tz })
   : null;
 
-// Format s Challongea, na hrvatskom.
+// ── Nagradni fond ────────────────────────────────────────────────────
+const fund = count * FEE;
+// „150 €", ali „52,50 €" — centi uvijek s dvije znamenke.
+const euro = (n: number) => {
+  const digits = Number.isInteger(n) ? 0 : 2;
+  return `${n.toLocaleString("hr-HR", { minimumFractionDigits: digits, maximumFractionDigits: digits })} €`;
+};
+const MEDALS = ["🥇", "🥈", "🥉"];
+const prizeRows = PRIZES.map((share, i) => ({
+  place: i + 1,
+  medal: MEDALS[i] ?? "",
+  percent: Math.round(share * 100),
+  amount: fund > 0 ? euro(fund * share) : null,
+}));
+
+// ── Format s Challongea, na hrvatskom ────────────────────────────────
 const FINAL_STAGE: Record<string, string> = {
   "single elimination": "eliminacija (ispada se nakon poraza)",
   "double elimination": "dvostruka eliminacija (ispada se nakon drugog poraza)",
@@ -83,24 +124,29 @@ const adv = format?.advancePerGroup ?? 0;
 const advanceLabel =
   adv === 1 ? "Prvi par" : `${pluralCroatian(adv, "Prvi", "Prva", "Prvih")} ${adv} ${pluralCroatian(adv, "par", "para", "parova")}`;
 const finalStage = format?.finalStage ? (FINAL_STAGE[format.finalStage] ?? format.finalStage) : null;
-const countLabel = pluralCroatian(count, "par", "para", "parova");
-// „Prijavljen je 1 par" · „Prijavljena su 3 para" · „Prijavljeno je 7 parova"
-const prijavljenoLabel = pluralCroatian(count, "Prijavljen je", "Prijavljena su", "Prijavljeno je");
 
 const lastUpdated = data.lastUpdated && fresh
-  ? new Date(data.lastUpdated).toLocaleString("hr-HR", {
-      dateStyle: "short",
-      timeStyle: "short",
-      timeZone: "Europe/Zagreb",
-    })
+  ? new Date(data.lastUpdated).toLocaleString("hr-HR", { dateStyle: "short", timeStyle: "short", timeZone: tz })
   : null;
+
+const shareText = `${TITLE} — DŠA Niza${shortDate ? `, ${shortDate} u ${timeLabel}` : ""}, ${VENUE}. Parovi, kotizacija ${FEE} €. Prijave i rezultati:`;
+
+const card = "bg-white rounded-lg shadow-md border border-[#C9D4E8] overflow-hidden";
+const cardHead = "px-5 py-3 text-white font-display uppercase tracking-wider text-sm flex flex-wrap items-center justify-between gap-2";
+const fact = "bg-white rounded-lg shadow-md border border-[#C9D4E8] p-4 text-center";
+const factLabel = "text-[11px] font-display uppercase tracking-wider text-[#64748B]";
+const factValue = "font-display font-bold text-xl md:text-2xl text-[#10275c]";
+const factNote = "text-xs text-[#64748B] mt-0.5";
+const h3 = "font-display font-bold text-[#10275c] uppercase tracking-wide mt-5 mb-1";
+const heroBtn =
+  "inline-flex items-center gap-1.5 px-3 py-2 sm:py-1.5 min-h-10 sm:min-h-0 bg-white/15 hover:bg-white/25 text-white text-xs font-display uppercase tracking-wider font-bold rounded transition border border-white/30";
 ---
 
-{/* Jednokratni događaj — nije u navigaciji ni u tražilicama (prefiks /turnir
-    je izbačen iz sitemapa u astro.config.mjs). */}
+{/* Jednokratni događaj — u navigaciji je dok traje, ali ne u tražilicama
+    (prefiks /turnir je izbačen iz sitemapa u astro.config.mjs). */}
 <BaseLayout
-  title="Turnir u pikadu"
-  description="Turnir u pikadu u parovima — DŠA Niza. Prijavljeni parovi, grupe, raspored i rezultati uživo."
+  title={TITLE}
+  description={`${TITLE} u parovima — DŠA Niza, ${VENUE}. Prijave, prijavljeni parovi, grupe, raspored i rezultati uživo.`}
   noIndex
 >
   <!-- HERO -->
@@ -114,7 +160,7 @@ const lastUpdated = data.lastUpdated && fresh
     >
     </div>
     <div class="relative container-narrow">
-      <div class="flex items-center gap-4 mb-4 flex-wrap">
+      <div class="flex items-center gap-3 mb-4 flex-wrap">
         <img
           src={url("/images/dsa-niza.png")}
           alt="DŠA Niza"
@@ -128,111 +174,210 @@ const lastUpdated = data.lastUpdated && fresh
           <span class="w-2 h-2 rounded-full bg-[#CF2130] animate-pulse"></span>
           {registrationOpen ? "Prijave otvorene" : "Rezultati uživo"}
         </div>
+        <a href="#pravila" class={heroBtn}>📖 Pravila</a>
+        <button
+          id="pikado-share"
+          type="button"
+          data-share-text={shareText}
+          data-umami-event="pikado-podijeli"
+          class={heroBtn}
+        >
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.7 10.7a3 3 0 100 2.6m0-2.6l6.6-3.4m-6.6 6l6.6 3.4M18 8a3 3 0 100-6 3 3 0 000 6zm0 14a3 3 0 100-6 3 3 0 000 6z" />
+          </svg>
+          <span id="pikado-share-text">Podijeli</span>
+        </button>
       </div>
-      <h1 class="text-white text-4xl md:text-6xl font-bold leading-none mb-3 drop-shadow-lg">
-        Turnir u pikadu
-      </h1>
+      <h1 class="text-white text-4xl md:text-6xl font-bold leading-none mb-3 drop-shadow-lg">{TITLE}</h1>
       <p class="text-white/90 text-base md:text-lg max-w-2xl">
-        DŠA Niza{startLabel ? ` · ${startLabel}` : ""} · Igra se u parovima (2 na 2)
+        DŠA Niza{dayLabel ? ` · ${dayLabel} u ${timeLabel}` : ""} · {VENUE}
       </p>
     </div>
   </section>
 
   <div class="container-narrow py-8 md:py-10 space-y-8">
-    <!-- PRIJAVE -->
-    <section id="prijave" class="bg-white rounded-lg shadow-md border border-[#C9D4E8] overflow-hidden">
-      <div
-        class="px-5 py-3 text-white font-display uppercase tracking-wider text-sm flex flex-wrap items-center justify-between gap-2"
-        style="background:#10275c"
-      >
-        <span>Prijavljeni parovi</span>
-        {
-          fresh && (
-            <span class="text-[#F6C500] font-bold tabular-nums">
-              {count}
-              {signupCap ? ` / ${signupCap}` : ""}
-            </span>
-          )
-        }
+    <!-- OSNOVNO -->
+    <div class="grid gap-3 grid-cols-2 lg:grid-cols-4">
+      <div class={fact}>
+        <div class={factLabel}>Kada</div>
+        <div class={factValue}>{shortDate ?? "uskoro"}</div>
+        <div class={factNote}>{weekday ? `${weekday} u ${timeLabel}` : " "}</div>
       </div>
+      <div class={fact}>
+        <div class={factLabel}>Gdje</div>
+        <div class={factValue}>Društveni dom</div>
+        <div class={factNote}>Niza</div>
+      </div>
+      <div class={fact}>
+        <div class={factLabel}>Kotizacija</div>
+        <div class={factValue}>{FEE} €</div>
+        <div class={factNote}>po paru</div>
+      </div>
+      <div class={fact}>
+        <div class={factLabel}>Prijave do</div>
+        <div class={factValue}>početka</div>
+        <div class={factNote}>turnira{timeLabel ? ` (${timeLabel})` : ""}</div>
+      </div>
+    </div>
 
-      <div class="p-5 md:p-6">
-        {
-          fresh ? (
-            <p class="text-[#334155] mb-4">
-              {count === 0 ? (
-                "Još nema prijavljenih parova — budite prvi!"
-              ) : (
-                <>
-                  {`${prijavljenoLabel} `}
-                  <strong class="text-[#10275c]">{`${count} ${countLabel}`}</strong>
-                  {signupCap ? ` od najviše ${signupCap}.` : "."}
-                </>
-              )}
-            </p>
-          ) : (
-            <p class="text-[#334155] mb-4">
-              Popis prijavljenih parova pogledajte{" "}
-              <a href={`${challongeUrl}/participants`} class="text-[#1e4fa0] underline" target="_blank" rel="noopener">
-                na Challongeu
-              </a>
-              .
-            </p>
-          )
-        }
+    <!-- PRIJAVA -->
+    {
+      showSignup && (
+        <section id="prijava" class={card}>
+          <div class={cardHead} style="background:#10275c">
+            <span>Prijava para</span>
+          </div>
+          <div class="p-5 md:p-6">
+            <div class="rounded-lg border-2 border-[#F6C500] bg-[#FFF9DB] px-4 py-3 mb-5">
+              <p class="text-sm text-[#334155]">
+                Par se prijavljuje imenima i prezimenima <strong>oba igrača</strong>, u obliku:
+              </p>
+              <p class="font-display font-bold text-lg md:text-xl text-[#10275c] mt-1">{NAME_FORMAT}</p>
+              <p class="text-xs text-[#64748B] mt-0.5">npr. {NAME_EXAMPLE}</p>
+            </div>
 
-        {
-          count > 0 && (
-            <ol class="grid gap-x-6 gap-y-1.5 sm:grid-cols-2 lg:grid-cols-3 mb-5">
-              {participants.map((p, i) => (
-                <li class="flex items-baseline gap-2 border-b border-[#EAF0FB] py-1.5">
-                  <span class="text-xs text-[#64748B] tabular-nums w-6 text-right shrink-0">{i + 1}.</span>
-                  <span class="text-[#10275c] font-medium">{p.name}</span>
-                </li>
-              ))}
-            </ol>
-          )
-        }
-
-        {
-          registrationOpen && full && (
-            <p class="text-[#10275c] font-medium">Sva mjesta su popunjena.</p>
-          )
-        }
-
-        {
-          showSignup && (
-            <div class="flex flex-wrap items-center gap-3">
+            <div class="grid gap-3 md:grid-cols-3">
               <a
                 href={signupUrl}
                 target="_blank"
                 rel="noopener"
                 data-umami-event="pikado-prijava"
-                class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg font-display uppercase tracking-wider text-sm font-bold bg-[#F6C500] text-[#10275c] hover:brightness-110 transition"
+                data-umami-event-nacin="challonge"
+                class="flex flex-col gap-1 rounded-lg p-4 bg-[#F6C500] text-[#10275c] hover:brightness-105 transition"
               >
-                🎯 Prijavi par
+                <span class="font-display uppercase tracking-wider font-bold">🎯 Prijava online</span>
+                <span class="text-sm">Upišite par sami, na Challongeu.</span>
               </a>
-              <span class="text-sm text-[#64748B]">Prijava ide preko Challongea — upišite imena oba igrača.</span>
+              <a
+                href={waHref}
+                target="_blank"
+                rel="noopener"
+                data-umami-event="pikado-prijava"
+                data-umami-event-nacin="whatsapp"
+                class="flex flex-col gap-1 rounded-lg p-4 bg-[#25D366] text-white hover:brightness-105 transition"
+              >
+                <span class="font-display uppercase tracking-wider font-bold">💬 WhatsApp</span>
+                <span class="text-sm">{CONTACT.name} · {CONTACT.phoneDisplay}</span>
+              </a>
+              <a
+                href={FACEBOOK_MSG}
+                target="_blank"
+                rel="noopener"
+                data-umami-event="pikado-prijava"
+                data-umami-event-nacin="facebook"
+                class="flex flex-col gap-1 rounded-lg p-4 bg-[#1877F2] text-white hover:brightness-105 transition"
+              >
+                <span class="font-display uppercase tracking-wider font-bold">✉️ Facebook</span>
+                <span class="text-sm">Poruka stranici NK Omladinac Niza.</span>
+              </a>
             </div>
-          )
-        }
-
-        {
-          lastUpdated && (
-            <p class="text-xs text-[#64748B] mt-4">
-              Popis se osvježava otprilike jednom na sat · podaci od {lastUpdated}
+            <p class="text-sm text-[#64748B] mt-4">
+              Parove prijavljene preko WhatsAppa ili Facebooka upisujemo mi. Popis na ovoj stranici osvježava
+              se otprilike jednom na sat. Kotizacija se plaća na dan turnira, prije početka.
             </p>
-          )
-        }
-      </div>
-    </section>
+          </div>
+        </section>
+      )
+    }
+
+    <!-- PRIJAVLJENI + NAGRADE -->
+    <div class="grid gap-8 lg:grid-cols-3">
+      <section id="prijave" class:list={[card, "lg:col-span-2"]}>
+        <div class={cardHead} style="background:#10275c">
+          <span>Prijavljeni parovi</span>
+          {
+            fresh && (
+              <span class="text-[#F6C500] font-bold tabular-nums">
+                {count}
+                {signupCap ? ` / ${signupCap}` : ""}
+              </span>
+            )
+          }
+        </div>
+
+        <div class="p-5 md:p-6">
+          {
+            fresh ? (
+              <p class="text-[#334155] mb-4">
+                {count === 0 ? (
+                  "Još nema prijavljenih parova — budite prvi!"
+                ) : (
+                  <>
+                    {`${prijavljenoLabel} `}
+                    <strong class="text-[#10275c]">{`${count} ${countLabel}`}</strong>
+                    {signupCap ? ` od najviše ${signupCap}.` : "."}
+                  </>
+                )}
+              </p>
+            ) : (
+              <p class="text-[#334155] mb-4">
+                Popis prijavljenih parova pogledajte{" "}
+                <a href={`${challongeUrl}/participants`} class="text-[#1e4fa0] underline" target="_blank" rel="noopener">
+                  na Challongeu
+                </a>
+                .
+              </p>
+            )
+          }
+
+          {
+            count > 0 && (
+              <ol class="grid gap-x-6 gap-y-1.5 sm:grid-cols-2">
+                {participants.map((p, i) => (
+                  <li class="flex items-baseline gap-2 border-b border-[#EAF0FB] py-1.5">
+                    <span class="text-xs text-[#64748B] tabular-nums w-6 text-right shrink-0">{i + 1}.</span>
+                    <span class="text-[#10275c] font-medium">{p.name}</span>
+                  </li>
+                ))}
+              </ol>
+            )
+          }
+
+          {registrationOpen && full && <p class="text-[#10275c] font-medium mt-4">Sva mjesta su popunjena.</p>}
+
+          {
+            lastUpdated && (
+              <p class="text-xs text-[#64748B] mt-4">
+                Popis se osvježava otprilike jednom na sat · podaci od {lastUpdated}
+              </p>
+            )
+          }
+        </div>
+      </section>
+
+      <section id="nagrade" class={card}>
+        <div class={cardHead} style="background:#10275c">
+          <span>Nagrade</span>
+          {fund > 0 && <span class="text-[#F6C500] font-bold tabular-nums">fond {euro(fund)}</span>}
+        </div>
+        <div class="p-5 md:p-6">
+          <ul class="space-y-2">
+            {
+              prizeRows.map((r) => (
+                <li class="flex items-center justify-between gap-3 rounded-lg bg-[#EAF0FB] px-4 py-3">
+                  <span class="font-display font-bold text-[#10275c] uppercase">
+                    {r.medal} {r.place}. mjesto
+                  </span>
+                  <span class="text-right text-sm text-[#334155]">
+                    <strong class="text-[#10275c] text-base">{r.amount ?? `${r.percent} %`}</strong>
+                    <span class="block text-xs text-[#64748B]">
+                      {r.amount ? `${r.percent} % + trofej` : "kotizacije + trofej"}
+                    </span>
+                  </span>
+                </li>
+              ))
+            }
+          </ul>
+          <p class="text-xs text-[#64748B] mt-3">
+            Fond raste sa svakom prijavom ({FEE} € po paru). Konačni iznosi računaju se iz uplaćenih kotizacija.
+          </p>
+        </div>
+      </section>
+    </div>
 
     <!-- GRUPE I ELIMINACIJA (Challonge) -->
-    <section id="raspored" class="bg-white rounded-lg shadow-md border border-[#C9D4E8] overflow-hidden">
-      <div
-        class="px-5 py-3 text-white font-display uppercase tracking-wider text-sm flex flex-wrap items-center justify-between gap-2"
-        style="background:#10275c"
-      >
+    <section id="raspored" class={card}>
+      <div class={cardHead} style="background:#10275c">
         <span>Grupe, raspored i rezultati</span>
         <button
           id="pikado-refresh"
@@ -251,7 +396,7 @@ const lastUpdated = data.lastUpdated && fresh
       <iframe
         id="pikado-frame"
         src={moduleUrl}
-        title="Turnir u pikadu — grupe i eliminacija"
+        title={`${TITLE} — grupe i eliminacija`}
         loading="lazy"
         class="block w-full border-0"
         style={registrationOpen ? "height:500px" : "height:min(1100px,85vh);min-height:600px"}></iframe>
@@ -263,45 +408,123 @@ const lastUpdated = data.lastUpdated && fresh
       </p>
     </section>
 
-    <!-- FORMAT -->
-    <section class="bg-white rounded-lg shadow-md border border-[#C9D4E8] p-5 md:p-6 text-[#334155]">
-      <h2 class="font-display font-bold text-[#10275c] uppercase tracking-wide text-xl mb-3">Format</h2>
+    <!-- PRAVILA -->
+    <section
+      id="pravila"
+      class="bg-white rounded-lg shadow-md border border-[#C9D4E8] p-5 md:p-6 text-[#334155] scroll-mt-24"
+    >
+      <h2 class="font-display font-bold text-[#10275c] uppercase tracking-wide text-2xl">Pravila</h2>
+      <p class="text-[#64748B]">{TITLE} · DŠA Niza · {VENUE}</p>
+
+      <h3 class={h3}>1. Prijave i kotizacija</h3>
       <ul class="list-disc pl-5 space-y-1">
         <li>Igra se <strong>u parovima</strong> (2 na 2).</li>
+        <li>Par se prijavljuje imenima i prezimenima oba igrača: <strong>{NAME_FORMAT}</strong>.</li>
+        <li>
+          Prijave su otvorene <strong>do početka turnira</strong>: online na Challongeu, WhatsAppom na
+          <strong> {CONTACT.phoneDisplay}</strong> ({CONTACT.name}) ili porukom Facebook stranici kluba.
+        </li>
+        <li>Kotizacija je <strong>{FEE} € po paru</strong> i plaća se na dan turnira, prije početka.</li>
+        {signupCap && <li>Najviše <strong>{`${signupCap} ${pluralCroatian(signupCap, "par", "para", "parova")}`}</strong>.</li>}
+      </ul>
+
+      <h3 class={h3}>2. Format natjecanja</h3>
+      <ul class="list-disc pl-5 space-y-1">
         {
           format?.groupSize ? (
             <li>
-              Parovi se ždrijebom raspoređuju u <strong>grupe po {format.groupSize}</strong>; u grupi
-              igra <strong>svatko sa svakim</strong>.
+              Parovi se ždrijebom raspoređuju u <strong>grupe po {format.groupSize}</strong>. U grupi igra
+              <strong> svatko sa svakim</strong>, po jedan meč.
             </li>
           ) : (
-            <li>Parovi se ždrijebom raspoređuju u <strong>grupe</strong>; u grupi igra <strong>svatko sa svakim</strong>.</li>
+            <li>
+              Parovi se ždrijebom raspoređuju u <strong>grupe</strong>. U grupi igra <strong>svatko sa svakim</strong>.
+            </li>
           )
         }
         {
-          format?.advancePerGroup ? (
+          adv > 0 ? (
             <li>
-              {`${advanceLabel} iz svake grupe ${format.advancePerGroup === 1 ? "ide" : "idu"} dalje`}
+              {`${advanceLabel} iz svake grupe ${adv === 1 ? "ide" : "idu"} dalje`}
               {finalStage ? <>: <strong>{finalStage}</strong>, do finala.</> : " u eliminaciju, do finala."}
             </li>
           ) : (
             <li>Najbolji iz svake grupe idu u <strong>eliminaciju</strong> do finala.</li>
           )
         }
+        <li>Veličina grupa može se prilagoditi konačnom broju prijavljenih, prije ždrijeba.</li>
+        <li>Poredak u grupi: broj pobjeda → međusobni susret → osvojeni legovi.</li>
+      </ul>
+
+      <h3 class={h3}>3. Igra</h3>
+      <ul class="list-disc pl-5 space-y-1">
+        <li>Igra se <strong>501</strong>, a završava se <strong>duplim poljem</strong> (double out).</li>
+        <li>
+          Grupna faza: <strong>1 leg</strong>. Eliminacija: <strong>best of 3</strong>. Finale:
+          <strong> best of 5</strong>.
+        </li>
+        <li>Igrači u paru bacaju <strong>naizmjenično</strong>, svaki po tri strelice.</li>
+        <li>
+          Počinje par čiji je igrač bacio <strong>bliže centru (bull)</strong>. U idućem legu počinje drugi par.
+        </li>
+        <li>Ako se bodovi „prebace" ili se ne završi duplim poljem, serija se poništava i ostaje prethodni rezultat.</li>
+      </ul>
+
+      <h3 class={h3}>4. Satnica</h3>
+      <ul class="list-disc pl-5 space-y-1">
+        <li>Raspored i rezultati uživo su na ovoj stranici.</li>
+        <li>Par koji se ne pojavi <strong>10 minuta</strong> od prozivke gubi meč bez borbe.</li>
+      </ul>
+
+      <h3 class={h3}>5. Nagrade</h3>
+      <ul class="list-disc pl-5 space-y-1">
+        {prizeRows.map((r) => <li>{r.place}. mjesto — <strong>{r.percent} %</strong> ukupne kotizacije + trofej</li>)}
+      </ul>
+
+      <h3 class={h3}>6. Fair play</h3>
+      <ul class="list-disc pl-5 space-y-1">
+        <li>Očekuje se sportsko ponašanje prema protivnicima i organizatorima.</li>
+        <li>Grubo nesportsko ponašanje znači opomenu ili diskvalifikaciju para.</li>
+        <li>Organizator (DŠA Niza) zadržava pravo izmjene rasporeda i pravila prije početka turnira.</li>
       </ul>
     </section>
   </div>
 </BaseLayout>
 
 <script>
-  // Challongeov iframe se sam ne osvježava — gumb ga ponovo učita.
   function setup() {
-    const btn = document.getElementById("pikado-refresh");
-    const frame = document.getElementById("pikado-frame") as HTMLIFrameElement | null;
-    if (!btn || !frame) return;
+    // Challongeov iframe se sam ne osvježava — gumb ga ponovo učita.
     // Ponovno postavljanje `src` uvijek ponovo učita iframe, i cross-origin.
-    btn.addEventListener("click", () => {
-      frame.src = frame.src;
+    const refresh = document.getElementById("pikado-refresh");
+    const frame = document.getElementById("pikado-frame") as HTMLIFrameElement | null;
+    if (refresh && frame) {
+      refresh.addEventListener("click", () => {
+        frame.src = frame.src;
+      });
+    }
+
+    // Podijeli: izbornik dijeljenja na mobitelu, inače kopiraj link.
+    const share = document.getElementById("pikado-share");
+    const label = document.getElementById("pikado-share-text");
+    if (!share || !label) return;
+    share.addEventListener("click", async () => {
+      const link = location.href.split("#")[0];
+      const text = share.dataset.shareText ?? document.title;
+      if (navigator.share) {
+        try {
+          await navigator.share({ title: document.title, text, url: link });
+        } catch {
+          // korisnik je odustao — ništa
+        }
+        return;
+      }
+      try {
+        await navigator.clipboard.writeText(link);
+        label.textContent = "Link kopiran";
+        setTimeout(() => (label.textContent = "Podijeli"), 2000);
+      } catch {
+        prompt("Kopiraj link:", link);
+      }
     });
   }
   document.addEventListener("astro:page-load", setup);

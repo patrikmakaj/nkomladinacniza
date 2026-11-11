@@ -10,6 +10,8 @@ import SeasonStats from "../components/SeasonStats.astro";
 import RecentResults from "../components/RecentResults.astro";
 import LatestPostBlock from "../components/LatestPostBlock.astro";
 import SchemaSportsTeam from "../components/SchemaSportsTeam.astro";
+import TurnirBanner from "../components/TurnirBanner.astro";
+import pikado from "../data/pikado.json";
 import hns from "../data/hns.json";
 import { url } from "../lib/url";
 import { pluralCroatian } from "../lib/croatian";
@@ -77,6 +79,20 @@ const heroItems: HeroItem[] = [
 
 const initialHero = heroItems.find((h) => h.match.date === todayInZagreb) ?? null;
 
+// Najava pikado turnira (src/data/pikado.json, s Challongea). Vidi se do
+// 6 h nakon početka — dulje od toga turnir sigurno ne traje.
+const pikadoStart = (() => {
+  if (!pikado.startsAt) return null;
+  const start = new Date(pikado.startsAt);
+  const day = start.toLocaleDateString("hr-HR", { weekday: "long", timeZone: "Europe/Zagreb" });
+  const date = start.toLocaleDateString("hr-HR", { day: "numeric", month: "numeric", timeZone: "Europe/Zagreb" });
+  const time = start.toLocaleTimeString("hr-HR", { hour: "2-digit", minute: "2-digit", timeZone: "Europe/Zagreb" });
+  return {
+    label: `${day.charAt(0).toUpperCase()}${day.slice(1)} ${date} u ${time}`,
+    until: new Date(start.getTime() + 6 * 3600_000).toISOString(),
+  };
+})();
+
 /** "Danas još: Seniori u 18:00, u gostima kod NK Iskrica" — kasnije utakmice istog dana. */
 function alsoToday(item: HeroItem): string | null {
   const later = heroItems.filter(
@@ -102,9 +118,20 @@ function alsoToday(item: HeroItem): string | null {
     )
   }
 
-  {/* Najava turnira ide ovdje dok traje, npr.
-      <TurnirBanner href={url("/turnir/penali")} kicker="…" title="…" meta="…" until="…" />
-      Sama nestane nakon `until`; kad prođe, obriši je i stavku iz Header.astro. */}
+  {/* Najava turnira dok traje. Sama nestane nakon `until`; kad prođe, obriši
+      je i stavku iz Header.astro. */}
+  {
+    pikadoStart && (
+      <TurnirBanner
+        href={url("/turnir/pikado")}
+        kicker="DŠA Niza"
+        title="2. pikado turnir"
+        meta={`${pikadoStart.label} · Društveni dom u Nizi`}
+        metaExtra="Parovi · kotizacija 15 € · prijave otvorene"
+        until={pikadoStart.until}
+      />
+    )
+  }
 
   {/* Match-day hero — vidljiv samo na dan utakmice */}
   {

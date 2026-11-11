@@ -427,7 +427,10 @@ Autentikacija je OAuth client credentials (GitHub Secrets
 `CHALLONGE_CLIENT_ID` / `CHALLONGE_CLIENT_SECRET`; ne smiju u preglednik).
 Besplatna aplikacija ima 500 zahtjeva mjesečno, a prolaz troši dva (token +
 turnir), zato scraper pita samo u prvoj polovici sata, svakih `refreshHours`
-sati, i prestaje čim turnir krene. U repo ide samo ime para, bez e-maila i
+sati, i prestaje čim turnir krene. Kotizacija, nagrade, mjesto i WhatsApp
+kontakt su konstante na vrhu `pikado.astro`; vrijeme početka mijenja se na
+Challongeu. Dok turnir traje, stavka „Turnir" je u `navItems` (Header), a
+najava (`TurnirBanner`) na naslovnici sama nestane 6 h nakon početka. U repo ide samo ime para, bez e-maila i
 korisničkog imena iz prijave. Lokalno: Node `fetch` ne čita `HTTPS_PROXY`,
 pa u sandboxu treba `NODE_USE_ENV_PROXY=1`.
 
