@@ -16,6 +16,7 @@ import { fileURLToPath } from "node:url";
 import * as cheerio from "cheerio";
 import { writeJsonIfChanged } from "./lib/write-json.mjs";
 import { findDataLoss } from "./lib/hns-sanity.mjs";
+import { recordOutage, clearOutage } from "./lib/hns-outage.mjs";
 import { archiveSeason } from "./lib/season-archive.mjs";
 
 const CLUB_ID = 134;
@@ -31,13 +32,33 @@ const AGE_CATEGORIES = ["Seniors", "Beginners"];
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const OUT_PATH = resolve(__dirname, "../src/data/hns.json");
+// Stanje ispada Semafora između runova (scripts/lib/hns-outage.mjs). Nije u
+// gitu; CI ga prenosi kroz actions/cache.
+const OUTAGE_PATH = resolve(__dirname, "../.cache/hns-outage.json");
 
 // Pauza između HTTP zahtjeva za detalje utakmica (ms) — pristojno prema serveru
 const MATCH_FETCH_DELAY_MS = 250;
 
+// Headeri kakve šalje stvarni Chrome. Prije je išao samo zastarjeli UA
+// ("Chrome/120") i Accept-Language, što Cloudflareova bot zaštita lakše
+// prepozna. Ne jamči prolaz (TLS otisak Nodea i dalje nije Chromeov), ali
+// ne smeta. Kad Chrome jako odmakne, podigni verziju.
 const UA =
-  "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 " +
-  "(KHTML, like Gecko) Chrome/120 Safari/537.36";
+  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 " +
+  "(KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36";
+const BROWSER_HEADERS = {
+  "User-Agent": UA,
+  Accept:
+    "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+  "Accept-Language": "hr-HR,hr;q=0.9,en-US;q=0.8,en;q=0.7",
+  "Cache-Control": "no-cache",
+  Pragma: "no-cache",
+  "Upgrade-Insecure-Requests": "1",
+  "Sec-Fetch-Dest": "document",
+  "Sec-Fetch-Mode": "navigate",
+  "Sec-Fetch-Site": "none",
+  "Sec-Fetch-User": "?1",
+};
 
 // ───────── Helpers ─────────────────────────────────────────────────────
 
@@ -154,7 +175,16 @@ async function fetchCompetitions(ageCategory, season) {
     linkConstructor: `/klubovi/${CLUB_ID}/nk-omladinac-niza/?cid={cid}`,
   });
   const raw = await fetchHtml(`${COMPETITIONS_API}?${params}`, {
-    headers: { "X-Requested-With": "XMLHttpRequest" },
+    headers: {
+      Accept: "application/json, text/javascript, */*; q=0.01",
+      "X-Requested-With": "XMLHttpRequest",
+      Referer: CLUB_URL,
+      "Sec-Fetch-Dest": "empty",
+      "Sec-Fetch-Mode": "cors",
+      "Sec-Fetch-Site": "same-origin",
+      "Sec-Fetch-User": undefined,
+      "Upgrade-Insecure-Requests": undefined,
+    },
   });
   const list = JSON.parse(raw);
   return list.map((c) => ({
@@ -648,13 +678,23 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 // Statusi kod kojih ima smisla ponoviti zahtjev — rate limit, serverske
 // greške i Cloudflareovi 52x (npr. 522 = origin nedostupan, viđamo ga
-// povremeno kad HNS-ov server ne odgovori).
-const RETRY_STATUS = new Set([429, 500, 502, 503, 504, 520, 521, 522, 523, 524, 525, 526]);
+// povremeno kad HNS-ov server ne odgovori). 403 je od 10.11.2026. Cloudflareova
+// bot zaštita koja odbije otprilike svaki drugi zahtjev s GitHub runnera —
+// to nije "zabranjeno zauvijek", pa ga tretiramo kao prolaznu grešku.
+const RETRY_STATUS = new Set([403, 429, 500, 502, 503, 504, 520, 521, 522, 523, 524, 525, 526]);
+
+/** Kratka oznaka je li odgovor došao od Cloudflarea, za log. */
+function cloudflareHint(res) {
+  const mitigated = res.headers.get("cf-mitigated");
+  if (mitigated) return ` (Cloudflare: ${mitigated})`;
+  if (/cloudflare/i.test(res.headers.get("server") ?? "")) return " (Cloudflare)";
+  return "";
+}
 
 /**
  * Dohvaća HTML s retryjem: do `attempts` pokušaja s eksponencijalnim
  * backoffom (3s, 6s, 12s). Ako svi pokušaji padnu zbog prolazne greške
- * (mreža/timeout/5xx), baca error s `transient: true` — pozivatelj tada
+ * (mreža/timeout/403/5xx), baca error s `transient: true` — pozivatelj tada
  * može graceful odustati umjesto srušiti cijeli scrape.
  */
 async function fetchHtml(url, { attempts = 4, headers = {} } = {}) {
@@ -666,16 +706,18 @@ async function fetchHtml(url, { attempts = 4, headers = {} } = {}) {
       await sleep(delay);
     }
     try {
-      const res = await fetch(url, {
-        headers: {
-          "User-Agent": UA,
-          "Accept-Language": "hr,en;q=0.8",
-          ...headers,
-        },
-        signal: AbortSignal.timeout(30_000),
-      });
+      // Sve osim stranice kluba "otvaramo" s nje, kao posjetitelj koji klikne
+      // dalje. `undefined` u `headers` briše browserski header (npr. za XHR).
+      const navigation =
+        url === CLUB_URL ? {} : { Referer: CLUB_URL, "Sec-Fetch-Site": "same-origin" };
+      const merged = Object.fromEntries(
+        Object.entries({ ...BROWSER_HEADERS, ...navigation, ...headers }).filter(
+          ([, v]) => v !== undefined,
+        ),
+      );
+      const res = await fetch(url, { headers: merged, signal: AbortSignal.timeout(30_000) });
       if (res.ok) return await res.text();
-      const err = new Error(`HTTP ${res.status} dohvaćajući ${url}`);
+      const err = new Error(`HTTP ${res.status}${cloudflareHint(res)} dohvaćajući ${url}`);
       err.status = res.status;
       if (!RETRY_STATUS.has(res.status)) throw err; // trajna greška (404 i sl.) — ne ponavljaj
       lastErr = err;
@@ -753,21 +795,11 @@ async function main() {
   const startedAt = new Date();
   console.log(`[scrape] dohvaćam ${CLUB_URL}…`);
 
-  let html;
-  try {
-    html = await fetchHtml(CLUB_URL);
-  } catch (err) {
-    if (err.transient) {
-      // HNS Semafor je privremeno nedostupan (Cloudflare 52x, timeout…).
-      // Zadrži postojeći hns.json i izađi uspješno — cron za 30 min
-      // ionako pokreće novi pokušaj, a deploy ne smije pasti zbog toga.
-      console.warn(
-        `[scrape] ⚠ HNS Semafor nedostupan (${err.message}) — zadržavam postojeće podatke i preskačem ovaj run.`,
-      );
-      return;
-    }
-    throw err;
-  }
+  // Prolazna greška (403, 52x, timeout) na bilo kojem bitnom dohvatu ovdje
+  // se ne hvata nego ide do `run()`, koji zadrži postojeći hns.json. Bolje
+  // stari podaci nego djelomični — bez popisa natjecanja ili stranice lige
+  // zapisali bismo raspored bez U-11 ili bez lige.
+  const html = await fetchHtml(CLUB_URL);
   const $ = cheerio.load(html);
 
   const club = parseClubHeader($);
@@ -785,6 +817,7 @@ async function main() {
         const list = await fetchCompetitions(acat, seasonValue);
         competitions.push(...pickActiveCompetitions(list, selectedCid));
       } catch (err) {
+        if (err.transient) throw err;
         console.warn(`[scrape] popis natjecanja za ${acat} nije dohvaćen: ${err.message}`);
       }
       await sleep(MATCH_FETCH_DELAY_MS);
@@ -814,6 +847,7 @@ async function main() {
       try {
         $comp = cheerio.load(await fetchHtml(comp.url));
       } catch (err) {
+        if (err.transient) throw err;
         console.warn(`[scrape] greška za natjecanje "${comp.name}": ${err.message}`);
         continue;
       }
@@ -903,9 +937,7 @@ async function main() {
   if (problems.length > 0) {
     const msg = `HNS podaci odbijeni, zadržavam postojeće: ${problems.join("; ")}`;
     console.error(`[scrape] ✗ ${msg}`);
-    if (process.env.GITHUB_OUTPUT) {
-      appendFileSync(process.env.GITHUB_OUTPUT, `hns_anomaly=${msg.replace(/\r?\n/g, " ")}\n`);
-    }
+    reportAnomaly(msg);
     return;
   }
 
@@ -927,7 +959,46 @@ async function main() {
   }
 }
 
-main().catch((err) => {
+function setOutput(name, value) {
+  if (process.env.GITHUB_OUTPUT) {
+    appendFileSync(process.env.GITHUB_OUTPUT, `${name}=${value.replace(/\r?\n/g, " ")}\n`);
+  }
+}
+
+/** Postavi `hns_anomaly` — CI job `upozorenje` tada pukne i GitHub pošalje mail. */
+function reportAnomaly(msg) {
+  setOutput("hns_anomaly", msg);
+}
+
+async function run() {
+  try {
+    await main();
+  } catch (err) {
+    if (!err.transient) throw err;
+    // Semafor privremeno ne odgovara (403 od Cloudflarea, 52x, timeout) i
+    // nakon svih pokušaja. Zadrži postojeći hns.json i izađi s 0, da ostatak
+    // `npm run scrape` lanca i deploy prođu — cron ionako ponovi za 30 min.
+    // Ako ispad potraje, `recordOutage` vrati poruku za upozorenje.
+    const outage = await recordOutage(OUTAGE_PATH, err.message);
+    setOutput("hns_outage_changed", "true");
+    console.warn(
+      `[scrape] ⚠ HNS Semafor nedostupan (${err.message}) — zadržavam postojeći hns.json ` +
+        `i preskačem ovaj run. Ispad traje od ${outage.since} (${outage.failures}. prolaz zaredom).`,
+    );
+    if (outage.alert) {
+      console.error(`[scrape] ✗ ${outage.alert}`);
+      reportAnomaly(outage.alert);
+    }
+    return;
+  }
+  const ended = await clearOutage(OUTAGE_PATH);
+  if (ended) {
+    setOutput("hns_outage_changed", "true");
+    console.log(`[scrape] HNS Semafor opet odgovara (ispad od ${ended.since}, ${ended.failures} prolaza).`);
+  }
+}
+
+run().catch((err) => {
   console.error("[scrape] GREŠKA:", err);
   process.exit(1);
 });
