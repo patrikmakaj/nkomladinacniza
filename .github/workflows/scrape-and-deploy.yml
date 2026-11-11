@@ -64,6 +64,21 @@ jobs:
         if: steps.window.outputs.active != 'false'
         run: npm ci
 
+      # Od kad HNS Semafor ne odgovara (403/52x) — scripts/lib/hns-outage.mjs.
+      # Kratki ispadi se samo preskoče; tek kad ispad traje satima scraper
+      # postavi `hns_anomaly`. Za to mora znati stanje prethodnog runa, a
+      # datoteka nije u gitu (inače bi svaki 403 bio commit i deploy).
+      # Ključ je jedinstven po runu (cache se ne može prepisati), a
+      # restore-keys vrati najnoviji.
+      - name: Stanje ispada HNS-a (restore)
+        if: steps.window.outputs.active != 'false'
+        uses: actions/cache/restore@v4
+        with:
+          path: .cache/hns-outage.json
+          key: hns-outage-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            hns-outage-
+
       - name: Scrape HNS Semafor + Facebook
         id: scrape
         if: steps.window.outputs.active != 'false'
@@ -74,6 +89,15 @@ jobs:
           CHALLONGE_CLIENT_ID: ${{ secrets.CHALLONGE_CLIENT_ID }}
           CHALLONGE_CLIENT_SECRET: ${{ secrets.CHALLONGE_CLIENT_SECRET }}
         run: npm run scrape
+
+      # Sprema samo kad se stanje promijenilo (novi neuspjeli prolaz ili kraj
+      # ispada), pa u normalnom radu ne nastaju novi unosi u cacheu.
+      - name: Stanje ispada HNS-a (save)
+        if: always() && steps.scrape.outputs.hns_outage_changed == 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: .cache/hns-outage.json
+          key: hns-outage-${{ github.run_id }}-${{ github.run_attempt }}
 
       - name: Commit if data changed
         id: commit
@@ -222,7 +246,8 @@ jobs:
       - id: deployment
         uses: actions/deploy-pages@v4
 
-  # HNS scraper je odbio zapisati sumnjivo prazne podatke (scripts/lib/hns-sanity.mjs).
+  # HNS scraper je odbio zapisati sumnjivo prazne podatke (scripts/lib/hns-sanity.mjs)
+  # ili Semafor ne odgovara (403/52x) već satima (scripts/lib/hns-outage.mjs).
   # Stranica i dalje radi sa starim podacima, a ovaj job pukne da GitHub
   # pošalje obavijest o neuspjelom runu — inače bi se kvar parsera vidio tek
   # kad netko primijeti da se raspored ne osvježava.

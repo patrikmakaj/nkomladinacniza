@@ -99,6 +99,25 @@ ljestvice na nulu i nečitljivu sezonu: `hns.json` ostaje star, FB scraperi i
 deploy nastave, a CI job `upozorenje` pukne pa GitHub pošalje obavijest.
 Kad stigne takav mail, problem je u parseru, ne u podacima.
 
+**HNS scraper ne ruši lanac kad Semafor ne odgovara.** Od 10.11.2026.
+Cloudflare ispred Semafora odbije otprilike svaki drugi zahtjev s GitHub
+runnera s **HTTP 403**. Prije je scraper tada izlazio s kodom 1, pa se
+ostatak `npm run scrape` (prijateljske, slike, FB, pikado) nije pokrenuo, a
+deploy se preskakao i na push u `main`. Sad `fetchHtml` 403 tretira kao
+prolaznu grešku, isto kao 429/5xx/52x i timeout: 4 pokušaja (3 s, 6 s, 12 s),
+pa ako ni to ne prođe, `hns.json` ostaje kakav je i izlaz je **0**. To vrijedi
+za stranicu kluba, popis natjecanja i stranice natjecanja — bolje stari
+podaci nego raspored bez lige ili bez U-11. Detalji utakmica smiju pasti
+pojedinačno. Šalju se headeri kao iz Chromea (`BROWSER_HEADERS`); verziju
+u UA povremeno podigni.
+
+Da trajni ispad ne prođe tiho, `scripts/lib/hns-outage.mjs` pamti od kad
+Semafor ne odgovara u `.cache/hns-outage.json` (nije u gitu, CI ga prenosi
+kroz `actions/cache`, sprema samo kad se stanje promijeni). Kad ispad traje
+**6 h** zaredom (`ALERT_AFTER_HOURS`), scraper postavi `hns_anomaly` i job
+`upozorenje` pukne. Povremeni 403 s uspjehom između se samo preskače.
+Mail „HNS Semafor ne odgovara" znači blokadu ili pad Semafora, ne parser.
+
 **Deploy na cron ide samo kad su se podaci promijenili** — plus jedan dnevni
 build iza ponoći po Zagrebu (`7 23 * * *` UTC), koji uvijek deploya. Sve što
 se u buildu računa iz „danas" (`todayInZagreb`, `nextMatch`) zato može biti
@@ -382,7 +401,7 @@ src/
 
 scripts/    scrape.mjs · scrape-friendlies.mjs · fetch-images.mjs · scrape-facebook.mjs
             scrape-facebook-albums.mjs · scrape-challonge.mjs · match-window.mjs (CI: traje li utakmica)
-            archive-season.mjs · lib/ (write-json · hns-sanity · season-archive)
+            archive-season.mjs · lib/ (write-json · hns-sanity · hns-outage · season-archive)
 public/     CNAME, favicons/ikone, images/ (logo.svg, og-image.png, facebook/, facebook-albums/)
 ```
 
@@ -479,7 +498,7 @@ Inter i Oswald su self-hostani (`src/assets/fonts/*.woff2`, `@font-face` u
 
 | Što | Gdje | Napomena |
 |---|---|---|
-| HNS Semafor | `scripts/scrape.mjs` | Bez autentikacije. Zna vraćati Cloudflare 52x, a od 11/2026 i 403 → scraper ima retry i graceful skip (zadrži stari `hns.json`, lanac ide dalje) |
+| HNS Semafor | `scripts/scrape.mjs` | Bez autentikacije. Cloudflare zna vraćati 52x i (od 11/2026) 403 bot zaštite → retry, pa zadrži stari `hns.json` i izađe s 0; ispad dulji od 6 h → `upozorenje` (`lib/hns-outage.mjs`). Iz sandboxa je host blokiran — testiraj mockom `fetch` kroz `node --import` |
 | Facebook Graph API | oba FB scrapera | Treba `FB_PAGE_ID` + `FB_ACCESS_TOKEN` (GitHub Secrets). Bez njih scraper ne ruši build |
 | Google Sheets | `pages/turnir.astro`, `scripts/scrape-friendlies.mjs` | Turnir: gviz iz preglednika. Prijateljske: CSV izvoz (`/export?format=csv`) u CI-u. Oba sheeta moraju biti javno čitljiva |
 | Challonge | `scripts/scrape-challonge.mjs`, `pages/turnir/pikado.astro` | Turnir u pikadu. Iframe bez ključa; popis prijavljenih kroz API v2.1 uz `CHALLONGE_CLIENT_ID`/`_SECRET` (GitHub Secrets). Bez njih ostaje stari `pikado.json` |
