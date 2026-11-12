@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-11-11T14:25:25.426Z",
+  "lastUpdated": "2026-11-12T09:14:22.503Z",
   "tournament": "dsanizapikadoturnir2026",
   "name": "DŠA NIZA 2. PIKADO TURNIR",
   "state": "pending",
@@ -16,6 +16,10 @@
     {
       "name": "Krešo Bušić / Petar Galinec",
       "seed": 1
+    },
+    {
+      "name": "Luka Babić / Deni Sitaš",
+      "seed": 2
     }
   ]
 }
