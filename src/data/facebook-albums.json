@@ -1,9 +1,9 @@
 {
-  "lastUpdated": "2026-11-17T10:58:30.825Z",
+  "lastUpdated": "2026-11-17T19:40:01.479Z",
   "enabled": true,
   "pageId": "55401829691",
   "photosPerYear": 200,
-  "totalOnFacebook": 7597,
+  "totalOnFacebook": 7598,
   "years": [
     "2026",
     "2025",
@@ -29,11 +29,20 @@
       "id": "482830940516078",
       "name": "Preneseno s mobitela",
       "createdAt": "2022-08-31T22:19:54+0000",
-      "updatedAt": "2026-11-10T13:38:31+0000",
+      "updatedAt": "2026-11-17T19:29:09+0000",
       "permalink": "https://www.facebook.com/album.php?fbid=482830940516078&id=1551452460320582&aid=1073741828",
       "cover": "/images/facebook-albums/482830940516078/cover.jpg",
-      "count": 4668,
+      "count": 4669,
       "photos": [
+        {
+          "id": "1766088042190355",
+          "src": "/images/facebook-albums/482830940516078/1766088042190355.jpg",
+          "thumb": "/images/facebook-albums/482830940516078/1766088042190355.webp",
+          "width": 500,
+          "height": 705,
+          "caption": "Da se ne zaboravi!!",
+          "createdAt": "2026-11-17T19:29:09+0000"
+        },
         {
           "id": "1756494679816358",
           "src": "/images/facebook-albums/482830940516078/1756494679816358.jpg",
@@ -2123,20 +2132,20 @@
           "createdAt": "2026-01-01T15:45:29+0000"
         },
         {
-          "id": "1449889623810200",
-          "src": "/images/facebook-albums/482830940516078/1449889623810200.jpg",
-          "thumb": "/images/facebook-albums/482830940516078/1449889623810200.webp",
-          "width": 500,
-          "height": 667,
-          "caption": "",
-          "createdAt": "2026-01-01T15:45:29+0000"
-        },
-        {
           "id": "1449889560476873",
           "src": "/images/facebook-albums/482830940516078/1449889560476873.jpg",
           "thumb": "/images/facebook-albums/482830940516078/1449889560476873.webp",
           "width": 500,
           "height": 281,
+          "caption": "",
+          "createdAt": "2026-01-01T15:45:29+0000"
+        },
+        {
+          "id": "1449889623810200",
+          "src": "/images/facebook-albums/482830940516078/1449889623810200.jpg",
+          "thumb": "/images/facebook-albums/482830940516078/1449889623810200.webp",
+          "width": 500,
+          "height": 667,
           "caption": "",
           "createdAt": "2026-01-01T15:45:29+0000"
         },
@@ -12383,18 +12392,18 @@
           "createdAt": "2020-08-05T19:06:39+0000"
         },
         {
-          "id": "10160009925819692",
-          "src": "/images/facebook-albums/482830940516078/10160009925819692.jpg",
-          "thumb": "/images/facebook-albums/482830940516078/10160009925819692.webp",
+          "id": "10160009925644692",
+          "src": "/images/facebook-albums/482830940516078/10160009925644692.jpg",
+          "thumb": "/images/facebook-albums/482830940516078/10160009925644692.webp",
           "width": 500,
           "height": 375,
           "caption": "",
           "createdAt": "2020-08-05T19:06:39+0000"
         },
         {
-          "id": "10160009925644692",
-          "src": "/images/facebook-albums/482830940516078/10160009925644692.jpg",
-          "thumb": "/images/facebook-albums/482830940516078/10160009925644692.webp",
+          "id": "10160009925819692",
+          "src": "/images/facebook-albums/482830940516078/10160009925819692.jpg",
+          "thumb": "/images/facebook-albums/482830940516078/10160009925819692.webp",
           "width": 500,
           "height": 375,
           "caption": "",
@@ -16235,6 +16244,15 @@
           "createdAt": "2018-05-12T11:37:41+0000"
         },
         {
+          "id": "10157320864874692",
+          "src": "/images/facebook-albums/482830940516078/10157320864874692.jpg",
+          "thumb": "/images/facebook-albums/482830940516078/10157320864874692.webp",
+          "width": 500,
+          "height": 281,
+          "caption": "",
+          "createdAt": "2018-05-12T11:37:41+0000"
+        },
+        {
           "id": "10157320864784692",
           "src": "/images/facebook-albums/482830940516078/10157320864784692.jpg",
           "thumb": "/images/facebook-albums/482830940516078/10157320864784692.webp",
@@ -16247,15 +16265,6 @@
           "id": "10157320864604692",
           "src": "/images/facebook-albums/482830940516078/10157320864604692.jpg",
           "thumb": "/images/facebook-albums/482830940516078/10157320864604692.webp",
-          "width": 500,
-          "height": 281,
-          "caption": "",
-          "createdAt": "2018-05-12T11:37:41+0000"
-        },
-        {
-          "id": "10157320864874692",
-          "src": "/images/facebook-albums/482830940516078/10157320864874692.jpg",
-          "thumb": "/images/facebook-albums/482830940516078/10157320864874692.webp",
           "width": 500,
           "height": 281,
           "caption": "",
@@ -19313,18 +19322,18 @@
           "createdAt": "2016-08-14T18:57:01+0000"
         },
         {
-          "id": "10155047499659692",
-          "src": "/images/facebook-albums/482830940516078/10155047499659692.jpg",
-          "thumb": "/images/facebook-albums/482830940516078/10155047499659692.webp",
+          "id": "10155047499344692",
+          "src": "/images/facebook-albums/482830940516078/10155047499344692.jpg",
+          "thumb": "/images/facebook-albums/482830940516078/10155047499344692.webp",
           "width": 500,
           "height": 281,
           "caption": "",
           "createdAt": "2016-08-14T18:57:00+0000"
         },
         {
-          "id": "10155047499344692",
-          "src": "/images/facebook-albums/482830940516078/10155047499344692.jpg",
-          "thumb": "/images/facebook-albums/482830940516078/10155047499344692.webp",
+          "id": "10155047499659692",
+          "src": "/images/facebook-albums/482830940516078/10155047499659692.jpg",
+          "thumb": "/images/facebook-albums/482830940516078/10155047499659692.webp",
           "width": 500,
           "height": 281,
           "caption": "",
@@ -19412,18 +19421,18 @@
           "createdAt": "2016-08-14T18:56:58+0000"
         },
         {
-          "id": "10155047495564692",
-          "src": "/images/facebook-albums/482830940516078/10155047495564692.jpg",
-          "thumb": "/images/facebook-albums/482830940516078/10155047495564692.webp",
+          "id": "10155047497569692",
+          "src": "/images/facebook-albums/482830940516078/10155047497569692.jpg",
+          "thumb": "/images/facebook-albums/482830940516078/10155047497569692.webp",
           "width": 500,
           "height": 281,
           "caption": "",
           "createdAt": "2016-08-14T18:56:58+0000"
         },
         {
-          "id": "10155047497569692",
-          "src": "/images/facebook-albums/482830940516078/10155047497569692.jpg",
-          "thumb": "/images/facebook-albums/482830940516078/10155047497569692.webp",
+          "id": "10155047495564692",
+          "src": "/images/facebook-albums/482830940516078/10155047495564692.jpg",
+          "thumb": "/images/facebook-albums/482830940516078/10155047495564692.webp",
           "width": 500,
           "height": 281,
           "caption": "",
@@ -21608,18 +21617,18 @@
           "createdAt": "2015-07-11T19:57:08+0000"
         },
         {
-          "id": "10153959268044692",
-          "src": "/images/facebook-albums/482830940516078/10153959268044692.jpg",
-          "thumb": "/images/facebook-albums/482830940516078/10153959268044692.webp",
+          "id": "10153959267944692",
+          "src": "/images/facebook-albums/482830940516078/10153959267944692.jpg",
+          "thumb": "/images/facebook-albums/482830940516078/10153959267944692.webp",
           "width": 500,
           "height": 299,
           "caption": "",
           "createdAt": "2015-07-11T19:57:07+0000"
         },
         {
-          "id": "10153959267944692",
-          "src": "/images/facebook-albums/482830940516078/10153959267944692.jpg",
-          "thumb": "/images/facebook-albums/482830940516078/10153959267944692.webp",
+          "id": "10153959268044692",
+          "src": "/images/facebook-albums/482830940516078/10153959268044692.jpg",
+          "thumb": "/images/facebook-albums/482830940516078/10153959268044692.webp",
           "width": 500,
           "height": 299,
           "caption": "",
@@ -25896,18 +25905,18 @@
           "createdAt": "2014-05-31T18:13:24+0000"
         },
         {
-          "id": "10152845006244692",
-          "src": "/images/facebook-albums/10152845003144692/10152845006244692.jpg",
-          "thumb": "/images/facebook-albums/10152845003144692/10152845006244692.webp",
+          "id": "10152845006264692",
+          "src": "/images/facebook-albums/10152845003144692/10152845006264692.jpg",
+          "thumb": "/images/facebook-albums/10152845003144692/10152845006264692.webp",
           "width": 500,
           "height": 375,
           "caption": "",
           "createdAt": "2014-05-31T18:13:21+0000"
         },
         {
-          "id": "10152845006264692",
-          "src": "/images/facebook-albums/10152845003144692/10152845006264692.jpg",
-          "thumb": "/images/facebook-albums/10152845003144692/10152845006264692.webp",
+          "id": "10152845006244692",
+          "src": "/images/facebook-albums/10152845003144692/10152845006244692.jpg",
+          "thumb": "/images/facebook-albums/10152845003144692/10152845006244692.webp",
           "width": 500,
           "height": 375,
           "caption": "",
@@ -32715,18 +32724,18 @@
           "createdAt": "2017-06-25T21:03:49+0000"
         },
         {
-          "id": "10156242941909692",
-          "src": "/images/facebook-albums/482830957182743/10156242941909692.jpg",
-          "thumb": "/images/facebook-albums/482830957182743/10156242941909692.webp",
+          "id": "10156242942469692",
+          "src": "/images/facebook-albums/482830957182743/10156242942469692.jpg",
+          "thumb": "/images/facebook-albums/482830957182743/10156242942469692.webp",
           "width": 500,
           "height": 375,
           "caption": "",
           "createdAt": "2017-06-25T21:03:49+0000"
         },
         {
-          "id": "10156242942469692",
-          "src": "/images/facebook-albums/482830957182743/10156242942469692.jpg",
-          "thumb": "/images/facebook-albums/482830957182743/10156242942469692.webp",
+          "id": "10156242941909692",
+          "src": "/images/facebook-albums/482830957182743/10156242941909692.jpg",
+          "thumb": "/images/facebook-albums/482830957182743/10156242941909692.webp",
           "width": 500,
           "height": 375,
           "caption": "",
@@ -34677,20 +34686,20 @@
           "createdAt": "2016-09-04T20:48:05+0000"
         },
         {
-          "id": "10155127086029692",
-          "src": "/images/facebook-albums/482830957182743/10155127086029692.jpg",
-          "thumb": "/images/facebook-albums/482830957182743/10155127086029692.webp",
-          "width": 500,
-          "height": 577,
-          "caption": "",
-          "createdAt": "2016-09-04T20:42:06+0000"
-        },
-        {
           "id": "10155127085414692",
           "src": "/images/facebook-albums/482830957182743/10155127085414692.jpg",
           "thumb": "/images/facebook-albums/482830957182743/10155127085414692.webp",
           "width": 500,
           "height": 598,
+          "caption": "",
+          "createdAt": "2016-09-04T20:42:06+0000"
+        },
+        {
+          "id": "10155127086029692",
+          "src": "/images/facebook-albums/482830957182743/10155127086029692.jpg",
+          "thumb": "/images/facebook-albums/482830957182743/10155127086029692.webp",
+          "width": 500,
+          "height": 577,
           "caption": "",
           "createdAt": "2016-09-04T20:42:06+0000"
         },
@@ -34893,18 +34902,18 @@
           "createdAt": "2016-08-14T07:26:28+0000"
         },
         {
-          "id": "10155043817474692",
-          "src": "/images/facebook-albums/482830957182743/10155043817474692.jpg",
-          "thumb": "/images/facebook-albums/482830957182743/10155043817474692.webp",
+          "id": "10155043817469692",
+          "src": "/images/facebook-albums/482830957182743/10155043817469692.jpg",
+          "thumb": "/images/facebook-albums/482830957182743/10155043817469692.webp",
           "width": 500,
           "height": 281,
           "caption": "",
           "createdAt": "2016-08-13T19:01:58+0000"
         },
         {
-          "id": "10155043817469692",
-          "src": "/images/facebook-albums/482830957182743/10155043817469692.jpg",
-          "thumb": "/images/facebook-albums/482830957182743/10155043817469692.webp",
+          "id": "10155043817474692",
+          "src": "/images/facebook-albums/482830957182743/10155043817474692.jpg",
+          "thumb": "/images/facebook-albums/482830957182743/10155043817474692.webp",
           "width": 500,
           "height": 281,
           "caption": "",
@@ -35433,9 +35442,9 @@
           "createdAt": "2016-06-13T09:31:44+0000"
         },
         {
-          "id": "10154846263999692",
-          "src": "/images/facebook-albums/482830957182743/10154846263999692.jpg",
-          "thumb": "/images/facebook-albums/482830957182743/10154846263999692.webp",
+          "id": "10154846263889692",
+          "src": "/images/facebook-albums/482830957182743/10154846263889692.jpg",
+          "thumb": "/images/facebook-albums/482830957182743/10154846263889692.webp",
           "width": 500,
           "height": 375,
           "caption": "",
@@ -35451,9 +35460,9 @@
           "createdAt": "2016-06-11T19:13:23+0000"
         },
         {
-          "id": "10154846263889692",
-          "src": "/images/facebook-albums/482830957182743/10154846263889692.jpg",
-          "thumb": "/images/facebook-albums/482830957182743/10154846263889692.webp",
+          "id": "10154846263999692",
+          "src": "/images/facebook-albums/482830957182743/10154846263999692.jpg",
+          "thumb": "/images/facebook-albums/482830957182743/10154846263999692.webp",
           "width": 500,
           "height": 375,
           "caption": "",
@@ -37107,18 +37116,18 @@
           "createdAt": "2015-07-05T00:13:35+0000"
         },
         {
-          "id": "10153940107654692",
-          "src": "/images/facebook-albums/482830957182743/10153940107654692.jpg",
-          "thumb": "/images/facebook-albums/482830957182743/10153940107654692.webp",
+          "id": "10153940107744692",
+          "src": "/images/facebook-albums/482830957182743/10153940107744692.jpg",
+          "thumb": "/images/facebook-albums/482830957182743/10153940107744692.webp",
           "width": 500,
           "height": 299,
           "caption": "",
           "createdAt": "2015-07-05T00:13:35+0000"
         },
         {
-          "id": "10153940107744692",
-          "src": "/images/facebook-albums/482830957182743/10153940107744692.jpg",
-          "thumb": "/images/facebook-albums/482830957182743/10153940107744692.webp",
+          "id": "10153940107654692",
+          "src": "/images/facebook-albums/482830957182743/10153940107654692.jpg",
+          "thumb": "/images/facebook-albums/482830957182743/10153940107654692.webp",
           "width": 500,
           "height": 299,
           "caption": "",
@@ -37143,18 +37152,18 @@
           "createdAt": "2015-07-05T00:13:35+0000"
         },
         {
-          "id": "10153940107084692",
-          "src": "/images/facebook-albums/482830957182743/10153940107084692.jpg",
-          "thumb": "/images/facebook-albums/482830957182743/10153940107084692.webp",
+          "id": "10153940106744692",
+          "src": "/images/facebook-albums/482830957182743/10153940106744692.jpg",
+          "thumb": "/images/facebook-albums/482830957182743/10153940106744692.webp",
           "width": 500,
           "height": 299,
           "caption": "",
           "createdAt": "2015-07-05T00:13:35+0000"
         },
         {
-          "id": "10153940106744692",
-          "src": "/images/facebook-albums/482830957182743/10153940106744692.jpg",
-          "thumb": "/images/facebook-albums/482830957182743/10153940106744692.webp",
+          "id": "10153940107084692",
+          "src": "/images/facebook-albums/482830957182743/10153940107084692.jpg",
+          "thumb": "/images/facebook-albums/482830957182743/10153940107084692.webp",
           "width": 500,
           "height": 299,
           "caption": "",

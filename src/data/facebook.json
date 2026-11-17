@@ -1,8 +1,22 @@
 {
-  "lastUpdated": "2026-11-11T12:04:46.166Z",
+  "lastUpdated": "2026-11-17T19:38:38.728Z",
   "enabled": true,
   "pageId": "55401829691",
   "posts": [
+    {
+      "id": "55401829691_1766088085523684",
+      "message": "Da se ne zaboravi!!",
+      "createdAt": "2026-11-17T19:29:09+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1766088085523684",
+      "images": [
+        {
+          "src": "/images/facebook/55401829691_1766088085523684.jpg",
+          "thumb": "/images/facebook/55401829691_1766088085523684.webp",
+          "width": 700,
+          "height": 988
+        }
+      ]
+    },
     {
       "id": "55401829691_1757624219703404",
       "message": "",
@@ -354,20 +368,6 @@
           "thumb": "/images/facebook/55401829691_1692589959540164.webp",
           "width": 700,
           "height": 875
-        }
-      ]
-    },
-    {
-      "id": "55401829691_1690860406379786",
-      "message": "Ovom prilikom zahvala Općini Koška na financiranju liječničkih pregleda svih naših igrača i igračica. Također hvala medicinskom osoblju i liječnicima ordinacije sportske medicine dr. Špiranovića iz Osijeka koji su izvršili pregled. Na kraju hvala i našim susjedima i sportskim prijateljima iz Nk Seljak Koška koji su ustuplil svoje prostorije za pregled. Hvala svima na velikom odazivu, a svi koji su bili spriječeni danas, tokom tjedna mogu obaviti pregled u ordinaciji u Osijeku. ifo",
-      "createdAt": "2026-09-12T14:20:47+0000",
-      "permalink": "https://www.facebook.com/1551452460320582/posts/1690860406379786",
-      "images": [
-        {
-          "src": "/images/facebook/55401829691_1690860406379786.jpg",
-          "thumb": "/images/facebook/55401829691_1690860406379786.webp",
-          "width": 700,
-          "height": 831
         }
       ]
     }
