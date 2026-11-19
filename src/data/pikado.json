@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-11-18T19:00:57.862Z",
+  "lastUpdated": "2026-11-19T18:30:15.707Z",
   "tournament": "dsanizapikadoturnir2026",
   "name": "DŠA NIZA 2. PIKADO TURNIR",
   "state": "pending",
@@ -32,6 +32,10 @@
     {
       "name": "Emanuel Galinec / Ivan Galinec",
       "seed": 5
+    },
+    {
+      "name": "Filip Tomac / Petar Tomac",
+      "seed": 6
     }
   ]
 }
