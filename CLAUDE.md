@@ -467,8 +467,10 @@ neredovito (11.11. samo 5 puta u danu), pa uvjet po minuti/satu ne valja. Challo
 prijava Google obrazac (`formUrl` u configu; prazno = gumb vodi na Challonge).
 Odgovori obrasca imaju brojeve mobitela, pa tablica odgovora ostaje privatna —
 nikad je ne čitaj iz scrapera ni s javnim linkom; organizator parove ručno
-prepisuje na Challonge. Kotizacija, nagrade, mjesto i WhatsApp
-kontakt su konstante na vrhu `pikado.astro`; vrijeme početka mijenja se na
+prepisuje na Challonge. Kad turnir krene (`state` više nije
+pending), Challonge prikaz ide na vrh, a nagrade ispred popisa parova —
+preko CSS `order`, bez dupliciranja markupa. Kotizacija, nagrade, broj
+pikada, mjesto i WhatsApp kontakt su konstante na vrhu `pikado.astro`; vrijeme početka mijenja se na
 Challongeu. Dok turnir traje, stavka „Turnir" je u `navItems` (Header), a
 najava (`TurnirBanner`) na naslovnici sama nestane 6 h nakon početka. U repo ide samo ime para, bez e-maila i
 korisničkog imena iz prijave. Lokalno: Node `fetch` ne čita `HTTPS_PROXY`,

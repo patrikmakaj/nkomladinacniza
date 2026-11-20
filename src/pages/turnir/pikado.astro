@@ -50,6 +50,7 @@ const data = rawData as unknown as PikadoData;
 const TITLE = "2. pikado turnir";
 const VENUE = "Društveni dom u Nizi";
 const FEE = 15; // € po paru
+const BOARDS = 2; // pikada na kojima se igra paralelno
 // Udio kotizacije po mjestu (ostatak ide za trofeje — namjerno se ne piše).
 const PRIZES = [0.5, 0.3, 0.1];
 const CONTACT = { name: "Patrik Makaj", phone: "+385912680220", phoneDisplay: "091 268 0220" };
@@ -72,6 +73,10 @@ const participants = fresh ? data.participants : [];
 const state = fresh ? data.state : null;
 const signupCap = fresh ? data.signupCap : null;
 const registrationOpen = state == null || state === "pending" || state === "checking_in" || state === "checked_in";
+// Kad turnir krene, stranica se gleda zbog rezultata (većina s mobitela):
+// Challonge prikaz ide na vrh, nagrade ispred popisa parova. Redoslijed se
+// mijenja CSS-om (`order`), da markup sekcija ostane na jednom mjestu.
+const live = !registrationOpen;
 const signupUrl = (fresh && data.signupUrl) || config.signupUrl;
 // Google obrazac za prijavu bez Challonge računa (odgovori idu u privatnu
 // tablicu na klupskom Driveu, organizator ih prepisuje na Challonge).
@@ -199,7 +204,7 @@ const heroBtn =
     </div>
   </section>
 
-  <div class="container-narrow py-8 md:py-10 space-y-8">
+  <div class="container-narrow py-8 md:py-10 flex flex-col gap-8">
     <!-- OSNOVNO -->
     <div class="grid gap-3 grid-cols-2 lg:grid-cols-4">
       <div class={fact}>
@@ -217,11 +222,21 @@ const heroBtn =
         <div class={factValue}>{FEE} €</div>
         <div class={factNote}>po paru</div>
       </div>
-      <div class={fact}>
-        <div class={factLabel}>Prijave do</div>
-        <div class={factValue}>početka</div>
-        <div class={factNote}>turnira{timeLabel ? ` (${timeLabel})` : ""}</div>
-      </div>
+      {
+        live ? (
+          <div class={fact}>
+            <div class={factLabel}>Igra se na</div>
+            <div class={factValue}>{`${BOARDS} ${pluralCroatian(BOARDS, "pikado", "pikada", "pikada")}`}</div>
+            <div class={factNote}>paralelno</div>
+          </div>
+        ) : (
+          <div class={fact}>
+            <div class={factLabel}>Prijave do</div>
+            <div class={factValue}>početka</div>
+            <div class={factNote}>turnira{timeLabel ? ` (${timeLabel})` : ""}</div>
+          </div>
+        )
+      }
     </div>
 
     <!-- PRIJAVA -->
@@ -389,7 +404,7 @@ const heroBtn =
         </div>
       </section>
 
-      <section id="nagrade" class={card}>
+      <section id="nagrade" class:list={[card, live && "max-lg:order-first"]}>
         <div class={cardHead} style="background:#10275c">
           <span>Nagrade</span>
           {fund > 0 && <span class="text-[#F6C500] font-bold tabular-nums">fond {euro(fund)}</span>}
@@ -413,14 +428,18 @@ const heroBtn =
             }
           </ul>
           <p class="text-xs text-[#64748B] mt-3">
-            Fond raste sa svakom prijavom ({FEE} € po paru). Konačni iznosi računaju se iz uplaćenih kotizacija.
+            {
+              live
+                ? "Konačni iznosi računaju se iz uplaćenih kotizacija."
+                : `Fond raste sa svakom prijavom (${FEE} € po paru). Konačni iznosi računaju se iz uplaćenih kotizacija.`
+            }
           </p>
         </div>
       </section>
     </div>
 
     <!-- GRUPE I ELIMINACIJA (Challonge) -->
-    <section id="raspored" class={card}>
+    <section id="raspored" class:list={[card, "scroll-mt-24", live && "order-first"]}>
       <div class={cardHead} style="background:#10275c">
         <span>Grupe, raspored i rezultati</span>
         <button
