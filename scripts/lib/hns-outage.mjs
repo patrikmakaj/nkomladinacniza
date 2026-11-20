@@ -31,6 +31,18 @@ import { dirname } from "node:path";
 /** Nakon koliko sati neprekidnog ispada se diže uzbuna. */
 export const ALERT_AFTER_HOURS = 6;
 
+/**
+ * Do kada se uzbuna za ispad ne diže (ISO datum, Europe/Zagreb ponoć).
+ *
+ * Od 11.11.2026. Cloudflare ispred Semafora odbija svaki zahtjev s GitHub
+ * runnera („challenge"). Jesenski dio je tada već bio odigran (zadnja
+ * utakmica seniora 7.11., U-11 24.10.), pa stranici ništa ne fali, a mail
+ * na svaki run samo smeta. Klub je odlučio riješiti to prije proljeća.
+ * Ispad se i dalje bilježi; nakon ovog datuma uzbuna se sama vraća.
+ * Upozorenje za sumnjivo prazne podatke (`hns-sanity.mjs`) ovo ne dira.
+ */
+export const ALERT_MUTED_UNTIL = "2027-03-01T00:00:00+01:00";
+
 /** Trenutni ispad ili null ako ga nema. */
 async function readState(path) {
   try {
@@ -84,6 +96,7 @@ async function save(path, state) {
 export function outageAlert(state, now) {
   const hours = (now.getTime() - new Date(state.since).getTime()) / 3_600_000;
   if (!(hours >= ALERT_AFTER_HOURS)) return null;
+  if (now < new Date(ALERT_MUTED_UNTIL)) return null;
   return (
     `HNS Semafor ne odgovara ${Math.floor(hours)} h ` +
     `(od ${state.since}, neuspjelih prolaza zaredom: ${state.failures}); ` +

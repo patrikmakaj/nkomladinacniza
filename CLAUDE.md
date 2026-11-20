@@ -118,6 +118,17 @@ kroz `actions/cache`, sprema samo kad se stanje promijeni). Kad ispad traje
 `upozorenje` pukne. Povremeni 403 s uspjehom između se samo preskače.
 Mail „HNS Semafor ne odgovara" znači blokadu ili pad Semafora, ne parser.
 
+**Stanje 20.11.2026.:** od 11.11. Cloudflare („challenge") odbija **svaki**
+zahtjev s GitHub runnera — `hns.json` je zadnji put osvježen 8.11. Jesenski
+dio je bio gotov (seniori 7.11., U-11 24.10.), pa stranici ništa ne fali.
+Uzbuna za ispad je utišana do 1.3.2027. (`ALERT_MUTED_UNTIL` u
+`hns-outage.mjs`); tada se vraća sama i problem treba riješiti prije
+proljetnog rasporeda. Zaobilaženje Cloudflarea (headless preglednik s
+prikrivanjem automatizacije, plaćeni „bypass" servisi) **ne dolazi u obzir** —
+to je zaštita koju je HNS namjerno postavio. Opcije: službeni pristup/izvoz
+od HNS-a ili ŽNS-a, ručni unos, ili kućni self-hosted runner samo uz
+dopuštenje HNS-a.
+
 **Deploy na cron ide samo kad su se podaci promijenili** — plus jedan dnevni
 build iza ponoći po Zagrebu (`7 23 * * *` UTC), koji uvijek deploya. Sve što
 se u buildu računa iz „danas" (`todayInZagreb`, `nextMatch`) zato može biti
