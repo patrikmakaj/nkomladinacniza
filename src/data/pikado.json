@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-11-19T18:30:15.707Z",
+  "lastUpdated": "2026-11-20T13:47:07.415Z",
   "tournament": "dsanizapikadoturnir2026",
   "name": "DŠA NIZA 2. PIKADO TURNIR",
   "state": "pending",
@@ -36,6 +36,14 @@
     {
       "name": "Filip Tomac / Petar Tomac",
       "seed": 6
+    },
+    {
+      "name": "Karlo Grubač / Anto Kostreš",
+      "seed": 7
+    },
+    {
+      "name": "Ivan Prišć / Marin Hvizdak",
+      "seed": 8
     }
   ]
 }
