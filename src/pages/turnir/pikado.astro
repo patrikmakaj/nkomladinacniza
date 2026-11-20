@@ -51,7 +51,8 @@ const TITLE = "2. pikado turnir";
 const VENUE = "Društveni dom u Nizi";
 const FEE = 15; // € po paru
 const BOARDS = 2; // pikada na kojima se igra paralelno
-// Udio kotizacije po mjestu (ostatak ide za trofeje — namjerno se ne piše).
+// Udio kotizacije po mjestu. Samo novčane nagrade, bez trofeja; ostatak
+// kotizacije se namjerno ne spominje na stranici.
 const PRIZES = [0.5, 0.3, 0.1];
 const CONTACT = { name: "Patrik Makaj", phone: "+385912680220", phoneDisplay: "091 268 0220" };
 const FACEBOOK_MSG = "https://m.me/omladinacniza";
@@ -420,7 +421,7 @@ const heroBtn =
                   <span class="text-right text-sm text-[#334155]">
                     <strong class="text-[#10275c] text-base">{r.amount ?? `${r.percent} %`}</strong>
                     <span class="block text-xs text-[#64748B]">
-                      {r.amount ? `${r.percent} % + trofej` : "kotizacije + trofej"}
+                      {r.amount ? `${r.percent} % kotizacije` : "kotizacije"}
                     </span>
                   </span>
                 </li>
@@ -542,7 +543,7 @@ const heroBtn =
 
       <h3 class={h3}>5. Nagrade</h3>
       <ul class="list-disc pl-5 space-y-1">
-        {prizeRows.map((r) => <li>{r.place}. mjesto — <strong>{r.percent} %</strong> ukupne kotizacije + trofej</li>)}
+        {prizeRows.map((r) => <li>{r.place}. mjesto — <strong>{r.percent} %</strong> ukupne kotizacije</li>)}
       </ul>
 
       <h3 class={h3}>6. Fair play</h3>
