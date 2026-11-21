@@ -121,14 +121,18 @@ const payload = { slug: config.tournament, fee: FEE, prizes: PRIZES, tvApi };
   #tv .h small { font-family: var(--font-sans); font-size: 15px; letter-spacing: 0; text-transform: none; opacity: .75; }
 
   #tv .queue { flex: 1; min-height: 0; overflow: hidden; padding-bottom: 6px; }
-  #tv .mc { margin: 12px 14px 0; border-radius: 12px; border: 2px solid #dbe4f3; padding: 12px 16px; display: flex; gap: 14px; align-items: center; }
+  #tv .mc { margin: 10px 14px 0; border-radius: 12px; border: 2px solid #dbe4f3; padding: 10px 14px; display: flex; gap: 14px; align-items: center; }
   #tv .mc .tag { font-family: var(--font-display); font-size: 17px; letter-spacing: .08em; text-transform: uppercase; width: 92px; padding: 8px 0; border-radius: 8px; text-align: center; flex: none; background: #0f2c6e; color: #fff; line-height: 1.1; }
   #tv .mc.next { border-color: #d4b659; background: #fffbea; }
   #tv .mc.next .tag { background: #d4b659; color: #0f2c6e; }
   #tv .mc.live { border-color: #16a34a; background: #f0fdf4; }
   #tv .mc.live .tag { background: #16a34a; }
   #tv .mc .who { flex: 1; min-width: 0; }
-  #tv .mc .who div { font-size: 27px; font-weight: 700; color: #0f2c6e; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.2; }
+  /* Puna imena („Dominik Hvizdak / Josip Hovanjec") smiju u drugi red, ne režu se. */
+  #tv .mc .who div { font-size: 24px; font-weight: 700; color: #0f2c6e; line-height: 1.15; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  #tv .mc .side { display: flex; flex-direction: column; gap: 8px; align-items: center; flex: none; width: 104px; }
+  #tv .mc .side .tag { width: 100%; }
+  #tv .mc .side .gtag { font-size: 16px; padding: 2px 8px; }
   #tv .mc .who span { display: block; font-size: 15px; color: #94a3b8; text-transform: uppercase; letter-spacing: .15em; margin: 1px 0; }
   #tv .gtag { font-family: var(--font-display); font-size: 18px; letter-spacing: .08em; background: #dbeafe; color: #0f2c6e; padding: 3px 10px; border-radius: 4px; white-space: nowrap; }
   #tv .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #fff; margin-right: 6px; animation: tvpulse 1.4s infinite; }
@@ -141,7 +145,7 @@ const payload = { slug: config.tournament, fee: FEE, prizes: PRIZES, tvApi };
   #tv .qr p b { display: block; font-family: var(--font-display); font-size: 26px; color: #0f2c6e; font-weight: 700; margin-bottom: 4px; word-break: normal; }
 
   #tv .board { display: grid; gap: 22px; min-height: 0; grid-template-columns: 1fr 1fr; grid-auto-rows: 1fr; }
-  #tv table { width: 100%; border-collapse: collapse; font-size: 22px; }
+  #tv table { width: 100%; border-collapse: collapse; font-size: 20px; }
   #tv th { font-size: 14px; letter-spacing: .1em; text-transform: uppercase; color: #64748b; padding: 6px 8px; text-align: center; font-weight: 600; }
   #tv td { padding: 8px; text-align: center; font-variant-numeric: tabular-nums; }
   #tv td.p, #tv th.p { text-align: left; }
@@ -218,7 +222,7 @@ const payload = { slug: config.tournament, fee: FEE, prizes: PRIZES, tvApi };
   #tv .cd .at { font-size: 30px; color: #334155; }
   #tv .cd .n { font-family: var(--font-display); font-size: 64px; color: #d4b659; margin-top: 30px; }
   #tv .pre .list { columns: 2; column-gap: 0; padding: 8px 0; }
-  #tv .pre .list div { break-inside: avoid; display: flex; gap: 12px; padding: 7px 18px; font-size: 22px; border-bottom: 1px solid #eef2f7; }
+  #tv .pre .list div { break-inside: avoid; display: flex; gap: 10px; padding: 5px 14px; font-size: 18px; line-height: 1.25; border-bottom: 1px solid #eef2f7; }
   #tv .pre .list b { font-family: var(--font-display); color: #64748b; width: 34px; text-align: right; }
 
   #tv .tv-foot { padding: 9px 40px; background: #0f2c6e; color: rgba(255,255,255,.8); font-size: 17px; display: flex; justify-content: space-between; }
@@ -432,9 +436,8 @@ const payload = { slug: config.tournament, fee: FEE, prizes: PRIZES, tvApi };
     $("tv-queue").innerHTML = cards.length
       ? cards
           .map(
-            ({ m, cls, tag }) => `<div class="mc ${cls}"><div class="tag">${tag}</div>
-              <div class="who"><div>${esc(name(m.a))}</div><span>vs</span><div>${esc(name(m.b))}</div></div>
-              <span class="gtag">${esc(stageTag(m))}</span></div>`,
+            ({ m, cls, tag }) => `<div class="mc ${cls}"><div class="side"><div class="tag">${tag}</div><span class="gtag">${esc(stageTag(m))}</span></div>
+              <div class="who"><div>${esc(name(m.a))}</div><span>vs</span><div>${esc(name(m.b))}</div></div></div>`,
           )
           .join("")
       : `<p class="empty">${t.state === "complete" || t.state === "awaiting_review" ? "Turnir je završen. Čestitamo pobjednicima!" : t.state === "pending" ? "Mečevi se pojavljuju nakon ždrijeba." : "Čekamo sljedeće mečeve…"}</p>`;
