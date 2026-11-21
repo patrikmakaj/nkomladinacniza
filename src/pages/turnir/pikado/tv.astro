@@ -258,7 +258,7 @@ const payload = { slug: config.tournament, fee: FEE, prizes: PRIZES, amounts: PR
   import { pluralCroatian } from "../../../lib/croatian";
 
   type Cfg = { slug: string; fee: number; prizes: number[]; amounts: number[]; tvApi: string };
-  type P = { id: string; name: string; seed: number; rank: number | null };
+  type P = { id: string; name: string; seed: number; rank: number | null; tb: number };
   type M = {
     id: string;
     state: string;
@@ -317,7 +317,8 @@ const payload = { slug: config.tournament, fee: FEE, prizes: PRIZES, amounts: PR
       if (x.type !== "participant") continue;
       const a = x.attributes ?? {};
       if (a.states?.active === false) continue;
-      const p: P = { id: String(x.id), name: String(a.name ?? "?"), seed: Number(a.seed) || 999, rank: a.final_rank ?? null };
+      // tie_break_points = ručno razrješenje izjednačenja (Manual Tie Break na Challongeu).
+      const p: P = { id: String(x.id), name: String(a.name ?? "?"), seed: Number(a.seed) || 999, rank: a.final_rank ?? null, tb: Number(a.tie_break_points) || 0 };
       people.push(p);
       byId.set(p.id, p);
       // U grupnoj fazi Challonge zna mečeve vezati na „group player" id.
@@ -386,7 +387,7 @@ const payload = { slug: config.tournament, fee: FEE, prizes: PRIZES, amounts: PR
     return { groups: groups.filter((g) => g.ids.length > 1), ko };
   }
 
-  function standings(ids: string[], ms: M[]) {
+  function standings(ids: string[], ms: M[], tb: (id: string) => number) {
     const row = new Map(ids.map((id) => [id, { id, w: 0, l: 0, lf: 0, la: 0 }]));
     for (const m of ms) {
       if (m.state !== "complete" || !m.a || !m.b) continue;
@@ -394,11 +395,20 @@ const payload = { slug: config.tournament, fee: FEE, prizes: PRIZES, amounts: PR
       A.lf += m.sa ?? 0; A.la += m.sb ?? 0; B.lf += m.sb ?? 0; B.la += m.sa ?? 0;
       if (m.winner === m.a) { A.w++; B.l++; } else if (m.winner === m.b) { B.w++; A.l++; }
     }
-    const h2h = (x: string, y: string) => {
-      const m = ms.find((m) => m.state === "complete" && ((m.a === x && m.b === y) || (m.a === y && m.b === x)));
-      return m?.winner === x ? -1 : m?.winner === y ? 1 : 0;
-    };
-    return [...row.values()].sort((x, y) => y.w - x.w || h2h(x.id, y.id) || (y.lf - y.la) - (x.lf - x.la) || y.lf - x.lf);
+    // „Wins vs tied" kao na Challongeu: pobjede protiv SVIH s istim brojem
+    // pobjeda. Usporedba par po par ne valja kad se troje vrti u krug.
+    const rows = [...row.values()];
+    const vsTied = new Map(
+      rows.map((r) => {
+        const tied = new Set(rows.filter((o) => o.w === r.w && o.id !== r.id).map((o) => o.id));
+        const wins = ms.filter((m) => m.state === "complete" && m.winner === r.id && tied.has(m.winner === m.a ? m.b! : m.a!)).length;
+        return [r.id, wins];
+      }),
+    );
+    // Pobjede → pobjede protiv izjednačenih → razlika legova → legovi → ručni tie break (veći ide gore).
+    return rows.sort(
+      (x, y) => y.w - x.w || vsTied.get(y.id)! - vsTied.get(x.id)! || (y.lf - y.la) - (x.lf - x.la) || y.lf - x.lf || tb(y.id) - tb(x.id),
+    );
   }
 
   /** Opis turnira s Challongea kao obican tekst (zna doci kao HTML). */
@@ -513,7 +523,7 @@ const payload = { slug: config.tournament, fee: FEE, prizes: PRIZES, amounts: PR
     } else if (groups.length) {
       board.innerHTML = groups
         .map((g) => {
-          const rows = standings(g.ids, g.ms);
+          const rows = standings(g.ids, g.ms, (id) => byId.get(id)?.tb ?? 0);
           const played = g.ms.filter((m) => m.state === "complete").length;
           return `<div class="card"><div class="h">Grupa ${g.name}<small>odigrano ${played} / ${g.ms.length}</small></div>
             <table><thead><tr><th></th><th class="p">Par</th><th>P</th><th>I</th><th>Legovi</th></tr></thead><tbody>${rows
