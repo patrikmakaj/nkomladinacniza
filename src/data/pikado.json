@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-11-20T13:47:07.415Z",
+  "lastUpdated": "2026-11-21T14:38:35.307Z",
   "tournament": "dsanizapikadoturnir2026",
   "name": "DŠA NIZA 2. PIKADO TURNIR",
   "state": "pending",
@@ -44,6 +44,10 @@
     {
       "name": "Ivan Prišć / Marin Hvizdak",
       "seed": 8
+    },
+    {
+      "name": "Kruno Jurišić / Filip Valenčak",
+      "seed": 9
     }
   ]
 }
