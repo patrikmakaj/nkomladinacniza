@@ -476,7 +476,10 @@ eliminacije, na kraju postolje. Čita Challonge uživo iz preglednika **preko
 Cloudflare Workera** (`scripts/cloudflare/pikado-tv-proxy.js`, URL u
 `config.tvApi`) — Challonge na GET ne šalje `Access-Control-Allow-Origin`, pa
 izravan poziv iz preglednika ne prolazi. Grupe se izvode iz mečeva grupne faze
-(povezane cjeline), jer v2.1 ne vraća pouzdano grupu meča. Kotizacija, nagrade, broj
+(povezane cjeline), jer v2.1 ne vraća pouzdano grupu meča. Dodaci: žuta
+traka obavijesti iz **opisa turnira na Challongeu** (organizator ga mijenja
+s mobitela), odbrojavanje prije starta i traka „Novi rezultat" (20 s) kad
+između dva osvježavanja stigne završeni meč. Kotizacija, nagrade, broj
 pikada, mjesto i WhatsApp kontakt su konstante na vrhu `pikado.astro`; vrijeme početka mijenja se na
 Challongeu. Dok turnir traje, stavka „Turnir" je u `navItems` (Header), a
 najava (`TurnirBanner`) na naslovnici sama nestane 6 h nakon početka. U repo ide samo ime para, bez e-maila i
