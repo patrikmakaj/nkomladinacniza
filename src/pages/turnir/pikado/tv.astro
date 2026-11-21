@@ -258,7 +258,7 @@ const payload = { slug: config.tournament, fee: FEE, prizes: PRIZES, amounts: PR
   import { pluralCroatian } from "../../../lib/croatian";
 
   type Cfg = { slug: string; fee: number; prizes: number[]; amounts: number[]; tvApi: string };
-  type P = { id: string; name: string; seed: number; rank: number | null; tb: number };
+  type P = { id: string; name: string; seed: number; rank: number | null; tb: number; gid: number | null };
   type M = {
     id: string;
     state: string;
@@ -316,9 +316,10 @@ const payload = { slug: config.tournament, fee: FEE, prizes: PRIZES, amounts: PR
     for (const x of inc) {
       if (x.type !== "participant") continue;
       const a = x.attributes ?? {};
-      if (a.states?.active === false) continue;
+      // Nakon „Finalize group stage" Challonge ispale parove označi kao
+      // neaktivne — i dalje trebaju za imena u grupama i za fond.
       // tie_break_points = ručno razrješenje izjednačenja (Manual Tie Break na Challongeu).
-      const p: P = { id: String(x.id), name: String(a.name ?? "?"), seed: Number(a.seed) || 999, rank: a.final_rank ?? null, tb: Number(a.tie_break_points) || 0 };
+      const p: P = { id: String(x.id), name: String(a.name ?? "?"), seed: Number(a.seed) || 999, rank: a.final_rank ?? null, tb: Number(a.tie_break_points) || 0, gid: a.group_id != null ? Number(a.group_id) : null };
       people.push(p);
       byId.set(p.id, p);
       // U grupnoj fazi Challonge zna mečeve vezati na „group player" id.
@@ -375,9 +376,12 @@ const payload = { slug: config.tournament, fee: FEE, prizes: PRIZES, amounts: PR
       const r = find(id);
       sets.set(r, [...(sets.get(r) ?? []), id]);
     }
+    // Slova po Challongeovom group_id (stalan); nositelji se nakon finaliziranja mijenjaju.
     const seed = (id: string) => people.find((p) => p.id === id)?.seed ?? 999;
+    const gid = (id: string) => people.find((p) => p.id === id)?.gid ?? Infinity;
+    const key = (ids: string[]) => Math.min(...ids.map(gid));
     const groups = [...sets.values()]
-      .sort((x, y) => Math.min(...x.map(seed)) - Math.min(...y.map(seed)))
+      .sort((x, y) => key(x) - key(y) || Math.min(...x.map(seed)) - Math.min(...y.map(seed)))
       .map((ids, i) => ({
         name: String.fromCharCode(65 + i),
         ids,
@@ -464,7 +468,7 @@ const payload = { slug: config.tournament, fee: FEE, prizes: PRIZES, amounts: PR
     $("tv-queue").innerHTML = live.length || upcoming.length
       ? (live.length ? `<div class="sec lv"><i class="dt"></i>Igra se</div>${live.map((m) => row(m, "live", "UŽIVO")).join("")}` : "") +
         (upcoming.length ? `<div class="sec">Na redu<small style="margin-left:auto;font-family:var(--font-sans);font-size:14px;letter-spacing:0;text-transform:none;color:#64748b">prvi slobodni pikado</small></div>${upcoming.map((m, i) => row(m, i === 0 ? "first" : "", String(i + 1))).join("")}` : "")
-      : `<p class="empty">${t.state === "complete" || t.state === "awaiting_review" ? "Turnir je završen. Čestitamo pobjednicima!" : t.state === "pending" ? "Mečevi se pojavljuju nakon ždrijeba." : "Čekamo sljedeće mečeve…"}</p>`;
+      : `<p class="empty">${t.state === "complete" || t.state === "awaiting_review" ? "Turnir je završen. Čestitamo pobjednicima!" : t.state === "pending" ? "Mečevi se pojavljuju nakon ždrijeba." : t.state === "group_stages_finalized" ? "Grupna faza je gotova — eliminacija počinje uskoro." : "Čekamo sljedeće mečeve…"}</p>`;
 
     // ── Glavni dio ────────────────────────────────────────────────────
     const board = $("tv-board");
