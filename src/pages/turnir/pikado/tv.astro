@@ -165,13 +165,30 @@ const payload = { slug: config.tournament, fee: FEE, prizes: PRIZES, tvApi };
   #tv .km .lbl { font-family: var(--font-display); font-size: 15px; letter-spacing: .12em; text-transform: uppercase; padding: 4px 14px; background: #f1f5f9; color: #64748b; }
 
   /* Postolje */
-  #tv .podium { grid-column: 1 / -1; grid-row: 1 / -1; align-items: center; justify-content: center; gap: 30px; }
-  #tv .podium .pl { display: flex; align-items: flex-end; gap: 30px; }
-  #tv .podium .st { width: 360px; text-align: center; }
-  #tv .podium .st .nm { font-size: 34px; font-weight: 800; color: #0f2c6e; margin-bottom: 14px; }
+  /* Kraj turnira: bez lijevog stupca, postolje preko cijele širine. */
+  #tv.is-done .tv-main { grid-template-columns: 1fr; }
+  #tv.is-done .col { display: none; }
+  #tv.is-done .board { grid-template-columns: 1fr 1fr auto; grid-template-rows: 1fr auto; grid-auto-rows: auto; }
+  #tv .podium { grid-column: 1 / -1; align-items: center; justify-content: flex-end; gap: 26px; padding-top: 30px; }
+  #tv .podium .ttl2 { font-family: var(--font-display); font-size: 34px; color: #0f2c6e; letter-spacing: .03em; }
+  #tv .podium .pl { display: flex; align-items: flex-end; gap: 28px; }
+  #tv .podium .st { width: 420px; text-align: center; }
+  #tv .podium .st .nm { font-size: 38px; font-weight: 800; color: #0f2c6e; margin-bottom: 12px; line-height: 1.15; }
   #tv .podium .st .bx { border-radius: 14px 14px 0 0; color: #fff; font-family: var(--font-display); padding-top: 18px; }
-  #tv .podium .st .bx b { display: block; font-size: 80px; line-height: 1; }
-  #tv .podium .st .bx span { font-size: 34px; }
+  #tv .podium .st .bx b { display: block; font-size: 88px; line-height: 1; }
+  #tv .podium .st .bx span { font-size: 40px; }
+  #tv .podium .g1 { background: linear-gradient(#e2c46a, #c9a443); }
+  #tv .podium .g2 { background: linear-gradient(#b4bfcc, #8c99aa); }
+  #tv .podium .g3 { background: linear-gradient(#c58d5c, #a26b3f); }
+  #tv .h.soft { background: #dbeafe; color: #0f2c6e; }
+  #tv .res { display: flex; align-items: center; gap: 14px; padding: 14px 18px; border-top: 1px solid #eef2f7; font-size: 24px; }
+  #tv .res .lb { font-family: var(--font-display); font-size: 17px; letter-spacing: .12em; text-transform: uppercase; color: #64748b; width: 150px; flex: none; }
+  #tv .res .sc { font-family: var(--font-display); font-size: 30px; color: #1e40af; }
+  #tv .res .w { font-weight: 800; color: #0f2c6e; }
+  #tv .rank { list-style: none; }
+  #tv .rank li { display: flex; gap: 14px; padding: 9px 18px; font-size: 22px; border-top: 1px solid #eef2f7; }
+  #tv .rank li b { font-family: var(--font-display); color: #0f2c6e; width: 40px; }
+  #tv .board .qr { border-top: none; }
 
   #tv .tv-foot { padding: 9px 40px; background: #0f2c6e; color: rgba(255,255,255,.8); font-size: 17px; display: flex; justify-content: space-between; }
   #tv .tv-foot b { color: #d4b659; font-weight: 600; }
@@ -369,18 +386,38 @@ const payload = { slug: config.tournament, fee: FEE, prizes: PRIZES, tvApi };
     const done = t.state === "complete" || t.state === "awaiting_review";
     const ranked = people.filter((p) => p.rank != null && p.rank <= 3).sort((a, b) => a.rank! - b.rank!);
 
-    if (done && ranked.length) {
-      const order = [2, 1, 3];
-      const colors: Record<number, string> = { 1: "#d4b659", 2: "#94a3b8", 3: "#b07a4a" };
-      const heights: Record<number, number> = { 1: 300, 2: 220, 3: 170 };
-      board.innerHTML = `<div class="card podium"><div class="pl">${order
+    const showPodium = done && ranked.length > 0;
+    $("tv").classList.toggle("is-done", showPodium);
+    if (showPodium) {
+      const heights: Record<number, number> = { 1: 280, 2: 210, 3: 160 };
+      const podium = [2, 1, 3]
         .map((r) => {
           const p = ranked.find((x) => x.rank === r);
           if (!p) return "";
           const prize = fund ? euro(fund * (cfg.prizes[r - 1] ?? 0)) : "";
-          return `<div class="st"><div class="nm">${esc(p.name)}</div><div class="bx" style="background:${colors[r]};height:${heights[r]}px"><b>${r}.</b><span>${prize}</span></div></div>`;
+          return `<div class="st"><div class="nm">${r === 1 ? "🏆 " : ""}${esc(p.name)}</div><div class="bx g${r}" style="height:${heights[r]}px"><b>${r}.</b><span>${prize}</span></div></div>`;
         })
-        .join("")}</div></div>`;
+        .join("");
+      // Finale = zadnje kolo bez meča za 3. mjesto.
+      const lastRound = Math.max(0, ...ko.filter((m) => !m.consolation).map((m) => m.round));
+      const finals = [
+        ...ko.filter((m) => !m.consolation && m.round === lastRound).map((m) => ({ m, lb: "Finale" })),
+        ...ko.filter((m) => m.consolation).map((m) => ({ m, lb: "Za 3. mjesto" })),
+      ].filter(({ m }) => m.state === "complete" && m.a && m.b);
+      const resHtml = finals
+        .map(({ m, lb }) => {
+          const [w, l, sw, sl] = m.winner === m.b ? [m.b, m.a, m.sb, m.sa] : [m.a, m.b, m.sa, m.sb];
+          return `<div class="res"><span class="lb">${lb}</span><span class="w">${esc(name(w))}</span><span class="sc">${sw ?? ""}:${sl ?? ""}</span><span>${esc(name(l))}</span></div>`;
+        })
+        .join("");
+      const rest = people.filter((p) => p.rank != null && p.rank > 3 && p.rank <= 8).sort((a, b) => a.rank! - b.rank! || a.seed - b.seed);
+      const qr = document.querySelector("#tv .col .qr")?.outerHTML ?? "";
+      board.innerHTML = `<div class="card podium"><div class="ttl2">Pobjednici 2. pikado turnira · hvala svima!</div><div class="pl">${podium}</div></div>
+        <div class="card"><div class="h soft">Finale i za 3. mjesto</div>${resHtml || '<p class="empty">—</p>'}</div>
+        <div class="card"><div class="h soft">${rest.length ? `Ostali plasmani (${rest[0].rank}.–${rest[rest.length - 1].rank}.)` : "Ostali plasmani"}</div><ul class="rank">${rest
+          .map((p) => `<li><b>${p.rank}.</b><span>${esc(p.name)}</span></li>`)
+          .join("")}</ul></div>
+        <div class="card">${qr}</div>`;
     } else if (ko.length) {
       const rounds = [...new Set(ko.filter((m) => !m.consolation).map((m) => m.round))].sort((a, b) => a - b);
       const kmHtml = (m: M) => {
