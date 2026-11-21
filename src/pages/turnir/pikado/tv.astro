@@ -1,0 +1,505 @@
+---
+/**
+ * TV prikaz pikado turnira — /turnir/pikado/tv
+ *
+ * Za veliki ekran u Društvenom domu: grupe s ljestvicama, „Igra se" (mečevi
+ * označeni na Challongeu kao in progress), „Na redu" / „Iduće" i QR za praćenje
+ * na mobitelu. Kad grupe završe, umjesto njih ide kostur eliminacije, a na
+ * kraju postolje s nagradama.
+ *
+ * Podaci se čitaju uživo iz preglednika preko posrednika (Cloudflare Worker,
+ * `scripts/cloudflare/pikado-tv-proxy.js`, adresa u `config.tvApi`). Izravno s
+ * Challonge API-ja ne ide: preflight dopusti CORS, ali GET odgovor nema
+ * `Access-Control-Allow-Origin`, pa ga preglednik odbije. Worker drži tajne i
+ * 30 s cache. Rezervni put bez Workera: token u adresi (`…/tv#t=<token>`) u
+ * pregledniku pokrenutom bez CORS provjere — samo za nuždu.
+ *
+ * Limit besplatne Challonge aplikacije je 500 zahtjeva mjesečno — osvježavanje
+ * svakih 60 s troši ~60 zahtjeva na sat.
+ *
+ * Grupe: Challonge u v2.1 ne vraća pouzdano kojoj grupi meč pripada, pa se
+ * grupe izvode iz samih mečeva grupne faze (svatko sa svakim → svaka grupa je
+ * zasebna povezana cjelina), a slova A, B, C… idu po najboljem nositelju.
+ */
+import QRCode from "qrcode";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { url } from "../../../lib/url";
+import config from "../../../config/pikado.json";
+
+// Isto kao na /turnir/pikado — kotizacija i udjeli nagrada.
+const FEE = 15;
+const PRIZES = [0.5, 0.3, 0.1];
+const TITLE = "2. pikado turnir";
+
+const site = Astro.site ?? new URL("https://omladinacniza.hr");
+const pageUrl = new URL(url("/turnir/pikado"), site).href;
+const qrSvg = await QRCode.toString(pageUrl, {
+  type: "svg",
+  margin: 0,
+  color: { dark: "#0f2c6e", light: "#0000" },
+});
+const shortUrl = pageUrl.replace(/^https?:\/\//, "").replace(/\/$/, "");
+
+// Posrednik (Cloudflare Worker, scripts/cloudflare/pikado-tv-proxy.js). Bez njega
+// preglednik ne može čitati Challonge API (vidi komentar u Workeru).
+const tvApi = (config as { tvApi?: string }).tvApi?.trim() || "";
+const payload = { slug: config.tournament, fee: FEE, prizes: PRIZES, tvApi };
+---
+
+<BaseLayout title={`${TITLE} — TV`} description="TV prikaz rezultata pikado turnira." noIndex bare>
+  <script type="application/json" id="tv-config" set:html={JSON.stringify(payload)} />
+
+  <div id="tv-stage">
+    <div id="tv">
+      <header class="tv-top">
+        <img src={url("/images/dsa-niza.png")} alt="DŠA Niza" />
+        <div class="ttl">
+          <span class="pill"><i></i><span id="tv-phase">Učitavam…</span></span>
+          <h1>{TITLE}</h1>
+          <p>DŠA Niza · Društveni dom u Nizi · 501 double out</p>
+        </div>
+        <div class="stat"><b id="tv-fund">—</b><small>nagradni fond</small></div>
+        <div class="stat"><b id="tv-clock">--:--</b><small id="tv-date">&nbsp;</small></div>
+      </header>
+
+      <main class="tv-main">
+        <section class="card col">
+          <div class="h">Igra se · na redu<small>prvi slobodni pikado</small></div>
+          <div id="tv-queue" class="queue"></div>
+          <div class="qr">
+            <Fragment set:html={qrSvg} />
+            <p><b>Prati na mobitelu</b>{shortUrl}</p>
+          </div>
+        </section>
+        <section id="tv-board" class="board"></section>
+      </main>
+
+      <footer class="tv-foot">
+        <span id="tv-note">Prva 2 iz svake grupe idu u četvrtfinale</span>
+        <span id="tv-status"></span>
+      </footer>
+
+      <div id="tv-setup" class="setup" hidden>
+        <div>
+          <h2>TV prikaz nije spojen na Challonge</h2>
+          <p>Upiši adresu posrednika (Cloudflare Worker) u <code>src/config/pikado.json</code> → <code>tvApi</code>.
+          Upute su u <code>scripts/cloudflare/pikado-tv-proxy.js</code>.</p>
+          <p id="tv-setup-detail"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style is:global>
+  /* Ekran je složen za 1920×1080 i skalira se na stvarnu veličinu (vidi skriptu). */
+  body:has(#tv-stage) { background: #0f2c6e; overflow: hidden; }
+  #tv-stage { position: fixed; inset: 0; overflow: hidden; }
+  #tv {
+    width: 1920px; height: 1080px; transform-origin: 0 0; position: absolute;
+    display: flex; flex-direction: column; background: #eef3fa; color: #0f172a;
+    font-family: var(--font-sans);
+  }
+  #tv .tv-top { display: flex; align-items: center; gap: 26px; padding: 16px 40px; background: #0f2c6e; color: #fff; border-bottom: 5px solid #d4b659; }
+  #tv .tv-top img { height: 120px; margin: -6px 0; filter: drop-shadow(0 4px 10px rgba(0,0,0,.35)); }
+  #tv .ttl { flex: 1; }
+  #tv .pill { font-family: var(--font-display); font-size: 19px; letter-spacing: .15em; text-transform: uppercase; background: #d4b659; color: #0f2c6e; padding: 4px 12px; border-radius: 4px; display: inline-flex; gap: 9px; align-items: center; }
+  #tv .pill i { width: 11px; height: 11px; border-radius: 50%; background: #CF2130; }
+  #tv h1 { font-size: 54px; line-height: 1.05; margin-top: 6px; color: #fff; }
+  #tv .ttl p { font-size: 21px; color: rgba(255,255,255,.8); }
+  #tv .stat { text-align: right; margin-left: 30px; }
+  #tv .stat b { display: block; font-family: var(--font-display); font-size: 50px; line-height: 1; color: #d4b659; }
+  #tv .stat small { font-size: 15px; letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.7); }
+
+  #tv .tv-main { flex: 1; min-height: 0; padding: 22px 40px; display: grid; grid-template-columns: 600px 1fr; gap: 22px; }
+  #tv .card { background: #fff; border-radius: 14px; box-shadow: 0 4px 18px rgba(15,44,110,.10); border: 1px solid #dbe4f3; overflow: hidden; display: flex; flex-direction: column; min-height: 0; }
+  #tv .h { font-family: var(--font-display); text-transform: uppercase; letter-spacing: .08em; font-size: 25px; padding: 9px 18px; background: #0f2c6e; color: #fff; display: flex; justify-content: space-between; align-items: baseline; }
+  #tv .h small { font-family: var(--font-sans); font-size: 15px; letter-spacing: 0; text-transform: none; opacity: .75; }
+
+  #tv .queue { flex: 1; min-height: 0; overflow: hidden; padding-bottom: 6px; }
+  #tv .mc { margin: 12px 14px 0; border-radius: 12px; border: 2px solid #dbe4f3; padding: 12px 16px; display: flex; gap: 14px; align-items: center; }
+  #tv .mc .tag { font-family: var(--font-display); font-size: 17px; letter-spacing: .08em; text-transform: uppercase; width: 92px; padding: 8px 0; border-radius: 8px; text-align: center; flex: none; background: #0f2c6e; color: #fff; line-height: 1.1; }
+  #tv .mc.next { border-color: #d4b659; background: #fffbea; }
+  #tv .mc.next .tag { background: #d4b659; color: #0f2c6e; }
+  #tv .mc.live { border-color: #16a34a; background: #f0fdf4; }
+  #tv .mc.live .tag { background: #16a34a; }
+  #tv .mc .who { flex: 1; min-width: 0; }
+  #tv .mc .who div { font-size: 27px; font-weight: 700; color: #0f2c6e; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.2; }
+  #tv .mc .who span { display: block; font-size: 15px; color: #94a3b8; text-transform: uppercase; letter-spacing: .15em; margin: 1px 0; }
+  #tv .gtag { font-family: var(--font-display); font-size: 18px; letter-spacing: .08em; background: #dbeafe; color: #0f2c6e; padding: 3px 10px; border-radius: 4px; white-space: nowrap; }
+  #tv .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #fff; margin-right: 6px; animation: tvpulse 1.4s infinite; }
+  @keyframes tvpulse { 50% { opacity: .3; } }
+  #tv .empty { padding: 24px 18px; font-size: 22px; color: #64748b; }
+
+  #tv .qr { display: flex; gap: 18px; align-items: center; padding: 16px 18px; border-top: 1px solid #e2e8f0; }
+  #tv .qr svg { width: 150px; height: 150px; flex: none; }
+  #tv .qr p { font-size: 20px; color: #334155; word-break: break-all; }
+  #tv .qr p b { display: block; font-family: var(--font-display); font-size: 26px; color: #0f2c6e; font-weight: 700; margin-bottom: 4px; word-break: normal; }
+
+  #tv .board { display: grid; gap: 22px; min-height: 0; grid-template-columns: 1fr 1fr; grid-auto-rows: 1fr; }
+  #tv table { width: 100%; border-collapse: collapse; font-size: 22px; }
+  #tv th { font-size: 14px; letter-spacing: .1em; text-transform: uppercase; color: #64748b; padding: 6px 8px; text-align: center; font-weight: 600; }
+  #tv td { padding: 8px; text-align: center; font-variant-numeric: tabular-nums; }
+  #tv td.p, #tv th.p { text-align: left; }
+  #tv td.p { max-width: 0; width: 60%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #tv td.n { width: 40px; font-weight: 700; color: #64748b; }
+  #tv tbody tr:nth-child(even) { background: #f3f7fd; }
+  #tv tr.q td.n { background: #4287f5; color: #fff; }
+  #tv tr.q td.p { font-weight: 700; }
+  #tv tr.cut td { border-bottom: 2px dashed #4287f5; }
+
+  /* Eliminacija */
+  #tv .ko { grid-column: 1 / -1; grid-row: 1 / -1; }
+  #tv .ko .cols { flex: 1; display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 26px; padding: 20px; }
+  #tv .ko .rnd { display: flex; flex-direction: column; justify-content: space-around; gap: 16px; }
+  #tv .ko .rnd h3 { font-size: 22px; color: #64748b; letter-spacing: .12em; text-align: center; }
+  #tv .km { border: 2px solid #dbe4f3; border-radius: 12px; overflow: hidden; }
+  #tv .km.live { border-color: #16a34a; }
+  #tv .km.next { border-color: #d4b659; }
+  #tv .km .r { display: flex; align-items: center; gap: 10px; padding: 9px 14px; font-size: 23px; }
+  #tv .km .r + .r { border-top: 1px solid #e2e8f0; }
+  #tv .km .r span { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #tv .km .r b { font-family: var(--font-display); font-size: 28px; color: #1e40af; }
+  #tv .km .r.w { background: #eff6ff; font-weight: 700; color: #0f2c6e; }
+  #tv .km .r.tbd span { color: #94a3b8; font-style: italic; }
+  #tv .km .lbl { font-family: var(--font-display); font-size: 15px; letter-spacing: .12em; text-transform: uppercase; padding: 4px 14px; background: #f1f5f9; color: #64748b; }
+
+  /* Postolje */
+  #tv .podium { grid-column: 1 / -1; grid-row: 1 / -1; align-items: center; justify-content: center; gap: 30px; }
+  #tv .podium .pl { display: flex; align-items: flex-end; gap: 30px; }
+  #tv .podium .st { width: 360px; text-align: center; }
+  #tv .podium .st .nm { font-size: 34px; font-weight: 800; color: #0f2c6e; margin-bottom: 14px; }
+  #tv .podium .st .bx { border-radius: 14px 14px 0 0; color: #fff; font-family: var(--font-display); padding-top: 18px; }
+  #tv .podium .st .bx b { display: block; font-size: 80px; line-height: 1; }
+  #tv .podium .st .bx span { font-size: 34px; }
+
+  #tv .tv-foot { padding: 9px 40px; background: #0f2c6e; color: rgba(255,255,255,.8); font-size: 17px; display: flex; justify-content: space-between; }
+  #tv .tv-foot b { color: #d4b659; font-weight: 600; }
+  #tv .tv-foot .err { color: #fca5a5; }
+
+  #tv .setup { position: absolute; inset: 0; background: rgba(15,44,110,.96); color: #fff; display: flex; align-items: center; justify-content: center; text-align: center; }
+  #tv .setup[hidden] { display: none; }
+  #tv .setup div { max-width: 1100px; }
+  #tv .setup h2 { font-size: 64px; margin-bottom: 24px; }
+  #tv .setup p { font-size: 28px; line-height: 1.5; color: rgba(255,255,255,.85); }
+  #tv .setup code { background: rgba(255,255,255,.15); padding: 2px 10px; border-radius: 6px; }
+</style>
+
+<script>
+  type Cfg = { slug: string; fee: number; prizes: number[]; tvApi: string };
+  type P = { id: string; name: string; seed: number; rank: number | null };
+  type M = {
+    id: string;
+    state: string;
+    round: number;
+    order: number;
+    live: boolean;
+    consolation: boolean;
+    created: number;
+    groupAttr: string | null;
+    a: string | null;
+    b: string | null;
+    sa: number | null;
+    sb: number | null;
+    winner: string | null;
+  };
+
+  const REFRESH_MS = 60_000;
+  const TOKEN_KEY = "pikado_tv_token";
+  const API = "https://api.challonge.com/v2.1";
+
+  const esc = (s: unknown) =>
+    String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
+  const $ = (id: string) => document.getElementById(id)!;
+  const time = (d: Date) => d.toLocaleTimeString("hr-HR", { hour: "2-digit", minute: "2-digit", timeZone: "Europe/Zagreb" });
+  const euro = (n: number) => {
+    const digits = Number.isInteger(n) ? 0 : 2;
+    return `${n.toLocaleString("hr-HR", { minimumFractionDigits: digits, maximumFractionDigits: digits })} €`;
+  };
+
+  /** Token iz adrese (#t=…) ili zapamćen u ovom pregledniku. */
+  function readToken(): string | null {
+    const h = new URLSearchParams(location.hash.slice(1));
+    const t = h.get("t") || h.get("token");
+    try {
+      if (t) localStorage.setItem(TOKEN_KEY, t);
+      return t || localStorage.getItem(TOKEN_KEY);
+    } catch {
+      return t;
+    }
+  }
+
+  /** Challonge šalje dugu varijantu stanja; dovoljno nam je ovo. */
+  function phase(state: string): string {
+    if (state === "pending" || state === "checking_in" || state === "checked_in") return "Uskoro";
+    if (state === "group_stages_underway") return "Uživo · Grupna faza";
+    if (state === "awaiting_review" || state === "complete") return "Završeno";
+    return "Uživo · Eliminacija";
+  }
+
+  function parse(json: any) {
+    const t = json.data.attributes;
+    const inc: any[] = json.included ?? [];
+    const people: P[] = [];
+    const byId = new Map<string, P>();
+    for (const x of inc) {
+      if (x.type !== "participant") continue;
+      const a = x.attributes ?? {};
+      if (a.states?.active === false) continue;
+      const p: P = { id: String(x.id), name: String(a.name ?? "?"), seed: Number(a.seed) || 999, rank: a.final_rank ?? null };
+      people.push(p);
+      byId.set(p.id, p);
+      // U grupnoj fazi Challonge zna mečeve vezati na „group player" id.
+      for (const gid of a.group_player_ids ?? []) byId.set(String(gid), p);
+    }
+    const matches: M[] = [];
+    for (const x of inc) {
+      if (x.type !== "match") continue;
+      const a = x.attributes ?? {};
+      const pts: any[] = a.points_by_participant ?? [];
+      const legs = (i: number) => {
+        const s = pts[i]?.scores;
+        return Array.isArray(s) && s.length ? s.reduce((n: number, v: number) => n + (Number(v) || 0), 0) : null;
+      };
+      const pid = (i: number) => (pts[i]?.participant_id != null ? byId.get(String(pts[i].participant_id))?.id ?? null : null);
+      matches.push({
+        id: String(x.id),
+        state: a.state,
+        round: Number(a.round) || 0,
+        order: Number(a.suggested_play_order) || 1e6,
+        live: a.state === "open" && !!a.timestamps?.underway_at,
+        consolation: !!a.consolation || /3P/i.test(String(a.identifier ?? "")),
+        created: Date.parse(a.timestamps?.created_at ?? "") || 0,
+        groupAttr: a.group_id != null ? String(a.group_id) : null,
+        a: pid(0),
+        b: pid(1),
+        sa: legs(0),
+        sb: legs(1),
+        winner: a.winner_id != null ? byId.get(String(a.winner_id))?.id ?? null : null,
+      });
+    }
+    return { t, people, byId, matches };
+  }
+
+  /** Mečevi grupne faze i grupe (povezane cjeline svatko-sa-svakim). */
+  function splitStages(matches: M[], people: P[]) {
+    if (!matches.length) return { groups: [] as { name: string; ids: string[]; ms: M[] }[], ko: [] as M[] };
+    let gm: M[];
+    if (matches.some((m) => m.groupAttr)) {
+      gm = matches.filter((m) => m.groupAttr);
+    } else {
+      // Grupni mečevi nastanu odjednom na startu; eliminacija tek kad se grupe zaključe.
+      const first = Math.min(...matches.map((m) => m.created));
+      gm = matches.filter((m) => m.created - first < 120_000);
+    }
+    const ko = matches.filter((m) => !gm.includes(m));
+    // Union-find po sudionicima.
+    const parent = new Map<string, string>();
+    const find = (x: string): string => (parent.get(x) === x ? x : (parent.set(x, find(parent.get(x)!)), parent.get(x)!));
+    for (const m of gm) for (const id of [m.a, m.b]) if (id && !parent.has(id)) parent.set(id, id);
+    for (const m of gm) if (m.a && m.b) parent.set(find(m.a), find(m.b));
+    const sets = new Map<string, string[]>();
+    for (const id of parent.keys()) {
+      const r = find(id);
+      sets.set(r, [...(sets.get(r) ?? []), id]);
+    }
+    const seed = (id: string) => people.find((p) => p.id === id)?.seed ?? 999;
+    const groups = [...sets.values()]
+      .sort((x, y) => Math.min(...x.map(seed)) - Math.min(...y.map(seed)))
+      .map((ids, i) => ({
+        name: String.fromCharCode(65 + i),
+        ids,
+        ms: gm.filter((m) => (m.a && ids.includes(m.a)) || (m.b && ids.includes(m.b))),
+      }));
+    // Grupna faza bez ijednog meča s poznatim igračima → nema grupa.
+    return { groups: groups.filter((g) => g.ids.length > 1), ko };
+  }
+
+  function standings(ids: string[], ms: M[]) {
+    const row = new Map(ids.map((id) => [id, { id, w: 0, l: 0, lf: 0, la: 0 }]));
+    for (const m of ms) {
+      if (m.state !== "complete" || !m.a || !m.b) continue;
+      const A = row.get(m.a)!, B = row.get(m.b)!;
+      A.lf += m.sa ?? 0; A.la += m.sb ?? 0; B.lf += m.sb ?? 0; B.la += m.sa ?? 0;
+      if (m.winner === m.a) { A.w++; B.l++; } else if (m.winner === m.b) { B.w++; A.l++; }
+    }
+    const h2h = (x: string, y: string) => {
+      const m = ms.find((m) => m.state === "complete" && ((m.a === x && m.b === y) || (m.a === y && m.b === x)));
+      return m?.winner === x ? -1 : m?.winner === y ? 1 : 0;
+    };
+    return [...row.values()].sort((x, y) => y.w - x.w || h2h(x.id, y.id) || (y.lf - y.la) - (x.lf - x.la) || y.lf - x.lf);
+  }
+
+  function render(json: any, cfg: Cfg) {
+    const { t, people, byId, matches } = parse(json);
+    const name = (id: string | null) => (id ? byId.get(id)?.name ?? "?" : null);
+    const fund = people.length * cfg.fee;
+    $("tv-phase").textContent = phase(t.state);
+    $("tv-fund").textContent = fund ? euro(fund) : "—";
+
+    const { groups, ko } = splitStages(matches, people);
+    const groupOf = (m: M) => groups.find((g) => g.ms.includes(m))?.name;
+    const koLabel = (m: M) => {
+      if (m.consolation) return "Za 3. mjesto";
+      const n = ko.filter((x) => x.round === m.round && !x.consolation).length;
+      return n === 1 ? "Finale" : n === 2 ? "Polufinale" : n === 4 ? "Četvrtfinale" : `${m.round}. kolo`;
+    };
+    const stageTag = (m: M) => (groupOf(m) ? `Grupa ${groupOf(m)}` : koLabel(m));
+
+    // ── Igra se · na redu ─────────────────────────────────────────────
+    const open = matches.filter((m) => m.state === "open" && m.a && m.b);
+    const live = open.filter((m) => m.live).sort((x, y) => x.order - y.order).slice(0, 2);
+    const next = open.filter((m) => !m.live).sort((x, y) => x.order - y.order || x.round - y.round);
+    const cards = [
+      ...live.map((m) => ({ m, cls: "live", tag: '<i class="dot"></i>Igra se' })),
+      ...next.slice(0, 4 - live.length).map((m, i) => ({ m, cls: i === 0 ? "next" : "", tag: i === 0 ? "Na redu" : "Iduće" })),
+    ];
+    $("tv-queue").innerHTML = cards.length
+      ? cards
+          .map(
+            ({ m, cls, tag }) => `<div class="mc ${cls}"><div class="tag">${tag}</div>
+              <div class="who"><div>${esc(name(m.a))}</div><span>vs</span><div>${esc(name(m.b))}</div></div>
+              <span class="gtag">${esc(stageTag(m))}</span></div>`,
+          )
+          .join("")
+      : `<p class="empty">${t.state === "complete" || t.state === "awaiting_review" ? "Turnir je završen. Čestitamo pobjednicima!" : t.state === "pending" ? "Mečevi se pojavljuju nakon ždrijeba." : "Čekamo sljedeće mečeve…"}</p>`;
+
+    // ── Glavni dio ────────────────────────────────────────────────────
+    const board = $("tv-board");
+    const done = t.state === "complete" || t.state === "awaiting_review";
+    const ranked = people.filter((p) => p.rank != null && p.rank <= 3).sort((a, b) => a.rank! - b.rank!);
+
+    if (done && ranked.length) {
+      const order = [2, 1, 3];
+      const colors: Record<number, string> = { 1: "#d4b659", 2: "#94a3b8", 3: "#b07a4a" };
+      const heights: Record<number, number> = { 1: 300, 2: 220, 3: 170 };
+      board.innerHTML = `<div class="card podium"><div class="pl">${order
+        .map((r) => {
+          const p = ranked.find((x) => x.rank === r);
+          if (!p) return "";
+          const prize = fund ? euro(fund * (cfg.prizes[r - 1] ?? 0)) : "";
+          return `<div class="st"><div class="nm">${esc(p.name)}</div><div class="bx" style="background:${colors[r]};height:${heights[r]}px"><b>${r}.</b><span>${prize}</span></div></div>`;
+        })
+        .join("")}</div></div>`;
+    } else if (ko.length) {
+      const rounds = [...new Set(ko.filter((m) => !m.consolation).map((m) => m.round))].sort((a, b) => a - b);
+      const kmHtml = (m: M) => {
+        const r = (id: string | null, s: number | null) =>
+          `<div class="r ${id && m.winner === id ? "w" : ""} ${id ? "" : "tbd"}"><span>${id ? esc(name(id)) : "čeka se"}</span><b>${m.state === "complete" && s != null ? s : ""}</b></div>`;
+        const cls = m.live ? "live" : next[0] === m ? "next" : "";
+        return `<div class="km ${cls}">${m.live ? '<div class="lbl">● Igra se</div>' : ""}${r(m.a, m.sa)}${r(m.b, m.sb)}</div>`;
+      };
+      const cols = rounds.map((rd) => {
+        const ms = ko.filter((m) => m.round === rd && !m.consolation).sort((a, b) => a.order - b.order || Number(a.id) - Number(b.id));
+        const third = rd === Math.max(...rounds) ? ko.filter((m) => m.consolation) : [];
+        return `<div class="rnd"><h3>${esc(koLabel(ms[0]))}</h3>${ms.map(kmHtml).join("")}${third
+          .map((m) => `<h3>Za 3. mjesto</h3>${kmHtml(m)}`)
+          .join("")}</div>`;
+      });
+      board.innerHTML = `<div class="card ko"><div class="h">Eliminacija<small>${esc(phase(t.state))}</small></div><div class="cols">${cols.join("")}</div></div>`;
+    } else if (groups.length) {
+      board.innerHTML = groups
+        .map((g) => {
+          const rows = standings(g.ids, g.ms);
+          const played = g.ms.filter((m) => m.state === "complete").length;
+          return `<div class="card"><div class="h">Grupa ${g.name}<small>odigrano ${played} / ${g.ms.length}</small></div>
+            <table><thead><tr><th></th><th class="p">Par</th><th>P</th><th>I</th><th>Legovi</th></tr></thead><tbody>${rows
+              .map(
+                (r, i) =>
+                  `<tr class="${i < 2 ? "q" : ""} ${i === 1 ? "cut" : ""}"><td class="n">${i + 1}</td><td class="p">${esc(name(r.id))}</td><td>${r.w}</td><td>${r.l}</td><td>${r.lf}:${r.la}</td></tr>`,
+              )
+              .join("")}</tbody></table></div>`;
+        })
+        .join("");
+    } else {
+      // Prije starta: popis prijavljenih.
+      board.innerHTML = `<div class="card ko"><div class="h">Prijavljeni parovi<small>${people.length}</small></div>
+        <table><tbody>${people
+          .sort((a, b) => a.seed - b.seed)
+          .map((p, i) => `<tr><td class="n">${i + 1}</td><td class="p">${esc(p.name)}</td></tr>`)
+          .join("")}</tbody></table></div>`;
+    }
+
+    const gTotal = groups.reduce((n, g) => n + g.ms.length, 0);
+    const gDone = groups.reduce((n, g) => n + g.ms.filter((m) => m.state === "complete").length, 0);
+    $("tv-note").innerHTML = done
+      ? `Turnir je završen — čestitamo pobjednicima! · <b>${esc(location.host)}/turnir/pikado</b>`
+      : ko.length
+      ? `Eliminacija · rezultati i na <b>${esc(location.host)}/turnir/pikado</b>`
+      : `Prva 2 iz svake grupe idu u četvrtfinale${gTotal ? ` · odigrano <b>${gDone} / ${gTotal}</b> mečeva u grupama` : ""}`;
+  }
+
+  let timer: ReturnType<typeof setInterval> | undefined;
+  let clock: ReturnType<typeof setInterval> | undefined;
+
+  function setup() {
+    const cfgEl = document.getElementById("tv-config");
+    const tv = document.getElementById("tv");
+    if (!cfgEl || !tv) return;
+    const cfg: Cfg = JSON.parse(cfgEl.textContent || "{}");
+    const slug = new URLSearchParams(location.hash.slice(1)).get("s") || cfg.slug;
+
+    // 1920×1080 skalirano na ekran, centrirano.
+    const fit = () => {
+      const k = Math.min(innerWidth / 1920, innerHeight / 1080);
+      tv.style.transform = `scale(${k})`;
+      tv.style.left = `${(innerWidth - 1920 * k) / 2}px`;
+      tv.style.top = `${(innerHeight - 1080 * k) / 2}px`;
+    };
+    fit();
+    addEventListener("resize", fit);
+
+    const tick = () => {
+      const now = new Date();
+      $("tv-clock").textContent = time(now);
+      $("tv-date").textContent = now.toLocaleDateString("hr-HR", { weekday: "long", day: "numeric", month: "numeric", timeZone: "Europe/Zagreb" });
+    };
+    tick();
+    clock = setInterval(tick, 10_000);
+
+    const token = cfg.tvApi ? null : readToken();
+    const setupBox = $("tv-setup");
+    if (!cfg.tvApi && !token) {
+      setupBox.hidden = false;
+      return;
+    }
+    let last: Date | null = null;
+    const load = async () => {
+      try {
+        // S posrednikom: bez tokena, turnir zna Worker. Bez njega: izravno s
+        // tokenom iz adrese — radi samo u pregledniku pokrenutom bez CORS provjere.
+        const res = cfg.tvApi
+          ? await fetch(cfg.tvApi, { cache: "no-store" })
+          : await fetch(`${API}/tournaments/${encodeURIComponent(slug)}.json?include=participants,matches`, {
+              headers: {
+                "Authorization-Type": "v2",
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/vnd.api+json",
+                Accept: "application/json",
+              },
+              cache: "no-store",
+            });
+        if (res.status === 401 || res.status === 403) {
+          setupBox.hidden = false;
+          $("tv-setup-detail").textContent = "Ključ je istekao ili nije ispravan — zatraži novi link.";
+          return;
+        }
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        render(await res.json(), cfg);
+        setupBox.hidden = true;
+        last = new Date();
+        $("tv-status").textContent = `Osvježeno ${time(last)}`;
+      } catch (err) {
+        $("tv-status").innerHTML = `<span class="err">Nema veze s Challongeom — pokušavam ponovo${last ? ` · zadnje ${time(last)}` : ""}</span>`;
+      }
+    };
+    load();
+    timer = setInterval(load, REFRESH_MS);
+  }
+
+  document.addEventListener("astro:page-load", setup);
+  document.addEventListener("astro:before-swap", () => {
+    clearInterval(timer);
+    clearInterval(clock);
+  });
+</script>

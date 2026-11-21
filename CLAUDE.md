@@ -469,7 +469,14 @@ Odgovori obrasca imaju brojeve mobitela, pa tablica odgovora ostaje privatna —
 nikad je ne čitaj iz scrapera ni s javnim linkom; organizator parove ručno
 prepisuje na Challonge. Kad turnir krene (`state` više nije
 pending), Challonge prikaz ide na vrh, a nagrade ispred popisa parova —
-preko CSS `order`, bez dupliciranja markupa. Kotizacija, nagrade, broj
+preko CSS `order`, bez dupliciranja markupa. **TV prikaz** `/turnir/pikado/tv`
+(`bare` BaseLayout, 1920×1080 skaliran na ekran): grupe, „Igra se" (mečevi
+označeni kao in progress), „Na redu"/„Iduće", QR; poslije grupa kostur
+eliminacije, na kraju postolje. Čita Challonge uživo iz preglednika **preko
+Cloudflare Workera** (`scripts/cloudflare/pikado-tv-proxy.js`, URL u
+`config.tvApi`) — Challonge na GET ne šalje `Access-Control-Allow-Origin`, pa
+izravan poziv iz preglednika ne prolazi. Grupe se izvode iz mečeva grupne faze
+(povezane cjeline), jer v2.1 ne vraća pouzdano grupu meča. Kotizacija, nagrade, broj
 pikada, mjesto i WhatsApp kontakt su konstante na vrhu `pikado.astro`; vrijeme početka mijenja se na
 Challongeu. Dok turnir traje, stavka „Turnir" je u `navItems` (Header), a
 najava (`TurnirBanner`) na naslovnici sama nestane 6 h nakon početka. U repo ide samo ime para, bez e-maila i
