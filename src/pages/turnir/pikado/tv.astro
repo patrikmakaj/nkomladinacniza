@@ -79,7 +79,7 @@ const payload = { slug: config.tournament, fee: FEE, prizes: PRIZES, tvApi };
       <div id="tv-toast" class="toast" hidden></div>
 
       <footer class="tv-foot">
-        <span id="tv-note">Prva 2 iz svake grupe idu u četvrtfinale</span>
+        <span id="tv-note"></span>
         <span id="tv-status"></span>
       </footer>
 
@@ -416,6 +416,8 @@ const payload = { slug: config.tournament, fee: FEE, prizes: PRIZES, tvApi };
     $("tv-fund").textContent = fund ? euro(fund) : "—";
 
     const { groups, ko } = splitStages(matches, people);
+    // Koliko ih prolazi iz grupe — postavka turnira na Challongeu (zadano 2).
+    const adv = Math.max(1, Number(t.group_stage_options?.participant_count_to_advance_per_group) || 2);
     const groupOf = (m: M) => groups.find((g) => g.ms.includes(m))?.name;
     const koLabel = (m: M) => {
       if (m.consolation) return "Za 3. mjesto";
@@ -504,7 +506,7 @@ const payload = { slug: config.tournament, fee: FEE, prizes: PRIZES, tvApi };
             <table><thead><tr><th></th><th class="p">Par</th><th>P</th><th>I</th><th>Legovi</th></tr></thead><tbody>${rows
               .map(
                 (r, i) =>
-                  `<tr data-id="${esc(r.id)}" class="${i < 2 ? "q" : ""} ${i === 1 ? "cut" : ""}"><td class="n">${i + 1}</td><td class="p">${esc(name(r.id))}</td><td>${r.w}</td><td>${r.l}</td><td>${r.lf}:${r.la}</td></tr>`,
+                  `<tr data-id="${esc(r.id)}" class="${i < adv ? "q" : ""} ${i === adv - 1 ? "cut" : ""}"><td class="n">${i + 1}</td><td class="p">${esc(name(r.id))}</td><td>${r.w}</td><td>${r.l}</td><td>${r.lf}:${r.la}</td></tr>`,
               )
               .join("")}</tbody></table></div>`;
         })
@@ -546,12 +548,15 @@ const payload = { slug: config.tournament, fee: FEE, prizes: PRIZES, tvApi };
     seenDone = new Set(doneNow.map((m) => m.id));
 
     const gTotal = groups.reduce((n, g) => n + g.ms.length, 0);
+    const toKo = groups.length * adv;
+    const koName = toKo === 8 ? "četvrtfinale" : toKo === 4 ? "polufinale" : toKo === 2 ? "finale" : "eliminaciju";
+    const advText = `${adv === 1 ? "Prvi" : `${pluralCroatian(adv, "Prvi", "Prva", "Prvih")} ${adv}`} iz svake grupe ${adv === 1 ? "ide" : "idu"} u ${koName}`;
     const gDone = groups.reduce((n, g) => n + g.ms.filter((m) => m.state === "complete").length, 0);
     $("tv-note").innerHTML = done
       ? `Turnir je završen — čestitamo pobjednicima! · <b>${esc(location.host)}/turnir/pikado</b>`
       : ko.length
       ? `Eliminacija · rezultati i na <b>${esc(location.host)}/turnir/pikado</b>`
-      : `Prva 2 iz svake grupe idu u četvrtfinale${gTotal ? ` · odigrano <b>${gDone} / ${gTotal}</b> mečeva u grupama` : ""}`;
+      : `${advText}${gTotal ? ` · odigrano <b>${gDone} / ${gTotal}</b> mečeva u grupama` : ""}`;
   }
 
   let timer: ReturnType<typeof setInterval> | undefined;
