@@ -1,8 +1,22 @@
 {
-  "lastUpdated": "2026-11-17T19:38:38.728Z",
+  "lastUpdated": "2026-11-21T18:40:51.625Z",
   "enabled": true,
   "pageId": "55401829691",
   "posts": [
+    {
+      "id": "55401829691_1770826785049814",
+      "message": "",
+      "createdAt": "2026-11-21T18:00:01+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1770826785049814",
+      "images": [
+        {
+          "src": "/images/facebook/55401829691_1770826785049814.jpg",
+          "thumb": "/images/facebook/55401829691_1770826785049814.webp",
+          "width": 700,
+          "height": 830
+        }
+      ]
+    },
     {
       "id": "55401829691_1766088085523684",
       "message": "Da se ne zaboravi!!",
@@ -352,20 +366,6 @@
         {
           "src": "/images/facebook/55401829691_1696631055802721.jpg",
           "thumb": "/images/facebook/55401829691_1696631055802721.webp",
-          "width": 700,
-          "height": 875
-        }
-      ]
-    },
-    {
-      "id": "55401829691_1692589959540164",
-      "message": "Seniori poraženi 4-2 na gostovanju u Motičini. Unatoč brojnim izostancima igramo dobro i sredinom drugog poluvremena smanjujemo sa 3-0 na 3-2, ali domaćini ubrzo dižu na 4-2...",
-      "createdAt": "2026-09-14T10:39:43+0000",
-      "permalink": "https://www.facebook.com/1551452460320582/posts/1692589959540164",
-      "images": [
-        {
-          "src": "/images/facebook/55401829691_1692589959540164.jpg",
-          "thumb": "/images/facebook/55401829691_1692589959540164.webp",
           "width": 700,
           "height": 875
         }

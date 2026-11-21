@@ -1,53 +1,85 @@
 {
-  "lastUpdated": "2026-11-21T14:38:35.307Z",
+  "lastUpdated": "2026-11-21T18:42:17.879Z",
   "tournament": "dsanizapikadoturnir2026",
   "name": "DŠA NIZA 2. PIKADO TURNIR",
-  "state": "pending",
+  "state": "group_stages_underway",
   "startsAt": "2026-11-21T17:00:00.000Z",
   "signupUrl": "https://challonge.com/tournaments/signup/LtinZvnFOS",
   "signupOpen": true,
   "signupCap": 24,
   "format": {
-    "groupSize": 4,
+    "groupSize": 5,
     "advancePerGroup": 2,
     "finalStage": "single elimination"
   },
   "participants": [
     {
-      "name": "Krešo Bušić / Petar Galinec",
+      "name": "Ivan Prišć / Marin Hvizdak",
       "seed": 1
     },
     {
-      "name": "Luka Babić / Deni Sitaš",
+      "name": "Zvonimir Galinec / Filip Kuzminski",
       "seed": 2
     },
     {
-      "name": "Dominik Hvizdak / Josip Hovanjec",
+      "name": "Ivan Žeravica / Marko Duvnjak",
       "seed": 3
     },
     {
-      "name": "David Ban / Mario Halusek",
+      "name": "Karlo Grubač / Jago Pejić",
       "seed": 4
     },
     {
-      "name": "Emanuel Galinec / Ivan Galinec",
+      "name": "Dominik Hvizdak / Josip Hovanjec",
       "seed": 5
     },
     {
-      "name": "Filip Tomac / Petar Tomac",
+      "name": "Dorijan Barišić / Ante Knežević",
       "seed": 6
     },
     {
-      "name": "Karlo Grubač / Anto Kostreš",
+      "name": "Ivan Makaj / Dario Makaj",
       "seed": 7
     },
     {
-      "name": "Ivan Prišć / Marin Hvizdak",
+      "name": "David Ban / Mario Halusek",
       "seed": 8
     },
     {
-      "name": "Kruno Jurišić / Filip Valenčak",
+      "name": "Ivan Bencak / Benjamin Bencak",
       "seed": 9
+    },
+    {
+      "name": "Dražen Stjepanović / Matija Kruljac",
+      "seed": 10
+    },
+    {
+      "name": "Filip Tomac / Petar Tomac",
+      "seed": 11
+    },
+    {
+      "name": "Emanuel Galinec / Krešo Bušić",
+      "seed": 12
+    },
+    {
+      "name": "Marko Varžić / Josip Šimašek",
+      "seed": 13
+    },
+    {
+      "name": "Kristian Mioč / Luka Babić",
+      "seed": 14
+    },
+    {
+      "name": "Ivan Šimac / Stipan Čulo",
+      "seed": 15
+    },
+    {
+      "name": "Davor Zalaj / Luka Duvnjak",
+      "seed": 16
+    },
+    {
+      "name": "Kruno Jurišić / Filip Valenčak",
+      "seed": 17
     }
   ]
 }
