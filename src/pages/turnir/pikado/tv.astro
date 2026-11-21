@@ -29,6 +29,8 @@ import config from "../../../config/pikado.json";
 // Isto kao na /turnir/pikado — kotizacija i udjeli nagrada.
 const FEE = 15;
 const PRIZES = [0.5, 0.3, 0.1];
+// Konačno isplaćeni iznosi (organizator ih je zaokružio) — isto kao na /turnir/pikado.
+const PRIZE_AMOUNTS: number[] = [130, 80, 30];
 const TITLE = "2. pikado turnir";
 
 const site = Astro.site ?? new URL("https://omladinacniza.hr");
@@ -43,7 +45,7 @@ const shortUrl = pageUrl.replace(/^https?:\/\//, "").replace(/\/$/, "");
 // Posrednik (Cloudflare Worker, scripts/cloudflare/pikado-tv-proxy.js). Bez njega
 // preglednik ne može čitati Challonge API (vidi komentar u Workeru).
 const tvApi = (config as { tvApi?: string }).tvApi?.trim() || "";
-const payload = { slug: config.tournament, fee: FEE, prizes: PRIZES, tvApi };
+const payload = { slug: config.tournament, fee: FEE, prizes: PRIZES, amounts: PRIZE_AMOUNTS, tvApi };
 ---
 
 <BaseLayout title={`${TITLE} — TV`} description="TV prikaz rezultata pikado turnira." noIndex bare>
@@ -255,7 +257,7 @@ const payload = { slug: config.tournament, fee: FEE, prizes: PRIZES, tvApi };
 <script>
   import { pluralCroatian } from "../../../lib/croatian";
 
-  type Cfg = { slug: string; fee: number; prizes: number[]; tvApi: string };
+  type Cfg = { slug: string; fee: number; prizes: number[]; amounts: number[]; tvApi: string };
   type P = { id: string; name: string; seed: number; rank: number | null };
   type M = {
     id: string;
@@ -467,7 +469,8 @@ const payload = { slug: config.tournament, fee: FEE, prizes: PRIZES, tvApi };
         .map((r) => {
           const p = ranked.find((x) => x.rank === r);
           if (!p) return "";
-          const prize = fund ? euro(fund * (cfg.prizes[r - 1] ?? 0)) : "";
+          const fixed = cfg.amounts?.[r - 1];
+          const prize = fixed != null ? euro(fixed) : fund ? euro(fund * (cfg.prizes[r - 1] ?? 0)) : "";
           return `<div class="st"><div class="nm">${r === 1 ? "🏆 " : ""}${esc(p.name)}</div><div class="bx g${r}" style="height:${heights[r]}px"><b>${r}.</b><span>${prize}</span></div></div>`;
         })
         .join("");

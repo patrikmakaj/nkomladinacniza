@@ -54,6 +54,8 @@ const BOARDS = 2; // pikada na kojima se igra paralelno
 // Udio kotizacije po mjestu. Samo novčane nagrade, bez trofeja; ostatak
 // kotizacije se namjerno ne spominje na stranici.
 const PRIZES = [0.5, 0.3, 0.1];
+// Konačno isplaćeni iznosi (organizator ih je zaokružio). Prazno = računa se iz fonda.
+const PRIZE_AMOUNTS: number[] = [130, 80, 30];
 const CONTACT = { name: "Patrik Makaj", phone: "+385912680220", phoneDisplay: "091 268 0220" };
 const FACEBOOK_MSG = "https://m.me/omladinacniza";
 const NAME_FORMAT = "Ime1 Prezime1 / Ime2 Prezime2";
@@ -118,7 +120,7 @@ const prizeRows = PRIZES.map((share, i) => ({
   place: i + 1,
   medal: MEDALS[i] ?? "",
   percent: Math.round(share * 100),
-  amount: fund > 0 ? euro(fund * share) : null,
+  amount: PRIZE_AMOUNTS[i] != null ? euro(PRIZE_AMOUNTS[i]) : fund > 0 ? euro(fund * share) : null,
 }));
 
 // ── Format s Challongea, na hrvatskom ────────────────────────────────
@@ -421,7 +423,7 @@ const heroBtn =
                   <span class="text-right text-sm text-[#334155]">
                     <strong class="text-[#10275c] text-base">{r.amount ?? `${r.percent} %`}</strong>
                     <span class="block text-xs text-[#64748B]">
-                      {r.amount ? `${r.percent} % kotizacije` : "kotizacije"}
+                      {PRIZE_AMOUNTS.length ? "isplaćeno" : r.amount ? `${r.percent} % kotizacije` : "kotizacije"}
                     </span>
                   </span>
                 </li>
