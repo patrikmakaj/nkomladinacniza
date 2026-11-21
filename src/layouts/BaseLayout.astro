@@ -15,6 +15,8 @@ interface Props {
   ogType?: "website" | "article";
   /** Indeksiranje — default true. Postavi false za debug/admin stranice. */
   noIndex?: boolean;
+  /** Bez zaglavlja, podnožja i ponude za instalaciju — za prikaz na TV-u. */
+  bare?: boolean;
 }
 
 const {
@@ -23,6 +25,7 @@ const {
   image = "/images/og-image.png",
   ogType = "website",
   noIndex = false,
+  bare = false,
 } = Astro.props;
 
 const fullTitle =
@@ -105,11 +108,11 @@ const ogImageUrl = new URL(url(image), Astro.site).toString();
     <script defer src="https://cloud.umami.is/script.js" data-website-id="2312771d-a887-4d9f-a074-9bb444964aa0"></script>
   </head>
   <body class="min-h-screen flex flex-col">
-    <Header />
+    {!bare && <Header />}
     <main class="flex-1">
       <slot />
     </main>
-    <Footer />
-    <InstallPrompt />
+    {!bare && <Footer />}
+    {!bare && <InstallPrompt />}
   </body>
 </html>

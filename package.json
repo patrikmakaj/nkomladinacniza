@@ -27,11 +27,13 @@
     "@resvg/resvg-js": "^2.6.2",
     "@tailwindcss/vite": "^4.2.4",
     "astro": "^6.1.9",
+    "qrcode": "^1.5.4",
     "satori": "^0.26.0",
     "tailwindcss": "^4.2.4"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
+    "@types/qrcode": "^1.5.5",
     "cheerio": "^1.2.0",
     "sharp": "^0.34.5",
     "typescript": "^5.9.3"
