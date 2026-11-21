@@ -66,7 +66,6 @@ const payload = { slug: config.tournament, fee: FEE, prizes: PRIZES, tvApi };
 
       <main class="tv-main">
         <section class="card col">
-          <div class="h">Igra se · na redu<small>prvi slobodni pikado</small></div>
           <div id="tv-queue" class="queue"></div>
           <div class="qr">
             <Fragment set:html={qrSvg} />
@@ -139,10 +138,26 @@ const payload = { slug: config.tournament, fee: FEE, prizes: PRIZES, tvApi };
   @keyframes tvpulse { 50% { opacity: .3; } }
   #tv .empty { padding: 24px 18px; font-size: 22px; color: #64748b; }
 
-  #tv .qr { display: flex; gap: 18px; align-items: center; padding: 16px 18px; border-top: 1px solid #e2e8f0; }
-  #tv .qr svg { width: 150px; height: 150px; flex: none; }
-  #tv .qr p { font-size: 20px; color: #334155; word-break: break-all; }
-  #tv .qr p b { display: block; font-family: var(--font-display); font-size: 26px; color: #0f2c6e; font-weight: 700; margin-bottom: 4px; word-break: normal; }
+  #tv .qr { display: flex; gap: 14px; align-items: center; padding: 10px 16px; border-top: 1px solid #e2e8f0; }
+  #tv .qr svg { width: 96px; height: 96px; flex: none; }
+  #tv .qr p { font-size: 17px; color: #334155; word-break: break-all; }
+  #tv .qr p b { display: block; font-family: var(--font-display); font-size: 22px; color: #0f2c6e; font-weight: 700; margin-bottom: 2px; word-break: normal; }
+  #tv.is-done .board .qr svg { width: 150px; height: 150px; }
+
+  /* „Igra se" (do 2) + „Na redu" (do 4) — kompaktni redovi */
+  #tv .sec { font-family: var(--font-display); font-size: 17px; letter-spacing: .14em; text-transform: uppercase; padding: 12px 16px 2px; display: flex; align-items: center; gap: 8px; color: #0f2c6e; }
+  #tv .sec.lv { color: #15803d; }
+  #tv .sec .dt { width: 10px; height: 10px; border-radius: 50%; background: #16a34a; display: inline-block; animation: tvpulse 1.4s infinite; }
+  #tv .rw { display: flex; align-items: center; gap: 12px; margin: 6px 12px 0; padding: 8px 12px; border-radius: 10px; border: 2px solid #dbe4f3; }
+  #tv .rw .no { font-family: var(--font-display); font-size: 24px; width: 40px; height: 40px; border-radius: 50%; background: #0f2c6e; color: #fff; display: flex; align-items: center; justify-content: center; flex: none; }
+  #tv .rw .who { flex: 1; min-width: 0; font-size: 20px; font-weight: 700; color: #0f2c6e; line-height: 1.2; }
+  #tv .rw .who div { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #tv .rw .who span { display: block; font-size: 12px; color: #94a3b8; letter-spacing: .15em; font-weight: 400; }
+  #tv .rw .gtag { font-size: 17px; }
+  #tv .rw.live { border-color: #16a34a; background: #f0fdf4; }
+  #tv .rw.live .no { background: #16a34a; font-size: 12px; letter-spacing: .02em; }
+  #tv .rw.first { border-color: #d4b659; background: #fffbea; }
+  #tv .rw.first .no { background: #d4b659; color: #0f2c6e; }
 
   #tv .board { display: grid; gap: 22px; min-height: 0; grid-template-columns: 1fr 1fr; grid-auto-rows: 1fr; }
   #tv table { width: 100%; border-collapse: collapse; font-size: 20px; }
@@ -430,18 +445,13 @@ const payload = { slug: config.tournament, fee: FEE, prizes: PRIZES, tvApi };
     const open = matches.filter((m) => m.state === "open" && m.a && m.b);
     const live = open.filter((m) => m.live).sort((x, y) => x.order - y.order).slice(0, 2);
     const next = open.filter((m) => !m.live).sort((x, y) => x.order - y.order || x.round - y.round);
-    const cards = [
-      ...live.map((m) => ({ m, cls: "live", tag: '<i class="dot"></i>Igra se' })),
-      // Obavijest pojede visinu za jednu karticu.
-      ...next.slice(0, Math.max(1, (notice ? 3 : 4) - live.length)).map((m, i) => ({ m, cls: i === 0 ? "next" : "", tag: i === 0 ? "Na redu" : "Iduće" })),
-    ];
-    $("tv-queue").innerHTML = cards.length
-      ? cards
-          .map(
-            ({ m, cls, tag }) => `<div class="mc ${cls}"><div class="side"><div class="tag">${tag}</div><span class="gtag">${esc(stageTag(m))}</span></div>
-              <div class="who"><div>${esc(name(m.a))}</div><span>vs</span><div>${esc(name(m.b))}</div></div></div>`,
-          )
-          .join("")
+    // Do 2 meča koja se igraju (2 pikada) i 4 sljedeća po Challongeovom redoslijedu.
+    const row = (m: M, cls: string, no: string) =>
+      `<div class="rw ${cls}"><div class="no">${no}</div><div class="who"><div>${esc(name(m.a))}</div><span>VS</span><div>${esc(name(m.b))}</div></div><span class="gtag">${esc(groupOf(m) ?? koLabel(m))}</span></div>`;
+    const upcoming = next.slice(0, 4);
+    $("tv-queue").innerHTML = live.length || upcoming.length
+      ? (live.length ? `<div class="sec lv"><i class="dt"></i>Igra se</div>${live.map((m) => row(m, "live", "UŽIVO")).join("")}` : "") +
+        (upcoming.length ? `<div class="sec">Na redu<small style="margin-left:auto;font-family:var(--font-sans);font-size:14px;letter-spacing:0;text-transform:none;color:#64748b">prvi slobodni pikado</small></div>${upcoming.map((m, i) => row(m, i === 0 ? "first" : "", String(i + 1))).join("")}` : "")
       : `<p class="empty">${t.state === "complete" || t.state === "awaiting_review" ? "Turnir je završen. Čestitamo pobjednicima!" : t.state === "pending" ? "Mečevi se pojavljuju nakon ždrijeba." : "Čekamo sljedeće mečeve…"}</p>`;
 
     // ── Glavni dio ────────────────────────────────────────────────────
