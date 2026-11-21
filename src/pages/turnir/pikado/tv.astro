@@ -60,7 +60,7 @@ const payload = { slug: config.tournament, fee: FEE, prizes: PRIZES, amounts: PR
           <h1>{TITLE}</h1>
           <p>DŠA Niza · Društveni dom u Nizi · 501 double out</p>
         </div>
-        <div class="stat"><b id="tv-fund">—</b><small>nagradni fond</small></div>
+        <div class="stat prizes"><b id="tv-fund">—</b><small>nagrade</small></div>
         <div class="stat"><b id="tv-clock">--:--</b><small id="tv-date">&nbsp;</small></div>
       </header>
 
@@ -114,6 +114,10 @@ const payload = { slug: config.tournament, fee: FEE, prizes: PRIZES, amounts: PR
   #tv .ttl p { font-size: 21px; color: rgba(255,255,255,.8); }
   #tv .stat { text-align: right; margin-left: 30px; }
   #tv .stat b { display: block; font-family: var(--font-display); font-size: 50px; line-height: 1; color: #d4b659; }
+  /* Nagrade po mjestima: 🥇 130 €  🥈 80 €  🥉 30 € */
+  #tv .stat.prizes b { display: flex; gap: 26px; justify-content: flex-end; font-size: 44px; }
+  #tv .stat.prizes b span { white-space: nowrap; }
+  #tv .stat.prizes b i { font-style: normal; font-size: 34px; margin-right: 6px; }
   #tv .stat small { font-size: 15px; letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.7); }
 
   #tv .tv-main { flex: 1; min-height: 0; padding: 22px 40px; display: grid; grid-template-columns: 600px 1fr; gap: 22px; }
@@ -444,7 +448,12 @@ const payload = { slug: config.tournament, fee: FEE, prizes: PRIZES, amounts: PR
     const name = (id: string | null) => (id ? byId.get(id)?.name ?? "?" : null);
     const fund = people.length * cfg.fee;
     $("tv-phase").textContent = phase(t.state);
-    $("tv-fund").textContent = fund ? euro(fund) : "—";
+    // Nagrade po mjestima: fiksni iznosi ako su upisani, inače udio fonda.
+    const medals = ["🥇", "🥈", "🥉"];
+    const amounts = cfg.prizes.map((share, i) => cfg.amounts?.[i] ?? (fund ? fund * share : null));
+    $("tv-fund").innerHTML = amounts.some((x) => x != null)
+      ? amounts.map((x, i) => `<span><i>${medals[i] ?? ""}</i>${x != null ? esc(euro(x)) : "—"}</span>`).join("")
+      : "—";
 
     const { groups, ko } = splitStages(matches, people);
     // Koliko ih prolazi iz grupe — postavka turnira na Challongeu (zadano 2).
