@@ -1,8 +1,28 @@
 {
-  "lastUpdated": "2026-11-21T18:40:51.625Z",
+  "lastUpdated": "2026-11-22T00:04:16.634Z",
   "enabled": true,
   "pageId": "55401829691",
   "posts": [
+    {
+      "id": "55401829691_1770979875034505",
+      "message": "",
+      "createdAt": "2026-11-21T21:30:10+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1770979875034505",
+      "images": [
+        {
+          "src": "/images/facebook/55401829691_1770979875034505_0.jpg",
+          "thumb": "/images/facebook/55401829691_1770979875034505_0.webp",
+          "width": 700,
+          "height": 525
+        },
+        {
+          "src": "/images/facebook/55401829691_1770979875034505_1.jpg",
+          "thumb": "/images/facebook/55401829691_1770979875034505_1.webp",
+          "width": 700,
+          "height": 525
+        }
+      ]
+    },
     {
       "id": "55401829691_1770826785049814",
       "message": "",
@@ -352,20 +372,6 @@
         {
           "src": "/images/facebook/55401829691_1699385355527291.jpg",
           "thumb": "/images/facebook/55401829691_1699385355527291.webp",
-          "width": 700,
-          "height": 875
-        }
-      ]
-    },
-    {
-      "id": "55401829691_1696631055802721",
-      "message": "4. kolo igramo u gostima protiv Stipanovaca. Utakmica se igra u nedjelju od 16:30h stoga poziv svima u Stipanovce...",
-      "createdAt": "2026-09-18T11:38:29+0000",
-      "permalink": "https://www.facebook.com/1551452460320582/posts/1696631055802721",
-      "images": [
-        {
-          "src": "/images/facebook/55401829691_1696631055802721.jpg",
-          "thumb": "/images/facebook/55401829691_1696631055802721.webp",
           "width": 700,
           "height": 875
         }
