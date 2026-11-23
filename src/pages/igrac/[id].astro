@@ -233,7 +233,7 @@ const pageDescription = `Profil igrača ${player.name} u sezoni ${hns.competitio
 
 <BaseLayout title={pageTitle} description={pageDescription}>
   {/* Hero */}
-  <section class="relative bg-club-primary text-white overflow-hidden">
+  <section class="relative hero-bg text-white overflow-hidden">
     <div class="absolute inset-0 opacity-10 pointer-events-none">
       <img
         src={url("/images/logo.svg")}
@@ -317,15 +317,16 @@ const pageDescription = `Profil igrača ${player.name} u sezoni ${hns.competitio
         </p>
       </div>
       <div class="bg-white border border-club-border rounded-lg p-4 text-center">
-        <p class="font-display font-bold text-3xl md:text-4xl text-yellow-600 flex items-center justify-center gap-2">
-          <span>🟨</span>
+        <p class="font-display font-bold text-3xl md:text-4xl text-club-primary-deep flex items-center justify-center gap-2.5">
+          {/* Karton kao pravokutnik, ne emoji — emoji se na svakom sustavu crta drukčije */}
+          <span class="w-4 h-6 md:w-5 md:h-7 rounded-[3px] bg-yellow-400 shadow-sm" aria-hidden="true"></span>
           <span>{totalYellow}</span>
         </p>
         <p class="text-xs md:text-sm text-club-muted mt-1">žuti kartoni</p>
       </div>
       <div class="bg-white border border-club-border rounded-lg p-4 text-center">
-        <p class="font-display font-bold text-3xl md:text-4xl text-red-600 flex items-center justify-center gap-2">
-          <span>🟥</span>
+        <p class="font-display font-bold text-3xl md:text-4xl text-club-primary-deep flex items-center justify-center gap-2.5">
+          <span class="w-4 h-6 md:w-5 md:h-7 rounded-[3px] bg-red-600 shadow-sm" aria-hidden="true"></span>
           <span>{totalRed}</span>
         </p>
         <p class="text-xs md:text-sm text-club-muted mt-1">crveni kartoni</p>

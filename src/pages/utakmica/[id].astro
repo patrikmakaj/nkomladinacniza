@@ -126,6 +126,19 @@ const sportsEventSchema: Record<string, unknown> = {
     name: "Nogometno središte Našice",
   },
 };
+
+// Traka s podacima o utakmici — samo polja koja postoje.
+const metaItems: { label: string; value: string; wide?: boolean }[] = [
+  { label: "Datum", value: formatDate(match.iso) },
+  ...(match.time ? [{ label: "Početak", value: match.time }] : []),
+  ...(detail.facility
+    ? [{ label: "Igralište", value: groundFromFacility(detail.facility) ?? detail.facility }]
+    : []),
+  ...(detail.referees?.length
+    ? [{ label: detail.referees.length > 1 ? "Suci" : "Sudac", value: detail.referees.join(", "), wide: true }]
+    : []),
+  ...(detail.attendance != null ? [{ label: "Gledatelja", value: String(detail.attendance) }] : []),
+];
 ---
 
 <BaseLayout title={pageTitle} description={pageDescription} image={ogImage}>
@@ -136,7 +149,7 @@ const sportsEventSchema: Record<string, unknown> = {
     set:html={JSON.stringify(sportsEventSchema)}
   />
   {/* Hero — kompaktan, fokus na rezultat */}
-  <section class="relative bg-club-primary text-white overflow-hidden">
+  <section class="relative hero-bg text-white overflow-hidden">
     <div class="absolute inset-0 opacity-10 pointer-events-none">
       <img
         src={url("/images/logo.svg")}
@@ -231,60 +244,16 @@ const sportsEventSchema: Record<string, unknown> = {
   </section>
 
   <section class="container-narrow mt-8 md:mt-12">
-    {/* META: stadion / datum / suci / gledatelja */}
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 mb-8">
-      <div class="bg-white border border-club-border rounded-lg p-4">
-        <p class="text-[10px] font-display uppercase tracking-wider text-club-muted mb-1">
-          Datum
-        </p>
-        <p class="font-display font-bold text-sm md:text-base text-club-primary-deep">
-          {formatDate(match.iso)}
-        </p>
-      </div>
-      <div class="bg-white border border-club-border rounded-lg p-4">
-        <p class="text-[10px] font-display uppercase tracking-wider text-club-muted mb-1">
-          Početak
-        </p>
-        <p class="font-display font-bold text-sm md:text-base text-club-primary-deep">
-          {match.time || "—"}
-        </p>
-      </div>
-      <div class="bg-white border border-club-border rounded-lg p-4">
-        <p class="text-[10px] font-display uppercase tracking-wider text-club-muted mb-1">
-          Gledatelja
-        </p>
-        <p class="font-display font-bold text-sm md:text-base text-club-primary-deep">
-          {detail.attendance != null ? detail.attendance : "—"}
-        </p>
-      </div>
-      <div class="bg-white border border-club-border rounded-lg p-4">
-        <p class="text-[10px] font-display uppercase tracking-wider text-club-muted mb-1">
-          {detail.referees && detail.referees.length > 1 ? "Suci" : "Sudac"}
-        </p>
-        <p class="font-display font-bold text-sm md:text-base text-club-primary-deep">
-          {detail.referees && detail.referees.length > 0 ? detail.referees.join(", ") : "—"}
-        </p>
-      </div>
-    </div>
-
-    {/* Stadion (puni redak) */}
-    {detail.facility && (
-      <div class="bg-club-light-2 border-l-4 border-club-primary rounded p-4 mb-8 flex items-start gap-3">
-        <svg class="w-5 h-5 text-club-primary flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-        </svg>
-        <div>
-          <p class="text-[10px] font-display uppercase tracking-wider text-club-muted mb-1">
-            Igralište
-          </p>
-          <p class="text-sm md:text-base text-club-primary-deep">
-            {/* HNS uz igralište lijepi datum i vrijeme — oni su već u karticama iznad */}
-            {groundFromFacility(detail.facility) ?? detail.facility}
-          </p>
+    {/* META u jednoj traci: datum, početak, igralište, suci, gledatelja.
+        Polje bez podatka se ne prikazuje — prazna kartica s "—" izgleda kao kvar. */}
+    <dl class="bg-white border border-club-border rounded-xl mb-10 grid grid-cols-2 lg:flex lg:flex-wrap divide-club-border overflow-hidden">
+      {metaItems.map((item) => (
+        <div class={`p-4 md:px-6 md:py-5 lg:flex-1 lg:min-w-0 border-club-border border-b lg:border-b-0 lg:border-r last:border-r-0 ${item.wide ? "col-span-2 lg:flex-[1.6]" : ""}`}>
+          <dt class="text-[10px] font-display uppercase tracking-widest text-club-muted mb-1">{item.label}</dt>
+          <dd class="font-medium text-sm md:text-[15px] text-club-primary-deep leading-snug">{item.value}</dd>
         </div>
-      </div>
-    )}
+      ))}
+    </dl>
 
     {/* IZVJEŠTAJ KLUBA s Facebooka (lib/match-posts.ts) */}
     {report && (

@@ -161,7 +161,7 @@ Nikad `href="/raspored"` direktno. Vanjske URL-ove (`http`, `mailto`, `tel`, `#`
 
 `lib/matches.ts` spaja HNS (liga + kup) i `friendlies.json` u jedinstveni
 `UnifiedMatch[]`. Izvozi `allMatches`, `upcoming`, `played`, `nextMatch`,
-`nextYouthMatch`, `lastResults()`, `matchBadge()`, `competitionShort()`,
+`nextYouthMatch`, `seasonPause` (stanka/kraj sezone kad nema zakazane utakmice), `lastResults()`, `matchBadge()`, `competitionShort()`,
 `badgeClass`, `todayInZagreb`, `daysFromToday()`, te za filtriranje
 `typeLabel`, `typeSlug`, `typeOrder` i `countByType()`.
 

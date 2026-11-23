@@ -150,6 +150,37 @@ function firstUpcoming(list: UnifiedMatch[]): UnifiedMatch | null {
 /** Sljedeća seniorska utakmica (liga, kup ili prijateljska). */
 export const nextMatch: UnifiedMatch | null = firstUpcoming(allMatches);
 
+/**
+ * Što reći kad seniori nemaju zakazanu utakmicu. Prije je pisalo "sezona je
+ * završena" i u studenom, usred zimske stanke — HNS raspored proljeća objavi
+ * tek pred nastavak. Ligaški dio je gotov kad su sve ekipe odigrale dvokružni
+ * sustav ((n − 1) × 2 kola); inače je stanka, a u studenom-veljači zimska.
+ */
+export type SeasonPause = { kind: "winter" | "break" | "end"; title: string; text: string };
+
+export const seasonPause: SeasonPause | null = (() => {
+  if (nextMatch) return null;
+  const rows = (hns.table ?? []) as { played: number | null }[];
+  const roundsPlayed = Math.max(0, ...rows.map((r) => r.played ?? 0));
+  const totalRounds = rows.length > 1 ? (rows.length - 1) * 2 : 0;
+  if (totalRounds > 0 && roundsPlayed >= totalRounds) {
+    return {
+      kind: "end",
+      title: "Sezona je završena",
+      text: "Raspored nove sezone objavljuje se ovdje čim ga HNS objavi.",
+    };
+  }
+  const month = Number(todayInZagreb.slice(5, 7));
+  const winter = month >= 11 || month <= 2;
+  return {
+    kind: winter ? "winter" : "break",
+    title: winter ? "Zimska stanka" : "Stanka u prvenstvu",
+    text: winter
+      ? "Jesenski dio je odigran. Raspored proljeća stiže na stranicu čim ga HNS objavi."
+      : "Trenutno nema zakazanih utakmica. Novi termini stižu na stranicu čim ih HNS objavi.",
+  };
+})();
+
 /** Offset Europe/Zagreb za zadani dan "YYYY-MM-DD", npr. "+02:00". */
 export function zagrebOffset(day: string): string {
   // Podne izbjegava sat prelaska na ljetno/zimsko vrijeme (u 2-3 ujutro).

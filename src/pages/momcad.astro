@@ -66,6 +66,11 @@ const players = allPlayers.sort((a, b) => {
   return a.name.localeCompare(b.name, "hr");
 });
 
+const squadGroups = [
+  { title: "Vratari", players: players.filter((p) => p.positionGroup === "GK") },
+  { title: "Igrači", players: players.filter((p) => p.positionGroup !== "GK") },
+].filter((g) => g.players.length > 0);
+
 const totalPlayers = players.length;
 const totalGoals = players.reduce((sum, p) => sum + (p.stats.goals || 0), 0);
 const lastUpdated = new Date(hns.lastUpdated).toLocaleString("hr-HR", {
@@ -97,7 +102,7 @@ const seasonLabel = hns.competition?.season
 
   <section class="container-narrow mt-8">
     {/* Brze statistike */}
-    <div class="grid grid-cols-3 gap-3 md:gap-6 mb-8">
+    <div class="grid grid-cols-3 gap-3 md:gap-6">
       <div class="bg-white border border-club-border rounded-lg p-4 text-center">
         <p class="font-display font-bold text-3xl md:text-4xl text-club-primary-deep">
           {totalPlayers}
@@ -118,28 +123,35 @@ const seasonLabel = hns.competition?.season
       </div>
     </div>
 
-    <div
-      id="players-grid"
-      class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4 mt-8"
-    >
-      {
-        players.map((p) => (
-          <PlayerCard
-            personId={p.id}
-            number={p.number}
-            name={p.name}
-            position={p.position}
-            positionGroup={p.positionGroup as "GK" | "FIELD"}
-            photo={p.photo}
-            appearances={p.stats.appearances}
-            goals={p.stats.goals}
-          />
-        ))
-      }
-    </div>
+    {/* Kadar po linijama — HNS razlikuje samo vratare i igrače, pa su dvije
+        skupine. Naslov skupine zamjenjuje oznaku "Vratar" na svakoj kartici. */}
+    {squadGroups.map((group) => (
+      <div class="mt-12 first:mt-8">
+        <div class="flex items-baseline justify-between gap-4 mb-4 pb-2 border-b border-club-border">
+          <h2 class="text-2xl">{group.title}</h2>
+          <span class="text-xs font-display uppercase tracking-widest text-club-muted">
+            {group.players.length}
+          </span>
+        </div>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4">
+          {group.players.map((p) => (
+            <PlayerCard
+              personId={p.id}
+              number={p.number}
+              name={p.name}
+              position={p.position}
+              positionGroup={p.positionGroup as "GK" | "FIELD"}
+              photo={p.photo}
+              appearances={p.stats.appearances}
+              goals={p.stats.goals}
+            />
+          ))}
+        </div>
+      </div>
+    ))}
 
     {/* Statistika sezone — Strijelci, Kartoni, Nastupi */}
-    <div class="mt-12">
+    <div class="mt-16">
       <h2 class="text-2xl mb-4">Statistika sezone</h2>
       <p class="text-sm text-club-muted mb-6">
         Zbrojeno kroz sva natjecanja — ligu i kup — prema podacima HNS Semafora.

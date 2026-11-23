@@ -8,6 +8,7 @@ import hns from "../data/hns.json";
 import {
   allMatches,
   upcoming,
+  seasonPause,
   played,
   typeLabel,
   typeOrder,
@@ -25,6 +26,14 @@ const competitionName = hns.competition?.name ?? "Sezona";
 // webcal:// natjera kalendar da se PRETPLATI umjesto da jednom preuzme datoteku.
 // Google i Apple tu adresu povremeno sami ponovo dohvate.
 const icsPath = url("/raspored.ics");
+
+const countResult = (r: string) => played.filter((m) => m.result === r).length;
+const record = [
+  { label: "Odigrano", value: played.length },
+  { label: "Pobjede", value: countResult("W") },
+  { label: "Neriješeno", value: countResult("D") },
+  { label: "Porazi", value: countResult("L") },
+];
 const icsAbsolute = new URL(icsPath, Astro.site ?? "https://omladinacniza.hr").href;
 const icsWebcal = icsAbsolute.replace(/^https?:/, "webcal:");
 
@@ -101,27 +110,17 @@ const showFilters = filters.length > 2;
       </div>
     </div>
 
-    {/* Sažetak sezone */}
-    <div class="grid grid-cols-3 gap-3 md:gap-6 mb-10">
-      <div class="bg-white border border-club-border rounded-lg p-4 text-center">
-        <p class="font-display font-bold text-3xl md:text-4xl text-club-primary-deep">
-          {allMatches.length}
-        </p>
-        <p class="text-xs md:text-sm text-club-muted mt-1">utakmica u sezoni</p>
-      </div>
-      <div class="bg-white border border-club-border rounded-lg p-4 text-center">
-        <p class="font-display font-bold text-3xl md:text-4xl text-club-primary">
-          {played.length}
-        </p>
-        <p class="text-xs md:text-sm text-club-muted mt-1">odigrano</p>
-      </div>
-      <div class="bg-white border border-club-border rounded-lg p-4 text-center">
-        <p class="font-display font-bold text-3xl md:text-4xl text-club-accent">
-          {upcoming.length}
-        </p>
-        <p class="text-xs md:text-sm text-club-muted mt-1">preostalo</p>
-      </div>
-    </div>
+    {/* Sažetak sezone: učinak svih odigranih (liga, kup, prijateljske).
+        Prije su tu bila tri broja (ukupno / odigrano / preostalo) koja su
+        se međusobno ponavljala, a o igri nisu rekla ništa. */}
+    <dl class="grid grid-cols-4 bg-white border border-club-border rounded-xl mb-10 divide-x divide-club-border overflow-hidden">
+      {record.map((r) => (
+        <div class="px-2 py-4 md:py-5 text-center flex flex-col-reverse">
+          <dt class="text-[11px] md:text-xs uppercase tracking-wider text-club-muted mt-1">{r.label}</dt>
+          <dd class="font-display font-bold text-3xl md:text-4xl text-club-primary-deep">{r.value}</dd>
+        </div>
+      ))}
+    </dl>
 
     {/* Filter po natjecanju */}
     {showFilters && (
@@ -170,9 +169,13 @@ const showFilters = filters.length > 2;
       </div>
 
       {upcoming.length === 0 ? (
-        <div class="bg-club-light border-l-4 border-club-primary p-6 rounded text-center">
-          <p class="text-club-secondary/80">
-            Nema više utakmica u ovoj sezoni — sezona je završena.
+        <div class="bg-white border border-club-border rounded-xl p-6 md:p-8 text-center">
+          <p class="font-display font-bold uppercase text-lg text-club-primary-deep">
+            {seasonPause?.title ?? "Nema zakazanih utakmica"}
+          </p>
+          <p class="text-sm text-club-muted mt-1 max-w-md mx-auto">
+            {seasonPause?.text ?? "Novi termini stižu na stranicu čim ih HNS objavi."}
+            {" "}Uz pretplatu iznad stići će i u tvoj kalendar.
           </p>
         </div>
       ) : (

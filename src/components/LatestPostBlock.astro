@@ -8,6 +8,7 @@
  */
 import facebook from "../data/facebook.json";
 import { url } from "../lib/url";
+import { pluralCroatian } from "../lib/croatian";
 
 type PostImage = { src: string; thumb?: string | null; width?: number | null; height?: number | null };
 
@@ -21,6 +22,7 @@ const posts = ((facebook.posts ?? []) as any[]).slice(0, 3).map((p) => {
     id: String(p.id),
     message,
     image: image ?? null,
+    imageCount: (p.images ?? []).length as number,
     date: new Date(p.createdAt).toLocaleDateString("hr-HR", {
       day: "numeric",
       month: "long",
@@ -74,7 +76,12 @@ const posts = ((facebook.posts ?? []) as any[]).slice(0, 3).map((p) => {
               {post.message ? (
                 <p class="text-sm text-club-secondary leading-snug line-clamp-3">{post.message}</p>
               ) : (
-                <p class="text-sm text-club-muted italic">Objava sa slikom</p>
+                /* Objava bez teksta: reci što je unutra umjesto praznog "Objava sa slikom". */
+                <p class="text-sm text-club-secondary font-medium">
+                  {post.imageCount > 1
+                    ? `Fotografije · ${post.imageCount} ${pluralCroatian(post.imageCount, "slika", "slike", "slika")}`
+                    : "Nova fotografija"}
+                </p>
               )}
               <span class="mt-auto pt-2 text-xs font-display uppercase tracking-wider text-club-primary group-hover:underline">
                 Pročitaj →

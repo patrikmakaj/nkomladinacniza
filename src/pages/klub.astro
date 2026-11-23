@@ -5,12 +5,13 @@ import hns from "../data/hns.json";
 
 const facts = [
   { label: "Osnovan", value: "1963." },
-  { label: "Adresa", value: hns.club.address || "Niza, Općina Koška" },
   { label: "Županija", value: "Osječko-baranjska" },
   { label: "Natjecanje", value: hns.competition?.name || "—" },
   { label: "Aktualni naslov", value: "Prvaci Lige NS Našice · 2025/26" },
   { label: "Stadion", value: hns.club.stadium || "—" },
-  { label: "Boje", value: "Plavo-bijelo-zlatne" },
+  // Adresa je u kartici Kontakt desno — ovdje bi se ponavljala i ostavljala
+  // neparnu karticu samu u zadnjem redu. Boje idu s uzorcima.
+  { label: "Boje", value: "Plavo-bijelo-zlatne", swatches: ["#0f2c6e", "#ffffff", "#d4b659"] },
 ];
 
 const boardMain = [
@@ -88,7 +89,16 @@ const boardNO = {
                 <p class="text-xs font-display uppercase tracking-wider text-club-muted">
                   {f.label}
                 </p>
-                <p class="font-medium mt-1">{f.value}</p>
+                <p class="font-medium mt-1 flex items-center gap-2">
+                  {"swatches" in f && f.swatches && (
+                    <span class="inline-flex -space-x-1" aria-hidden="true">
+                      {f.swatches.map((c) => (
+                        <span class="w-4 h-4 rounded-full ring-2 ring-white border border-club-border" style={`background:${c}`} />
+                      ))}
+                    </span>
+                  )}
+                  {f.value}
+                </p>
               </div>
             ))
           }

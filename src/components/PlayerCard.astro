@@ -27,10 +27,9 @@ const {
 
 const profileHref = personId ? url(`/igrac/${personId}`) : null;
 
-// HNS razlikuje samo "Vratar" i "Igrač". "Igrač" bi pisalo na skoro svakoj
-// kartici i ne bi ništa govorilo, pa se ističe samo vratar. Ispod imena
-// pozicija ide samo ako HNS ikad pošalje nešto preciznije.
-const isKeeper = positionGroup === "GK";
+// HNS razlikuje samo "Vratar" i "Igrač" — na /momcad su to naslovi skupina,
+// pa kartica ne ponavlja oznaku. Ispod imena pozicija ide samo ako HNS ikad
+// pošalje nešto preciznije.
 const detail = position && !/^(igrač|vratar)$/i.test(position.trim()) ? position : null;
 
 // Inicijali za fallback ako nema slike
@@ -43,7 +42,7 @@ const initials = name
 ---
 
 <article
-  class="group relative bg-white border border-club-border rounded-lg overflow-hidden hover:shadow-xl hover:border-club-primary transition-all duration-200"
+  class="group relative bg-white border border-club-border rounded-xl overflow-hidden hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
   data-position={positionGroup}
 >
   {profileHref && (
@@ -53,35 +52,32 @@ const initials = name
       aria-label={`Profil — ${name}`}
     />
   )}
-  <div class="aspect-[3/4] bg-gradient-to-br from-club-primary-deep to-club-primary/40 flex items-center justify-center relative overflow-hidden">
+  <div class="aspect-[4/5] bg-gradient-to-br from-club-primary-deep to-club-primary-dark flex items-center justify-center relative overflow-hidden">
     {photo ? (
       <img
         src={photoSrc(photo)}
         alt={name}
-        class="w-full h-full object-cover object-top"
+        class="w-full h-full object-cover object-top group-hover:scale-[1.03] transition-transform duration-300"
         loading="lazy"
       />
     ) : (
       <span class="font-display text-6xl text-white/30 font-bold">{initials}</span>
     )}
+    {/* Ime preko donjeg ruba fotke, broj diskretno u kutu */}
+    <div class="absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t from-club-primary-deep/95 via-club-primary-deep/50 to-transparent pointer-events-none"></div>
     {number != null && (
-      <div class="absolute top-2 left-2 bg-white text-club-secondary font-display font-bold text-lg w-10 h-10 rounded flex items-center justify-center shadow-md">
+      <span class="absolute top-2 left-2 min-w-7 h-7 px-1.5 rounded-md bg-club-primary-deep/80 backdrop-blur-sm text-white font-display font-bold text-sm flex items-center justify-center">
         {number}
-      </div>
+      </span>
     )}
-    {isKeeper && (
-      <div class="absolute top-2 right-2 bg-club-accent text-club-primary-deep text-xs font-display font-bold uppercase tracking-wider px-2 py-1 rounded shadow">
-        Vratar
-      </div>
-    )}
-  </div>
-  <div class="p-3">
-    <p class="font-display font-bold uppercase text-sm leading-tight truncate" title={name}>
+    <p class="absolute inset-x-0 bottom-0 px-3 pb-2.5 font-display font-bold uppercase text-white text-[15px] leading-tight drop-shadow" title={name}>
       {name}
     </p>
-    {detail && <p class="text-xs text-club-muted mt-0.5">{detail}</p>}
-    {(appearances > 0 || goals > 0) && (
-      <div class="flex items-center gap-3 mt-2 pt-2 border-t border-club-border text-xs">
+  </div>
+  <div class="px-3 py-2.5 flex items-center gap-3 text-xs min-h-10">
+    {detail && <span class="text-club-muted">{detail}</span>}
+    {appearances > 0 ? (
+      <>
         <span class="flex items-center gap-1">
           <span class="font-display font-bold text-club-primary-deep">{appearances}</span>
           <span class="text-club-muted">{nastupLabel(appearances)}</span>
@@ -92,7 +88,9 @@ const initials = name
             <span class="text-club-muted">{golLabel(goals)}</span>
           </span>
         )}
-      </div>
+      </>
+    ) : (
+      <span class="text-club-muted">Bez nastupa</span>
     )}
   </div>
 </article>
