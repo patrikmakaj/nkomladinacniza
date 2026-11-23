@@ -12,6 +12,7 @@ import LatestPostBlock from "../components/LatestPostBlock.astro";
 import SchemaSportsTeam from "../components/SchemaSportsTeam.astro";
 import TurnirBanner from "../components/TurnirBanner.astro";
 import pikado from "../data/pikado.json";
+import pikadoConfig from "../config/pikado.json";
 import hns from "../data/hns.json";
 import { url } from "../lib/url";
 import { pluralCroatian } from "../lib/croatian";
@@ -79,10 +80,11 @@ const heroItems: HeroItem[] = [
 
 const initialHero = heroItems.find((h) => h.match.date === todayInZagreb) ?? null;
 
-// Najava pikado turnira (src/data/pikado.json, s Challongea). Vidi se do
-// 6 h nakon početka — dulje od toga turnir sigurno ne traje.
+// Najava pikado turnira (src/data/pikado.json, s Challongea), samo dok je
+// `active` u src/config/pikado.json. Vidi se do 6 h nakon početka — dulje
+// od toga turnir sigurno ne traje.
 const pikadoStart = (() => {
-  if (!pikado.startsAt) return null;
+  if (!pikadoConfig.active || !pikado.startsAt) return null;
   const start = new Date(pikado.startsAt);
   const day = start.toLocaleDateString("hr-HR", { weekday: "long", timeZone: "Europe/Zagreb" });
   const date = start.toLocaleDateString("hr-HR", { day: "numeric", month: "numeric", timeZone: "Europe/Zagreb" });
@@ -118,8 +120,8 @@ function alsoToday(item: HeroItem): string | null {
     )
   }
 
-  {/* Najava turnira dok traje. Sama nestane nakon `until`; kad prođe, obriši
-      je i stavku iz Header.astro. */}
+  {/* Najava turnira dok traje. Sama nestane nakon `until`; uključuje se
+      prekidačem `active` u src/config/pikado.json. */}
   {
     pikadoStart && (
       <TurnirBanner

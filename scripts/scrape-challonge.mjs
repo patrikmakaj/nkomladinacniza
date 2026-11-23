@@ -111,6 +111,11 @@ async function main() {
     return;
   }
 
+  if (config.active === false) {
+    console.log(`${LABEL} turnir nije aktivan (active: false u configu) — ne pitam API`);
+    return;
+  }
+
   const clientId = process.env.CHALLONGE_CLIENT_ID;
   const clientSecret = process.env.CHALLONGE_CLIENT_SECRET;
   if (!clientId || !clientSecret) {

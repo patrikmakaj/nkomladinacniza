@@ -1,14 +1,15 @@
 ---
 import Logo from "./Logo.astro";
 import { url } from "../lib/url";
+import pikadoConfig from "../config/pikado.json";
 
 const navItems = [
   { href: "/", label: "Početna" },
   { href: "/novosti", label: "Novosti" },
   { href: "/raspored", label: "Raspored" },
-  // Aktualni turnir dok traje. Kad prođe, makni redak — stranica ostaje kao
-  // arhiva na direktan link.
-  { href: "/turnir/pikado", label: "Turnir" },
+  // Pikado turnir samo dok je `active` u src/config/pikado.json. Poslije
+  // stranica ostaje na direktan link (rezultati), samo nije u izborniku.
+  ...(pikadoConfig.active ? [{ href: "/turnir/pikado", label: "Turnir" }] : []),
   { href: "/momcad", label: "Momčad" },
   { href: "/mladje-kategorije", label: "Mlađe kategorije" },
   { href: "/galerija", label: "Galerija" },

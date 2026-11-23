@@ -481,8 +481,18 @@ traka obavijesti iz **opisa turnira na Challongeu** (organizator ga mijenja
 s mobitela), odbrojavanje prije starta i traka „Novi rezultat" (20 s) kad
 između dva osvježavanja stigne završeni meč. Kotizacija, nagrade, broj
 pikada, mjesto i WhatsApp kontakt su konstante na vrhu `pikado.astro`; vrijeme početka mijenja se na
-Challongeu. Dok turnir traje, stavka „Turnir" je u `navItems` (Header), a
-najava (`TurnirBanner`) na naslovnici sama nestane 6 h nakon početka. U repo ide samo ime para, bez e-maila i
+Challongeu. **Prekidač je `active` u `src/config/pikado.json`:** kad je
+`true`, stavka „Turnir" je u `navItems` (Header), najava (`TurnirBanner`) je
+na naslovnici (sama nestane 6 h nakon početka), a scraper pita Challonge. Kad
+je `false`, stranica i TV i dalje rade na direktan link (rezultati zadnjeg
+turnira), ali nisu nigdje istaknuti i scraper ne troši zahtjeve.
+
+Idući turnir: novi turnir na Challongeu → u configu `tournament`,
+`signupUrl`, `formUrl` (novi Google obrazac ili prazno) i `active: true`; na
+vrhu `pikado.astro` `TITLE`, `FEE`, `PRIZE_AMOUNTS` i ostale konstante; u
+`index.astro` naslov i tekst najave (`TurnirBanner`); u Workeru na
+Cloudflareu varijablu `TOURNAMENT`. Nakon turnira samo `active: false`.
+U repo ide samo ime para, bez e-maila i
 korisničkog imena iz prijave. Lokalno: Node `fetch` ne čita `HTTPS_PROXY`,
 pa u sandboxu treba `NODE_USE_ENV_PROXY=1`.
 
