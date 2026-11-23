@@ -1,8 +1,22 @@
 {
-  "lastUpdated": "2026-11-22T15:31:13.784Z",
+  "lastUpdated": "2026-11-23T22:09:03.909Z",
   "enabled": true,
   "pageId": "55401829691",
   "posts": [
+    {
+      "id": "55401829691_1773090231490136",
+      "message": "",
+      "createdAt": "2026-11-23T16:38:52+0000",
+      "permalink": "https://www.facebook.com/1551452460320582/posts/1773090231490136",
+      "images": [
+        {
+          "src": "/images/facebook/55401829691_1773090231490136.jpg",
+          "thumb": "/images/facebook/55401829691_1773090231490136.webp",
+          "width": 700,
+          "height": 990
+        }
+      ]
+    },
     {
       "id": "55401829691_1771605901638569",
       "message": "Ovom prilikom velika zahvala našim simpatizerima i navijačima kluba Zlatanu Stipančević i Mateju Striškoviću na donaciji kuhinje za potrebe kluba. Ista je montirana u garderobi, a gdje je u planu i sudoper, pa će sve zajedno doprijeniti što kvalitetnijoj uslugi kod raznih domjenaka i sl. na terasi. Također hvala našem Miki na montaži iste, te njegovoj firmi  Vodovod - hidrogeološki radovi d. o. o. na prijevozu. ifo.",
@@ -370,20 +384,6 @@
         {
           "src": "/images/facebook/55401829691_1705487794917047.jpg",
           "thumb": "/images/facebook/55401829691_1705487794917047.webp",
-          "width": 700,
-          "height": 875
-        }
-      ]
-    },
-    {
-      "id": "55401829691_1702574698541690",
-      "message": "",
-      "createdAt": "2026-09-24T09:04:41+0000",
-      "permalink": "https://www.facebook.com/1551452460320582/posts/1702574698541690",
-      "images": [
-        {
-          "src": "/images/facebook/55401829691_1702574698541690.jpg",
-          "thumb": "/images/facebook/55401829691_1702574698541690.webp",
           "width": 700,
           "height": 875
         }
