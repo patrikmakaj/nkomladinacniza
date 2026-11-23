@@ -301,7 +301,8 @@ a za interval koji treba ugasiti pri odlasku sa stranice `MatchDayHero.astro`
 </script>
 ```
 
-Tako rade `galerija.astro` i `TurnirLive.astro`. Ne koristi `define:vars` osim za
+Tako rade `galerija.astro` i `TurnirLive.astro`. Galerija prvo pokazuje samo fotografije; klupske
+grafike (plakati 4:5, `lib/gallery.ts`) su pod filtrom „Plakati". Ne koristi `define:vars` osim za
 skalare (kao `turnir.astro` sa `SHEET_ID`).
 
 Kad je podataka puno, inline payload nije opcija. Galerija ima 4000+ fotki kroz
@@ -360,6 +361,11 @@ Sve je u `src/styles/global.css`:
 - custom klase preko `@utility` (`container-narrow`, `btn-primary`, `btn-outline`, `hero-bg`)
 
 Koristi postojeće tokene (`bg-club-primary`, `text-club-accent`, …) umjesto hex vrijednosti.
+
+Kontrast: `club-primary` (#1562dd) je tamnija verzija klupske #4287f5 jer
+je ona s bijelim tekstom imala 3,5:1 (minimum 4,5:1). Svijetla je ostala kao
+`club-primary-bright`, samo za pozadine bez teksta. Zlatna `club-accent` ide
+samo na tamnu pozadinu; zlatni tekst na svijetlom je `club-accent-dark`.
 Naslovi `h1–h4` su globalno Oswald + uppercase.
 
 ### 7. Hrvatska gramatika
@@ -412,6 +418,7 @@ src/
 ├── lib/                       # url.ts · matches.ts · croatian.ts · facebook.ts · images.ts
 │                              # venue.ts (igralište, Google Maps, mjesto za prognozu) · ics.ts
 │                              # schema.ts · og.ts · match-posts.ts · seasons.ts · poster.ts
+│                              # sponsors.ts (popis sponzora: /sponzori + SponsorStrip) · gallery.ts
 ├── data/                      # vidi tablicu gore
 ├── assets/                    # fontovi (za OG slike) + logotipi sponzora (Astro <Image>)
 └── styles/global.css
