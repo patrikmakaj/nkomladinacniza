@@ -3,8 +3,13 @@ import Logo from "./Logo.astro";
 import { url } from "../lib/url";
 import pikadoConfig from "../config/pikado.json";
 
-const navItems = [
-  { href: "/", label: "Početna" },
+type NavLink = { href: string; label: string };
+type NavItem = NavLink & { children?: NavLink[] };
+
+// Šest stavki umjesto devet: Početna je logo, a Klub, Povijest i Sponzori su
+// jedna skupina pod "Klub" (padajući izbornik na desktopu, odjeljak na mobitelu).
+// Nova stranica o klubu ide u `children` te stavke, ne u glavni red.
+const navItems: NavItem[] = [
   { href: "/novosti", label: "Novosti" },
   { href: "/raspored", label: "Raspored" },
   // Pikado turnir samo dok je `active` u src/config/pikado.json. Poslije
@@ -13,15 +18,25 @@ const navItems = [
   { href: "/momcad", label: "Momčad" },
   { href: "/mladje-kategorije", label: "Mlađe kategorije" },
   { href: "/galerija", label: "Galerija" },
-  { href: "/klub", label: "Klub" },
-  { href: "/sponzori", label: "Sponzori" },
-  { href: "/povijest", label: "Povijest" },
+  {
+    href: "/klub",
+    label: "Klub",
+    children: [
+      { href: "/klub", label: "O klubu" },
+      { href: "/povijest", label: "Povijest" },
+      { href: "/sponzori", label: "Sponzori" },
+    ],
+  },
 ];
 
 // Normaliziraj trenutnu putanju (skida base path i trailing slash) za isActive provjeru
 const base = (import.meta.env.BASE_URL || "/").replace(/\/$/, "");
 const rawPath = Astro.url.pathname.replace(/\/$/, "");
 const currentPath = (rawPath.startsWith(base) ? rawPath.slice(base.length) : rawPath) || "/";
+
+const isActive = (href: string) => (href === "/" ? currentPath === "/" : currentPath.startsWith(href));
+const isItemActive = (item: NavItem) =>
+  item.children ? item.children.some((c) => isActive(c.href)) : isActive(item.href);
 ---
 
 <header class="sticky top-0 z-50 bg-club-primary-deep text-white shadow-lg border-b-2 border-club-accent">
@@ -35,22 +50,55 @@ const currentPath = (rawPath.startsWith(base) ? rawPath.slice(base.length) : raw
     </a>
 
     <!-- Desktop nav -->
-    <nav class="hidden lg:flex items-center gap-1">
+    <nav class="hidden lg:flex items-center gap-1" aria-label="Glavni izbornik">
       {
-        navItems.map((item) => {
-          const isActive =
-            item.href === "/" ? currentPath === "/" : currentPath.startsWith(item.href);
-          return (
+        navItems.map((item) =>
+          item.children ? (
+            /* Padajući izbornik: otvara se na hover i na fokus tipkovnicom.
+               Sama stavka vodi na /klub, pa radi i na dodir bez otvaranja. */
+            <div class="relative group">
+              <a
+                href={url(item.href)}
+                aria-haspopup="true"
+                class={`flex items-center gap-1 px-3 py-2 text-sm font-display uppercase tracking-wider transition-colors hover:text-club-accent ${
+                  isItemActive(item) ? "text-club-accent" : "text-white"
+                }`}
+              >
+                {item.label}
+                <svg class="w-3 h-3 opacity-70 transition-transform group-hover:rotate-180 group-focus-within:rotate-180" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 9l6 6 6-6" />
+                </svg>
+              </a>
+              <div class="absolute right-0 top-full pt-3 invisible opacity-0 translate-y-1 group-hover:visible group-hover:opacity-100 group-hover:translate-y-0 group-focus-within:visible group-focus-within:opacity-100 group-focus-within:translate-y-0 transition-all duration-150">
+                <ul class="min-w-48 bg-white rounded-lg shadow-xl border border-club-border py-2 text-club-secondary">
+                  {item.children.map((child) => (
+                    <li>
+                      <a
+                        href={url(child.href)}
+                        aria-current={isActive(child.href) ? "page" : undefined}
+                        class={`block px-4 py-2.5 text-sm font-display uppercase tracking-wider transition-colors hover:bg-club-light-2 hover:text-club-primary ${
+                          isActive(child.href) ? "text-club-primary" : ""
+                        }`}
+                      >
+                        {child.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          ) : (
             <a
               href={url(item.href)}
+              aria-current={isActive(item.href) ? "page" : undefined}
               class={`px-3 py-2 text-sm font-display uppercase tracking-wider transition-colors hover:text-club-accent ${
-                isActive ? "text-club-accent" : "text-white"
+                isActive(item.href) ? "text-club-accent" : "text-white"
               }`}
             >
               {item.label}
             </a>
-          );
-        })
+          ),
+        )
       }
     </nav>
 
@@ -68,23 +116,48 @@ const currentPath = (rawPath.startsWith(base) ? rawPath.slice(base.length) : raw
   </div>
 
   <!-- Mobile menu (collapsible) -->
-  <nav id="mobile-menu" class="hidden lg:hidden bg-club-primary-deep border-t border-white/10">
+  <nav id="mobile-menu" class="hidden lg:hidden bg-club-primary-deep border-t border-white/10" aria-label="Glavni izbornik">
     <div class="container-narrow py-4 flex flex-col gap-1">
+      <a
+        href={url("/")}
+        aria-current={isActive("/") ? "page" : undefined}
+        class={`px-3 py-3 text-sm font-display uppercase tracking-wider ${isActive("/") ? "text-club-accent" : "text-white"}`}
+      >
+        Početna
+      </a>
       {
-        navItems.map((item) => {
-          const isActive =
-            item.href === "/" ? currentPath === "/" : currentPath.startsWith(item.href);
-          return (
+        navItems.map((item) =>
+          item.children ? (
+            <div class="mt-2 pt-3 border-t border-white/10">
+              <p class="px-3 pb-1 text-[11px] font-display uppercase tracking-widest text-white/50">
+                {item.label}
+              </p>
+              <div class="grid grid-cols-3 gap-1">
+                {item.children.map((child) => (
+                  <a
+                    href={url(child.href)}
+                    aria-current={isActive(child.href) ? "page" : undefined}
+                    class={`px-3 py-3 text-sm font-display uppercase tracking-wider ${
+                      isActive(child.href) ? "text-club-accent" : "text-white"
+                    }`}
+                  >
+                    {child.label}
+                  </a>
+                ))}
+              </div>
+            </div>
+          ) : (
             <a
               href={url(item.href)}
+              aria-current={isActive(item.href) ? "page" : undefined}
               class={`px-3 py-3 text-sm font-display uppercase tracking-wider ${
-                isActive ? "text-club-accent" : "text-white"
+                isActive(item.href) ? "text-club-accent" : "text-white"
               }`}
             >
               {item.label}
             </a>
-          );
-        })
+          ),
+        )
       }
     </div>
   </nav>

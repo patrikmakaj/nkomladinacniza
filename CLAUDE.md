@@ -421,6 +421,10 @@ public/     CNAME, favicons/ikone, images/ (logo.svg, og-image.png, facebook/, f
 
 Nova stranica → dodaj i u `navItems` u `components/Header.astro` te u `serialize()`
 prioritete u `astro.config.mjs` (sitemap) ako joj treba drukčiji prioritet.
+Izbornik namjerno ima šest stavki: Početna je logo (na mobitelu ipak prva
+stavka), a O klubu, Povijest i Sponzori su `children` stavke „Klub" (padajući
+izbornik na desktopu, odjeljak na mobitelu). Stranica o klubu ide tamo, ne u
+glavni red.
 
 ### Turniri
 
