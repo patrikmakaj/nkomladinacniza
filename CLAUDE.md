@@ -208,7 +208,10 @@ prikazuju, a prazna rang-lista se ne renderira. Igrači mlađih kategorija nemaj
 `/igrac/[id]` profil (te se rute grade samo iz seniorskog `hns.players`), pa se
 linka na njihov `profileUrl` na Semaforu.
 
-`LeagueTable` prima `rows` i `title`; bez njih pada na seniorsku ligu.
+`LeagueTable` prima `rows` i `title`; bez njih pada na seniorsku ligu. Na
+naslovnici je `compact`: prvak, pa naš red ± 2 (i sljedeći protivnik), a
+ostali redovi su u HTML-u skriveni i gumb ih otvara na mjestu. Cijela
+seniorska tablica nema drugu stranicu, pa se ne smije izbaciti iz HTML-a.
 
 Dvije zamke koje su već jednom ugrizle:
 

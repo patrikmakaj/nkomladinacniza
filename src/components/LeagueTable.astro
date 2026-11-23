@@ -5,49 +5,53 @@ import { url } from "../lib/url";
 import type { LeagueRow } from "../lib/matches";
 
 interface Props {
-  preview?: boolean;
+  /**
+   * Sažeta tablica za naslovnicu: prvak, pa naš red s dvije ekipe iznad i
+   * ispod (i sljedeći protivnik ako je izvan toga). Ostali redovi su u HTML-u,
+   * samo skriveni — gumb ispod ih otvara na mjestu. Cijela seniorska tablica
+   * nema svoju stranicu, pa se ne smije izgubiti.
+   */
+  compact?: boolean;
   /** Redovi ljestvice; bez ovoga se koristi seniorska liga. */
   rows?: LeagueRow[];
-  /** Naslov u preview headeru; bez ovoga naziv seniorskog natjecanja. */
+  /** Naziv natjecanja (caption za čitače ekrana); bez ovoga seniorska liga. */
   title?: string;
   /** id kluba koji se ističe kao sljedeći protivnik. */
   highlightId?: number | null;
 }
 
-const { preview = false, rows, title, highlightId = null } = Astro.props;
+const { compact = false, rows, title, highlightId = null } = Astro.props;
 
 const fullTable: LeagueRow[] = rows ?? hns.table;
 const competitionName = title ?? hns.competition?.name ?? "Tablica lige";
 
-// Za preview na početnoj: prvih 5 + naš red ako nije u top 5
-const usIdx = fullTable.findIndex((t) => t.isUs);
-const top5 = fullTable.slice(0, 5);
-const includeUs = usIdx >= 5;
-const previewRows = includeUs ? [...top5, fullTable[usIdx]] : top5;
-
-const tableData = preview ? previewRows : fullTable;
+// Koji redovi se vide u sažetom prikazu (indeksi u fullTable).
+const WINDOW = 5;
+const n = fullTable.length;
+const isCompact = compact && n > WINDOW + 2;
+const visible = new Set<number>();
+if (isCompact) {
+  const usIdx = fullTable.findIndex((t) => t.isUs);
+  const centre = usIdx >= 0 ? usIdx : 0;
+  const start = Math.max(0, Math.min(centre - 2, n - WINDOW));
+  for (let i = start; i < start + WINDOW; i++) visible.add(i);
+  visible.add(0);
+  const nextIdx = highlightId != null ? fullTable.findIndex((t) => t.club.id === highlightId) : -1;
+  if (nextIdx >= 0) visible.add(nextIdx);
+}
+const shown = (idx: number) => !isCompact || visible.has(idx);
+/** Prije vidljivog reda kojem prethodni red nije vidljiv ide "···". */
+const gapBefore = (idx: number) => isCompact && idx > 0 && shown(idx) && !shown(idx - 1);
 
 // Oznaka uz ime (ne samo boja) — vidi se i bez razlikovanja boja.
 const isNext = (row: LeagueRow) =>
   highlightId != null && !row.isUs && row.club.id === highlightId;
 ---
 
-<div class="bg-white rounded-lg shadow-md overflow-hidden border border-club-border">
-  {
-    preview && (
-      <div class="px-6 py-4 border-b border-club-border flex items-center justify-between">
-        <h3 class="font-display uppercase tracking-wider text-lg">{competitionName}</h3>
-        <a
-          href={url("/")}
-          class="text-xs font-display uppercase tracking-wider text-club-primary hover:underline"
-        >
-          Cijela tablica →
-        </a>
-      </div>
-    )
-  }
+<div class="bg-white rounded-lg shadow-md overflow-hidden border border-club-border" data-league-table>
   <div class="overflow-x-auto">
     <table class="w-full text-sm">
+      <caption class="sr-only">{competitionName}</caption>
       <thead class="bg-club-secondary text-white">
         <tr>
           <th class="px-3 py-3 text-left font-display uppercase tracking-wider text-xs">#</th>
@@ -62,16 +66,17 @@ const isNext = (row: LeagueRow) =>
       </thead>
       <tbody>
         {
-          tableData.map((row, idx) => {
-            const showSeparator = preview && includeUs && idx === 5;
+          fullTable.map((row, idx) => {
             return (
               <>
-                {showSeparator && (
-                  <tr>
-                    <td colspan="8" class="text-center text-club-muted text-xs py-1">···</td>
+                {gapBefore(idx) && (
+                  <tr data-table-gap aria-hidden="true">
+                    <td colspan="8" class="text-center text-club-muted text-xs py-1 bg-club-light-2 tracking-[0.3em]">···</td>
                   </tr>
                 )}
                 <tr
+                  data-table-extra={shown(idx) ? undefined : ""}
+                  style={shown(idx) ? undefined : "display: none"}
                   class={`border-b border-club-border ${
                     row.isUs
                       ? "bg-club-primary/10 font-bold"
@@ -121,4 +126,43 @@ const isNext = (row: LeagueRow) =>
       </tbody>
     </table>
   </div>
+  {
+    isCompact && (
+      <button
+        type="button"
+        data-table-toggle
+        aria-expanded="false"
+        data-umami-event="Cijela tablica"
+        class="w-full flex items-center justify-center gap-1.5 px-4 py-3 text-xs font-display uppercase tracking-widest text-club-primary hover:bg-club-light-2 transition-colors"
+      >
+        <span data-label-closed>Cijela tablica · {n} klubova</span>
+        <span data-label-open style="display: none">Sažeta tablica</span>
+        <svg class="w-3.5 h-3.5 transition-transform" data-chevron fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 9l6 6 6-6" />
+        </svg>
+      </button>
+    )
+  }
 </div>
+
+<script>
+  // Otvaranje sažete tablice. Skrivanje ide kroz style.display, ne `hidden`
+  // (Tailwind klasa bi ga pregazila). Veže se na astro:page-load zbog View Transitions.
+  function setupTables() {
+    document.querySelectorAll<HTMLElement>("[data-league-table]").forEach((table) => {
+      const toggle = table.querySelector<HTMLButtonElement>("[data-table-toggle]");
+      if (!toggle || toggle.dataset.init === "1") return;
+      toggle.dataset.init = "1";
+      toggle.addEventListener("click", () => {
+        const open = toggle.getAttribute("aria-expanded") !== "true";
+        toggle.setAttribute("aria-expanded", String(open));
+        table.querySelectorAll<HTMLElement>("[data-table-extra]").forEach((r) => (r.style.display = open ? "" : "none"));
+        table.querySelectorAll<HTMLElement>("[data-table-gap]").forEach((r) => (r.style.display = open ? "none" : ""));
+        toggle.querySelector<HTMLElement>("[data-label-closed]")!.style.display = open ? "none" : "";
+        toggle.querySelector<HTMLElement>("[data-label-open]")!.style.display = open ? "" : "none";
+        toggle.querySelector<SVGElement>("[data-chevron]")!.style.transform = open ? "rotate(180deg)" : "";
+      });
+    });
+  }
+  document.addEventListener("astro:page-load", setupTables);
+</script>

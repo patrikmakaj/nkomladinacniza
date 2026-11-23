@@ -177,8 +177,13 @@ function alsoToday(item: HeroItem): string | null {
 
   <!-- Tablica (cijela) -->
   <section class="container-narrow mt-16">
-    <h2 class="text-2xl mb-4">Tablica</h2>
-    <LeagueTable highlightId={nextOpponentId} />
+    <div class="flex items-baseline justify-between gap-4 mb-4">
+      <h2 class="text-2xl">Tablica</h2>
+      <span class="text-xs font-display uppercase tracking-widest text-club-muted text-right">
+        {hns.competition?.name}
+      </span>
+    </div>
+    <LeagueTable compact highlightId={nextOpponentId} />
   </section>
 
   <!-- Zadnji rezultati ispod tablice u 2 stupca -->
