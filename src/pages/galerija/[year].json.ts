@@ -9,6 +9,7 @@
 import type { APIRoute, GetStaticPaths } from "astro";
 import albumsData from "../../data/facebook-albums.json";
 import { url } from "../../lib/url";
+import { galleryKind, type GalleryKind } from "../../lib/gallery";
 
 type SourcePhoto = {
   id: string;
@@ -33,6 +34,8 @@ export type GalleryPhoto = {
   caption: string;
   albumName: string;
   albumPermalink: string | null;
+  /** Fotografija ili klupska grafika (plakat) — za filter, vidi lib/gallery.ts. */
+  kind: GalleryKind;
 };
 
 const albums = ((albumsData as { albums?: Album[] }).albums ?? []) as Album[];
@@ -48,6 +51,7 @@ const allPhotos = albums
       caption: p.caption,
       albumName: album.name,
       albumPermalink: album.permalink ?? null,
+      kind: galleryKind(p.width, p.height),
       createdAt: p.createdAt,
     })),
   )

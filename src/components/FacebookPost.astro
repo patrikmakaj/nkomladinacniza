@@ -1,6 +1,6 @@
 ---
 import { url } from "../lib/url";
-import { linkify, formatPostDate, formatRelative } from "../lib/facebook";
+import { linkify, formatPostDate } from "../lib/facebook";
 
 /**
  * Slika uz objavu. Stariji facebook.json ima obične stringove — dok ga CI ne
@@ -32,9 +32,26 @@ interface Props {
 
 const { post, collapsible = false } = Astro.props;
 
-const messageHtml = linkify(post.message);
+// Prvi kratki redak objave je naslov ("Osvrt na jesenski dio prvenstva",
+// "35 godina od raketiranja Nize"), ostatak je tekst. Bez kratkog prvog
+// retka nema naslova — ne izmišljamo ga rezanjem rečenice.
+const TITLE_MAX = 90;
+const message = (post.message ?? "").trim();
+const [firstLine = "", ...restLines] = message.split(/\n/);
+const hasTitle = firstLine.trim().length > 0 && firstLine.trim().length <= TITLE_MAX;
+const title = hasTitle ? firstLine.trim() : null;
+const body = (hasTitle ? restLines.join("\n") : message).trim();
+const messageHtml = linkify(body);
+
+// Datum, ne "prije 20 sati": stranica se gradi jednom dnevno, pa bi relativno
+// vrijeme do sutra bilo krivo. Puni datum s vremenom je u title.
 const dateAbsolute = formatPostDate(post.createdAt);
-const dateRelative = formatRelative(post.createdAt);
+const dateShort = new Date(post.createdAt).toLocaleDateString("hr-HR", {
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+  timeZone: "Europe/Zagreb",
+});
 
 // Slike idu u okvir 4:5 — u tom su formatu gotovo sve objave (plakati
 // utakmica), pa se kartice u mreži poravnaju i plakat ostane cijeli.
@@ -51,30 +68,6 @@ const imageGridClass =
   id={`objava-${post.id}`}
   class="bg-white border border-club-border rounded-lg overflow-hidden hover:shadow-md transition-shadow scroll-mt-24 flex flex-col"
 >
-  {/* Header - datum + permalink */}
-  <header class="flex items-center justify-between px-5 py-3 border-b border-club-border bg-club-light-2">
-    <div class="flex items-center gap-2 text-sm">
-      <svg class="w-4 h-4 text-club-primary" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-        <path d="M22.675 0H1.325C.593 0 0 .593 0 1.325v21.351C0 23.407.593 24 1.325 24H12.82v-9.294H9.692v-3.622h3.128V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12V24h6.116c.73 0 1.323-.593 1.323-1.325V1.325C24 .593 23.407 0 22.675 0z"/>
-      </svg>
-      <time datetime={post.createdAt} title={dateAbsolute} class="text-club-muted">
-        {dateRelative}
-      </time>
-    </div>
-    {
-      post.permalink && (
-        <a
-          href={post.permalink}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="text-xs font-display uppercase tracking-wider text-club-primary hover:underline"
-        >
-          Otvori na FB →
-        </a>
-      )
-    }
-  </header>
-
   {/* Slike */}
   {
     shown.length > 0 && (
@@ -106,10 +99,18 @@ const imageGridClass =
     )
   }
 
-  {/* Tekst posta */}
-  {
-    post.message && (
-      <div class="px-5 py-4">
+  {/* Datum, naslov i tekst — kartica vijesti kluba, ne ugrađeni Facebook */}
+  <div class="px-5 pt-4 pb-4 flex-1 flex flex-col">
+    <time datetime={post.createdAt} title={dateAbsolute} class="text-[11px] font-display uppercase tracking-widest text-club-muted">
+      {dateShort}
+    </time>
+    {title && (
+      <h2 class="mt-1.5 font-sans normal-case tracking-normal text-lg font-semibold leading-snug text-club-primary-deep">
+        {title}
+      </h2>
+    )}
+    {body && (
+      <div class="mt-2">
         {collapsible ? (
           <details class="fb-post-collapsible">
             <summary class="cursor-pointer list-none">
@@ -122,7 +123,7 @@ const imageGridClass =
               </span>
             </summary>
             <div
-              class="text-club-secondary leading-relaxed mt-2"
+              class="text-club-secondary leading-relaxed"
               set:html={messageHtml}
             />
           </details>
@@ -130,8 +131,21 @@ const imageGridClass =
           <div class="text-club-secondary leading-relaxed" set:html={messageHtml} />
         )}
       </div>
-    )
-  }
+    )}
+    {post.permalink && (
+      <a
+        href={post.permalink}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="mt-auto pt-3 self-start inline-flex items-center gap-1.5 text-xs text-club-muted hover:text-club-primary"
+      >
+        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M22.675 0H1.325C.593 0 0 .593 0 1.325v21.351C0 23.407.593 24 1.325 24H12.82v-9.294H9.692v-3.622h3.128V8.413c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12V24h6.116c.73 0 1.323-.593 1.323-1.325V1.325C24 .593 23.407 0 22.675 0z"/>
+        </svg>
+        Objava na Facebooku
+      </a>
+    )}
+  </div>
 </article>
 
 <style>

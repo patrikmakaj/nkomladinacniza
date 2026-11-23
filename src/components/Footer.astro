@@ -1,12 +1,29 @@
 ---
 import Logo from "./Logo.astro";
 import { url } from "../lib/url";
+import SponsorStrip from "./SponsorStrip.astro";
 
 const year = new Date().getFullYear();
+
+// Na /sponzori traka bi ponavljala stranicu.
+const onSponsorsPage = /\/sponzori\/?$/.test(Astro.url.pathname);
+
+const navLinks = [
+  { href: "/novosti", label: "Novosti" },
+  { href: "/raspored", label: "Raspored" },
+  { href: "/momcad", label: "Momčad" },
+  { href: "/mladje-kategorije", label: "Mlađe kategorije" },
+  { href: "/galerija", label: "Galerija" },
+  { href: "/klub", label: "O klubu" },
+  { href: "/povijest", label: "Povijest" },
+  { href: "/sponzori", label: "Sponzori" },
+];
 ---
 
-<footer class="bg-club-primary-deep text-white/80 mt-16 border-t-4 border-club-accent">
-  <div class="container-narrow py-12 grid grid-cols-1 md:grid-cols-3 gap-8">
+{!onSponsorsPage && <SponsorStrip />}
+
+<footer class={`bg-club-primary-deep text-white/80 border-t-4 border-club-accent ${onSponsorsPage ? "mt-16" : ""}`}>
+  <div class="container-narrow py-10 md:py-12 grid grid-cols-1 md:grid-cols-[1.2fr_1.3fr_1fr] gap-8">
     <div>
       <div class="flex items-center gap-3 mb-4">
         <Logo size={48} />
@@ -22,16 +39,12 @@ const year = new Date().getFullYear();
 
     <div>
       <h4 class="text-white text-sm mb-4">Navigacija</h4>
-      <ul class="space-y-2 text-sm">
-        <li><a href={url("/novosti")} class="hover:text-club-accent">Novosti</a></li>
-        <li><a href={url("/raspored")} class="hover:text-club-accent">Raspored</a></li>
-        <li><a href={url("/momcad")} class="hover:text-club-accent">Momčad</a></li>
-        <li><a href={url("/mladje-kategorije")} class="hover:text-club-accent">Mlađe kategorije</a></li>
-        <li><a href={url("/galerija")} class="hover:text-club-accent">Galerija</a></li>
-        <li><a href={url("/klub")} class="hover:text-club-accent">Klub</a></li>
-        <li><a href={url("/sponzori")} class="hover:text-club-accent">Sponzori</a></li>
-        <li><a href={url("/povijest")} class="hover:text-club-accent">Povijest</a></li>
-        <li>
+      {/* Dva stupca i na mobitelu — u jednom je podnožje bilo dugo skoro kao ekran */}
+      <ul class="grid grid-cols-2 gap-x-6 gap-y-2 text-sm">
+        {navLinks.map((l) => (
+          <li><a href={url(l.href)} class="hover:text-club-accent">{l.label}</a></li>
+        ))}
+        <li class="col-span-2 pt-1">
           <button
             type="button"
             onclick="window.omladinacInstall && window.omladinacInstall()"

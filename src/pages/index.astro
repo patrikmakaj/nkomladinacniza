@@ -175,20 +175,28 @@ function alsoToday(item: HeroItem): string | null {
 
   <SeasonStats />
 
-  <!-- Tablica (cijela) -->
-  <section class="container-narrow mt-16">
-    <div class="flex items-baseline justify-between gap-4 mb-4">
-      <h2 class="text-2xl">Tablica</h2>
-      <span class="text-xs font-display uppercase tracking-widest text-club-muted text-right">
-        {hns.competition?.name}
-      </span>
+  <!-- Tablica i zadnji rezultati jedno uz drugo (na mobitelu jedno ispod
+       drugog). Rezultati u jednom stupcu: u dva su išli cik-cak (najnoviji
+       lijevo, drugi desno), pa se nije vidjelo kojim redom se čitaju. -->
+  <section class="container-narrow mt-16 grid gap-12 lg:gap-8 lg:grid-cols-2 lg:items-start">
+    <div class="min-w-0">
+      <div class="flex items-baseline justify-between gap-4 mb-4">
+        <h2 class="text-2xl">Tablica</h2>
+        <span class="text-xs font-display uppercase tracking-widest text-club-muted text-right">
+          {hns.competition?.name}
+        </span>
+      </div>
+      <LeagueTable compact highlightId={nextOpponentId} />
     </div>
-    <LeagueTable compact highlightId={nextOpponentId} />
-  </section>
-
-  <!-- Zadnji rezultati ispod tablice u 2 stupca -->
-  <section class="container-narrow mt-12">
-    <RecentResults limit={6} grid={true} title="Zadnji rezultati" />
+    <div class="min-w-0">
+      <RecentResults limit={5} title="Zadnji rezultati" />
+      <a
+        href={url("/raspored")}
+        class="mt-3 inline-block text-xs font-display uppercase tracking-widest text-club-primary hover:underline"
+      >
+        Svi rezultati →
+      </a>
+    </div>
   </section>
 
   <!-- Upis u školu nogometa -->

@@ -1,0 +1,84 @@
+---
+/**
+ * Traka sponzora iznad podnožja, na svakoj stranici osim /sponzori.
+ * Prije su se sponzori vidjeli samo na podstranici koju malo tko otvori.
+ *
+ * Logotipi su sivi dok se preko njih ne prijeđe mišem, da traka ne bude
+ * šarena. Sponzori bez logotipa i oni s fotografijom osobe (fotka u traci od
+ * 40 px se ne bi prepoznala) idu kao natpis. Podaci: lib/sponsors.ts.
+ */
+import { Image } from "astro:assets";
+import { sponsors, getLogo, wordmark } from "../lib/sponsors";
+import { url } from "../lib/url";
+
+const [main, ...rest] = sponsors;
+const mainLogo = main.logo ? getLogo(main.logo) : null;
+
+const items = rest.map((s) => ({
+  ...s,
+  image: !s.textOnly && !s.photo && s.logo ? getLogo(s.logo) : null,
+}));
+---
+
+<section aria-labelledby="sponsor-strip-title" class="mt-16 bg-white border-t border-club-border">
+  <div class="container-narrow py-8 md:py-10 grid gap-6 md:gap-10 md:grid-cols-[auto_1fr] md:items-center">
+    <a
+      href={main.url}
+      target="_blank"
+      rel="noopener"
+      class="flex items-center gap-4 md:pr-10 md:border-r md:border-club-border"
+    >
+      {mainLogo && (
+        <Image src={mainLogo} alt={main.name} widths={[180, 360]} sizes="180px" class="h-14 w-auto object-contain" loading="lazy" />
+      )}
+      <span>
+        <span class="block text-[11px] font-display uppercase tracking-widest text-club-muted">Glavni pokrovitelj</span>
+        <span class="block font-display font-bold uppercase text-club-primary-deep">{main.name}</span>
+      </span>
+    </a>
+
+    <div class="min-w-0">
+      <div class="flex items-baseline justify-between gap-4 mb-3">
+        <h2 id="sponsor-strip-title" class="text-[11px] font-display uppercase tracking-widest text-club-muted font-normal">
+          Sponzori i prijatelji kluba
+        </h2>
+        <a href={url("/sponzori")} class="text-xs font-display uppercase tracking-wider text-club-primary hover:underline whitespace-nowrap">
+          Postani sponzor →
+        </a>
+      </div>
+      <ul class="flex flex-wrap items-center gap-x-6 gap-y-4">
+        {items.map((s) => {
+          const Tag = s.url ? "a" : "span";
+          return (
+            <li>
+              <Tag
+                href={s.url}
+                target={s.url ? "_blank" : undefined}
+                rel={s.url ? "noopener" : undefined}
+                title={s.name}
+                class="group block"
+              >
+                {s.image ? (
+                  <span class={`flex items-center h-10 ${s.dark ? "bg-club-primary-deep rounded px-2" : ""}`}>
+                    <Image
+                      src={s.image}
+                      alt={s.name}
+                      widths={[120, 240]}
+                      sizes="120px"
+                      loading="lazy"
+                      class="h-8 w-auto max-w-[120px] object-contain grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition"
+                    />
+                  </span>
+                ) : (
+                  <span class="flex items-center h-10 font-display font-medium text-[13px] tracking-wider text-club-muted group-hover:text-club-primary-deep transition-colors">
+                    {wordmark(s.name)}
+                  </span>
+                )}
+              </Tag>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  </div>
+</section>

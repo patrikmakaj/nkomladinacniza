@@ -54,12 +54,19 @@
 
 @theme {
   /* Klupske boje - plava paleta usklađena s grbom kluba */
-  --color-club-primary: #4287f5;       /* glavna plava (zatraženo) */
+  /* Glavna plava. Klupska #4287f5 s bijelim tekstom ima kontrast 3,5:1 (minimum
+     za čitljiv tekst je 4,5:1), pa se gumbi i linkovi slabo čitaju, osobito na
+     suncu. Ovo je ista nijansa, samo tamnija: 5,5:1 na bijelom, 4,5:1 i na
+     --color-club-light. Svijetla #4287f5 ostaje kao --color-club-primary-bright
+     za pozadine i prijelaze bez teksta (hero, sjaj). */
+  --color-club-primary: #1562dd;
+  --color-club-primary-bright: #4287f5;
   --color-club-primary-dark: #1e40af;  /* tamnija plava za hover */
   --color-club-primary-deep: #0f2c6e;  /* vrlo tamna plava (header/hero) */
   --color-club-light: #dbeafe;         /* svijetlo plava (suptilne pozadine) */
   --color-club-light-2: #eff6ff;       /* još svijetlija plava */
-  --color-club-accent: #d4b659;        /* zlatna iz grba — fancy akcent */
+  --color-club-accent: #d4b659;        /* zlatna iz grba — samo na tamnoj pozadini (6,6:1) */
+  --color-club-accent-dark: #8a7124;   /* zlatna za tekst na svijetlom (4,7:1); #d4b659 tamo ima 2:1 */
   --color-club-secondary: #0f172a;     /* tamno-tamno plava za tekst */
   --color-club-bg: #f8fafc;            /* svijetla pozadina */
   --color-club-surface: #ffffff;
@@ -122,12 +129,12 @@
   border-radius: 4px;
   background-color: var(--color-club-primary);
   color: white;
-  box-shadow: 0 4px 14px rgb(66 135 245 / 30%);
+  box-shadow: 0 4px 14px rgb(21 98 221 / 25%);
 
   &:hover {
     background-color: var(--color-club-primary-dark);
     transform: translateY(-1px);
-    box-shadow: 0 6px 20px rgb(66 135 245 / 40%);
+    box-shadow: 0 6px 20px rgb(21 98 221 / 35%);
   }
 }
 
