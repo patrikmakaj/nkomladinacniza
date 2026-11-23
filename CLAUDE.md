@@ -358,7 +358,7 @@ u git povijesti.
 
 Sve je u `src/styles/global.css`:
 - klupske boje i fontovi u `@theme` bloku (`--color-club-*`, `--font-display`, `--font-sans`)
-- custom klase preko `@utility` (`container-narrow`, `btn-primary`, `btn-outline`, `hero-bg`)
+- custom klase preko `@utility` (`container-narrow`, `btn-primary`, `btn-accent`, `btn-outline`, `hero-bg`)
 
 Koristi postojeće tokene (`bg-club-primary`, `text-club-accent`, …) umjesto hex vrijednosti.
 
@@ -366,6 +366,8 @@ Kontrast: `club-primary` (#1562dd) je tamnija verzija klupske #4287f5 jer
 je ona s bijelim tekstom imala 3,5:1 (minimum 4,5:1). Svijetla je ostala kao
 `club-primary-bright`, samo za pozadine bez teksta. Zlatna `club-accent` ide
 samo na tamnu pozadinu; zlatni tekst na svijetlom je `club-accent-dark`.
+Glavni gumb na tamnoj plavoj (hero, plavi blokovi) je `btn-accent` (zlatni),
+jer se plavi `btn-primary` tamo stapa s pozadinom.
 Naslovi `h1–h4` su globalno Oswald + uppercase.
 
 ### 7. Hrvatska gramatika
